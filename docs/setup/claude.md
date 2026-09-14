@@ -227,8 +227,8 @@ setx CLAUDE_CODE_USE_POWERSHELL_TOOL 1
 后两行解释一下：
 
 - **`Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`**：放开 PowerShell 的脚本限制。Windows 默认策略是 `Restricted`，**默认不支持加载 `$PROFILE` 配置文件**。所以少了这一行，下一步写进 `$PROFILE` 的配置会毫无动静地失效。
-  - `RemoteSigned` 表示本地脚本可以跑、从网上下载的必须有签名
-  - `-Scope CurrentUser` 让它只对当前用户生效，**不需要管理员权限**
+    - `RemoteSigned` 表示本地脚本可以跑、从网上下载的必须有签名
+    - `-Scope CurrentUser` 让它只对当前用户生效，**不需要管理员权限**
 - **`setx CLAUDE_CODE_USE_POWERSHELL_TOOL 1`**：让 Claude Code 用 **PowerShell 原生工具**执行命令，而不是绕 Git Bash。好处是能直接跑 PowerShell 命令、管道传对象、用 Windows 原生路径。用 `setx` 而不是 `$env:`，是因为它要**写进用户环境变量来持久化**，只在当前终端窗口里设置不够用。
 
 然后用 VSCode 编辑器打开 `$PROFILE`：
