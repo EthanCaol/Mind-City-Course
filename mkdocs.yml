@@ -27,7 +27,14 @@ theme:
 nav:
   - 课程首页: index.md
   - 实验课:
+      - (0) Dev-C++ 环境搭建: setup/dev-cpp.md
       - (0) WSL2 环境搭建: setup/wsl2-vscode.md
+  - 实用工具:
+      - Claude 配置: setup/claude.md
+      - Linux 命令行基础: setup/linux-cli.md
+      - Git 与 GitHub 配置: setup/git-github.md
+      - GCC 与 GDB 入门: setup/gcc-gdb.md
+      - Make 构建工具: setup/make.md
 
 markdown_extensions:
   - admonition
