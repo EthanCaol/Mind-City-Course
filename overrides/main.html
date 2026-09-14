@@ -1,0 +1,43 @@
+{#-
+  主题覆盖：让正文里的站外链接在新标签页打开。
+
+  MkDocs 默认输出朴素的 <a href>，浏览器就在当前标签页跳转。教程类
+  文档里学生点开视频链接再返回会丢失阅读位置，所以这里改成新开标签。
+
+  两个约束，改动时注意别破坏：
+    1. 只选 .md-content 内的链接 —— 侧边栏、页眉、页脚不受影响，
+       否则点导航会开一堆标签页。
+    2. 只处理 hostname 与本站不同的链接 —— 站内页面跳转保持原行为。
+
+  注意：若将来启用 navigation.instant（单页应用式导航），
+  DOMContentLoaded 不会在后续导航中触发，需要改用 Material 的
+  document$ observable 订阅。
+-#}
+{% extends "base.html" %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    (function () {
+      function normalize(host) {
+        return host.replace(/^www\./, "");
+      }
+
+      function markExternalLinks() {
+        var here = normalize(location.hostname);
+        document.querySelectorAll(".md-content a[href^='http']").forEach(function (a) {
+          if (a.hostname && normalize(a.hostname) !== here) {
+            a.setAttribute("target", "_blank");
+            a.setAttribute("rel", "noopener noreferrer");
+          }
+        });
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", markExternalLinks);
+      } else {
+        markExternalLinks();
+      }
+    })();
+  </script>
+{% endblock %}

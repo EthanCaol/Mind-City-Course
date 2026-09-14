@@ -1,9 +1,11 @@
 site_name: 程序设计-课程实验文档
 site_description: 复旦大学《程序设计》课程实验文档
+site_url: https://mind-city.com/
 docs_dir: docs
 
 theme:
   name: material
+  custom_dir: overrides
   language: zh
   icon:
     logo: material/city
@@ -34,6 +36,8 @@ theme:
 
 nav:
   - 首页: index.md
+  - 实验环境:
+      - WSL2 + VSCode 环境搭建: setup/wsl2-vscode.md
 
 markdown_extensions:
   - admonition
@@ -48,7 +52,11 @@ markdown_extensions:
         kwds:
           case: lower
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.tabbed:
@@ -57,6 +65,7 @@ markdown_extensions:
       anchor_linenums: true
   - pymdownx.tasklist:
       custom_checkbox: true
+  - pymdownx.keys          # ++ctrl+s++ 渲染成键帽样式
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
@@ -64,3 +73,22 @@ markdown_extensions:
 plugins:
   - search:
       lang: zh
+  - glightbox:
+      effect: none          # 关闭开/闭时的缩放动画，点击直接显示
+  - git-revision-date-localized:
+      type: timeago
+      locale: zh
+      enable_creation_date: false
+      fallback_to_build_date: true
+  # 构建时抓取外部资源（Google Fonts、站外图片）并本地化。
+  # 学生无需访问 fonts.googleapis.com（内地不可达）。必须放在最后。
+  - privacy
+
+extra_css:
+  - assets/stylesheets/fonts.css
+
+# 把锚点校验从默认的 info 提到 warn —— 否则写错 #锚点 只会打一行 INFO，
+# --strict 不拦，站内交叉引用坏了也没人发现。
+validation:
+  links:
+    anchors: warn

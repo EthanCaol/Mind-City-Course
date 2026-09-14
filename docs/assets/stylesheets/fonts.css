@@ -1,0 +1,54 @@
+/* ---------------------------------------------------------------------------
+   代码字体：Cascadia Code（自托管）
+
+   选它的理由：Windows Terminal 和 VSCode 的默认等宽字体就是它，学生对这个
+   字形有亲切感，看着文档里的代码和自己在编辑器里看到的是一回事。
+
+   只打包 latin 子集——代码块内容是纯 ASCII 的 C 代码，不需要中文字形，
+   体积因此从 3 MB 降到 100 KB。
+
+   授权 SIL OFL 1.1，允许自由分发与自托管。
+   --------------------------------------------------------------------------- */
+
+@font-face {
+  font-family: "Cascadia Code";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/cascadia-code-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Cascadia Code";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/cascadia-code-latin-400-italic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Cascadia Code";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/cascadia-code-latin-700-normal.woff2") format("woff2");
+}
+
+/* 覆盖 Material 的代码字体变量。
+   Material 原本的写法是 var(--md-code-font,_) 后面跟一串等宽兜底字体
+   （SFMono-Regular / Consolas / Menlo / monospace），这里只替换变量本身，
+   兜底链保持不动——字体加载失败时不会退化成比例字体。 */
+:root {
+  --md-code-font: "Cascadia Code";
+}
+
+/* ---------------------------------------------------------------------------
+   Cascadia Code 默认启用编程连字（!= 显示为 ≠，>= 显示为 ≥，=> 显示为箭头）。
+
+   这与 VSCode 里的显示一致，所以保留了默认行为。如果认为一年级学生看
+   ≠ 会误以为要输入 ≠ 而不是 !=，取消下面这段注释即可全局关闭：
+
+   .md-typeset code,
+   .md-typeset pre,
+   .highlight { font-variant-ligatures: none; }
+   --------------------------------------------------------------------------- */
