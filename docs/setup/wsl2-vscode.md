@@ -1,12 +1,15 @@
 # WSL2 + gcc + VSCode 环境搭建
 
-面向零基础、使用 Win11 操作系统的同学。全过程只需要在 Windows 终端里粘贴命令，**不需要任何前置知识**。中途遇到不懂的术语或者问题，请立即咨询 AI，或向助教求助。
+面向零基础、使用 Win11 操作系统的同学。全过程只需要在 Windows 终端里粘贴命令，**不需要任何前置知识**。中途遇到任何不懂的术语或者问题，请立即咨询 AI，或马上向助教求助。
 
 !!! tip "推荐 AI 工具"
-    腾讯元宝（免费）、ChatGPT（付费）、Claude（付费）
+    - DeepSeek-API（国内，收费）
+    - 腾讯元宝（国内，免费）
+    - ChatGPT（付费）
+    - Claude（付费）
 
 !!! abstract "全程概览"
-    本文按顺序做完这 8 步，你就有了一个完整的 C 语言开发环境：
+    本文按顺序做完这 8 步，你就有了一个完整的 C语言开发环境：
 
     1. 了解为什么用这套方案（可跳过）
     2. 启用 Windows 功能，安装 WSL2
@@ -17,8 +20,6 @@
     7. （进阶）VSCode 详细配置视频
     8. （进阶）备份系统、迁移到 D 盘
 
----
-
 ## 1. 为什么推荐 VSCode + WSL 开发模式
 
 ### 1.1 为什么要在 Linux 里写代码
@@ -28,12 +29,12 @@
 
 ![《操作系统发展史》视频封面](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913211826711.jpg)
 
-C 语言就是为了 Unix 操作系统而生的。它不是先被设计好一门语言、再找个操作系统来跑，而是为了重写 Unix 才被造出来的，之后几十年语言和系统一起演化，所以 C 语言里到处是 Unix 的影子：
+C语言就是为了 Unix 操作系统而生的。它不是先被设计好一门语言、再找个操作系统来跑，而是为了重写 Unix 才被造出来的，之后几十年语言和系统一起演化，所以 C语言里到处是 Unix 的影子：
 
 - `main(int argc, char *argv[])` 的参数形态、`stdin` / `stdout` / `stderr` 这三个流、`errno` 这套错误码，全都来自 Unix。
 - 那些名字里带 unix 的头文件 —— `unistd.h`（unistd 就是 Unix standard 的缩写）、`sys/wait.h`、`sys/types.h` —— 声明的就是 Unix 那套操作系统接口。这套东西后来被写成了一份正式标准，叫 POSIX，现在的 Linux、macOS 都是照着它实现的。
 - 计算机专业课上绕不开的 `fork()`、`pipe()`、`open()` / `read()` / `write()`、信号、文件描述符，全部是 Unix 的概念。
-- 连 C 语言编译器本身也是：`gcc` 出自 GNU 计划，这是一个为了做出自由版 Unix 而发起的项目。
+- 连 C语言编译器本身也是：`gcc` 出自 GNU 计划，这是一个为了做出自由版 Unix 而发起的项目。
 
 !!! quote "延伸阅读"
     想了解 GNU 计划和自由软件运动是怎么来的，可以看这期视频：[《计算机博物志·最后的黑客：理查德·马修·斯托曼》](https://www.bilibili.com/video/BV11R4y1b7zc)
@@ -42,7 +43,7 @@ C 语言就是为了 Unix 操作系统而生的。它不是先被设计好一门
 
 并且 Unix 家族至今仍是世界上使用最广泛的操作系统：安卓手机的底层就是 Linux 内核，全世界的服务器跑的都是 Linux，路由器、机顶盒等所有智能设备里面也跑着它，包括 Mac 和 iPhone 的系统内核同样是 Unix 家族。
 
-也就是说，**在 Linux 环境上写 C 语言，用的是这门语言原生的环境**；在 Windows 环境上写 C 语言，用的是后来才移植过去的版本，很多 Unix 侧的东西根本没有对应实现。
+也就是说，**在 Linux 环境上写 C语言，用的是这门语言原生的环境**；在 Windows 环境上写 C语言，用的是后来才移植过去的版本，很多 Unix 侧的东西根本没有对应实现。
 
 ### 1.2 为什么要使用 WSL
 
@@ -71,23 +72,21 @@ VSCode 是目前世界上最主流的代码编辑器 —— 用的人最多、�
 
 Dev-C++ 是个 2005 年就停止更新的老古董 IDE，内置的是 2004 年的 GCC-3.4.2 和 2002 年的 GDB-5.2.1，比同学们的岁数都大不少。它底层是一套跑在 Windows 上的 MinGW-w64 (GCC) 工具链，编译简单 C 程序没问题，但跑一些复杂偏底层的程序会踩到不少坑。
 
----
-
 ## 2. 启用 Windows 功能并安装 WSL2 工具
 
 ### 2.1 启用 Windows 功能
 
-按 ++win++ 键，输入并打开「启用或关闭 Windows 功能」
+**按 ++win++ 键**，输入并打开「启用或关闭 Windows 功能」
 
 ![在开始菜单搜索「启用或关闭 Windows 功能」](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913222107863.png)
 
-勾选「虚拟机平台」和「适用于 Linux 的 Windows 子系统」两项，确定后按提示重启电脑
+勾选**「虚拟机平台」**和**「适用于 Linux 的 Windows 子系统」**两项，确定后**按提示重启电脑**
 
 ![勾选「虚拟机平台」和「适用于 Linux 的 Windows 子系统」](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913212409719.png)
 
 ### 2.2 安装 WSL 本体
 
-下载并双击安装包 `wsl.2.7.14.0.x64.msi`：
+下载并**双击**安装包 `wsl.2.7.14.0.x64.msi`：
 
 - **直接下载**：<https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/wsl.2.7.14.0.x64.msi>
 - **官方最新版**：<https://github.com/microsoft/wsl/releases>
@@ -97,7 +96,7 @@ Dev-C++ 是个 2005 年就停止更新的老古董 IDE，内置的是 2004 年�
 
 ### 2.3 检查是否安装成功
 
-打开终端（开始菜单搜索「终端」）
+打开终端（**开始菜单搜索「终端」**）
 
 ![在开始菜单搜索「终端」](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913213618811.png)
 
@@ -126,20 +125,18 @@ wsl --version
 wsl --update
 ```
 
----
-
 ## 3. 配置 Ubuntu
 
 ### 3.1 下载并安装 Ubuntu
 
-在终端里执行下面这条命令，会自动下载并安装 Ubuntu 26.04。
+在终端里执行下面这条命令，会**自动下载并安装** Ubuntu 26.04。
 
 ```pwsh title="Windows 终端"
 wsl --install -d Ubuntu-26.04
 ```
 
 !!! tip "下载很慢或者连接超时怎么办"
-    先按 ++ctrl+c++ 终止下载，然后再重新输入指令下载，多试几次通常就能成。
+    先按 ++ctrl+c++ **终止下载**，然后再重新输入指令下载，多试几次通常就能成。
 
 !!! tip "还是慢？用助教准备的离线安装包"
     助教已经提前把安装包传到了腾讯云存储桶，可以先下载到本地再从本地安装：
@@ -154,7 +151,7 @@ wsl --install -d Ubuntu-26.04
 
 ### 3.2 卸载刚才安装的 Ubuntu
 
-既然学会了安装，就顺便学会卸载吧 —— 以后环境搞坏了，重来一次就是这两条命令。
+既然学会了安装，就顺便学会卸载吧 —— 以后环境搞坏了，**重来一次就是这两条命令**。
 
 ```pwsh title="Windows 终端"
 # 查看当前已经安装了哪些发行版
@@ -171,12 +168,12 @@ wsl --unregister Ubuntu-26.04
 
 ![首次启动 Ubuntu 时的创建账号提示](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913222827482.png)
 
-等安装好之后，会出现创建账号的提示。用户名那一栏已经预填好了你的 Windows 用户名，推荐改成别的名字（比如你的英文名）。
+等安装好之后，会出现创建账号的提示。用户名那一栏已经预填好了你的 Windows 用户名，**推荐改成别的名字**（比如你的英文名）。
 
 ![设置 Linux 用户密码](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913223100271.png)
 
-- 推荐使用 `123456` 这种简单密码，或者想一个其他容易输入的密码
-- 以后执行命令经常要输好几遍密码，如果密码太复杂，敲起来很麻烦
+- **推荐使用 `123456`** 这种简单密码，或者想一个其他容易输入的密码
+- 以后执行命令**经常要输好几遍密码**，如果密码太复杂，敲起来很麻烦
 - 这是你自己电脑的子系统，不必担心安全性问题
 
 !!! warning "输入密码时屏幕上不会有任何显示"
@@ -194,7 +191,7 @@ ethan@Ethan-Asus:~$
 
 ### 3.4 让 Ubuntu 关机
 
-关掉 Ubuntu 的终端窗口之后，过几秒钟这套 Linux 系统就会自动停止运行。手动关机就是在 Windows 终端里执行：
+关掉 Ubuntu 的终端窗口之后，**过几秒钟**这套 Linux 系统就会自动停止运行。手动关机就是在 Windows 终端里执行：
 
 ```pwsh title="Windows 终端"
 wsl --shutdown
@@ -212,7 +209,7 @@ wsl --shutdown
     wsl
     ```
 
-    不跟任何参数时，`wsl` 会进入「默认发行版」。如果你只装了 Ubuntu-26.04 这一个，那它本来就是默认的，敲 `wsl` 就够用了。
+    不跟任何参数时，`wsl` 会进入**「默认发行版」**。如果你只装了 Ubuntu-26.04 这一个，那它本来就是默认的，敲 `wsl` 就够用了。
 
     如果以后装了不止一个发行版，可以用 `-d` 指定这次进哪一个：
 
@@ -234,11 +231,9 @@ wsl --shutdown
 
     按 ++win++ 键打开开始菜单，直接输入 `Ubuntu-26.04`。
 
-    推荐点上「固定到"开始"屏幕」，以后点一下就能打开。
+    **推荐点上「固定到"开始"屏幕」**，以后点一下就能打开。
 
     ![在开始菜单中把 Ubuntu-26.04 固定到开始屏幕](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913231050196.png)
-
----
 
 ## 4. 配置网络并安装 GCC / GDB
 
@@ -252,7 +247,7 @@ Ubuntu 的软件都要从网上下载，所以这一步先把网络理顺，再�
 
 ### 4.1 切换镜像源并更新（可选）
 
-Ubuntu 的 apt 软件管理工具默认会从国外的服务器下载软件，速度很慢甚至超时。如果不熟悉科学上网，可以先使用腾讯云的国内镜像源加速。
+Ubuntu 的 apt 软件管理工具默认会从国外的服务器下载软件，**速度很慢甚至超时**。如果不熟悉科学上网，可以先使用腾讯云的国内镜像源加速。
 
 ![腾讯云镜像源配置界面](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913224450975.png)
 
@@ -275,13 +270,13 @@ Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
 EOF
 ```
 
-配置好镜像源之后，先拉取当前最新的软件版本列表：
+配置好镜像源之后，**先**拉取当前最新的软件版本列表：
 
 ```bash title="Ubuntu 终端"
 sudo apt update
 ```
 
-再对照最新的软件列表，把系统里已经安装的软件升级到最新版本：
+**再**对照最新的软件列表，把系统里已经安装的软件升级到最新版本：
 
 ```bash title="Ubuntu 终端"
 sudo apt upgrade -y
@@ -304,13 +299,13 @@ WSL 的全局配置存在 Windows 用户目录下的 `.wslconfig` 文件里。**
 C:\Users\<你的用户名>
 ```
 
-如果懒得去找这个路径，可以在资源管理器顶部的地址栏直接输入 `%UserProfile%` 再回车，就会跳转到你的用户目录。
+**如果懒得去找这个路径**，可以在资源管理器顶部的地址栏直接输入 `%UserProfile%` 再回车，就会跳转到你的用户目录。
 
 ![在资源管理器地址栏输入 %UserProfile%](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913230242391.png)
 
 #### 第 2 步：让文件显示扩展名
 
-点击窗口上方的「查看」菜单，在展开的「显示」子菜单里，勾上「文件扩展名」。
+点击窗口上方的「查看」菜单，在展开的「显示」子菜单里，**勾上「文件扩展名」**。
 
 ![在「查看 → 显示」中勾选「文件扩展名」](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913225251762.png)
 
@@ -327,11 +322,11 @@ C:\Users\<你的用户名>
 .wslconfig
 ```
 
-改完回车，Windows 会弹一个「如果改变文件扩展名，文件可能不可用」的提示，点「是」。
+改完回车，Windows 会弹一个「如果改变文件扩展名，文件可能不可用」的提示，**点「是」**。
 
 改成功后，这个文件的类型一栏会显示成「WSLCONFIG 文件」，图标也变成一张白纸，跟图上一样。
 
-然后双击打开 `.wslconfig`（如果问用什么程序打开，选「记事本」），把下面两行粘进去，记得一定要 ++ctrl+s++ 保存，然后再关掉：
+然后双击打开 `.wslconfig`（如果问用什么程序打开，选「记事本」），把下面两行粘进去，**记得一定要 ++ctrl+s++ 保存**，然后再关掉：
 
 ```ini title=".wslconfig"
 [wsl2]
@@ -339,14 +334,14 @@ autoProxy=true
 networkingMode=mirrored
 ```
 
-- `networkingMode=mirrored`：让 WSL 和 Windows 共用同一套网络。
-- `autoProxy=true`：让 WSL 自动读取并同步 Windows 当前的代理设置。
+- `networkingMode=mirrored`：让 WSL 和 Windows **共用同一套网络**。
+- `autoProxy=true`：让 WSL **自动读取并同步** Windows 当前的代理设置。
 
 ![改好后的 .wslconfig 文件](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913225359625.png)
 
 #### 第 4 步：重启 WSL 让配置生效
 
-`.wslconfig` 只在 WSL 启动时读取一次，改完必须让 WSL 重启才能生效。打开 Windows 终端，执行命令先让 WSL 关机：
+`.wslconfig` **只在 WSL 启动时读取一次**，改完必须让 WSL 重启才能生效。打开 Windows 终端，执行命令先让 WSL 关机：
 
 ```pwsh title="Windows 终端"
 wsl --shutdown
@@ -360,7 +355,7 @@ wsl --shutdown
 echo $http_proxy
 ```
 
-能打印出形如 `http://127.0.0.1:7890` 的地址，就说明代理已经打通了。
+能打印出形如 `http://127.0.0.1:7890` 的地址，**就说明代理已经打通了**。
 
 再尝试一下能不能真的访问谷歌：
 
@@ -379,8 +374,8 @@ curl google.com
 
 先说说这两个东西是干什么的：
 
-- **gcc**（GNU Compiler Collection，GNU 编译器套件）是 C 语言的编译器：负责把 C 代码翻译成能跑的可执行程序
-- **gdb**（GNU Debugger）是 C 语言的调试器：负责单步执行、看变量的值如何变化、定位程序是怎么崩溃报错的
+- **gcc**（GNU Compiler Collection，GNU 编译器套件）是 C语言的编译器：负责把 C 代码翻译成能跑的可执行程序
+- **gdb**（GNU Debugger）是 C语言的调试器：负责单步执行、看变量的值如何变化、定位程序是怎么崩溃报错的
 
 开始安装：
 
@@ -395,8 +390,6 @@ gcc --version
 ```
 
 ![gcc --version 的输出](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913232920110.png)
-
----
 
 ## 5. 写第一个 C 程序
 
@@ -415,15 +408,10 @@ notepad.exe hello.c
 !!! tip "如果记事本提示找不到文件"
     问你要不要新建，点「是」就行。
 
-把下面的代码粘进记事本，++ctrl+s++ 保存，然后关掉它：
+把下面的代码粘进记事本，**++ctrl+s++ 保存**，然后关掉它：
 
 ```c title="hello.c"
-#include <stdio.h>
-
-int main(void) {
-    printf("Hello, Fudan!\n");
-    return 0;
-}
+--8<-- "code/hello.c"
 ```
 
 回到 WSL 窗口，编译并运行刚才的代码：
@@ -433,14 +421,12 @@ gcc hello.c -o hello   # 编译代码，得到可执行文件 hello
 ./hello                # 运行可执行文件 hello
 ```
 
-屏幕输出 `Hello, Fudan!`，恭喜你的第一个程序就成功跑起来了。
+屏幕输出 `Hello, Fudan!`，**恭喜你的第一个程序成功跑起来了**。
 
 !!! quote "延伸阅读：为什么还要学 vim"
     Linux 上最经典的编辑器是 vim，几乎所有服务器都预装了它，而别的编辑器多半没有。以后你连到服务器或者其他远程机器上时，往往就只有 vim 能用。
 
     想学习 vim，可以看这期视频：[《保姆级入门：Vim 编辑器》](https://www.bilibili.com/video/BV13t4y1t7Wg)
-
----
 
 ## 6. 安装 VSCode 及插件并连接到 WSL
 
@@ -451,7 +437,7 @@ gcc hello.c -o hello   # 编译代码，得到可执行文件 hello
 - **直接下载**：<https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/VSCodeUserSetup-x64-1.137.0.exe>
 - **官方最新版**：<https://code.visualstudio.com/Download>
 
-安装向导里的「通过 Code 打开」和「添加到 PATH」两个选项都勾上：
+安装向导里的**「通过 Code 打开」**和**「添加到 PATH」**两个选项都勾上：
 
 - 「通过 Code 打开」：能在 Windows 文件管理器里右键点击文件夹，直接用 VSCode 打开。
 - 「添加到 PATH」：能在 Windows 终端里直接敲 `code` 命令来打开 VSCode。
@@ -462,12 +448,12 @@ gcc hello.c -o hello   # 编译代码，得到可执行文件 hello
 
 ![VSCode 左侧边栏的「扩展」按钮](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913233649921.png)
 
-打开 VSCode，点击左侧边栏的「扩展」（Extensions，方块图标），搜索并安装下面这几个：
+打开 VSCode，**点击左侧边栏的「扩展」**（Extensions，方块图标），搜索并安装下面这几个：
 
 | 插件名                             | 说明                     | 必装？ |
 | ---------------------------------- | ------------------------ | ------ |
 | WSL                                | 让 VSCode 能连进 WSL     | 是     |
-| C/C++                              | C 语言语法高亮、代码提示 | 是     |
+| C/C++                              | C语言语法高亮、代码提示 | 是     |
 | Code Runner                        | 一键运行代码的小插件     | 是     |
 | Chinese (Simplified) Language Pack | 中文界面                 | 可选   |
 
@@ -485,11 +471,11 @@ gcc hello.c -o hello   # 编译代码，得到可执行文件 hello
 code .
 ```
 
-VSCode 会打开，并且自动连上 WSL。窗口标题和左下角都会变成 `WSL: Ubuntu-26.04`。
+VSCode 会打开，并且**自动连上 WSL**。窗口标题和左下角都会变成 `WSL: Ubuntu-26.04`。
 
 ![VSCode 左下角显示 WSL: Ubuntu-26.04](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913234038421.png)
 
-首次连接时，VSCode 会自动往 Ubuntu 里装一个服务端组件。
+**首次连接时**，VSCode 会自动往 Ubuntu 里装一个服务端组件。
 
 ### 6.4 把插件再在 WSL 里装一遍
 
@@ -512,7 +498,7 @@ VSCode 其实是分两端的：界面跑在 Windows 上，但真正读写代码�
 
 ### 6.5 编辑并运行代码
 
-左侧文件栏里应该能看到第 5 节写的 `hello.c`，点开它。
+左侧文件栏里应该能看到第 5 节写的 `hello.c`，**点开它**。
 
 运行代码，两种方式任选：
 
@@ -528,16 +514,12 @@ VSCode 其实是分两端的：界面跑在 Windows 上，但真正读写代码�
     gcc hello.c -o hello && ./hello
     ```
 
----
-
 ## 7. 进阶补充：VSCode 详细配置（视频，强烈推荐）
 
-第 6 节只讲了把第一个程序跑起来所必需的最精简配置。想让 VSCode 真正好用起来（界面外观、常用插件、C/C++ 的调试与构建），下面这两期视频讲得很细，非常建议大家跟着做一遍：
+第 6 节只讲了把第一个程序跑起来所必需的最精简配置。想让 VSCode 真正好用起来（界面外观、常用插件、C/C++ 的调试与构建），下面这两期视频讲得很细，**非常建议大家跟着做一遍**：
 
 - [《VSCode 配置 | 外观 | 通用型扩展 | Minimal》](https://www.bilibili.com/video/BV1YW4y1M7uX)
 - [《VSCode 配置 | C/C++ | MakeFile | CMake | Minimal》](https://www.bilibili.com/video/BV1H24y1D7Kn)
-
----
 
 ## 8. 进阶补充：备份操作系统，以及迁移到 D 盘
 
@@ -555,7 +537,7 @@ WSL 里的 Ubuntu 说到底就是一堆文件。WSL 为此提供了一对命令�
 wsl --list
 ```
 
-导出之前必须先关掉 WSL，否则文件正在被占用：
+导出之前**必须先关掉 WSL**，否则文件正在被占用：
 
 ```pwsh title="Windows 终端"
 # 关掉 WSL
