@@ -2,6 +2,10 @@ site_name: Mind-City-Course
 site_description: Mind City Course 课程文档
 docs_dir: docs
 
+repo_url: https://github.com/EthanCaol/Mind-City-Course
+repo_name: EthanCaol/Mind-City-Course
+edit_uri: edit/main/docs/
+
 theme:
   name: material
   language: zh
