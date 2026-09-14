@@ -229,12 +229,14 @@ pip install mkdocs-material                              # 主题本体
 pip install jieba                                        # 中文搜索分词；缺了搜「镜像」搜不到
 pip install mkdocs-glightbox                             # 图片点击放大
 pip install mkdocs-git-revision-date-localized-plugin    # 页面底部「最后更新于 X 天前」
+pip install mkdocs-open-in-new-tab                       # 站外链接新标签页打开
 ```
 
-装完可以这样自查是否齐全：
+装完可以这样自查是否齐全（注意 `mkdocs-open-in-new-tab` 装出来的模块名是
+`open_in_new_tab`，不带 `mkdocs_` 前缀）：
 
 ```bash
-python3 -c "import jieba, mkdocs_glightbox, mkdocs_git_revision_date_localized_plugin; print('ok')"
+python3 -c "import jieba, mkdocs_glightbox, mkdocs_git_revision_date_localized_plugin, open_in_new_tab; print('ok')"
 ```
 
 两点补充：
@@ -297,6 +299,26 @@ if "mermaid.min.js" in url.path and not config.site_url:
 Material 的配色又叠加了一层：`.n`（Name）被映射成 `--md-code-fg-color`，**等于正文色**。所以实测 `sudo apt update && sudo apt upgrade -y` 渲染出来只有 `&&` 是淡灰。
 
 **换 `pygments_style` 无效**——配色能换，但那些命令压根没有 token 类。真要改只能自定义 lexer。
+
+**三、部分插件已倒向 ProperDocs，在本站的 mkdocs 1.6.1 下不可用**
+
+MkDocs 上游放弃 1.x 转向 2.x 后，社区把 1.x 分叉成了 **ProperDocs**。一些插件随之改了依赖，
+装上去轻则拖进一整个 properdocs，重则直接构建失败。已实测确认不可用的：
+
+| 插件 | 症状 |
+|---|---|
+| `mkdocs-recently-updated-docs` | 构建崩溃：`AttributeError: 'int' object has no attribute 'get'`。它依赖的 `mkdocs-document-dates` 是照 ProperDocs API 写的 |
+| `mkdocs-redirects` | 依赖 `properdocs>=1.6.5`，会拖进第二个静态站点生成器 |
+| `mkdocs-code-validator` | 同上 |
+
+**要用「最近更新」功能请自己写**——用 `git log` 生成列表即可，十行代码，不依赖任何插件，
+也不会因为生态变动失效。**URL 重定向直接写在 Caddy 里**，两行配置，同样不受影响。
+
+判断一个插件是否还有效，最快的办法是装之前先看一眼它的依赖：
+
+```bash
+pip install --dry-run <插件名> 2>&1 | grep -i properdocs
+```
 
 ## 注意事项
 
