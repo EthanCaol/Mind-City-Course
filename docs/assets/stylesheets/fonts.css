@@ -37,37 +37,53 @@
 /* ---------------------------------------------------------------------------
    代码块的完整字体栈
 
-   Material 原本的写法是：
-      var(--md-code-font,_), SFMono-Regular, Consolas, Menlo, monospace
-   只替换 --md-code-font 的话，中文会一路掉到最后的通用 monospace ——
-   Cascadia Code 只打包了 latin 子集，后面那串等宽兜底也都没有汉字，
-   于是 Windows 上通常落到宋体，和旁边的 Cascadia Code 风格割裂。
+   分两段：前半段管 ASCII，后半段管中文。
 
-   所以这里整条接管，按「先等宽、再中文」的顺序排：
-
-     1. Cascadia Code —— 只管 ASCII，没有汉字，中文会自动往后找
+     1. Cascadia Code —— 代码主字体。只打包了 latin 子集，没有汉字
      2. 等宽兜底 —— Cascadia 加载失败时顶上，同样只管 ASCII
-     3. 等宽中文字体 —— 装了就用，代码里的中文注释还能对齐
-     4. 系统常规中文字体 —— 与正文一致，也就是绝大多数学生的实际情况
-     5. 最终兜底
+     3. 正文那一套 —— 本站展开就是
+        Roboto, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif
 
-   关键点：第 2 组必须排在中文之前。中文不会命中第 1、2 组（它们没汉字），
-   所以顺序不会影响 ASCII；但反过来把中文插在前面，一旦 Cascadia 加载失败，
+   第 3 组也没有汉字，中文最终由浏览器交给系统中文字体去接 —— 而这正是正文
+   走的那条路，所以代码块里的中文和正文里的中文是同一个字体。
+
+   第 3 组写成 var(--md-text-font-family) 而不是把 Roboto 那串抄一遍：正文以后
+   换字体时这里自动跟着换，不会漏改。Material 把 --md-text-font-family 定义在
+   body 上，和下面这条挂在同一个元素，引用同元素的自定义属性没有先后问题。
+
+   顺序仍然是「先等宽、再正文」：第 1、2 组没有汉字，中文不会在这里停下，所以
+   这个顺序不影响中文；但反过来把正文那套插到前面，一旦 Cascadia 加载失败，
    ASCII 就会用上比例字体，代码块会歪掉。
+
+   末尾特意不再补一个通用 monospace。通用 monospace 是含汉字的（Windows 上是
+   宋体），排在正文那套之后的话，中文会停在它那里，就又不是正文的字体了。
+
+   代价：中文注释不再等宽，和上下行 ASCII 的列对不齐。这是刻意的取舍 —— 换来
+   的是「代码里的中文和正文看起来是一套字」。
    --------------------------------------------------------------------------- */
 
-:root {
+/* 选择器必须是 body，不能写 :root —— 这是个很容易踩的坑。
+
+   Material 自己就是把 --md-code-font-family 定义在 body 上的：
+       body{ ...--md-code-font-family:var(--md-code-font,_),SFMono-Regular,
+             Consolas,Menlo,monospace }
+   自定义属性同样遵循层叠，而「元素自己声明的值」永远压过「从父元素继承来的
+   值」。写在 :root 上只是给了 html 一个值，body 会用自己的声明把它盖掉，
+   等于整段白写 —— 浏览器就退回 SFMono-Regular / Consolas，看起来「字体没
+   生效」。
+
+   写成 body 后靠加载顺序取胜：mkdocs 把 extra_css 排在主题样式之后，同为
+   body 选择器（优先级 0,0,1）时后加载的赢。
+   --------------------------------------------------------------------------- */
+
+body {
   --md-code-font-family:
     /* 1. 代码主字体（latin 子集） */
     "Cascadia Code",
     /* 2. 等宽兜底，只管 ASCII */
     SFMono-Regular, Consolas, Menlo,
-    /* 3. 等宽中文字体，装了就用，保住对齐 */
-    "Sarasa Mono SC", "Noto Sans Mono CJK SC", "Source Han Mono SC",
-    /* 4. 系统常规中文字体，与正文一致 */
-    "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Source Han Sans SC",
-    /* 5. 最终兜底 */
-    monospace;
+    /* 3. 中文跟着正文走 */
+    var(--md-text-font-family);
 }
 
 /* ---------------------------------------------------------------------------

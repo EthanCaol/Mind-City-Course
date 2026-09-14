@@ -51,7 +51,7 @@ C语言就是为了 Unix 操作系统而生的。它不是先被设计好一门�
 
 ### 1.2 为什么要使用 WSL
 
-WSL 的全称是 Windows Subsystem for Linux，中文叫「适用于 Linux 的 Windows 子系统」。它是微软官方提供的一个功能：让你在 Windows 里直接跑一个真正的 Linux 系统 —— 不用装虚拟机软件，也不用装双系统，在 Windows 的终端里敲 Linux 命令就能用。
+WSL 的全称是 **Windows Subsystem for Linux**，中文叫**「适用于 Linux 的 Windows 子系统」**。它是微软官方提供的一个功能：让你在 Windows 里直接跑一个真正的 Linux 系统 —— 不用装虚拟机软件，也不用装双系统，在 Windows 的终端里敲 Linux 命令就能用。
 
 现在的 WSL2 用的是微软自己编译的真正的 Linux 内核，跑在轻量虚拟化上。
 
@@ -69,7 +69,7 @@ VSCode 是目前世界上最主流的代码编辑器 —— 用的人最多、�
 - **智能补全**：敲两三个字母，函数名、参数列表、结构体成员就自动列出来，不用背也不用完整敲出来。写 `str` 会提示 `strlen` / `strcpy` / `strcmp`，还附带参数说明和该引入哪个头文件。
 - **写的时候就知道错**：拼错函数名、少个分号、参数类型对不上，编辑器当场画波浪线，不用等到编译才发现。
 - **和各种 AI 工具无缝衔接**：GitHub Copilot、Claude Code、Codex 这类工具都有围绕 VSCode 生态做适配，装上插件就能在编辑器里直接对话、讲解代码、解释报错，学习效率完全不一样。
-- **一套工具用到底**：C/C++、Python、LaTeX、Markdown、Git，后面所有的课都能用同一个编辑器，不用每门课换一个工具。
+- **一套工具用到底**：C/C++、Python、Verilog、Java、JS/TS、Rust、Go，后面所有的课都能用同一个编辑器，不用每门课换一个工具。
 - **调试体验完整**：断点、单步、看变量值、看调用栈，直接调试 WSL 里的 Linux 程序。
 
 ### 1.4 为什么 Dev-C++ 只适合暂时过渡
@@ -107,14 +107,12 @@ Dev-C++ 是个 2005 年就停止更新的老古董 IDE，内置的是 2004 年�
     ```
 
     - 右键开始菜单（或按 ++win+x++），选「**终端(管理员)**」，才能打开管理员终端
-    - 两条命令都要看到 `操作成功完成` 才算生效，执行完同样按提示重启电脑
-    - `/norestart` 的意思是「先别自动重启」，方便你两条命令连着敲完
-    - 执行完之后，记得也要重启电脑，才能让 Windows 功能生效
+    - 两条命令都要看到 `操作成功完成` 才算生效，执行完同样按需要重启电脑
 
 
 ### 2.2 安装 WSL 本体
 
-下载并**双击**安装包 `wsl.2.7.14.0.x64.msi`：
+下载并运行安装包 `wsl.2.7.14.0.x64.msi`：
 
 - **直接下载**：<https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/wsl.2.7.14.0.x64.msi>
 - **官方最新版**：<https://github.com/microsoft/wsl/releases>
@@ -472,7 +470,7 @@ gcc hello.c -o hello   # 编译代码，得到可执行文件 hello
 
 打开 VSCode，**点击左侧边栏的「扩展」**（Extensions，方块图标），搜索并安装下面这几个：
 
-| 插件名                             | 说明                    | 必装？ |
+| 插件名                             | 说明                    | 是否必装 |
 | ---------------------------------- | ----------------------- | ------ |
 | WSL                                | 让 VSCode 能连进 WSL    | 是     |
 | C/C++                              | C语言语法高亮、代码提示 | 是     |
@@ -542,6 +540,11 @@ VSCode 其实是分两端的：界面跑在 Windows 上，但真正读写代码�
 
 - [《VSCode 配置 | 外观 | 通用型扩展 | Minimal》](https://www.bilibili.com/video/BV1YW4y1M7uX)
 - [《VSCode 配置 | C/C++ | MakeFile | CMake | Minimal》](https://www.bilibili.com/video/BV1H24y1D7Kn)
+
+![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260914214817142.jpg)
+
+![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260914214845964.jpg)
+
 
 ## 8. 进阶补充：备份操作系统，以及迁移到 D 盘
 
