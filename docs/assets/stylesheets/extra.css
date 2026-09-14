@@ -195,3 +195,50 @@
 .md-source-file {
   display: none;
 }
+
+/* ---------------------------------------------------------------------------
+   首页底部的源码仓库卡片
+
+   为什么不用 shields.io / github-readme-stats 那类徽章：
+   本站启用了 privacy 插件，构建时会把外链图片抓成本地副本 —— 徽章会被冻结
+   成构建那一刻的样子，star 数变成一张静态图，还不如不放；更麻烦的是构建跑在
+   --strict 下，这类第三方服务一旦抽风就会让构建失败、把整个部署卡住。
+   所以这里纯 CSS 画一张，不依赖任何外部服务。
+
+   卡片也特意不显示 star / fork 数：那要么再引入一个外部接口（同样的问题），
+   要么构建时去问 GitHub API（每次 push 都多一个能搞挂部署的环节）。
+   --------------------------------------------------------------------------- */
+
+.md-typeset .repo-card {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-top: 1.5em;
+  padding: 1.1rem 1.3rem;
+  /* 左边一道主色竖条当地标。用 border-left 而不是另外塞一个 div，
+     省一层结构，也保证它一定顺着卡片圆角走。 */
+  border: 0.05rem solid var(--md-default-fg-color--lightest);
+  border-left: 0.2rem solid var(--md-primary-fg-color);
+  border-radius: 0.3rem;
+  background-color: var(--md-code-bg-color);
+}
+
+/* flex: none 是关键：仓库名比较长，默认的 flex-shrink 会把图标压扁 */
+.md-typeset .repo-card__logo {
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: 0.15rem; /* 跟右侧第一行文字的视觉中心对齐 */
+  fill: var(--md-default-fg-color--light);
+}
+
+.md-typeset .repo-card__name {
+  font-family: var(--md-code-font-family);
+  font-weight: 700;
+}
+
+.md-typeset .repo-card__desc {
+  margin: 0.35em 0 0; /* 段落默认上下都有 margin，这里只要一点上间距 */
+  font-size: 0.85em;
+  color: var(--md-default-fg-color--light);
+}
