@@ -1,58 +1,43 @@
-# Mind-City-Course
+# 程序设计 · 课程实验文档
 
-欢迎来到 Mind City Course 的文档站点。这里是首页，直接把 `docs/index.md` 的内容替换成你的课程内容即可。
+复旦大学《程序设计》课程（2026 年秋季学期）的实验文档。
 
-## 本地预览
+本课程以 **C语言** 为描述语言，面向零基础的同学。
 
-```bash
-cd ~/Mind-City-Course
-mkdocs serve
-```
+!!! info "上课时间"
 
-默认监听 `http://127.0.0.1:8000`，改 Markdown 后浏览器会自动刷新。
+    | 类型       | 星期   |     时间      | 地点            | 备注           |
+    | ---------- | ------ | :-----------: | --------------- | -------------- |
+    | **实验课** | 星期三 |  8:00 - 9:40  | 逸夫楼 204、205 | **这是一节早八课** |
+    | 理论课     | 星期四 | 13:30 - 16:10 | 四教 H4204      |                |
 
-## 部署
+    
 
-推送到 `main` 分支即自动部署，无需手动操作：
+!!! tip "课程主页"
+    这里是课程主页：<https://admis.fudan.edu.cn/sgzhou/0e/9a/c33974a790170/page.htm>
 
-```bash
-git add -A && git commit -m "..." && git push
-```
+!!! tip "课程微信群"
+    TODO
 
-GitHub 通过 webhook 通知服务器拉取并重新构建，通常十几秒后 <https://mind-city.com> 即可看到更新。
 
-构建使用 `mkdocs build --strict`，文档中存在坏链接或非法语法会导致构建失败——此时线上保持上一版内容，不会出现半成品页面。
+## 主讲教师
 
-## 新增页面
+**周水庚** 教授
 
-1. 在 `docs/` 下新建 `.md` 文件，比如 `docs/lesson-01.md`
-2. 在 `mkdocs.yml` 的 `nav` 里登记：
+- 办公室：江湾校区交叉二号楼 D4021 室
+- 邮箱：sgzhou@fudan.edu.cn
+- 主页：<https://admis.fudan.edu.cn/sgzhou/>
 
-```yaml
-nav:
-  - 首页: index.md
-  - 第一课: lesson-01.md
-```
+## 助教
 
-## 主题能力速查
+### 曹奕伦
 
-!!! note "提示框"
-    用 `!!! note` 开头，配合 `admonition` 扩展。还有 `tip` / `warning` / `danger` 等类型。
+- 经历：22级计拔班本科生，26级计算机直博生
+- 邮箱：26113050003@m.fudan.edu.cn
+- 微信号：C1677035769
+- 线上答疑：加我微信，随时提问，看到包秒回（或者微信群直接@我）
+- 线下答疑：来江湾校区找我，或者约在南区活动中心（记得预约好活动室）
 
-=== "Tab A"
+### 余仕达
 
-    用 `=== "标题"` 做内容分页，左侧可切换。
-
-=== "Tab B"
-
-    同样支持代码块：
-
-    ```python
-    def hello(name: str) -> str:
-        return f"Hello, {name}!"
-    ```
-
-- [x] 已完成的待办
-- [ ] 未完成的待办
-
-支持 `#!python print("行内高亮")` 和 :material-city: 图标 emoji。
+- 邮箱：26113050344@m.fudan.edu.cn
