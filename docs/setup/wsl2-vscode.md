@@ -312,6 +312,8 @@ sudo apt upgrade -y
 
 WSL 的全局配置存在 Windows 用户目录下的 `.wslconfig` 文件里。**默认是没有这个文件的，需要我们自己新建一个。**
 
+---
+
 #### 第 1 步：打开你的用户目录
 
 打开文件资源管理器，进入你的用户目录，它的路径是：
@@ -324,6 +326,8 @@ C:\Users\<你的用户名>
 
 ![在资源管理器地址栏输入 %UserProfile%](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913230242391.png)
 
+---
+
 #### 第 2 步：让文件显示扩展名
 
 点击窗口上方的「查看」菜单，在展开的「显示」子菜单里，**勾上「文件扩展名」**。
@@ -334,6 +338,8 @@ C:\Users\<你的用户名>
     Windows 默认会把扩展名藏起来，于是 `新建文本文档.txt` 在你眼里只显示成「新建文本文档」。
 
     不开这个开关，等下重命名时就会把它改成 `.wslconfig.txt`，而 WSL 只会读取文件名是 `.wslconfig` 的配置文件 —— 结果就是配置**看起来做了但完全不生效**。
+
+---
 
 #### 第 3 步：创建 `.wslconfig` 并粘贴配置
 
@@ -360,6 +366,8 @@ networkingMode=mirrored
 
 ![改好后的 .wslconfig 文件](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913225359625.png)
 
+---
+
 #### 第 4 步：重启 WSL 让配置生效
 
 `.wslconfig` **只在 WSL 启动时读取一次**，改完必须让 WSL 重启才能生效。打开 Windows 终端，执行命令先让 WSL 关机：
@@ -367,6 +375,8 @@ networkingMode=mirrored
 ```pwsh title="Windows 终端"
 wsl --shutdown
 ```
+
+---
 
 #### 第 5 步：验证代理是否打通
 
