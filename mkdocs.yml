@@ -5,7 +5,6 @@ docs_dir: docs
 
 theme:
   name: material
-  custom_dir: overrides
   language: zh
   icon:
     logo: material/city
@@ -18,21 +17,12 @@ theme:
     - search.highlight
     - content.code.copy
     - content.code.annotate
+  # 固定暗色。写成单个 scheme（而不是带 media 的列表）并且不给 toggle，
+  # 顶栏就不会出现亮暗切换按钮，也不跟随系统偏好。
   palette:
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: indigo
-      accent: indigo
-      toggle:
-        icon: material/brightness-7
-        name: 切换到深色模式
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: indigo
-      accent: indigo
-      toggle:
-        icon: material/brightness-4
-        name: 切换到浅色模式
+    scheme: slate
+    primary: indigo
+    accent: indigo
 
 nav:
   - 首页: index.md
@@ -58,7 +48,8 @@ markdown_extensions:
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.inlinehilite
-  - pymdownx.snippets
+  - pymdownx.snippets:
+      base_path: docs       # 让 --8<-- "code/hello.c" 这种简写路径可用
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.highlight:
@@ -80,12 +71,15 @@ plugins:
       locale: zh
       enable_creation_date: false
       fallback_to_build_date: true
+  - open-in-new-tab:
+      add_icon: true        # 站外链接后面加一个小箭头图标
   # 构建时抓取外部资源（Google Fonts、站外图片）并本地化。
   # 学生无需访问 fonts.googleapis.com（内地不可达）。必须放在最后。
   - privacy
 
 extra_css:
   - assets/stylesheets/fonts.css
+  - assets/stylesheets/extra.css
 
 # 把锚点校验从默认的 info 提到 warn —— 否则写错 #锚点 只会打一行 INFO，
 # --strict 不拦，站内交叉引用坏了也没人发现。

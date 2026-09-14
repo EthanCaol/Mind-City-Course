@@ -43,12 +43,23 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Cascadia Code 默认启用编程连字（!= 显示为 ≠，>= 显示为 ≥，=> 显示为箭头）。
+   关闭编程连字
 
-   这与 VSCode 里的显示一致，所以保留了默认行为。如果认为一年级学生看
-   ≠ 会误以为要输入 ≠ 而不是 !=，取消下面这段注释即可全局关闭：
+   Cascadia Code 默认把 != 渲染成 ≠、>= 渲染成 ≥、=> 渲染成箭头。这些连字
+   在 VSCode 里看着舒服，但文档是给学生「照着抄」用的：一年级学生看到 ≠
+   很可能直接去输入 ≠，而键盘上根本没有这个字符。所以这里全局关掉，让代码
+   显示成它本来的样子。
 
-   .md-typeset code,
-   .md-typeset pre,
-   .highlight { font-variant-ligatures: none; }
+   三个属性都要写：
+     font-variant-ligatures 是高层属性，管标准连字（liga / clig）
+     font-feature-settings 是底层开关，coding ligature 主要靠 calt
+       （contextual alternates），只关前者不足以生效
    --------------------------------------------------------------------------- */
+
+.md-typeset code,
+.md-typeset pre,
+.md-typeset kbd,
+.highlight {
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "clig" 0, "calt" 0;
+}
