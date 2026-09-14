@@ -176,8 +176,7 @@ Claude 桌面版只会按 `sonnet`、`opus`、`fable`、`haiku` 这几个固定�
 
 图中的「声明支持 1M」也可以勾上。填完点右下角的 **「添加」**。
 
-![配置模型映射，把各档模型指向 DeepSeek](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260914220833355.png)
-
+![配置模型映射，把各档模型指向 DeepSeek](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260915004736226.png)
 
 ## 5. 打开路由开关
 
