@@ -1,10 +1,6 @@
-site_name: Mind-City-Course
-site_description: Mind City Course 课程文档
+site_name: 程序设计-课程实验文档
+site_description: 复旦大学《程序设计》课程实验文档
 docs_dir: docs
-
-repo_url: https://github.com/EthanCaol/Mind-City-Course
-repo_name: EthanCaol/Mind-City-Course
-edit_uri: edit/main/docs/
 
 theme:
   name: material
