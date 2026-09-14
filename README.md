@@ -100,9 +100,28 @@ git add -A && git commit -m "添加第一课" && git push
 支持行内高亮 `#!python print("x")`、脚注[^1]、以及 :material-city: 图标。
 
 [^1]: 这是脚注内容。
+
+流程图用 `mermaid` 代码块（Material 内置支持，不需要装插件）：
+
+```mermaid
+graph LR
+    A[Windows] --> B[WSL2]
+    B --> C[Ubuntu]
+    C --> D[gcc 编译]
+```
 ````
 
 标题会自动生成锚点，**中文标题保留中文锚点**（如 `#部署`），可直接分享该链接。
+
+**图片点击放大**：由 `mkdocs-glightbox` 提供，点击图片会在浮层中放大查看，手机上看实验截图尤其方便。语法就是标准 Markdown：
+
+```markdown
+![](assets/images/lab-01-step-1.png)
+```
+
+**每页底部显示最后更新时间**：由 `mkdocs-git-revision-date-localized-plugin` 根据 git 记录生成「X 天前」，学生能一眼判断内容是否对应当前学期。**注意它读的是 git 历史**——新建的文件要先 commit 并 push，时间戳才会更新。
+
+**中文全文搜索**：`lang: zh` 配合 jieba 分词，搜「镜像」这类词能命中词中的片段，而不是要求整句匹配。
 
 ---
 
@@ -203,11 +222,81 @@ git clone git@github.com:EthanCaol/Mind-City-Course.git ~/Mind-City-Course
 ~/.local/bin/mind-city-deploy.sh
 ```
 
-依赖重装（conda base）：
+依赖重装（conda base）。**这些包一个都不能少**——缺任何一个都不会报错，只会静默降级：
 
 ```bash
-pip install mkdocs-material
+pip install mkdocs-material                              # 主题本体
+pip install jieba                                        # 中文搜索分词；缺了搜「镜像」搜不到
+pip install mkdocs-glightbox                             # 图片点击放大
+pip install mkdocs-git-revision-date-localized-plugin    # 页面底部「最后更新于 X 天前」
 ```
+
+装完可以这样自查是否齐全：
+
+```bash
+python3 -c "import jieba, mkdocs_glightbox, mkdocs_git_revision_date_localized_plugin; print('ok')"
+```
+
+两点补充：
+
+- **`privacy` 插件是 Material 自带的**，不需要单独 pip 安装，但**首次构建必须能联网**——它要去 Google Fonts 和 unpkg 抓资源。抓完缓存在 `.cache/plugin/privacy`（已 gitignore），之后离线也能构建。
+- **Cascadia Code 字体已随仓库提交**（`docs/assets/fonts/`），克隆下来就有，不需要额外下载。
+
+`mermaid` 流程图**不需要装包**——Material 自带渲染逻辑，只需 `mkdocs.yml` 里 `pymdownx.superfences` 的 `custom_fences` 配置（已配好）。但注意 Material 是从 `unpkg.com` 加载 mermaid 脚本的，国内网络可能较慢，详见下方「已知问题」。
+
+## 字体与外部资源自托管
+
+`privacy` 插件在构建时把所有外部资源抓下来本地化，学生**无需访问任何境外域名**：
+
+```
+assets/external/
+├── fonts.googleapis.com/     44K   Roboto 样式表
+├── fonts.gstatic.com/       808K   Roboto / Roboto Mono 字体（30 个 woff2）
+├── unpkg.com/               3.5M   mermaid（懒加载，仅含流程图的页面才请求）
+└── image-...myqcloud.com/   2.3M   教程里的 19 张截图
+```
+
+顺带解决了原本截图托管在腾讯云 COS 上的隐患——现在是本地副本，不怕对方开防盗链或欠费。
+
+**构建时必须能联网**（服务器在香港，访问 Google/Cloudflare 无障碍）。首次构建约 7 秒，之后走 `.cache/plugin/privacy` 缓存，2 秒左右。缓存目录已加入 `.gitignore`。
+
+### 正文字体
+
+Material 默认用 Google 的 Roboto + Roboto Mono，现由 `privacy` 自托管。注意 **Roboto 不含中文字形**——中文始终由系统字体渲染（Windows 上通常是微软雅黑，macOS 是苹方）。自托管只是消掉了那个被墙的请求让首屏不卡住，中文的显示效果本来就由系统决定，不需要额外配。
+
+### 代码字体：Cascadia Code
+
+自托管在 `docs/assets/fonts/`（3 个 woff2，共 100 KB，**只含 latin 子集**——代码块是纯 ASCII，不需要中文字形，体积因此从 3 MB 降到 100 KB），由 `docs/assets/stylesheets/fonts.css` 定义 `@font-face` 并覆盖 `--md-code-font`。
+
+选它的理由：**Windows Terminal 和 VSCode 的默认等宽字体就是它**，学生看文档里代码和看自己编辑器里的是同一套字形。授权 SIL OFL 1.1，可自由分发。
+
+**连字默认开着**：`!=` 显示为 `≠`，`>=` 显示为 `≥`，`=>` 显示为箭头。这与 VSCode 一致，所以保留了默认行为。如果认为一年级学生看 `≠` 会误以为要输入 `≠` 而不是 `!=`，取消 `fonts.css` 末尾那段注释即可全局关闭。
+
+## 已知问题
+
+**一、删掉 `site_url` 会让 mermaid 变成每页加载 3.4 MB**
+
+`privacy` 插件里有这样一个特判：
+
+```python
+# If site URL is not given, ensure that Mermaid.js is always present.
+if "mermaid.min.js" in url.path and not config.site_url:
+    config.extra_javascript.append(script)
+```
+
+未配置 `site_url` 时，插件无法把 mermaid 的绝对 URL 正确改写成本地路径，于是走兜底——把它硬塞进 `extra_javascript`，**每个页面（含 404）都会加载 3.4 MB**，而且构建时间从 2 秒涨到 7 秒。
+
+配上 `site_url: https://mind-city.com/` 之后，URL 被正确改写成 `assets/external/unpkg.com/mermaid@11/dist/mermaid.min.js`，恢复「只有含流程图的页面才请求」的懒加载行为。
+
+**所以 `site_url` 这一行不能删。** 它本来也是该配的——`sitemap.xml` 里的链接依赖它。
+
+**二、bash 代码块的命令名不着色**
+
+这是 Pygments `BashLexer` 的固有行为，不是配置错误。它只给 shell **语法结构**着色（注释、字符串、变量、关键字、操作符、数字），**外部命令一律不着色**——`sudo`、`apt`、`wsl`、`cat`、`grep` 都是白的，因为词法分析器无法判断 `nginx` 是命令还是文件名。只有 `echo`、`cd` 这类 bash 内建才有颜色。
+
+Material 的配色又叠加了一层：`.n`（Name）被映射成 `--md-code-fg-color`，**等于正文色**。所以实测 `sudo apt update && sudo apt upgrade -y` 渲染出来只有 `&&` 是淡灰。
+
+**换 `pygments_style` 无效**——配色能换，但那些命令压根没有 token 类。真要改只能自定义 lexer。
 
 ## 注意事项
 
