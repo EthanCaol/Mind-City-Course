@@ -27,8 +27,20 @@
 
 .md-typeset h2 {
   margin-top: 3.5em; /* ≈ 70px */
+  /* 横线到下方正文的距离。Material 默认是 .64em（≈ 12.8px），对带横线的
+     标题来说偏紧，横线会贴着下一段文字。这里放到 1em（≈ 20px）。 */
+  margin-bottom: 1em;
   padding-top: 0.2em;
+  /* 标题下方的横线。用 border-bottom 而不是给文字加 text-decoration:
+     前者横跨整个内容宽度，起的是分割作用；后者只贴着文字走，没法承担
+     章节分隔的职责。 */
+  padding-bottom: 0.4em; /* 文字与横线之间留一点空隙 */
+  border-bottom: 0.05rem solid var(--md-default-fg-color--lighter);
 }
+
+/* 注：Material 自己的 hr 用的是 --md-default-fg-color--lightest，比这里更淡。
+   那条线在暗色主题下几乎看不见，而这里要的是能读出层级的结构线，
+   所以用亮一档的 --lighter。嫌重就换成 --lightest。 */
 
 .md-typeset h3 {
   margin-top: 2.8em; /* ≈ 45px */
@@ -79,4 +91,83 @@
 /* 列表项之间也稍微拉开，避免密集的条目连成一片 */
 .md-typeset li {
   margin-bottom: 0.35em;
+}
+
+/* ---------------------------------------------------------------------------
+   右侧目录（TOC）加宽、字号收小
+
+   Material 默认给侧边栏 12.1rem 宽、导航字号 .7rem。中文标题本来就长，
+   加上章节编号（「4.2 配置网络代理（可选）」）后经常折成两行，目录看起来
+   很碎。加宽 + 收小字号两边一起使劲，容量约提升 24%。
+
+   注意两个选择器都是左右共用的，必须限定到右侧：
+     .md-sidebar            → 左右侧边栏都是这个类
+     .md-sidebar--secondary → 只有右侧目录
+     .md-nav                → 左右导航都是这个类
+     .md-nav--primary       → 左侧站点导航
+     .md-nav--secondary     → 右侧目录
+
+   字号那条要连嵌套的 .md-nav 一起写：Material 给每个 .md-nav 都单独设了
+   .7rem，只改最外层的话，子条目会因为自己的 .md-nav 规则而保持原大小。
+   --------------------------------------------------------------------------- */
+
+.md-sidebar--secondary {
+  width: 15rem; /* 12.1rem → 加宽约 24% */
+}
+
+.md-nav--secondary,
+.md-nav--secondary .md-nav {
+  font-size: 0.65rem; /* .7rem → 收小约 7% */
+}
+
+/* ---------------------------------------------------------------------------
+   侧边栏滚动条：取消悬停时的高亮
+
+   Material 给滚动条设了三段状态，常态是淡色，但鼠标移上去（以及键盘聚焦）
+   会换成 --md-accent-fg-color —— 在本站是 indigo，一个饱和的靛蓝，在暗色
+   背景上非常刺眼。这里把所有状态都钉回常态的淡色，等于取消悬停反馈。
+
+   两套写法都要覆盖，因为它们是不同的标准：
+     scrollbar-color       Firefox
+     ::-webkit-scrollbar   Chrome / Edge / Safari
+   --------------------------------------------------------------------------- */
+
+.md-sidebar__scrollwrap,
+.md-sidebar__scrollwrap:focus-within,
+.md-sidebar__scrollwrap:hover {
+  scrollbar-color: var(--md-default-fg-color--lighter) #0000;
+}
+
+.md-sidebar__scrollwrap::-webkit-scrollbar-thumb,
+.md-sidebar__scrollwrap:focus-within::-webkit-scrollbar-thumb,
+.md-sidebar__scrollwrap:hover::-webkit-scrollbar-thumb,
+.md-sidebar__scrollwrap:focus-within::-webkit-scrollbar-thumb:hover,
+.md-sidebar__scrollwrap:hover::-webkit-scrollbar-thumb:hover {
+  background-color: var(--md-default-fg-color--lighter);
+}
+
+/* ---------------------------------------------------------------------------
+   大标题下方的小字（负责助教 / 实验课时间）
+
+   用法：每项用一个 <span> 包起来，整行放在 <p class="doc-meta"> 里：
+
+       <p class="doc-meta"><span>负责助教：<strong>曹奕伦</strong></span><span>实验课时间：<strong>2026-9-16</strong></span></p>
+
+   之所以用 flex 而不是在 Markdown 里打空格：空格的宽度看不见也数不清，
+   改起来全靠猜。flex 的 gap 是一个明确的数字，想调多宽就改一个值。
+
+   样式做成「小一号 + 淡一档」，让它读起来像标题的附注而不是正文。
+
+   margin-top 是负值：Material 给 h1 设了 1.25em 的下边距（约 32px），
+   不减掉的话小字会离标题很远，看起来像独立的一段。
+   --------------------------------------------------------------------------- */
+
+.md-typeset .doc-meta {
+  display: flex;
+  flex-wrap: wrap; /* 窄屏放不下时自动换行，不会挤成一团 */
+  gap: 0.3rem 1.8rem; /* 行间距 0.3rem，两项之间 1.8rem ← 只改这个数字 */
+  font-size: 0.72rem; /* 正文是 0.8rem，收小一档 */
+  color: var(--md-default-fg-color--light);
+  margin-top: -1em;
+  margin-bottom: 2em; /* 与下方正文拉开距离 */
 }

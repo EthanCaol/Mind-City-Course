@@ -25,9 +25,9 @@ theme:
     accent: indigo
 
 nav:
-  - 首页: index.md
-  - 实验环境:
-      - WSL2 + VSCode 环境搭建: setup/wsl2-vscode.md
+  - 课程首页: index.md
+  - 实验课:
+      - (0) WSL2 环境搭建: setup/wsl2-vscode.md
 
 markdown_extensions:
   - admonition

@@ -34,12 +34,40 @@
   src: url("../fonts/cascadia-code-latin-700-normal.woff2") format("woff2");
 }
 
-/* 覆盖 Material 的代码字体变量。
-   Material 原本的写法是 var(--md-code-font,_) 后面跟一串等宽兜底字体
-   （SFMono-Regular / Consolas / Menlo / monospace），这里只替换变量本身，
-   兜底链保持不动——字体加载失败时不会退化成比例字体。 */
+/* ---------------------------------------------------------------------------
+   代码块的完整字体栈
+
+   Material 原本的写法是：
+      var(--md-code-font,_), SFMono-Regular, Consolas, Menlo, monospace
+   只替换 --md-code-font 的话，中文会一路掉到最后的通用 monospace ——
+   Cascadia Code 只打包了 latin 子集，后面那串等宽兜底也都没有汉字，
+   于是 Windows 上通常落到宋体，和旁边的 Cascadia Code 风格割裂。
+
+   所以这里整条接管，按「先等宽、再中文」的顺序排：
+
+     1. Cascadia Code —— 只管 ASCII，没有汉字，中文会自动往后找
+     2. 等宽兜底 —— Cascadia 加载失败时顶上，同样只管 ASCII
+     3. 等宽中文字体 —— 装了就用，代码里的中文注释还能对齐
+     4. 系统常规中文字体 —— 与正文一致，也就是绝大多数学生的实际情况
+     5. 最终兜底
+
+   关键点：第 2 组必须排在中文之前。中文不会命中第 1、2 组（它们没汉字），
+   所以顺序不会影响 ASCII；但反过来把中文插在前面，一旦 Cascadia 加载失败，
+   ASCII 就会用上比例字体，代码块会歪掉。
+   --------------------------------------------------------------------------- */
+
 :root {
-  --md-code-font: "Cascadia Code";
+  --md-code-font-family:
+    /* 1. 代码主字体（latin 子集） */
+    "Cascadia Code",
+    /* 2. 等宽兜底，只管 ASCII */
+    SFMono-Regular, Consolas, Menlo,
+    /* 3. 等宽中文字体，装了就用，保住对齐 */
+    "Sarasa Mono SC", "Noto Sans Mono CJK SC", "Source Han Mono SC",
+    /* 4. 系统常规中文字体，与正文一致 */
+    "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Source Han Sans SC",
+    /* 5. 最终兜底 */
+    monospace;
 }
 
 /* ---------------------------------------------------------------------------
