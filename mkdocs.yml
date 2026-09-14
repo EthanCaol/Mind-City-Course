@@ -47,6 +47,10 @@ markdown_extensions:
   - footnotes
   - toc:
       permalink: true
+      # 保留中文锚点（默认会被转成 _1/_2 这类序号）
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
   - pymdownx.details
   - pymdownx.superfences
   - pymdownx.inlinehilite
