@@ -5,10 +5,12 @@
 面向零基础、使用 Win11 操作系统的同学。全过程只需要在 Windows 终端里粘贴命令，**不需要任何前置知识**。中途遇到任何不懂的术语或者问题，请立即咨询 AI，或马上向助教求助。
 
 !!! tip "推荐 AI 工具"
-    - DeepSeek-API（国内，收费）
-    - 腾讯元宝（国内，免费）
-    - ChatGPT（付费）
-    - Claude（付费）
+    可以参考 [LMArena](https://arena.ai/leaderboard/agent) 大模型实时排行榜
+
+    - [DeepSeek-API](https://platform.deepseek.com/)（国内，收费）
+    - [腾讯元宝](https://yuanbao.tencent.com/)（国内，免费）
+    - [ChatGPT](https://chatgpt.com/)（付费）
+    - [Claude](https://claude.ai/)（付费）
 
 !!! abstract "全程概览"
     本文按顺序做完这 8 步，你就有了一个完整的 C语言开发环境：
@@ -82,9 +84,33 @@ Dev-C++ 是个 2005 年就停止更新的老古董 IDE，内置的是 2004 年�
 
 ![在开始菜单搜索「启用或关闭 Windows 功能」](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913222107863.png)
 
-勾选**「虚拟机平台」**和**「适用于 Linux 的 Windows 子系统」**两项，确定后**按提示重启电脑**
+在弹出的窗口中，勾选以下两个选项
 
-![勾选「虚拟机平台」和「适用于 Linux 的 Windows 子系统」](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913212409719.png)
+- 「适用于 Linux 的 Windows 子系统」
+- 「虚拟机平台」
+
+确定后会开始安装，然后按提示重启电脑
+
+![勾选「虚拟机平台」和「适用于 Linux 的 Windows 子系统」](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260914204140810.png)
+
+!!! tip "补充：用命令行做同样的事"
+    如果你更喜欢敲命令，上面的勾选框操作等价于在**管理员终端**里执行下面这两条命令：
+
+    ```pwsh title="Windows 终端（管理员）"
+    # 启用「适用于 Linux 的 Windows 子系统」
+    dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+    ```
+
+    ```pwsh title="Windows 终端（管理员）"
+    # 启用「虚拟机平台」
+    dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+    ```
+
+    - 右键开始菜单（或按 ++win+x++），选「**终端(管理员)**」，才能打开管理员终端
+    - 两条命令都要看到 `操作成功完成` 才算生效，执行完同样按提示重启电脑
+    - `/norestart` 的意思是「先别自动重启」，方便你两条命令连着敲完
+    - 执行完之后，记得也要重启电脑，才能让 Windows 功能生效
+
 
 ### 2.2 安装 WSL 本体
 

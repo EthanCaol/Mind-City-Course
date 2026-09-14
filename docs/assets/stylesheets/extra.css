@@ -169,5 +169,29 @@
   font-size: 0.72rem; /* 正文是 0.8rem，收小一档 */
   color: var(--md-default-fg-color--light);
   margin-top: -1em;
-  margin-bottom: 2em; /* 与下方正文拉开距离 */
+  /* 下边距特意留小：紧跟其后的是「最后更新」提示（见下方 .doc-updated），
+     两行小字属于同一组元信息，应该贴近。两者之间的空隙由这条 margin 决定，
+     与正文的距离则由 .doc-updated 的下边距负责。 */
+  margin-bottom: 0.4em;
+}
+
+/* ---------------------------------------------------------------------------
+   页顶的「最后更新」提示
+
+   日期由 hooks/revision_notice.py 插到标题下方（排在 .doc-meta 之后），
+   这里只管样式。文案在 hook 文件里改。
+   --------------------------------------------------------------------------- */
+
+.md-typeset .doc-updated {
+  font-size: 0.72rem; /* 与 .doc-meta 同字号，视觉上归为一组 */
+  color: var(--md-default-fg-color--light);
+  margin-top: 0; /* 与 .doc-meta 的下边距折叠，取较大者 */
+  margin-bottom: 2em; /* 与正文拉开距离 */
+}
+
+/* 隐藏页脚原本的「最后更新」——已经移到页顶，不隐藏会显示两次。
+   Material 只用到这个 aside 的日期部分（没配 repo_url，不含源码链接），
+   整块隐藏没有副作用。 */
+.md-source-file {
+  display: none;
 }

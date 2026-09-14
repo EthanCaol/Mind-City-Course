@@ -77,6 +77,10 @@ plugins:
   # 学生无需访问 fonts.googleapis.com（内地不可达）。必须放在最后。
   - privacy
 
+# 把「最后更新」提示从页底移到标题下方。见文件内的说明。
+hooks:
+  - hooks/revision_notice.py
+
 extra_css:
   - assets/stylesheets/fonts.css
   - assets/stylesheets/extra.css
