@@ -6,14 +6,13 @@
 这套方案要解决的问题是：**用 Claude 的客户端，但跑 DeepSeek 的模型**。配好之后，你就有了一个随时能用的 AI 助手：查报错、讲代码、逐行解释程序都行。
 
 !!! abstract "全程概览"
-    本文按顺序做完这 6 步，你就有了一个能用的 AI 编程助手：
-
     1. 了解为什么用这套方案（可跳过）
     2. 在 DeepSeek 开放平台申请 API Key
     3. 安装 CC Switch
     4. 在 CC Switch 里配置 DeepSeek
     5. 打开路由开关
     6. 安装 Claude 桌面版
+    7. 安装并配置 Claude Code
 
     全程只需要下载、点击和粘贴，**不需要任何前置知识**。
 
@@ -204,9 +203,11 @@ Claude 桌面版只会按 `sonnet`、`opus`、`fable`、`haiku` 这几个固定�
     - **提示 API Key 无效** → 回 CC Switch 检查 Key 有没有粘错，以及 DeepSeek 账户里还有没有余额
 
 
-## 7. 终端配置 Claude Code
+## 7. 安装并配置 Claude Code
 
 桌面版平时写作业够用了。如果你想在终端里直接让 AI 读代码、改代码，可以再装一个 **Claude Code**，它和桌面版共用同一套后端，只是配置从图形界面换成了环境变量。
+
+下面按系统分开写，**只看你自己那一个**。
 
 !!! warning "这一步必须科学上网，而且不能用香港节点"
 
@@ -215,15 +216,9 @@ Claude 桌面版只会按 `sonnet`、`opus`、`fable`、`haiku` 这几个固定�
     - Claude Code 的安装脚本放在 `claude.ai` 上，国内打不开，**安装的时候必须挂着代理**
     - **节点不要选香港**。Anthropic 不向香港提供服务，用香港 IP 会被判定成「不支持的地区」，装上了也用不了。选日本、新加坡、美国这类节点
 
-### 7.1 安装
+### 7.1 Windows
 
-
-
-
-
-```bash title="Ubuntu 终端"
-curl -fsSL https://claude.ai/install.sh | bash
-```
+安装：
 
 ```pwsh title="Windows 终端"
 irm https://claude.ai/install.ps1 | iex
@@ -231,32 +226,13 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 setx CLAUDE_CODE_USE_POWERSHELL_TOOL 1
 ```
 
-### 7.2 配置
-
-下面这些要写进 shell 的启动文件，这样每次开终端都自动生效。先把它打开：
-
-```bash title="Ubuntu 终端"
-code ~/.bashrc
-```
+然后用编辑器打开 `$PROFILE`：
 
 ```pwsh title="Windows 终端"
 code $PROFILE
 ```
 
-然后把对应系统的那一段粘到文件**末尾**，注意把 Key 换成第 2 步存下来的那一个：
-
-```bash title="~/.bashrc"
-alias cc='claude --permission-mode auto'
-export ANTHROPIC_AUTH_TOKEN="这里填上你的 DeepSeek API Key"
-
-export PATH="$HOME/.local/bin:$PATH"
-export ANTHROPIC_MODEL="deepseek-flash[1m]"
-export ANTHROPIC_BASE_URL="https://api.deepseek.com/anthropic"
-export ANTHROPIC_DEFAULT_OPUS_MODEL="deepseek-flash[1m]"
-export ANTHROPIC_DEFAULT_SONNET_MODEL="deepseek-flash[1m]"
-export ANTHROPIC_DEFAULT_HAIKU_MODEL="deepseek-flash[1m]"
-export CLAUDE_CODE_SUBAGENT_MODEL="deepseek-flash[1m]"
-```
+把下面这段粘到文件**末尾**，注意把 Key 换成第 2 步存下来的那一个：
 
 ```pwsh title="$PROFILE"
 function cc { claude --permission-mode auto @args }
@@ -271,8 +247,37 @@ $env:ANTHROPIC_DEFAULT_HAIKU_MODEL = "deepseek-flash[1m]"
 $env:CLAUDE_CODE_SUBAGENT_MODEL = "deepseek-flash[1m]"
 ```
 
+### 7.2 Ubuntu
+
+安装：
+
+```bash title="Ubuntu 终端"
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+然后用编辑器打开 `~/.bashrc`：
+
+```bash title="Ubuntu 终端"
+code ~/.bashrc
+```
+
+把下面这段粘到文件**末尾**，注意把 Key 换成第 2 步存下来的那一个：
+
+```bash title="~/.bashrc"
+alias cc='claude --permission-mode auto'
+export ANTHROPIC_AUTH_TOKEN="这里填上你的 DeepSeek API Key"
+
+export PATH="$HOME/.local/bin:$PATH"
+export ANTHROPIC_MODEL="deepseek-flash[1m]"
+export ANTHROPIC_BASE_URL="https://api.deepseek.com/anthropic"
+export ANTHROPIC_DEFAULT_OPUS_MODEL="deepseek-flash[1m]"
+export ANTHROPIC_DEFAULT_SONNET_MODEL="deepseek-flash[1m]"
+export ANTHROPIC_DEFAULT_HAIKU_MODEL="deepseek-flash[1m]"
+export CLAUDE_CODE_SUBAGENT_MODEL="deepseek-flash[1m]"
+```
+
 !!! warning "这个文件里存着你的 API Key"
-    `~/.bashrc` 和 `$PROFILE` 现在是明文保存 Key 的。**不要把这个文件发给别人，也不要提交到 GitHub**，道理和第 2 步那条警告一样。
+    `~/.bashrc` 和 `$PROFILE` 现在是明文保存 Key 的。**不要把这个文件发给别人，也不要提交到 GitHub**。
 
 ### 7.3 验证
 
