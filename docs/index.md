@@ -11,6 +11,18 @@ mkdocs serve
 
 默认监听 `http://127.0.0.1:8000`，改 Markdown 后浏览器会自动刷新。
 
+## 部署
+
+推送到 `main` 分支即自动部署，无需手动操作：
+
+```bash
+git add -A && git commit -m "..." && git push
+```
+
+GitHub 通过 webhook 通知服务器拉取并重新构建，通常十几秒后 <https://mind-city.com> 即可看到更新。
+
+构建使用 `mkdocs build --strict`，文档中存在坏链接或非法语法会导致构建失败——此时线上保持上一版内容，不会出现半成品页面。
+
 ## 新增页面
 
 1. 在 `docs/` 下新建 `.md` 文件，比如 `docs/lesson-01.md`
