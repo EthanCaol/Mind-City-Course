@@ -26,6 +26,7 @@ theme:
 
 nav:
   - 课程首页: index.md
+  - 站点计划: plan.md
   - 实验课:
       - (0) Dev-C++ 环境搭建: setup/dev-cpp.md
       - (0) WSL2 环境搭建: setup/wsl2-vscode.md
