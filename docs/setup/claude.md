@@ -205,16 +205,14 @@ Claude 桌面版只会按 `sonnet`、`opus`、`fable`、`haiku` 这几个固定�
 
 ## 7. 安装并配置 Claude Code
 
-桌面版平时写作业够用了。如果你想在终端里直接让 AI 读代码、改代码，可以再装一个 **Claude Code**，它和桌面版共用同一套后端，只是配置从图形界面换成了环境变量。
-
-下面按系统分开写，**只看你自己那一个**。
+桌面版日常聊天够用了，但是如果你想要在终端里直接让 AI 读代码、改代码，就需要再装一个 **Claude Code**。
 
 !!! warning "这一步必须科学上网，而且不能用香港节点"
 
     前面六步全程国内直连，只有这一步是例外：
 
     - Claude Code 的安装脚本放在 `claude.ai` 上，国内打不开，**安装的时候必须挂着代理**
-    - **节点不要选香港**。Anthropic 不向香港提供服务，用香港 IP 会被判定成「不支持的地区」，装上了也用不了。选日本、新加坡、美国这类节点
+    - **节点不要选香港**。Anthropic 不向香港提供服务，用香港 IP 会被判定成「不支持的地区」，装上了也用不了。
 
 ### 7.1 Windows
 
@@ -226,13 +224,20 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 setx CLAUDE_CODE_USE_POWERSHELL_TOOL 1
 ```
 
-然后用编辑器打开 `$PROFILE`：
+后两行解释一下：
+
+- **`Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`**：放开 PowerShell 的脚本限制。Windows 默认策略是 `Restricted`，**默认不支持加载 `$PROFILE` 配置文件**。所以少了这一行，下一步写进 `$PROFILE` 的配置会毫无动静地失效。
+  - `RemoteSigned` 表示本地脚本可以跑、从网上下载的必须有签名
+  - `-Scope CurrentUser` 让它只对当前用户生效，**不需要管理员权限**
+- **`setx CLAUDE_CODE_USE_POWERSHELL_TOOL 1`**：让 Claude Code 用 **PowerShell 原生工具**执行命令，而不是绕 Git Bash。好处是能直接跑 PowerShell 命令、管道传对象、用 Windows 原生路径。用 `setx` 而不是 `$env:`，是因为它要**写进用户环境变量来持久化**，只在当前终端窗口里设置不够用。
+
+然后用 VSCode 编辑器打开 `$PROFILE`：
 
 ```pwsh title="Windows 终端"
 code $PROFILE
 ```
 
-把下面这段粘到文件**末尾**，注意把 Key 换成第 2 步存下来的那一个：
+把下面这段粘到文件**末尾**，注意把 Key 替换成你之前存下来的那个：
 
 ```pwsh title="$PROFILE"
 function cc { claude --permission-mode auto @args }
@@ -255,13 +260,13 @@ $env:CLAUDE_CODE_SUBAGENT_MODEL = "deepseek-flash[1m]"
 curl -fsSL https://claude.ai/install.sh | bash
 ```
 
-然后用编辑器打开 `~/.bashrc`：
+然后用 vim 编辑器打开 `~/.bashrc`：
 
 ```bash title="Ubuntu 终端"
-code ~/.bashrc
+vi ~/.bashrc
 ```
 
-把下面这段粘到文件**末尾**，注意把 Key 换成第 2 步存下来的那一个：
+把下面这段粘到文件**末尾**，注意把 Key 替换成你之前存下来的那个：
 
 ```bash title="~/.bashrc"
 alias cc='claude --permission-mode auto'
@@ -288,4 +293,26 @@ cc
 ```
 
 能正常对话就说明配好了。`cc` 是上面定义的快捷方式，等价于 `claude --permission-mode auto`，省得每次都打全名。
+
+
+### 7.4 权限模式
+
+上面定义的 `cc` 带了一个参数 `--permission-mode auto`。**权限模式**决定 Claude Code 做哪些事情之前要先问你。
+
+会话里按 ++shift+tab++ 可以循环切换（终端底部会显示当前模式）：
+
+
+| 模式         | 名称                | 权限                                   | 适合任务                     |
+| ------------ | ------------------- | -------------------------------------- | ---------------------------- |
+| 手动模式     | `manual`            | 只能读                                 | 想逐步确认每一步、改敏感代码 |
+| 接受编辑     | `acceptEdits`       | 读、改文件，以及常见文件操作           | 边看边改的迭代               |
+| 计划模式     | `plan`              | 读，加上分类器放行的少量命令           | 动手前先列出详细计划书       |
+| 自动模式     | `auto`              | 全部，但背后有安全检查                 | 长任务、不想被反复打断       |
+| 不询问       | `dontAsk`           | 只做读取和预先批准的工具，其余直接拒绝 | 无人值守的脚本和 CI          |
+| 绕过所有权限 | `bypassPermissions` | 全部                                   | 助教这样的懒人               |
+
+
+- 本教程的 `cc` 用的是**自动（`auto`）**：大部分操作直接放行，另有独立的分类器模型在后台审查，拦下越界或来路不明的动作。
+- **计划（`plan`）模式不动你的代码**：只读、只查、只写方案，等你点头才开工。拿不准该怎么做时先用它。
+
 
