@@ -18,8 +18,10 @@ icon: material/bookshelf
 | [Z-lib 电子书库](https://zh.z-library.sk/)                                                 | 电子书下载站，需要科学上网                     |
 | [助教的电子书库](https://drive.google.com/drive/folders/1ocKcs9ZWBz9OqYgbICC1kCDKlZxVbdfb) | 放在 Google Drive 上，需要科学上网             |
 
+## 2. 计算机科普视频
 
-## 2. 推荐阅读书目
+
+## 3. 推荐阅读书目
 
 下面这些书在助教的电子书库里都有，或者也可以去 Z-lib 电子书库下载当前最新版。
 
@@ -41,7 +43,7 @@ icon: material/bookshelf
 - 算法导论（CLRS）
 - 动手学深度学习（D2L.ai）
 
-## 3. 课件
+## 4. 课件
 
 - [26程设-第0讲-课程简介.pdf](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC1%E8%AE%B2-%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%80.pdf)
 - [26程设-第1讲-程序设计基础.pdf](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC1%E8%AE%B2-%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%80.pdf)
@@ -49,7 +51,7 @@ icon: material/bookshelf
 !!! tip "课件会陆续补齐"
     后面的讲次上传之后，会在这里和下面的课程安排里一起更新。
 
-## 4. 课程安排
+## 5. 课程安排
 
 | 课程周            | 时间     | 内容                         | 课件<br>(对应上面的PDF文件)           |
 | ----------------- | -------- | ---------------------------- | -------------- |
