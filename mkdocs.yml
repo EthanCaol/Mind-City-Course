@@ -25,7 +25,8 @@ theme:
     accent: indigo
 
 nav:
-  - 课程首页: index.md
+  - 站点首页: index.md
+  - 课程资料: material.md
   - 站点计划: plan.md
   - 实验课:
       - (0) Dev-C++ 环境搭建: setup/dev-cpp.md
