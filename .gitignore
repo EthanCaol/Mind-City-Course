@@ -13,3 +13,6 @@ venv/
 .idea/
 .DS_Store
 *.swp
+
+# Claude Code 镜像临时目录（约 460MB，勿入库）
+claude-code-tmp/

@@ -206,19 +206,36 @@ Claude 桌面版只会按 `sonnet`、`opus`、`fable`、`haiku` 这几个固定�
 
 桌面版日常聊天够用了，但是如果你想要在终端里直接让 AI 读代码、改代码，就需要再装一个 **Claude Code**。
 
-!!! warning "这一步必须科学上网，而且不能用香港节点"
+!!! info "两种安装方式，二选一"
 
-    前面六步全程国内直连，只有这一步是例外：
+    官方的安装脚本放在 `claude.ai` 上，而 Anthropic 不对中国大陆和中国香港特别行政区提供服务 —— 直连会返回 `App unavailable in region`。所以安装这一步给了两条路：
 
-    - Claude Code 的安装脚本放在 `claude.ai` 上，国内打不开，**安装的时候必须挂着代理**
-    - **节点不要选香港**。Anthropic 不向中国香港特别行政区提供服务，用香港 IP 会被判定成「不支持的地区」，根本下载不了。
+    - **课程镜像**：从课程的文件服务器下载，**国内直连，不需要科学上网**。二进制是从 Anthropic 官方下载桶转存的原件，安装时用官方清单里的 SHA256 逐个校验，装到的是官方原版。
+    - **官方渠道**：就是 Anthropic 官方那条命令，**需要挂代理**，而且**节点不要选香港** —— 香港同样会被判定为「不支持的地区」。
+
+    两条路装出来的东西完全一样，镜像只是换了个下载地址。
+
+    Claude Code 自带的自动更新指向官方地址，国内连不上，所以**它不会自己升级**。课程镜像也不跟随官方更新，装到的始终是助教打包时的那一版 —— 想用更新的版本，需要走官方渠道。
 
 ### 7.1 Windows
 
-安装：
+安装（两种方式选一种）：
+
+=== "方式一：课程镜像（国内可以直连）"
+
+    ```pwsh title="Windows 终端"
+    irm https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/claude-code-releases/bootstrap.ps1 | iex
+    ```
+
+=== "方式二：官方渠道（需科学上网）"
+
+    ```pwsh title="Windows 终端"
+    irm https://claude.ai/install.ps1 | iex
+    ```
+
+不管走哪种方式，装完**接着再跑这两行**：
 
 ```pwsh title="Windows 终端"
-irm https://claude.ai/install.ps1 | iex
 Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 setx CLAUDE_CODE_USE_POWERSHELL_TOOL 1
 ```
@@ -228,7 +245,9 @@ setx CLAUDE_CODE_USE_POWERSHELL_TOOL 1
 - **`Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`**：放开 PowerShell 的脚本限制。Windows 默认策略是 `Restricted`，**默认不支持加载 `$PROFILE` 配置文件**。所以少了这一行，下一步写进 `$PROFILE` 的配置会毫无动静地失效。
     - `RemoteSigned` 表示本地脚本可以跑、从网上下载的必须有签名
     - `-Scope CurrentUser` 让它只对当前用户生效，**不需要管理员权限**
-- **`setx CLAUDE_CODE_USE_POWERSHELL_TOOL 1`**：让 Claude Code 用 **PowerShell 原生工具**执行命令，而不是绕 Git Bash。好处是能直接跑 PowerShell 命令、管道传对象、用 Windows 原生路径。用 `setx` 而不是 `$env:`，是因为它要**写进用户环境变量来持久化**，只在当前终端窗口里设置不够用。
+- **`setx CLAUDE_CODE_USE_POWERSHELL_TOOL 1`**：让 Claude Code 用 **PowerShell 原生工具**执行命令，而不是绕 Git Bash。
+    - 好处是能直接跑 PowerShell 命令、管道传对象、用 Windows 原生路径。
+    - 用 `setx` 而不是 `$env:`，是因为它要**写进用户环境变量来持久化**，只在当前终端窗口里设置不够用。
 
 然后用 VSCode 编辑器打开 `$PROFILE`：
 
@@ -253,11 +272,19 @@ $env:CLAUDE_CODE_SUBAGENT_MODEL = "deepseek-flash[1m]"
 
 ### 7.2 Ubuntu
 
-安装：
+安装（两种方式选一种）：
 
-```bash title="Ubuntu 终端"
-curl -fsSL https://claude.ai/install.sh | bash
-```
+=== "方式一：课程镜像（国内可以直连）"
+
+    ```bash title="Ubuntu 终端"
+    curl -fsSL https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/claude-code-releases/bootstrap.sh | bash
+    ```
+xie
+=== "方式二：官方渠道（需科学上网）"
+
+    ```bash title="Ubuntu 终端"
+    curl -fsSL https://claude.ai/install.sh | bash
+    ```
 
 然后用 vim 编辑器打开 `~/.bashrc`：
 
