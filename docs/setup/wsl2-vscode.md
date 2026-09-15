@@ -5,13 +5,13 @@
 
 面向零基础、使用 Win11 操作系统的同学。全过程只需要在 Windows 终端里粘贴命令，**不需要任何前置知识**。中途遇到任何不懂的术语或者问题，请立即咨询 AI，或马上向助教求助。
 
-!!! tip "推荐 AI 工具"
+!!! tip "课程推荐 AI 工具"
     可以参考 [LMArena](https://arena.ai/leaderboard/agent) 大模型实时排行榜
 
-    - [DeepSeek-API](https://platform.deepseek.com/)（国内，收费）
-    - [腾讯元宝](https://yuanbao.tencent.com/)（国内，免费）
-    - [ChatGPT](https://chatgpt.com/)（付费）
-    - [Claude](https://claude.ai/)（付费）
+    - 排行榜第1名：[Claude](https://claude.ai/)（付费）
+    - 排行榜第2名：[ChatGPT](https://chatgpt.com/)（付费）
+    - 排行榜第11名：[腾讯元宝](https://yuanbao.tencent.com/)（国内，免费但限流）
+    - 排行榜第12名：[DeepSeek-API](https://platform.deepseek.com/)（国内，收费但便宜）
 
 !!! abstract "全程概览"
     本文按顺序做完这 8 步，你就有了一个完整的 C语言开发环境：
