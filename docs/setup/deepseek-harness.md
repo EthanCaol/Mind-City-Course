@@ -171,15 +171,22 @@ DeepSeek 目前提供两个模型，**先把这两个名字记住** —— 后�
 
 两者用的是**同一个 DeepSeek API Key**，功能也基本一样，装哪套都行。这个命令行走的是 npm 渠道，所以：
 
-- 用 **WSL 或 Linux** 的同学走这条（桌面版没有 Linux 版，这条有）
+- 用 **WSL 或 Linux** 的同学走这条
 - 想装在服务器上、或者通过 SSH 用，也走这条
 
-!!! info "这一节装的是官方仓库，和前面的社区桌面版不是一回事"
-    `@deepseek-ai/dsh` 由 **DeepSeek 官方**维护。桌面版内部跑的就是它，只是社区帮你把运行环境包好了；自己用命令行跑，则要多装一个 Node.js。
+!!! info "这一节装的是官方仓库"
+    `@deepseek-ai/dsh` 由 **DeepSeek 官方**维护。之前那个社区桌面版内部跑的就是它，只是社区帮你把运行环境包好了。
 
 ### 6.1 装 Node.js
 
-`dsh` 是个 Node 程序，需要 **Node.js 22.19 以上，或者 24 以上**。
+`dsh` 本身是用 JavaScript 写的，要跑它，电脑上得先有个能跑 JavaScript 的环境 —— 这就是 **Node.js**。
+
+它把 JavaScript 这个原本只能在浏览器里跑的语言搬到了命令行上，让它像普通程序一样在你电脑上跑起来。
+
+装 Node.js 会**顺带装上 `npm`**，一个命令行的「软件包管理器」。后面那条 `npx @deepseek-ai/dsh web`，就是让 npm 从它的仓库里把 `dsh` 下载下来并运行，不用你手动去下载安装。
+
+!!! info "这也正是第 1 节说桌面版「不需要 Node」的原因"
+    桌面版已经把这一整套运行环境连同 `dsh` 一起打包好了，那套什么都不用装；走命令行这条，就得自己把 Node 备上。
 
 === "Windows"
 
@@ -189,15 +196,17 @@ DeepSeek 目前提供两个模型，**先把这两个名字记住** —— 后�
 
     `winget` 是 Windows 自带的，这条会装上当前的 LTS 版本。
 
-=== "macOS / Linux"
+    LTS 是「Long Term Support」的缩写，即「长期支持版本」，稳定性和安全性都比最新版本更好。
 
-    ```bash title="终端"
+=== "Linux"
+
+    ```bash title="Linux 终端"
     curl -o- https://fnm.vercel.app/install | bash
     ```
 
-    这条装的是 **fnm**（一个 Node 版本管理工具）。装完之后**按屏幕上的提示做**（一般是新开一个终端），再装 Node 24：
+    `fnm` 是一个 Node 版本管理器，能让你在同一台机器上装多个 Node 版本、随时切换。
 
-    ```bash title="终端"
+    ```bash title="Linux 终端"
     fnm install 24
     ```
 
@@ -207,17 +216,14 @@ DeepSeek 目前提供两个模型，**先把这两个名字记住** —— 后�
 node -v
 ```
 
-看到 `v22.19` 以上（`v24.x` 也算）的版本号就对了。
+如果成功打印出版本号，就说明 Node 安装好了。
 
 !!! warning "`node -v` 报「不是内部或外部命令」/「command not found」"
     基本上是 **PATH 还没生效** —— Node 刚装好，你手上这个终端窗口是装之前开的，它还看不到。**关掉终端，重新开一个**再试。
 
 ### 6.2 启动 Web UI
 
-**先 `cd` 到你要让它读的代码目录**，再启动 —— `dsh` 会把「你运行命令时所在的目录」当作默认位置：
-
 ```bash title="终端"
-cd 你的项目目录
 npx @deepseek-ai/dsh web
 ```
 
@@ -226,47 +232,9 @@ npx @deepseek-ai/dsh web
 
 跑起来之后：
 
-- 默认在本机 <http://127.0.0.1:3080> 提供服务，并**自动用默认浏览器打开**
-- 不想让它自动开浏览器（比如在服务器上跑），加一个参数：`npx @deepseek-ai/dsh web --no-open`
-- 这个窗口要**一直开着**。关掉终端 = 服务停了，网页也就打不开了
+- 默认在本机 <http://127.0.0.1:3080> 提供服务，并**自动用默认浏览器打开**。
+- 这个窗口要**一直开着**。关掉终端 = 服务停了。
 
 !!! tip "通过 SSH 启动时不会自动打开浏览器"
-    它只会把宿主机上的地址打印出来，转发到你本机是 SSH 客户端或编辑器的事（VSCode Remote 一般会自动帮你转）。转发好之后，在本机浏览器里打开那个地址就行。
-
-### 6.3 在网页里配置
-
-步骤和桌面版对得上，只是换到浏览器里：
-
-1. **填 Key**：打开**设置 → 模型**，在 DeepSeek 卡片里把 API Key 粘进去、保存。Key 是**只写**的，保存后页面只拿到脱敏的值，明文存在 `$DSH_HOME/.credentials.yaml` 里；改完**下一次请求就生效，不用重启**。
-2. **选工作区**：点**选择工作区**，把你启动 `dsh` 时所在的目录加进去并选中。
-3. **选模型**：模型选择器里选 `deepseek-flash`，它同时会成为新会话的默认模型。
-
-!!! warning "没选中工作区之前，输入框是不能用的"
-    全新的 Web UI **不会自动选中任何工作区**，必须先加一个。这是最容易卡住的一步 —— 输入框点了没反应，不是卡死了，是还没选工作区。
-
-!!! tip "它默认只能动你的工作区"
-    新会话默认用 `workspace-write` 权限：**改文件和跑命令都限制在工作区目录和系统临时目录里**，读取和联网不受限。要动工作区以外的文件时，界面会先弹出来问你。
-
-### 6.4 从源码运行（进阶）
-
-想改它的插件、或者跟最新的开发版，可以从仓库源码跑：
-
-```bash title="终端"
-git clone https://github.com/deepseek-ai/deepseek-harness.git
-cd deepseek-harness
-pnpm install
-pnpm run build
-pnpm dsh web
-```
-
-`pnpm run build` 负责准备仓库产物，`pnpm dsh web` 直接用这些已构建的产物，**不会重新构建**。
-
-!!! warning "这条路要 clone GitHub 的仓库，国内不一定通"
-    这也是前面推荐 `npx` 那条的原因：`npx @deepseek-ai/dsh web` 只从 npm 拉一个包，不碰 GitHub。除非你确实要改插件，否则用不上这一节。
-
-    装依赖时如果卡在下载上，可以给 npm 换个国内镜像：
-
-    ```bash title="终端"
-    npm config set registry https://registry.npmmirror.com
-    ```
+    它只会把宿主机上的地址打印出来，转发到你本机是需要你自己配置 SSH 客户端和端口转发（VSCode Remote 一般会自动帮你转）。转发好之后，在本机浏览器里打开那个地址就行。
 
