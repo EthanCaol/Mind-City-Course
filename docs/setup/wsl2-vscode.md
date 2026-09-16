@@ -418,15 +418,16 @@ sudo apt upgrade -y
 
 ### 4.4 安装 GCC / GDB
 
-先说说这两个东西是干什么的：
+先说说这几个东西是干什么的：
 
 - **gcc**（GNU Compiler Collection，GNU 编译器套件）是 C语言的编译器：负责把 C 代码翻译成能跑的可执行程序
 - **gdb**（GNU Debugger）是 C语言的调试器：负责单步执行、看变量的值如何变化、定位程序是怎么崩溃报错的
+- **build-essential** 是一组基础编译工具的合集包：除了 gcc 和 g++，还包含 make 和 C 标准库的开发文件。只装 gcc 有时会因为缺头文件编译不过，装它一次到位，后面的《Make 构建工具》也要用它
 
 开始安装：
 
 ```bash title="Ubuntu 终端"
-sudo apt install -y gcc gdb
+sudo apt install -y gcc gdb build-essential
 ```
 
 验证一下是否安装成功：
