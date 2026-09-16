@@ -31,6 +31,7 @@ nav:
   - 实验课:
       - (0) Dev-C++ 环境搭建: setup/dev-cpp.md
       - (0) WSL2 环境搭建: setup/wsl2-vscode.md
+      - (0) macOS 环境搭建: setup/macos-vscode.md
   - 实用工具:
       - Claude 配置: setup/claude.md
       - Linux 命令行基础: setup/linux-cli.md
