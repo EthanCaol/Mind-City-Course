@@ -163,15 +163,13 @@ wsl --install -d Ubuntu-26.04
     先按 ++ctrl+c++ **终止下载**，然后再重新输入指令下载，多试几次通常就能成。
 
 !!! tip "还是慢？用助教准备的离线安装包"
-    助教已经提前把安装包传到了腾讯云存储桶，可以先下载到本地，再从本地安装：
+    助教已经提前把安装包传到了腾讯云存储桶。**直接下载，然后双击这个文件，系统就会自动把它装好**，全程不用敲命令：
 
-    ```pwsh title="Windows 终端"
-    # 先将 Ubuntu-26.04 的安装包下载到临时目录
-    curl.exe -Lo $env:TEMP\ubuntu-26.04.wsl https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/ubuntu-26.04.1-wsl-amd64.wsl
+    **下载**：<https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/ubuntu-26.04.1-wsl-amd64.wsl>
 
-    # 再从临时目录安装 Ubuntu-26.04
-    wsl --install --from-file $env:TEMP\ubuntu-26.04.wsl --name Ubuntu-26.04
-    ```
+    下载完在「下载」文件夹里找到它，双击，等安装窗口跑完就行 —— 效果和上面那条命令完全一样。
+
+    **如果双击没反应**：在文件上右键，看看「打开方式」里有没有 WSL。没有的话，多半是你的 WSL 版本太旧 —— 双击 `.wsl` 安装是较新版本才支持的功能，先回去做 [2.4 更新 WSL](#24-更新-wsl)，再回来双击。
 
 ### 3.2 卸载刚才安装的 Ubuntu
 
