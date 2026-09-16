@@ -34,6 +34,7 @@ nav:
       - (0) macOS 环境搭建: setup/macos-vscode.md
   - 实用工具:
       - Claude 配置: setup/claude.md
+      - DeepSeek 工具链配置: setup/deepseek-harness.md
       - Linux 命令行基础: setup/linux-cli.md
       - Git 与 GitHub 配置: setup/git-github.md
       - GCC 与 GDB 入门: setup/gcc-gdb.md
