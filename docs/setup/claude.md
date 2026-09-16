@@ -157,6 +157,14 @@ DeepSeek 目前提供两个模型，**它们的模型名要一字不差地填进
 
     所以正确的顺序是：**装好桌面版 → 让它至少完整启动过一次 → 再回 CC Switch 写配置**
 
+!!! tip "顺序弄反了的话，会看到这个报错"
+
+    顺序反了、配置被桌面版首次启动时的迁移挤掉之后，桌面版发消息会报 `Host Claude Code binary not available. Check that the download completed.`：
+
+    ![桌面版提示 Host Claude Code binary not available](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260916132341531.png)
+
+    **不用重装**。回 CC Switch 的 Claude Desktop 面板，**重新加一个 DeepSeek 供应商配置**（把 [5.2 添加供应商](#52-添加供应商) 再做一遍），用它覆盖掉出错的那份，再按第 7 步退出重启桌面版就好了。
+
 ## 4. 安装 CC Switch
 
 下载并运行安装包 `CC-Switch-v3.20.3-Windows.msi`：
