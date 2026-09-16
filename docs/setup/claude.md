@@ -9,12 +9,15 @@
     1. 了解为什么用这套方案（可跳过）
     2. 在 DeepSeek 开放平台申请 API Key
     3. 安装 CC Switch
-    4. 在 CC Switch 里配置 DeepSeek
-    5. 打开路由开关
-    6. 安装 Claude 桌面版
-    7. 安装并配置 Claude Code
+    4. 先安装 Claude 桌面版，并启动一次
+    5. 回 CC Switch 里配置 DeepSeek
+    6. 打开路由开关
+    7. 完全退出桌面版，再重新打开
+    8. 安装并配置 Claude Code
 
     全程只需要下载、点击和粘贴，**不需要任何前置知识**。
+
+    **第 4 步和第 5 步的顺序不能反**：CC Switch 是往桌面版自己的配置目录里写配置的，桌面版没装、没启动过，这份配置就没有地方可写。
 
 ## 1. 为什么是这套方案
 
@@ -144,13 +147,39 @@ DeepSeek 目前提供两个模型，**它们的模型名要一字不差地填进
 !!! tip "GitHub 访问"
     官方仓库有时需要科学上网才能打开。打不开就用上面的直接下载链接，助教已经传好了。
 
-## 4. 在 CC Switch 里配置 DeepSeek
+!!! warning "别用 3.20.0 之前的 CC Switch"
+
+    Claude 桌面版在 Windows 上是 **MSIX 打包应用**，它的配置文件放在一个**被虚拟化过的目录**里，和普通程序不在同一个位置。**3.20.0 之前的 CC Switch 会把配置写到普通路径，桌面版读不到** —— 症状就是「照着配完了，但一点没生效，或者只有第一次能用」。
+
+    课程镜像里的 `v3.20.3` 已经包含这个修复，照上面装就行。从别处下载的话，确认版本号不低于 3.20.0。
+
+## 4. 安装 Claude 桌面版
+
+**这一步要排在配置 CC Switch 之前**，原因见下面的提示框。
+
+下载并安装 Claude 官方客户端：
+
+- **直接下载**：<https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/Claude-1.52386.6.0.msix>
+- **官方网站**：<https://claude.com/download>
+
+装好之后**先打开一次**（现在还连不通，能启动到界面就算成功），然后关掉。
+
+!!! warning "为什么必须「先装桌面版，再配 CC Switch」"
+
+    CC Switch 接管桌面版的办法，是**往桌面版自己的配置目录里写配置文件**。这带来两个绕不开的先后关系：
+
+    - 桌面版还没装，CC Switch 要写的那个目录**根本不存在**，配置无处可写；
+    - 桌面版**第一次启动时会做一次配置迁移**，把配置搬进自己的容器路径。要是先配了 CC Switch 再装桌面版，这份配置会被这次迁移挤掉，桌面版读到的仍然是内置的官方模型。
+
+    所以正确的顺序是：**装好桌面版 → 让它至少完整启动过一次 → 再回 CC Switch 写配置**。顺序反了，表现就是「照教程从头配到尾，打开客户端还是连不上、或者还是官方模型」。
+
+## 5. 在 CC Switch 里配置 DeepSeek
 
 **CC Switch 是一个跑在本机的模型路由工具**，作用是让 AI 客户端连到你指定的模型服务上。
 
 例如 Claude Desktop 默认只支持自家的模型服务，而 CC Switch 是作为中间层，让它把实际的请求转发到 DeepSeek 上。这样既能用上 Claude 的完整配套工具链，又能跑 DeepSeek 的高性价比模型。
 
-### 4.1 选中 Claude Desktop
+### 5.1 选中 Claude Desktop
 
 工具栏上那一排图标，对应的是不同的 AI 客户端。
 
@@ -158,7 +187,7 @@ DeepSeek 目前提供两个模型，**它们的模型名要一字不差地填进
 
 ![在工具栏中选中 Claude Desktop](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260914230823562.png)
 
-### 4.2 添加供应商
+### 5.2 添加供应商
 
 点右上角的 **「+」**，会弹出「添加新供应商」窗口。
 
@@ -168,41 +197,71 @@ DeepSeek 目前提供两个模型，**它们的模型名要一字不差地填进
 
 选中之后，窗口下方会出现 API Key 等字段，把第 2 步存下来的那个 Key 粘进去。
 
-### 4.3 配置模型映射
+### 5.3 配置模型映射
 
 同一个窗口往下滚，是「模型配置」这一栏。
 
 Claude 桌面版只会按 `sonnet`、`opus`、`fable`、`haiku` 这几个固定的模型名去请求，所以要把这四档一一映射到 DeepSeek 实际提供的模型上 —— 每一行的「菜单显示名」和「实际请求模型」都填上 `deepseek-flash`。
 
-图中的「声明支持 1M」也可以勾上。填完点右下角的 **「保存」**。
+图中的「声明支持 1M」**要勾上** —— `deepseek-flash` 本身就是 1M 上下文，勾了才对得上。填完点右下角的 **「保存」**。
 
 ![配置模型映射，把各档模型指向 DeepSeek](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260915004736226.png)
 
-## 5. 打开路由开关
+!!! warning "连接模式必须选「模型映射」，不能选直连"
+
+    桌面版从 v1.6259.1 起加了**模型名白名单**：它只认 `claude-sonnet-*`、`claude-opus-*`、`claude-haiku-*` 这类名字，`deepseek-flash` 这种第三方模型名会被**直接拒掉**。
+
+    所以这里必须走**代理 / 模型映射模式**，由 CC Switch 在本机把模型名换掉再转发出去。手滑选成直连，就会收到：
+
+    ```
+    configured model "deepseek-flash" is not an Anthropic model
+    ```
+
+## 6. 打开路由开关
 
 配置完成后回到主界面，**把左上角的开关打开**（绿色表示已经打开）。
 
 ![打开 CC Switch 的路由开关](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260914230901561.png)
 
-!!! warning "电脑每次重启，都要重新打开路由"
-    CC Switch 关掉或者电脑重启之后，这个开关会自己关掉。**Claude 连不上时，第一件事就是回来看这个开关是不是又关了** —— 这是最常见的问题。
+!!! warning "这个开关要一直开着，不是在配置时打开一下就行"
 
-## 6. 安装 Claude 桌面版
+    桌面版发出去的请求并不是直接去 DeepSeek，而是**先发给 CC Switch 在本机开的代理**（`http://127.0.0.1:15721`），由它把模型名换好、再转发出去。所以只要 CC Switch 没在跑、或者这个开关被关掉，**整条链路就断了**，桌面版立刻连不上。
 
-最后一步，下载并安装 Claude 官方客户端：
+    CC Switch 退出、电脑重启之后，这个开关会自己关掉。**Claude 连不上时，第一件事就是回来看这个开关是不是又关了** —— 这是最常见的问题。
 
-- **直接下载**：<https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/Claude-1.52386.6.0.msix>
-- **官方网站**：<https://claude.com/download>
+## 7. 完全退出桌面版，再重新打开
 
-装好后打开随便问个问题。如果能正常回答，说明整条链路已经通了。
+配置已经写好了，但**桌面版不会自己读** —— 这一点和 Claude Code 正好相反：Claude Code 改完配置文件立刻生效，桌面版只在**自己启动的那一刻**读一次。
 
-!!! tip "出问题了先看这两处"
+所以现在要把桌面版**彻底退干净，再重新打开**：
 
-    - **Claude 连不上** → 先检查 CC Switch 的**路由开关**是不是关着（见第 5 步）
+1. 关掉桌面版的窗口
+2. 在**系统托盘**里找到 Claude 图标（右下角时钟旁边，点 `^` 展开），右键 → **退出**（英文菜单里是 **Exit**）
+3. 打开**任务管理器**（++ctrl+shift+esc++），确认列表里已经没有 `Claude` 进程
+
+![在系统托盘右键 Claude 图标，选 Exit](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260916130629134.png)
+
+!!! warning "只关窗口是不够的"
+    关掉聊天窗口只是把界面收起来了，**进程还在后台跑着**，用着的仍然是启动时读到的那份旧配置。必须退到进程真的结束，重新打开才会重新读一遍。
+
+    桌面版在 Windows 上是 **MSIX 打包应用**，托盘退出这一步尤其不能省。
+
+重新打开桌面版，随便问一个问题。能正常回答，说明整条链路已经通了。
+
+!!! tip "出问题了先看这几处"
+
+    - **`Can't reach 127.0.0.1:15721`** → 桌面版连不上 CC Switch 的本地代理，按概率依次查：
+        1. 路由**开关没开**（第 6 步）
+        2. CC Switch 没在运行，或者已经被关掉了
+        3. **15721 端口被别的程序占了** —— 在 CC Switch 里换个端口，或者关掉占用的那个程序
+        4. **防火墙**拦了本机的回环连接
+        5. 供应商里的地址填成了 **DeepSeek 的地址**，而不是 CC Switch 提供的本地代理地址
+    - **`configured model "deepseek-flash" is not an Anthropic model`** → 连接模式选成了直连，改回「模型映射」模式（第 5.3 步）
     - **提示 API Key 无效** → 回 CC Switch 检查 Key 有没有粘错，以及 DeepSeek 账户里还有没有余额
+    - **配了没生效，或者只有第一次能用** → Windows 上先确认配置真的写进了桌面版的目录：在资源管理器地址栏里粘 `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Local\Claude-3p\configLibrary\` 回车，里面应该能看到 CC Switch 建的 profile。目录不存在或者是空的，多半是 CC Switch 版本太旧（要 ≥ 3.20.0，见第 3 步）。
 
 
-## 7. 安装并配置 Claude Code
+## 8. 安装并配置 Claude Code
 
 桌面版日常聊天够用了，但是如果你想要在终端里直接让 AI 读代码、改代码，就需要再装一个 **Claude Code**。
 
@@ -217,7 +276,15 @@ Claude 桌面版只会按 `sonnet`、`opus`、`fable`、`haiku` 这几个固定�
 
     Claude Code 自带的自动更新指向官方地址，国内连不上，所以**它不会自己升级**。课程镜像也不跟随官方更新，装到的始终是助教打包时的那一版 —— 想用更新的版本，需要走官方渠道。
 
-### 7.1 Windows
+!!! quote "延伸阅读：为什么建议顺手学一下 vim"
+
+    下面两个小节给的都是 VSCode 和记事本，是为了照顾还没学过 vim 的同学。但**练熟之后 vim 反而是最快的**：不用切窗口，手不离键盘，改两行配置几秒钟就完事。
+
+    Linux 上最经典的编辑器就是 vim，几乎所有服务器都预装了它，而别的编辑器多半没有。以后你连到服务器或者其他远程机器上时，往往**只有 vim 能用**。
+
+    想学习 vim，可以看这期视频：[《保姆级入门：Vim 编辑器》](https://www.bilibili.com/video/BV13t4y1t7Wg)
+
+### 8.1 Windows
 
 !!! warning "这几行要在 PowerShell 里跑，不能粘到 cmd 里"
     下面用到的 `irm` 和 `iex` 都是 PowerShell 的命令（`Invoke-RestMethod` / `Invoke-Expression` 的缩写），**命令提示符（cmd）里没有这两个东西**，粘进去只会报 `'irm' 不是内部或外部命令`。这一节后面的 `Set-ExecutionPolicy`、`$PROFILE` 也是 PowerShell 的语法，同样不能在 cmd 里跑。
@@ -260,11 +327,19 @@ setx CLAUDE_CODE_USE_POWERSHELL_TOOL 1
     - 好处是能直接跑 PowerShell 命令、管道传对象、用 Windows 原生路径。
     - 用 `setx` 而不是 `$env:`，是因为它要**写进用户环境变量来持久化**，只在当前终端窗口里设置不够用。
 
-然后用 VSCode 编辑器打开 `$PROFILE`：
+然后用编辑器打开 `$PROFILE`（两种方式选一种）：
 
-```pwsh title="Windows 终端"
-code $PROFILE
-```
+=== "VSCode"
+
+    ```pwsh title="Windows 终端"
+    code $PROFILE
+    ```
+
+=== "记事本"
+
+    ```pwsh title="Windows 终端"
+    notepad $PROFILE
+    ```
 
 把下面这段粘到文件**末尾**，注意把 Key 替换成你之前存下来的那个：
 
@@ -277,11 +352,12 @@ $env:ANTHROPIC_MODEL = "deepseek-flash[1m]"
 $env:ANTHROPIC_BASE_URL = "https://api.deepseek.com/anthropic"
 $env:ANTHROPIC_DEFAULT_OPUS_MODEL = "deepseek-flash[1m]"
 $env:ANTHROPIC_DEFAULT_SONNET_MODEL = "deepseek-flash[1m]"
+$env:ANTHROPIC_DEFAULT_FABLE_MODEL = "deepseek-flash[1m]"
 $env:ANTHROPIC_DEFAULT_HAIKU_MODEL = "deepseek-flash[1m]"
 $env:CLAUDE_CODE_SUBAGENT_MODEL = "deepseek-flash[1m]"
 ```
 
-### 7.2 Ubuntu
+### 8.2 Ubuntu
 
 安装（两种方式选一种）：
 
@@ -297,11 +373,22 @@ $env:CLAUDE_CODE_SUBAGENT_MODEL = "deepseek-flash[1m]"
     curl -fsSL https://claude.ai/install.sh | bash
     ```
 
-然后用 vim 编辑器打开 `~/.bashrc`：
+然后用编辑器打开 `~/.bashrc`（两种方式选一种）：
 
-```bash title="Ubuntu 终端"
-vi ~/.bashrc
-```
+=== "VSCode"
+
+    ```bash title="Ubuntu 终端"
+    code ~/.bashrc
+    ```
+
+=== "记事本"
+
+    ```bash title="Ubuntu 终端"
+    notepad.exe ~/.bashrc
+    ```
+
+!!! tip "`code` 提示找不到命令"
+    这个命令要装了 VSCode **并且连上 WSL** 之后才生效（见 [WSL2 环境搭建](wsl2-vscode.md) 第 6 步）。没装上就直接用记事本那条 —— WSL 能直接调用 Windows 的程序，记事本打开的确实就是 WSL 里的那份 `~/.bashrc`。
 
 把下面这段粘到文件**末尾**，注意把 Key 替换成你之前存下来的那个：
 
@@ -314,6 +401,7 @@ export ANTHROPIC_MODEL="deepseek-flash[1m]"
 export ANTHROPIC_BASE_URL="https://api.deepseek.com/anthropic"
 export ANTHROPIC_DEFAULT_OPUS_MODEL="deepseek-flash[1m]"
 export ANTHROPIC_DEFAULT_SONNET_MODEL="deepseek-flash[1m]"
+export ANTHROPIC_DEFAULT_FABLE_MODEL="deepseek-flash[1m]"
 export ANTHROPIC_DEFAULT_HAIKU_MODEL="deepseek-flash[1m]"
 export CLAUDE_CODE_SUBAGENT_MODEL="deepseek-flash[1m]"
 ```
@@ -321,7 +409,7 @@ export CLAUDE_CODE_SUBAGENT_MODEL="deepseek-flash[1m]"
 !!! warning "这个文件里存着你的 API Key"
     `~/.bashrc` 和 `$PROFILE` 现在是明文保存 Key 的。**不要把这个文件发给别人，也不要提交到 GitHub**。
 
-### 7.3 验证
+### 8.3 验证
 
 关掉终端重新开一个（让新配置生效），然后输入：
 
@@ -332,7 +420,7 @@ cc
 能正常对话就说明配好了。`cc` 是上面定义的快捷方式，等价于 `claude --permission-mode auto`，省得每次都打全名。
 
 
-### 7.4 权限模式
+### 8.4 权限模式
 
 上面定义的 `cc` 带了一个参数 `--permission-mode auto`。**权限模式**决定 Claude Code 做哪些事情之前要先问你。
 
