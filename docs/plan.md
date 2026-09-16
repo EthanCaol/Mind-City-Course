@@ -6,16 +6,17 @@ icon: material/clipboard-list
 
 ## 近期项目
 
-| 项目        | 当前进展 | 内容描述                                                                |
-| ----------- | -------- | ----------------------------------------------------------------------- |
-| dev-cpp     | ✅ 已完成 | Dev-C++ 的安装与使用，不想装 WSL 时的备选                               |
-| wsl2-vscode | ✅ 已完成 | 让 Windows 11 的 WSL2 能用 VSCode 开发                                  |
-| macos-vscode | ⬜ 施工中 | macOS 上用 VSCode 开发，Apple clang + lldb。正文已完成，截图待补        |
-| claude      | ✅ 已完成 | 用 CC Switch 把 Claude 客户端接到 DeepSeek，含终端版 Claude Code 的配置 |
-| linux-cli   | ⬜ 施工中 | Linux 命令行基础                                                        |
-| git-github  | ⬜ 施工中 | Git 与 GitHub 配置                                                      |
-| gcc-gdb     | ⬜ 施工中 | GCC 与 GDB 入门                                                         |
-| make        | ⬜ 施工中 | Make 构建工具                                                           |
+| 项目             | 当前进展  | 内容描述                                                                        |
+| ---------------- | --------- | ------------------------------------------------------------------------------- |
+| dev-cpp          | ✅ 已完成 | Dev-C++ 的安装与使用，不想装 WSL 时的备选                                       |
+| wsl2-vscode      | ✅ 已完成 | 让 Windows 11 的 WSL2 能用 VSCode 开发                                          |
+| macos-vscode     | ⬜ 施工中 | macOS 上用 VSCode 开发，Apple clang + lldb。正文已完成，截图待补                |
+| claude           | ✅ 已完成 | 用 CC Switch 把 Claude 客户端接到 DeepSeek，含终端版 Claude Code 与 VSCode 扩展 |
+| deepseek-harness | ✅ 已完成 | 社区版 DSH Desktop 与官方 dsh 命令行的配置，全程不需要科学上网                  |
+| linux-cli        | ⬜ 施工中 | Linux 命令行基础                                                                |
+| git-github       | ⬜ 施工中 | Git 与 GitHub 配置                                                              |
+| gcc-gdb          | ⬜ 施工中 | GCC 与 GDB 入门                                                                 |
+| make             | ⬜ 施工中 | Make 构建工具                                                                   |
 
 ## 未来项目
 
