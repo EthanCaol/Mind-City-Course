@@ -584,6 +584,9 @@ VSCode 其实是分两端的：界面跑在 Windows 上，但真正读写代码�
 
 ![扩展面板中出现的 Install in WSL 按钮](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913234609008.png)
 
+!!! tip "看不到这行小字？"
+    VSCode 较新的版本加了一层**信任**确认 —— 点插件旁边的**齿轮图标（Manage / 管理）**，在里面选 **Trust**（信任），`Install in WSL: Ubuntu-26.04` 这行小字才会显示出来。
+
 !!! tip "记住这个规律"
     以后凡是 VSCode 弹窗提示某个插件需要 `Install in WSL`，直接点它就行。养成习惯之后，这一步花不了几秒钟，但能省掉后面一大堆莫名其妙的报错。
 
