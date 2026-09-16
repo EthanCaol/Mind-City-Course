@@ -8,8 +8,8 @@
 !!! abstract "全程概览"
     1. 了解为什么用这套方案（可跳过）
     2. 在 DeepSeek 开放平台申请 API Key
-    3. 安装 CC Switch
-    4. 先安装 Claude 桌面版，并启动一次
+    3. 安装 Claude 桌面版，并启动一次
+    4. 安装 CC Switch
     5. 回 CC Switch 里配置 DeepSeek
     6. 打开路由开关
     7. 完全退出桌面版，再重新打开
@@ -17,7 +17,7 @@
 
     全程只需要下载、点击和粘贴，**不需要任何前置知识**。
 
-    **第 4 步和第 5 步的顺序不能反**：CC Switch 是往桌面版自己的配置目录里写配置的，桌面版没装、没启动过，这份配置就没有地方可写。
+    **第 3 步和第 5 步的顺序不能反**：CC Switch 是往桌面版自己的配置目录里写配置的，桌面版没装、没启动过，这份配置就没有地方可写。
 
 ## 1. 为什么是这套方案
 
@@ -137,23 +137,7 @@ DeepSeek 目前提供两个模型，**它们的模型名要一字不差地填进
 
 
 
-## 3. 安装 CC Switch
-
-下载并运行安装包 `CC-Switch-v3.20.3-Windows.msi`：
-
-- **直接下载**：<https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/CC-Switch-v3.20.3-Windows.msi>
-- **官方最新版**：<https://github.com/farion1231/cc-switch/releases>
-
-!!! tip "GitHub 访问"
-    官方仓库有时需要科学上网才能打开。打不开就用上面的直接下载链接，助教已经传好了。
-
-!!! warning "别用 3.20.0 之前的 CC Switch"
-
-    Claude 桌面版在 Windows 上是 **MSIX 打包应用**，它的配置文件放在一个**被虚拟化过的目录**里，和普通程序不在同一个位置。**3.20.0 之前的 CC Switch 会把配置写到普通路径，桌面版读不到** —— 症状就是「照着配完了，但一点没生效，或者只有第一次能用」。
-
-    课程镜像里的 `v3.20.3` 已经包含这个修复，照上面装就行。从别处下载的话，确认版本号不低于 3.20.0。
-
-## 4. 安装 Claude 桌面版
+## 3. 安装 Claude 桌面版
 
 **这一步要排在配置 CC Switch 之前**，原因见下面的提示框。
 
@@ -171,7 +155,23 @@ DeepSeek 目前提供两个模型，**它们的模型名要一字不差地填进
     - 桌面版还没装，CC Switch 要写的那个目录**根本不存在**，配置无处可写；
     - 桌面版**第一次启动时会做一次配置迁移**，把配置搬进自己的容器路径。要是先配了 CC Switch 再装桌面版，这份配置会被这次迁移挤掉，桌面版读到的仍然是内置的官方模型。
 
-    所以正确的顺序是：**装好桌面版 → 让它至少完整启动过一次 → 再回 CC Switch 写配置**。顺序反了，表现就是「照教程从头配到尾，打开客户端还是连不上、或者还是官方模型」。
+    所以正确的顺序是：**装好桌面版 → 让它至少完整启动过一次 → 再回 CC Switch 写配置**（第 5 步）。顺序反了，表现就是「照教程从头配到尾，打开客户端还是连不上、或者还是官方模型」。
+
+## 4. 安装 CC Switch
+
+下载并运行安装包 `CC-Switch-v3.20.3-Windows.msi`：
+
+- **直接下载**：<https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/CC-Switch-v3.20.3-Windows.msi>
+- **官方最新版**：<https://github.com/farion1231/cc-switch/releases>
+
+!!! tip "GitHub 访问"
+    官方仓库有时需要科学上网才能打开。打不开就用上面的直接下载链接，助教已经传好了。
+
+!!! warning "别用 3.20.0 之前的 CC Switch"
+
+    Claude 桌面版在 Windows 上是 **MSIX 打包应用**，它的配置文件放在一个**被虚拟化过的目录**里，和普通程序不在同一个位置。**3.20.0 之前的 CC Switch 会把配置写到普通路径，桌面版读不到** —— 症状就是「照着配完了，但一点没生效，或者只有第一次能用」。
+
+    课程镜像里的 `v3.20.3` 已经包含这个修复，照上面装就行。从别处下载的话，确认版本号不低于 3.20.0。
 
 ## 5. 在 CC Switch 里配置 DeepSeek
 
@@ -258,7 +258,7 @@ Claude 桌面版只会按 `sonnet`、`opus`、`fable`、`haiku` 这几个固定�
         5. 供应商里的地址填成了 **DeepSeek 的地址**，而不是 CC Switch 提供的本地代理地址
     - **`configured model "deepseek-flash" is not an Anthropic model`** → 连接模式选成了直连，改回「模型映射」模式（第 5.3 步）
     - **提示 API Key 无效** → 回 CC Switch 检查 Key 有没有粘错，以及 DeepSeek 账户里还有没有余额
-    - **配了没生效，或者只有第一次能用** → Windows 上先确认配置真的写进了桌面版的目录：在资源管理器地址栏里粘 `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Local\Claude-3p\configLibrary\` 回车，里面应该能看到 CC Switch 建的 profile。目录不存在或者是空的，多半是 CC Switch 版本太旧（要 ≥ 3.20.0，见第 3 步）。
+    - **配了没生效，或者只有第一次能用** → Windows 上先确认配置真的写进了桌面版的目录：在资源管理器地址栏里粘 `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Local\Claude-3p\configLibrary\` 回车，里面应该能看到 CC Switch 建的 profile。目录不存在或者是空的，多半是 CC Switch 版本太旧（要 ≥ 3.20.0，见第 4 步）。
 
 
 ## 8. 安装并配置 Claude Code
