@@ -23,11 +23,15 @@ icon: material/bookshelf
 
 ## 3. 推荐阅读书目
 
-下面这些书在助教的电子书库里都有，或者也可以去 Z-lib 电子书库下载当前最新版。
+这些书在助教的电子书库里都有，或者也可以去 Z-lib 电子书库下载当前最新版；带链接的可以直接点开。
+
+**课程教材**
+
+- [C语言程序设计（第3版）](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%88%E7%AC%AC3%E7%89%88%EF%BC%89.pdf)
 
 **语言基础**
 
-- C Primer Plus
+- [C Primer Plus（第 6 版·中文版）](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/C%20Primer%20Plus-%E7%AC%AC6%E7%89%88-%E4%B8%AD%E6%96%87%E7%89%88.pdf)
 - C++ Primer
 - C++ Primer Plus
 - Python 编程：从入门到实践
