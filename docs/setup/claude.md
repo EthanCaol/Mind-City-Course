@@ -3,6 +3,15 @@
 
 <p class="doc-meta"><span>负责助教：<strong>曹奕伦</strong></span><span>实验课时间：<strong>待定</strong></span></p>
 
+!!! warning "开始之前：整篇教程的前置基础是科学上网"
+
+    Claude 的母公司 Anthropic **不向中国大陆和中国香港特别行政区提供服务**，直连一律返回 `App unavailable in region`。所以这篇教程**从头到尾都建立在科学上网的基础上** —— 下载客户端、安装 Claude Code 走的都是官方渠道，**代理没配好就一步也走不下去，请先把代理配好再往下看**。
+
+    另外两点要注意：
+
+    - **代理节点不要选香港** —— 香港同样会被判定为「不受支持的地区」，挂上去照样打不开。
+    - Anthropic **对国内用户的风控封号很凶**，账号被封是常事。**助教那个充了好几个月的尊贵 Max 会员账号就被封了**，钱直接打水漂。所以这套方案**一分钱都不付给 Anthropic**：只借用它的客户端（Harness），模型全部换成国内的平台。这样即使哪天账号被风控，也不会有任何充值损失。
+
 这套方案要解决的问题是：**用 Claude 的客户端，但跑 DeepSeek 的模型**。配好之后，你就有了一个随时能用的 AI 助手：查报错、讲代码、逐行解释程序都行。
 
 !!! abstract "全程概览"
@@ -15,7 +24,7 @@
     7. 完全退出桌面版，再重新打开
     8. 安装并配置 Claude Code
 
-    全程只需要下载、点击和粘贴，**不需要任何前置知识**。
+    全程只需要下载、点击和粘贴，**不需要任何前置知识**（代理除外，见文首警告）。
 
     **第 3 步和第 5 步的顺序不能反**：CC Switch 是往桌面版自己的配置目录里写配置的，桌面版没装、没启动过，这份配置就没有地方可写。
 
@@ -36,10 +45,7 @@
 - **Cowork 沙盒**：它运行在本机隔离的虚拟机中，用户指定一个文件夹作为工作区，读写范围限于该文件夹，网络访问受白名单管控。
 - **编辑器集成**：在 VSCode 中选中代码后，该段内容会自动进入上下文，无需手动复制粘贴。
 
-!!! warning "但邪恶的 Anthropic 公司（Claude 系列模型的母公司）对国内用户封号很凶"
-    Claude 官方不向中国大陆提供服务，账号被风控封禁是常事。**助教那个充了好几个月的尊贵 Max 会员账号就被封了**，钱直接打水漂。
-
-    这正是这套方案要绕开的东西：**只用 Claude 的 Harness，把内置的模型都换成国内的平台。**
+但正如文首警告所说，Anthropic 对国内用户封号很凶，官方模型既贵又随时可能用不了。所以这套方案**一分钱都不付给 Anthropic**：只借它的 Harness，内置的模型全部换成国内的平台。
 
 ### 1.2 为什么模型换成 DeepSeek
 
@@ -47,7 +53,7 @@
 
 - **便宜**：按量计费，用多少扣多少，不用担心每周 token 限额。
 - **能力强**：在编程和 agent 类跑分上，DeepSeek V4.1-Flash 已经跻身第一梯队，平时写写代码，能力绰绰有余。
-- **国内可用**：注册充值方便，无需科学上网，不用担心封号。
+- **国内可用**：注册、充值都方便，API 本身国内直连，也不存在封号问题。
 
 ![DeepSeek V4.1-Flash 与主流模型的跑分对比](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260914231741845.jpg)
 
@@ -141,12 +147,11 @@ DeepSeek 目前提供两个模型，**它们的模型名要一字不差地填进
 
 **这一步要排在配置 CC Switch 之前**，原因见下面的提示框。
 
-下载并安装 Claude 官方客户端：
+从官网下载并安装 Claude 官方客户端（**需要科学上网**）：
 
-- **直接下载**：<https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/Claude-1.52386.6.0.msix>
-- **官方网站**：<https://claude.com/download>
+<https://claude.com/download>
 
-装好之后**先打开一次**（现在还连不通，能启动到界面就算成功），然后关掉。
+装好之后**先打开一次**（现在还连不通模型，能启动到界面就算成功），然后关掉。
 
 !!! warning "为什么必须「先装桌面版，再配 CC Switch」"
 
@@ -167,13 +172,11 @@ DeepSeek 目前提供两个模型，**它们的模型名要一字不差地填进
 
 ## 4. 安装 CC Switch
 
-下载并运行安装包 `CC-Switch-v3.20.3-Windows.msi`：
+从官方仓库下载安装包（**需要科学上网**）：
 
-- **直接下载**：<https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/CC-Switch-v3.20.3-Windows.msi>
-- **官方最新版**：<https://github.com/farion1231/cc-switch/releases>
+<https://github.com/farion1231/cc-switch/releases>
 
-!!! tip "GitHub 访问"
-    官方仓库有时需要科学上网才能打开。打不开就用上面的直接下载链接，助教已经传好了。
+打开最新的一版 Release，在下面的 **Assets** 里找到 Windows 的 `.msi`（文件名形如 `CC-Switch-v3.20.3-Windows.msi`），下载后运行安装。
 
 ## 5. 在 CC Switch 里配置 DeepSeek
 
@@ -244,16 +247,11 @@ Claude 桌面版只会按 `sonnet`、`opus`、`fable`、`haiku` 这几个固定�
 
 桌面版日常聊天够用了，但是如果你想要在终端里直接让 AI 读代码、改代码，就需要再装一个 **Claude Code**。
 
-!!! info "两种安装方式，二选一"
+!!! warning "安装前先确认代理是通的"
 
-    官方的安装脚本放在 `claude.ai` 上，而 Anthropic 不对**中国大陆**和**中国香港特别行政区**提供服务，直连会返回 `App unavailable in region`。所以安装这一步给了两条路：
+    官方的安装脚本放在 `claude.ai` 上，而 Anthropic 不对**中国大陆**和**中国香港特别行政区**提供服务，直连会返回 `App unavailable in region`。**挂上代理再往下走**，并且**节点不要选香港**。
 
-    - **课程镜像**：从课程的文件服务器下载，是从 Anthropic 官方下载桶转存的原件，**国内直连，不需要科学上网**。
-    - **官方渠道**：**需要挂代理**，而且**节点不要选香港** —— 香港同样会被判定为「不受支持的地区」。
-
-    两条路装出来的东西完全一样，镜像只是换了个下载地址。
-
-    Claude Code 自带的自动更新指向官方地址，国内连不上，所以**它不会自己升级**。课程镜像也不跟随官方更新，装到的始终是助教打包时的那一版 —— 想用更新的版本，需要走官方渠道。
+    走官方渠道安装还有个附带好处：Claude Code 自带的自动更新同样指向官方地址，装完之后能跟着官方一起升级，不会一直停在某个旧版本上。
 
 !!! quote "延伸阅读：为什么建议顺手学一下 vim"
 
@@ -275,21 +273,13 @@ Claude 桌面版只会按 `sonnet`、`opus`、`fable`、`haiku` 这几个固定�
 
     **怎么知道自己开对了**：PowerShell 的提示符前面有个 `PS`，长这样 `PS C:\Users\你的用户名>`；cmd 的提示符没有 `PS`。
 
-安装（两种方式选一种）：
+安装（**需要科学上网**）：
 
-=== "方式一：课程镜像（国内可以直连）"
+```pwsh title="Windows 终端"
+irm https://claude.ai/install.ps1 | iex
+```
 
-    ```pwsh title="Windows 终端"
-    irm https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/claude-code-releases/bootstrap.ps1 | iex
-    ```
-
-=== "方式二：官方渠道（需科学上网）"
-
-    ```pwsh title="Windows 终端"
-    irm https://claude.ai/install.ps1 | iex
-    ```
-
-不管走哪种方式，装完需要**接着再跑这两行**：
+装完需要**接着再跑这两行**：
 
 ```pwsh title="Windows 终端"
 Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
@@ -337,19 +327,11 @@ $env:CLAUDE_CODE_SUBAGENT_MODEL = "deepseek-flash[1m]"
 
 ### 8.2 在 Ubuntu 中安装 Claude Code
 
-安装（两种方式选一种）：
+安装（**需要科学上网**）：
 
-=== "方式一：课程镜像（国内可以直连）"
-
-    ```bash title="Ubuntu 终端"
-    curl -fsSL https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/claude-code-releases/bootstrap.sh | bash
-    ```
-
-=== "方式二：官方渠道（需科学上网）"
-
-    ```bash title="Ubuntu 终端"
-    curl -fsSL https://claude.ai/install.sh | bash
-    ```
+```bash title="Ubuntu 终端"
+curl -fsSL https://claude.ai/install.sh | bash
+```
 
 然后用编辑器打开 `~/.bashrc`（两种方式选一种）：
 
