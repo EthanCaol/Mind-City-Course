@@ -219,6 +219,17 @@ Claude 桌面版只会按 `sonnet`、`opus`、`fable`、`haiku` 这几个固定�
 
 ### 7.1 Windows
 
+!!! warning "这几行要在 PowerShell 里跑，不能粘到 cmd 里"
+    下面用到的 `irm` 和 `iex` 都是 PowerShell 的命令（`Invoke-RestMethod` / `Invoke-Expression` 的缩写），**命令提示符（cmd）里没有这两个东西**，粘进去只会报 `'irm' 不是内部或外部命令`。这一节后面的 `Set-ExecutionPolicy`、`$PROFILE` 也是 PowerShell 的语法，同样不能在 cmd 里跑。
+
+    打开 PowerShell：
+
+    - 按 ++win++ 键，搜索 `PowerShell`
+    - 按 ++win+r++，输入 `powershell`，回车
+    - 用「Windows 终端」的话，**新建标签页时选 PowerShell**，不要选成「命令提示符」
+
+    **怎么知道自己开对了**：PowerShell 的提示符前面有个 `PS`，长这样 `PS C:\Users\你的用户名>`；cmd 的提示符没有 `PS`。
+
 安装（两种方式选一种）：
 
 === "方式一：课程镜像（国内可以直连）"
@@ -279,7 +290,7 @@ $env:CLAUDE_CODE_SUBAGENT_MODEL = "deepseek-flash[1m]"
     ```bash title="Ubuntu 终端"
     curl -fsSL https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/claude-code-releases/bootstrap.sh | bash
     ```
-xie
+
 === "方式二：官方渠道（需科学上网）"
 
     ```bash title="Ubuntu 终端"
