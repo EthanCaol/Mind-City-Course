@@ -424,6 +424,15 @@ sudo apt upgrade -y
 - **gdb**（GNU Debugger）是 C语言的调试器：负责单步执行、看变量的值如何变化、定位程序是怎么崩溃报错的
 - **build-essential** 是一组基础编译工具的合集包：除了 gcc 和 g++，还包含 make 和 C 标准库的开发文件。只装 gcc 有时会因为缺头文件编译不过，装它一次到位，后面的《Make 构建工具》也要用它
 
+!!! warning "装之前先确认你做过 4.3 的 `sudo apt update`"
+    这是同学漏得最多的一步。跳过它直接装，`apt` 手上还是一份很旧的软件列表，经常直接报 `E: Unable to locate package gcc`，或者装上一个早该换掉的旧版本。
+
+    不确定自己做过没有？**就当没做过，先补一条**（重复执行没有任何坏处）：
+
+    ```bash title="Ubuntu 终端"
+    sudo apt update
+    ```
+
 开始安装：
 
 ```bash title="Ubuntu 终端"
