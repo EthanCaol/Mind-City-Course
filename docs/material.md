@@ -50,7 +50,7 @@ icon: material/bookshelf
 
 **语言基础**
 
-- [C Primer Plus（强烈推荐自学阅读）](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/C%20Primer%20Plus-%E7%AC%AC6%E7%89%88-%E4%B8%AD%E6%96%87%E7%89%88.pdf)
+- [C Primer Plus（强烈推荐自学）](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/C%20Primer%20Plus-%E7%AC%AC6%E7%89%88-%E4%B8%AD%E6%96%87%E7%89%88.pdf)
 - C++ Primer
 - C++ Primer Plus
 - Python 编程：从入门到实践
