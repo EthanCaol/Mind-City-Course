@@ -18,7 +18,7 @@ icon: material/bookshelf
 | [力扣题库](https://leetcode.cn/problemset/)                                                | 在线题库，可以去上面找题练练练手                           |
 | [Compiler Explorer](https://godbolt.org/)                                                  | 在线编译器，左边写 C代码，右边实时看对应的汇编             |
 | [Z-lib 电子书库](https://zh.z-library.sk/)                                                 | 电子书下载站，需要科学上网                                 |
-| [助教的电子书库](https://drive.google.com/drive/folders/1ocKcs9ZWBz9OqYgbICC1kCDKlZxVbdfb) | 放在 Google Drive 上，需要科学上网                         |
+| [助教的电子书库](https://drive.google.com/drive/folders/1ocKcs9ZWBz9OqYgbICC1kCDKlZxVbdfb) | 放在谷歌硬盘上，需要科学上网                               |
 
 ## 2. 视频推荐
 
