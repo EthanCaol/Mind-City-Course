@@ -36,7 +36,20 @@ nav:
       - Claude 工具链配置: setup/claude.md
       - DeepSeek 工具链配置: setup/deepseek-harness.md
   - 题库:
-      - 索引: question/00-索引.md
+      - 00-索引: question/00-索引.md
+      - 01-标识符常量与数据类型: question/01-标识符常量与数据类型.md
+      - 02-运算符表达式与求值顺序: question/02-运算符表达式与求值顺序.md
+      - 03-控制结构: question/03-控制结构.md
+      - 04-函数递归与存储类别: question/04-函数递归与存储类别.md
+      - 05-数组: question/05-数组.md
+      - 06-字符串与字符数组: question/06-字符串与字符数组.md
+      - 07-指针: question/07-指针.md
+      - 08-结构体与链表: question/08-结构体与链表.md
+      - 09-动态内存管理: question/09-动态内存管理.md
+      - 10-文件操作: question/10-文件操作.md
+      - 11-预处理与宏: question/11-预处理与宏.md
+      - 12-算法编程题: question/12-算法编程题.md
+      - 13-格式化输入输出: question/13-格式化输入输出.md
 
 markdown_extensions:
   - admonition
