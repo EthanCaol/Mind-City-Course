@@ -35,6 +35,8 @@ nav:
   - 实用工具:
       - Claude 工具链配置: setup/claude.md
       - DeepSeek 工具链配置: setup/deepseek-harness.md
+  - 题库:
+      - 索引: question/00-索引.md
 
 markdown_extensions:
   - admonition

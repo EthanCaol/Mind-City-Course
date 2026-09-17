@@ -71,7 +71,7 @@ icon: material/bookshelf
 
 - [26程设-第0讲-课程简介.pdf](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC0%E8%AE%B2-%E8%AF%BE%E7%A8%8B%E7%AE%80%E4%BB%8B.pdf)
 - [26程设-第1讲-程序设计基础.pdf](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC1%E8%AE%B2-%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%80.pdf)
-- [26程设-第2讲-基本数据及其运算-1.pdf](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/%E7%AC%AC2%E8%AE%B2-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%8F%8A%E5%85%B6%E8%BF%90%E7%AE%97-1.pdf)
+- [26程设-第2讲-基本数据及其运算-1.pdf](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC2%E8%AE%B2-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%8F%8A%E5%85%B6%E8%BF%90%E7%AE%97-1.pdf)
 
 !!! tip "课件会陆续补齐"
     后面的讲次上传之后，会在这里和下面的课程安排里一起更新。
