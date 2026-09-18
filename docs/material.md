@@ -10,7 +10,7 @@ icon: material/bookshelf
 
 ## 1. 推荐阅读书目
 
-这些书在助教的电子书库里都有，或者也可以去 Z-lib 电子书库下载当前最新版
+这些书在[助教的电子书库](https://drive.google.com/drive/folders/1ocKcs9ZWBz9OqYgbICC1kCDKlZxVbdfb)里都有，或者也可以去 [Z-lib 电子书库](https://zh.z-library.sk/)下载当前最新版
 
 带链接的可以直接点开下载电子版。
 
