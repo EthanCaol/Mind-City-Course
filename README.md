@@ -12,12 +12,24 @@
 
 ```
 .
-├── mkdocs.yml         # 站点配置：主题、导航(nav)、Markdown 扩展
+├── mkdocs.yml         # 站点配置：主题、导航(nav)、Markdown 扩展、hooks
+├── hooks/
+│   └── revision_notice.py   # 构建钩子：把「最后更新」提示从页脚挪到标题下方
 ├── docs/
 │   ├── index.md       # 首页
-│   └── assets/        # 图片等静态资源（需自行创建）
+│   ├── material.md    # 课程资料：网站、书目、课件链接、每周课程安排
+│   ├── plan.md        # 站点计划
+│   ├── question/      # C 语言题库，按讲课顺序编号的 13 个知识点文件
+│   ├── setup/         # 实验课文档：环境搭建与工具链，共 9 篇
+│   ├── code/          # 正文用 snippet 引入的示例代码（hello.c、sum.c）
+│   └── assets/
+│       ├── fonts/         # Cascadia Code（代码字体，自托管，只含 latin 子集）
+│       └── stylesheets/   # extra.css、fonts.css
 └── README.md          # 本文件，仅面向仓库，不会出现在网站上
 ```
+
+`site/`（构建产物）与 `.cache/`（`privacy` 插件抓取外部资源的缓存）都已 gitignore；
+页面里引用的 `assets/external/` 是构建时由 `privacy` 插件生成的，仓库里没有。
 
 ## 新增页面
 
