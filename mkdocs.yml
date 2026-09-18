@@ -35,6 +35,8 @@ nav:
   - 实用工具:
       - Claude 工具链配置: setup/claude.md
       - DeepSeek 工具链配置: setup/deepseek-harness.md
+  - 作业:
+      - 作业1：int整数加法: homework/作业1-int整数加法.md
   - 题库:
       - 01-标识符常量与数据类型: question/01-标识符常量与数据类型.md
       - 02-格式化输入输出: question/02-格式化输入输出.md
