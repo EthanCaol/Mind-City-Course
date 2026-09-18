@@ -52,7 +52,7 @@ icon: material/bookshelf
 
 **语言基础**
 
-- [C语言程序设计：现代方法（推荐自学）](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/C%e8%af%ad%e8%a8%80%e7%a8%8b%e5%ba%8f%e8%ae%be%e8%ae%a1-%e7%8e%b0%e4%bb%a3%e6%96%b9%e6%b3%95%ef%bc%88%e7%ac%ac2%e7%89%88-%e4%bf%ae%e8%ae%a2%e7%89%88%ef%bc%89.pdf)
+- [C语言程序设计：现代方法](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/C%e8%af%ad%e8%a8%80%e7%a8%8b%e5%ba%8f%e8%ae%be%e8%ae%a1-%e7%8e%b0%e4%bb%a3%e6%96%b9%e6%b3%95%ef%bc%88%e7%ac%ac2%e7%89%88-%e4%bf%ae%e8%ae%a2%e7%89%88%ef%bc%89.pdf)
 - [C Primer Plus（自学最推荐）](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/C%20Primer%20Plus-%E7%AC%AC6%E7%89%88-%E4%B8%AD%E6%96%87%E7%89%88.pdf)
 - C++ Primer
 - C++ Primer Plus
