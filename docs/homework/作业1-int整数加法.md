@@ -1,5 +1,5 @@
 ---
-icon: material/pencil
+icon: material/pencil-outline
 ---
 
 # 作业 1：int 整数加法
