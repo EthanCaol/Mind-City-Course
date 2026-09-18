@@ -6,41 +6,9 @@ icon: material/bookshelf
 
 <p class="doc-meta"><span>负责助教：<strong>曹奕伦</strong></span><span>整理时间：<strong>2026-9-15</strong></span></p>
 
-本页汇总助教觉得实用的网站、书目和课件，以及每周的课程安排。
+本页汇总助教觉得实用的书目、网站和课件，以及每周的课程安排。
 
-## 1. 常用网站
-
-| 网站                                                                                       | 功能描述                                                   |
-| ------------------------------------------------------------------------------------------ | ---------------------------------------------------------- |
-| [菜鸟教程 · C语言](https://www.runoob.com/cprogramming)                                    | 非常精练全面的语法教程                                     |
-| [OI Wiki](https://oi-wiki.org/)                                                            | 算法竞赛的知识整合站点，学算法、查模板都在这里             |
-| [CS 自学指南](https://csdiy.wiki/)                                                         | 北大学长写的计算机自学指南，汇总了国内外优质课程和自学路线 |
-| [力扣题库](https://leetcode.cn/problemset/)                                                | 在线题库，可以去上面找题练练练手                           |
-| [Compiler Explorer](https://godbolt.org/)                                                  | 在线编译器，左边写 C代码，右边实时看对应的汇编             |
-| [Z-lib 电子书库](https://zh.z-library.sk/)                                                 | 电子书下载站，需要科学上网                                 |
-| [助教的电子书库](https://drive.google.com/drive/folders/1ocKcs9ZWBz9OqYgbICC1kCDKlZxVbdfb) | 放在谷歌硬盘上，需要科学上网                               |
-
-## 2. 视频推荐
-
-**科普：计算机的历史和原理**
-
-- [《计算机科学速成课》](https://www.bilibili.com/video/BV1EW411u7th)
-- [《操作系统发展史｜仿生之旅》](https://www.bilibili.com/video/BV1Zc411D7sG/)
-- [《计算机博物志·最后的黑客：理查德·马修·斯托曼》](https://www.bilibili.com/video/BV11R4y1b7zc)
-
-**工具：编辑器和开发环境**
-
-- [VSCode 教程合集](https://space.bilibili.com/103466775/lists/4080160)
-- [《VSCode 配置 | 外观 | 通用型扩展 | Minimal》](https://www.bilibili.com/video/BV1YW4y1M7uX)
-- [《VSCode 配置 | C/C++ | MakeFile | CMake | Minimal》](https://www.bilibili.com/video/BV1H24y1D7Kn)
-- [《保姆级入门：Vim 编辑器》](https://www.bilibili.com/video/BV13t4y1t7Wg)
-
-**进阶：计算机系统和操作系统**
-
-- [《深入理解计算机系统》(CSAPP) 配套讲解](https://www.bilibili.com/video/BV1cD4y1D7uR)
-- [2026 南京大学《操作系统原理》（蒋炎岩）](https://space.bilibili.com/202224425/lists/7587348)
-
-## 3. 推荐阅读书目
+## 1. 推荐阅读书目
 
 这些书在助教的电子书库里都有，或者也可以去 Z-lib 电子书库下载当前最新版
 
@@ -68,6 +36,38 @@ icon: material/bookshelf
 
 - 算法导论（CLRS）
 - 动手学深度学习（D2L.ai）
+
+## 2. 常用网站
+
+| 网站                                                                                       | 功能描述                                                   |
+| ------------------------------------------------------------------------------------------ | ---------------------------------------------------------- |
+| [菜鸟教程 · C语言](https://www.runoob.com/cprogramming)                                    | 非常精练全面的语法教程                                     |
+| [OI Wiki](https://oi-wiki.org/)                                                            | 算法竞赛的知识整合站点，学算法、查模板都在这里             |
+| [CS 自学指南](https://csdiy.wiki/)                                                         | 北大学长写的计算机自学指南，汇总了国内外优质课程和自学路线 |
+| [力扣题库](https://leetcode.cn/problemset/)                                                | 在线题库，可以去上面找题练练练手                           |
+| [Compiler Explorer](https://godbolt.org/)                                                  | 在线编译器，左边写 C代码，右边实时看对应的汇编             |
+| [Z-lib 电子书库](https://zh.z-library.sk/)                                                 | 电子书下载站，需要科学上网                                 |
+| [助教的电子书库](https://drive.google.com/drive/folders/1ocKcs9ZWBz9OqYgbICC1kCDKlZxVbdfb) | 放在谷歌硬盘上，需要科学上网                               |
+
+## 3. 视频推荐
+
+**科普：计算机的历史和原理**
+
+- [《计算机科学速成课》](https://www.bilibili.com/video/BV1EW411u7th)
+- [《操作系统发展史｜仿生之旅》](https://www.bilibili.com/video/BV1Zc411D7sG/)
+- [《计算机博物志·最后的黑客：理查德·马修·斯托曼》](https://www.bilibili.com/video/BV11R4y1b7zc)
+
+**工具：编辑器和开发环境**
+
+- [VSCode 教程合集](https://space.bilibili.com/103466775/lists/4080160)
+- [《VSCode 配置 | 外观 | 通用型扩展 | Minimal》](https://www.bilibili.com/video/BV1YW4y1M7uX)
+- [《VSCode 配置 | C/C++ | MakeFile | CMake | Minimal》](https://www.bilibili.com/video/BV1H24y1D7Kn)
+- [《保姆级入门：Vim 编辑器》](https://www.bilibili.com/video/BV13t4y1t7Wg)
+
+**进阶：计算机系统和操作系统**
+
+- [《深入理解计算机系统》(CSAPP) 配套讲解](https://www.bilibili.com/video/BV1cD4y1D7uR)
+- [2026 南京大学《操作系统原理》（蒋炎岩）](https://space.bilibili.com/202224425/lists/7587348)
 
 ## 4. 课件
 
