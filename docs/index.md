@@ -34,7 +34,7 @@ icon: material/home
 !!! tip "课程微信群"
     大家进群之后，要记得顺便实名一下，助教需要确保每位同学都进群了。
     如果二维码过期了，可以加助教的微信号，让助教把你拉进群。
-    ![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260915215522441.png)
+    ![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/%E7%BE%A4%E8%81%8A%EF%BC%9A%E3%80%90%E6%B0%B4%E7%BE%A4%E3%80%91%E7%A8%8B%E8%AE%BE%E5%AE%9E%E9%AA%8C%E8%AF%BE%20%28%E9%80%B8%E5%A4%AB%E6%A5%BC204%29.png)
 
 
 ## 主讲教师
