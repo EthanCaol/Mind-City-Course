@@ -14,7 +14,7 @@
     - 排行榜第12名：[DeepSeek-API](https://platform.deepseek.com/)（国内，收费但便宜）
 
 !!! abstract "全程概览"
-    本文按顺序做完这 8 步，你就有了一个完整的 C语言开发环境：
+    本文按顺序做完这 7 步，你就有了一个完整的 C语言开发环境：
 
     1. 了解为什么用这套方案（可跳过）
     2. 启用 Windows 功能，安装 WSL2
@@ -22,8 +22,7 @@
     4. 配置国内网络，安装 GCC / G++ / GDB
     5. 写并运行第一个 C 程序
     6. 安装 VSCode，连接到 WSL
-    7. （进阶）VSCode 详细配置视频
-    8. （进阶）备份系统、迁移到 D 盘
+    7. （进阶）备份系统、迁移到 D 盘
 
 ## 1. 为什么推荐 VSCode + WSL 开发模式
 
@@ -419,21 +418,21 @@ sudo apt upgrade -y
 先说说这几个东西是干什么的：
 
 - **gcc**（GNU Compiler Collection，GNU 编译器套件）是 C语言的编译器：负责把 C 代码翻译成能跑的可执行程序
-- **g++** 是 C++ 的编译器：负责把 C++ 代码翻译成能跑的可执行程序。它和 gcc 用的是同一套编译器，只是默认行为不一样 —— 大致可以理解成 `gcc -lstdc++`，另外还会把源文件一律当成 C++ 来编译（哪怕文件后缀写的是 `.c`）
+- **g++** 是 C++ 的编译器：也就是链接了 C++ 标准库的 GCC，并且会把 C代码 也当成 C++ 来编译
 - **gdb**（GNU Debugger）是 C语言的调试器：负责单步执行、看变量的值如何变化、定位程序是怎么崩溃报错的
 - **build-essential** 是一组基础编译工具的合集包：把上面的 gcc 和 g++ 都包了进去，另外还有 make 和 C 标准库的开发文件。只装 gcc 有时会因为缺头文件编译不过，装它一次到位，后面的《Make 构建工具》也要用它
 
 !!! warning "C++ 代码要用 g++ 编译"
     C++ 里的 `cin` / `cout` / `std::string` / `std::vector` 都来自 C++ 标准库 libstdc++，gcc 按 C语言处理时不会自动链接它。所以拿 `gcc test.cpp` 编译 C++ 程序，常常是编译阶段看着没事，链接阶段却报一串 `undefined reference to ...` 的错 —— 不是代码写错了，只是少链接了 C++ 标准库。
 
-    写 C 就用 gcc、写 C++ 就用 g++，各用各的就不会碰上这种事。非要拿 gcc 编 C++ 的话，得自己把标准库补上：`gcc test.cpp -lstdc++ -o test`。
-
-    另外，如果当初只装了 gcc、跳过了 build-essential，机器上其实根本没有 g++，敲 `g++` 会直接提示 `command not found`。按上面那条命令把 `gcc g++ gdb build-essential` 一起装上就行。
+    写 C 就用 gcc、写 C++ 就用 g++，各用各的就不会碰上这种事。
+    
+    如果非要拿 gcc 编 C++ 的话，需要自己在编译时把标准库补上：`gcc test.cpp -lstdc++ -o test`。
 
 !!! warning "装之前先确认你做过 4.3 的 `sudo apt update`"
-    这是同学漏得最多的一步。跳过它直接装，`apt` 手上还是一份很旧的软件列表，经常直接报 `E: Unable to locate package gcc`，或者装上一个早该换掉的旧版本。
-
-    不确定自己做过没有？**就当没做过，先补一条**（重复执行没有任何坏处）：
+    这是同学漏得最多的一步。
+    
+    如果跳过它直接装，`apt` 手上还是一份很旧的软件列表，经常直接报 `E: Unable to locate package gcc`。
 
     ```bash title="Ubuntu 终端"
     sudo apt update
@@ -551,11 +550,11 @@ gcc hello.c -o hello   # 编译代码，得到可执行文件 hello
 打开 VSCode，**点击左侧边栏的「扩展」**（Extensions，方块图标），搜索并安装下面这几个：
 
 | 插件名                             | 说明                    | 是否必装 |
-| ---------------------------------- | ----------------------- | ------ |
-| WSL                                | 让 VSCode 能连进 WSL    | 是     |
-| C/C++                              | C语言语法高亮、代码提示 | 是     |
-| Code Runner                        | 一键运行代码的小插件    | 是     |
-| Chinese (Simplified) Language Pack | 中文界面                | 可选   |
+| ---------------------------------- | ----------------------- | -------- |
+| WSL                                | 让 VSCode 能连进 WSL    | 是       |
+| C/C++                              | C语言语法高亮、代码提示 | 是       |
+| Code Runner                        | 一键运行代码的小插件    | 是       |
+| Chinese (Simplified) Language Pack | 中文界面                | 可选     |
 
 !!! tip "建议用英文界面"
     推荐大家尽量使用英文界面，这样之后修改配置文件会方便很多，也能和网上搜到的教程对得上。
@@ -617,47 +616,12 @@ VSCode 其实是分两端的：界面跑在 Windows 上，但真正读写代码�
     gcc hello.c -o hello && ./hello
     ```
 
-## 7. 进阶补充：VSCode 详细配置（视频，强烈推荐）
+!!! tip "想继续折腾 VSCode 的话"
+    到这里，环境部分就算完成了：能写代码、能编译、能运行。
 
-第 6 节只讲了把第一个程序跑起来所必需的最精简配置。想让 VSCode 真正好用起来（界面外观、常用插件、C/C++ 的调试与构建），下面这两期视频讲得很细，**非常建议大家跟着做一遍**：
+    想把编辑器再配置得顺手一些（新建配置文件、换主题、改 Code Runner 的编译命令、配 C/C++ 的调试），继续看那篇：VSCode 入门教程。
 
-- [《VSCode 配置 | 外观 | 通用型扩展 | Minimal》](https://www.bilibili.com/video/BV1YW4y1M7uX)
-- [《VSCode 配置 | C/C++ | MakeFile | CMake | Minimal》](https://www.bilibili.com/video/BV1H24y1D7Kn)
-
-![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260914214817142.jpg)
-
-![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260914214845964.jpg)
-
-
-### 7.1 先新建一个配置文件（Profile）
-
-视频里的第一步是新建一个配置文件（Profile）。这一步在视频里的操作画面被挡住了，看不清，所以这里补一份文字版步骤：
-
-![视频里那一步的截图，菜单被挡住了一部分](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260921113808647.png)
-
-#### 第 1 步：打开配置文件页面
-
-点左下角的齿轮图标（Manage / 管理），菜单里有一项 Profiles。鼠标移上去会展开子菜单，在子菜单里点 Profiles：
-
-![管理菜单里的 Profiles 子菜单](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260921113940672.png)
-
-#### 第 2 步：创建新的配置文件并保存
-
-配置文件页面打开后，点左上角的 New Profile，在 Name 里填个自己想要的名字，然后点 Create：
-
-![New Profile 表单：填好 Name，再点 Create](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260921115659950.png)
-
-#### 第 3 步：勾选启用新配置文件
-
-回到左边的配置文件列表，找到刚建好的那个，点它名字后面的小方框勾选，把它切换成当前正在使用的配置文件：
-
-![在列表中勾选新建的配置文件](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260921114101466.png)
-
-启用之后，它旁边会显示 Active 字样，说明现在用的就是它。
-
-到这里准备工作就完成了，视频后面的内容就可以接着往下做了。
-
-## 8. 进阶补充：备份操作系统，以及迁移到 D 盘
+## 7. 进阶补充：备份操作系统，以及迁移到 D 盘
 
 WSL 里的 Ubuntu 说到底就是一堆文件。WSL 为此提供了一对命令：可以把整套系统原样打包成一个 tar 文件，也可以把这个 tar 文件还原成一套能直接跑的系统。
 
