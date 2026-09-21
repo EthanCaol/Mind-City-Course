@@ -629,7 +629,7 @@
   border: 0;
   border-bottom: 0.05rem solid var(--md-default-fg-color--lightest);
   /* 列之间一条浅竖线，作业一多不容易看串列 */
-  border-right: 0.05rem solid var(--md-default-fg-color--lightest);
+  border-right: 0.08rem solid var(--md-default-fg-color--lightest);
 }
 
 /* 最后一列右边不封口 */
