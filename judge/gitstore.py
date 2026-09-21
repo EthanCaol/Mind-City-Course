@@ -42,7 +42,6 @@ class GitStore:
     def __init__(self, repo_dir: Path = config.DATA_DIR) -> None:
         self.dir = Path(repo_dir)
         self.lock_path = self.dir / ".sync.lock"
-        self._push_failures = 0
 
     # ------------------------------------------------------------ 基础
 
@@ -163,47 +162,29 @@ class GitStore:
     # ------------------------------------------------------------ 后台线程
 
     def sync_loop(self, stop_event: threading.Event, on_change=None) -> None:
-        """定时同步：拉花名册 + 推提交记录。
+        """定时同步：花名册勤拉，提交记录一周推一次。
 
-        独立线程，判题 worker 不碰网络。推送失败按退避重试，不阻塞判题。
+        独立线程，判题 worker 不碰网络 —— 网络再慢再断也不影响判题。
         """
-        last_roster_pull = 0.0
-        pending_since = 0.0
-        last_commit_count = -1
+        next_pull = 0.0  # 启动时立刻拉一次
+        next_push = time.monotonic() + config.PUSH_INTERVAL_S
 
         while not stop_event.is_set():
             now = time.monotonic()
 
-            if now - last_roster_pull >= config.ROSTER_PULL_INTERVAL_S:
-                last_roster_pull = now
+            if now >= next_pull:
+                next_pull = now + config.ROSTER_PULL_INTERVAL_S
                 if self.pull() and on_change is not None:
                     on_change()
 
-            # 攒够一批再推，避免每判一份就联网
-            committed = self._commit_count()
-            if committed != last_commit_count:
-                if pending_since == 0.0:
-                    pending_since = now
-                last_commit_count = committed
-
-            if pending_since and (now - pending_since >= config.SYNC_IDLE_INTERVAL_S):
+            if now >= next_push:
+                # 正常情况下 worker 每判一份就已经本地 commit 了，
+                # 这里只是兜底，顺手把可能漏掉的改动一起提上
                 self.commit("判题记录")
                 if self.push():
-                    pending_since = 0.0
+                    next_push = now + config.PUSH_INTERVAL_S
                 else:
-                    self._backoff(stop_event)
+                    # 不能真等一周才重试
+                    next_push = now + config.PUSH_RETRY_S
 
-            stop_event.wait(15)
-
-    def _commit_count(self) -> int:
-        try:
-            result = self._git(["rev-list", "--count", "HEAD"], 10)
-            return int(result.stdout.strip() or 0)
-        except (subprocess.TimeoutExpired, ValueError):
-            return -1
-
-    def _backoff(self, stop_event: threading.Event) -> None:
-        delay = config.GIT_BACKOFF_S[min(self._push_failures, len(config.GIT_BACKOFF_S) - 1)]
-        self._push_failures += 1
-        log.warning("推送失败第 %d 次，%.0f 秒后重试", self._push_failures, delay)
-        stop_event.wait(delay)
+            stop_event.wait(30)

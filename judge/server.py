@@ -221,6 +221,12 @@ class App:
         self.worker.wake()
         return 200, {"ok": True}
 
+    def admin_sync(self) -> tuple[int, dict]:
+        """立刻把提交记录推到备份仓库。"""
+        committed = self.git.commit("判题记录（手动同步）")
+        pushed = self.git.push()
+        return 200, {"committed": committed, "pushed": pushed}
+
     def admin_export(self, homework: str) -> str:
         """导出成绩 CSV：每人一行，第一次通过的时间。"""
         roster = self.roster.all()
@@ -418,6 +424,10 @@ def create_handler(app: App):
                         if sub_id is not None
                         else (404, {"error": "没有这份提交"})
                     )
+
+                # 提交记录一周才自动推一次，想立刻备份就手动触发
+                if route == "/api/admin/sync" and method == "POST":
+                    return app.admin_sync()
 
             return 404, {"error": "not found"}
 

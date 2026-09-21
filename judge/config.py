@@ -151,7 +151,13 @@ GIT_REMOTE = "origin"
 GIT_BRANCH = "main"
 GIT_PULL_TIMEOUT_S = 30
 GIT_PUSH_TIMEOUT_S = 60
-GIT_BACKOFF_S = (30, 60, 120, 300, 600, 900)  # 上限 15 分钟
+
+# 花名册要勤拉：助教 push 完名单，希望很快生效。
 ROSTER_PULL_INTERVAL_S = 300
-SYNC_IDLE_INTERVAL_S = 120
-SYNC_BATCH_SIZE = 20  # 攒够这么多条提交就推一次
+
+# 提交记录一周推一次。SQLite 在本机就是权威数据源，git 只是异地备份；
+# 推送频率低不省什么资源，纯粹是没必要。
+# 代价：万一这台机器整个坏掉，最多会丢一周的记录。
+PUSH_INTERVAL_S = 7 * 24 * 3600
+# 推送失败后隔多久重试（不能等到下周）
+PUSH_RETRY_S = 1800
