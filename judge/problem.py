@@ -128,7 +128,7 @@ def load_problem(slug: str) -> Problem:
 
     compile_limits = _limits_from(config.COMPILE_LIMITS, meta.get("compile_limits"))
     run_limits = _limits_from(config.RUN_LIMITS, meta.get("run_limits"))
-    flags = tuple(meta.get("compile_flags", ("-O2", "-std=c11", "-Wall", "-DONLINE_JUDGE")))
+    flags = tuple(meta.get("compile_flags", ("-O2", "-std=gnu23", "-Wall", "-DONLINE_JUDGE")))
 
     return Problem(
         slug=slug,

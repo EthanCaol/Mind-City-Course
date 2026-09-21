@@ -94,7 +94,7 @@ curl -X POST -H "Authorization: Bearer $TOKEN" https://mind-city.com/judge/api/a
    ```json
    {
      "title": "作业 2：xxx",
-     "compile_flags": ["-O2", "-std=c11", "-Wall", "-DONLINE_JUDGE"],
+     "compile_flags": ["-O2", "-std=gnu23", "-Wall", "-DONLINE_JUDGE"],
      "run_limits": { "time_s": 1, "wall_time_s": 3, "cg_mem_kb": 262144, "mem_kb": 524288 }
    }
    ```

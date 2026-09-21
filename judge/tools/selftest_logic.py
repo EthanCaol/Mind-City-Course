@@ -117,7 +117,7 @@ def test_problem() -> None:
     check("题目 · 第一组期望", prob.cases[0].expected, "8\n")
     check("题目 · 索引从 1 开始", [c.index for c in prob.cases], [1, 2, 3, 4, 5])
     check("题目 · 都还没隐藏", all(not c.hidden for c in prob.cases), True)
-    check("题目 · 编译参数", "-std=c11" in prob.compile_flags, True)
+    check("题目 · 编译参数", "-std=gnu23" in prob.compile_flags, True)
     check("题目 · 运行内存倍于 cg-mem", prob.run_limits.mem_kb, 2 * prob.run_limits.cg_mem_kb)
     check("题目 · 题目列表", [p.slug for p in list_problems()], ["作业1"])
 
