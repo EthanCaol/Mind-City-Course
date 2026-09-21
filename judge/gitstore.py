@@ -11,6 +11,7 @@ worker 只调这里的本地磁盘操作（微秒级），联网的 push 交给�
 
 from __future__ import annotations
 
+import datetime as dt
 import fcntl
 import json
 import logging
@@ -178,13 +179,27 @@ class GitStore:
         stamps = [int(t) for t in result.stdout.split() if t.strip().isdigit()]
         return time.time() - min(stamps) if stamps else None
 
+    @staticmethod
+    def seconds_until(hour: int, minute: int) -> float:
+        """距离下一个 HH:MM（本地时间）还有多少秒。"""
+        now = dt.datetime.now()
+        target = now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+        if target <= now:
+            target += dt.timedelta(days=1)
+        return (target - now).total_seconds()
+
+    def _push_deadline(self) -> float:
+        return time.monotonic() + self.seconds_until(
+            config.PUSH_AT_HOUR, config.PUSH_AT_MINUTE
+        )
+
     def sync_loop(self, stop_event: threading.Event, on_change=None) -> None:
-        """定时同步：花名册勤拉，提交记录每两天推一次。
+        """定时同步：花名册勤拉，提交记录每两天的凌晨四点半推一次。
 
         独立线程，判题 worker 不碰网络 —— 网络再慢再断也不影响判题。
         """
         next_pull = 0.0  # 启动时立刻拉一次
-        next_push_attempt = 0.0
+        next_push_check = self._push_deadline()
 
         while not stop_event.is_set():
             now = time.monotonic()
@@ -194,15 +209,17 @@ class GitStore:
                 if self.pull() and on_change is not None:
                     on_change()
 
-            if now >= next_push_attempt:
+            if now >= next_push_check:
                 age = self.unpushed_age_s()
                 if age is not None and age >= config.PUSH_INTERVAL_S:
                     # 正常情况 worker 每判一份就已经本地 commit 了，
                     # 这里兜底，顺手把可能漏掉的改动一起提上
                     self.commit("判题记录")
-                    if self.push():
-                        next_push_attempt = 0.0
-                    else:
-                        next_push_attempt = now + config.PUSH_RETRY_S
+                    # 失败就别等明天四点半了
+                    next_push_check = (
+                        self._push_deadline() if self.push() else now + config.PUSH_RETRY_S
+                    )
+                else:
+                    next_push_check = self._push_deadline()
 
             stop_event.wait(60)
