@@ -42,7 +42,8 @@ icon: material/pencil-outline
 !!! note "先自测，再提交"
     - 先使用 IDE 写好代码，然后在你的电脑上跑一下样例
     - 等所有样例都过了，再把代码粘贴到这里进行提交
-    - 助教服务器的性能比较拉，同学们尽量先自测再提交
+    - 助教服务器的性能比较拉，同学们还是先自测再提交
+    - 2 分钟最多交 5 次，如果提交太频繁会被拒绝，等会再交就行
 
 <div class="judge" id="judge" data-homework="作业1">
   <div class="judge__bar">

@@ -36,7 +36,7 @@ BOX_ROOT = Path("/var/local/lib/isolate")
 
 # 就绪探针读这个文件拿 cgroup 路径。注意 isolate.service 停掉之后
 # 这个文件**不会**跟着清理，它会留着一条已经不存在了的路径
-# （isolate.md 第 8.10 条），所以必须再去检查该路径是否真的有 cgroup.procs。
+# （见根目录 README 的「三个坑」②），所以必须再去检查该路径是否真的有 cgroup.procs。
 CGROUP_FILE = Path("/run/isolate/cgroup")
 
 # --cg 必须始终打开。不加就等于没做内存隔离：--mem 只落到 RLIMIT_AS，
@@ -57,7 +57,7 @@ SUBPROCESS_SLACK_S = 10.0
 
 # ---------------------------------------------------------------- 判题
 
-# 判题必须串行。2 核机器上并发 gcc 会打爆内存（isolate.md 第 8.6 条）。
+# 判题必须串行。2 核机器上并发 gcc 会打爆内存。
 # 生产环境（claude / VSCode 都不开）内存是够跑 2 个的，但 2 核的 CPU 仍是瓶颈，
 # 除非确有必要，否则别动这个值。
 JUDGE_WORKERS = 1
@@ -108,7 +108,7 @@ COMPILE_LIMITS = Limits(
 
 # 运行：入门 C 作业的默认值，每题可在 problem.json 里覆盖。
 #
-# 注意 mem_kb 刻意取 cg_mem_kb 的 2 倍，与 isolate.md 第 4 节「两者同值」的
+# 注意 mem_kb 刻意取 cg_mem_kb 的 2 倍，与「两者同值」的
 # 建议不同。原因：RLIMIT_AS >= RSS 恒成立，两者同值时 RLIMIT_AS 必然先触发，
 # 程序 malloc 返回 NULL 后段错误，而 cg-mem 停在低位达不到阈值 ——
 # 于是「cg-mem 接近上限」这条 MLE 判据永远不会成立，MLE 会被误判成 RE。
@@ -145,7 +145,7 @@ HANDLER_TIMEOUT_S = 15  # 挡 slowloris
 MIN_SUBMIT_INTERVAL_S = 3  # 两次提交的最小间隔，防连点
 # 每学生每作业，2 分钟内最多交 5 次。
 # 窗口开得小是有意的：重复提交不去重，学生改一版交一版是正常操作，
-# 卡太久会挡着人改错。
+# 卡太久会挡着人改错。作业页的提示文字里也写了这个数，改这里记得同步改。
 RATE_LIMIT_WINDOW_S = 120
 RATE_LIMIT_MAX_IN_WINDOW = 5
 

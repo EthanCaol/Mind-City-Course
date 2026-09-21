@@ -1,7 +1,7 @@
 """把 isolate 的 meta 映射成判题结论。
 
 isolate 本身没有 AC/WA/TLE/MLE 这些概念，只有 `status`（RE/SG/TO/XX）、
-`exitcode`、`exitsig` 和一堆计量值。映射规则见 isolate.md 第 9 节。
+`exitcode`、`exitsig` 和一堆计量值。映射规则见下面这张表。
 
 两条不能搞错的：
 

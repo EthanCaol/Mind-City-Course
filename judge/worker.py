@@ -3,7 +3,7 @@
 队列就是 `submissions` 表，不是内存队列 —— 这样服务重启后没判完的提交还在，
 退回 PENDING 重判即可（判题是幂等的）。内存队列一重启就丢。
 
-串行是硬要求：这台机器只有 2 核，并发跑 gcc 会打爆内存（isolate.md 第 8.6 条）。
+串行是硬要求：这台机器只有 2 核，并发跑 gcc 会打爆内存。
 """
 
 from __future__ import annotations

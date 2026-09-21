@@ -28,6 +28,9 @@ nav:
   - 站点首页: index.md
   - 课程资料: material.md
   - 站点计划: plan.md
+  - 作业:
+      - 作业完成情况: homework/作业完成情况.md
+      - 作业1：int整数加法: homework/作业1-int整数加法.md
   - 实验课:
       - (0) Dev-C++ 环境搭建: setup/dev-cpp.md
       - (0) WSL2 环境搭建: setup/wsl2-vscode.md
@@ -35,9 +38,6 @@ nav:
   - 实用工具:
       - Claude 工具链配置: setup/claude.md
       - DeepSeek 工具链配置: setup/deepseek-harness.md
-  - 编程作业:
-      - 作业完成情况: homework/作业完成情况.md
-      - 作业1：int整数加法: homework/作业1-int整数加法.md
   - 备考题库:
       - 01-标识符常量与数据类型: question/01-标识符常量与数据类型.md
       - 02-格式化输入输出: question/02-格式化输入输出.md

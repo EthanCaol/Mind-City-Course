@@ -1,6 +1,6 @@
 """isolate 子进程编排：box 的建立、编译、逐测试点运行、销毁。
 
-事实依据全部来自 `isolate.md`（面向 agent 的使用手册，2026-09-21 实测）。
+行为依据是 2026-09-21 在这台机器上逐条实测的结果。
 几条最容易踩的，这里再点一遍：
 
 - `--cg` 必须始终打开，且 `--init` 与 `--run` 必须一致。不一致会得到
@@ -120,7 +120,7 @@ def cgroup_root() -> Path | None:
     """isolate 实际使用的 cgroup 根，不可用则返回 None。
 
     注意 `/run/isolate/cgroup` 这个文件在 `isolate.service` 停掉之后**不会**
-    跟着清理，它会留着一条已经不存在了的路径（isolate.md 第 8.10 条）。
+    跟着清理，它会留着一条已经不存在了的路径（见根目录 README 的「三个坑」②）。
     所以必须再去确认那个路径下面真的有 `cgroup.procs`。
     """
     try:
@@ -374,7 +374,7 @@ class BoxPool:
         """取出一个 box，退出时自动 cleanup 并归还。
 
         cleanup 放在 finally 里 —— box 泄漏（init 了没 cleanup）久了，
-        box 目录和 box cgroup 都会堆积，这是 isolate.md 第 8.5 条点名的坑。
+        box 目录和 box cgroup 都会堆积，这是最容易漏的一条。
         """
         box_id = self._take(timeout)
         box = Box(box_id, self._workdir / str(box_id))

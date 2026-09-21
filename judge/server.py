@@ -98,8 +98,7 @@ class App:
                 minutes = max(1, round(config.RATE_LIMIT_WINDOW_S / 60))
                 return 429, {
                     "error": (
-                        f"提交太频繁了。{minutes} 分钟内最多交 "
-                        f"{config.RATE_LIMIT_MAX_IN_WINDOW} 次，请稍后再试。"
+                        f"提交太频繁了，{minutes} 分钟最多交 {config.RATE_LIMIT_MAX_IN_WINDOW} 次，请稍后再试。"
                     )
                 }
 

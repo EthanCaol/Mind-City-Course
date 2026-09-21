@@ -92,18 +92,56 @@ def run_all(pool: BoxPool, problem) -> dict[str, tuple[str, str]]:
     return results
 
 
+def check_isolation(pool: BoxPool) -> None:
+    """沙箱隔离是否真的生效。
+
+    这两条不能省 —— 它们验证的是「学生能不能拿到不该拿的东西」。
+    原先散在一份单独的 isolate 手册里，删掉那份手册时搬到这里。
+    """
+    cases = [
+        (
+            "读宿主文件（/etc/shadow 应读不到）",
+            ["/bin/cat", "/etc/shadow"],
+            lambda r: "No such file" in r.stderr_text,
+        ),
+        (
+            "连外网（应被挡住）",
+            ["/bin/sh", "-c", "curl -s -m 3 http://1.1.1.1 && echo NETOK || echo NETBLOCKED"],
+            lambda r: "NETBLOCKED" in r.stdout_text,
+        ),
+    ]
+
+    print("\n隔离性")
+    for label, argv, ok in cases:
+        with pool.acquire() as box:
+            box.init()
+            run = box.run(argv, config.RUN_LIMITS, stdout="out.txt", stderr="err.txt")
+
+        if ok(run):
+            print(f"  OK {label}")
+            continue
+
+        print(f"  !! {label}")
+        _failures.append(
+            f"{label} 隔离没生效："
+            f"stdout={run.stdout_text.strip()[:80]!r} "
+            f"stderr={run.stderr_text.strip()[:80]!r}"
+        )
+
+
 def compare_mem_configs(pool: BoxPool, problem) -> None:
     """对 `--mem` 的两种取值各跑一次「吃内存」，看 MLE 判据成不成立。
 
-    这是我们和 isolate.md 建议值唯一的偏离点，必须实测确认：
+    这是配置里唯一一处「和直觉相反」的地方，必须能随时复现：
     两者同值时 RLIMIT_AS 会先触发，cg-mem 达不到阈值，MLE 会被误判成 RE。
+    结论写在 README 的「三个坑」里，这里负责给出实测数字。
     """
     print("\n--mem / --cg-mem 取值对比（都在判「吃内存」那个程序）")
 
     same = dataclasses.replace(problem.run_limits, mem_kb=problem.run_limits.cg_mem_kb)
     variants = [
-        ("同值（isolate.md 的建议）", same),
-        ("2 倍（本项目的选择）", problem.run_limits),
+        ("同值（错，MLE 被判成 RE）", same),
+        ("2 倍（本项目采用）", problem.run_limits),
     ]
 
     for label, limits in variants:
@@ -136,6 +174,7 @@ def main() -> int:
     print("各状态判定")
     run_all(pool, problem)
 
+    check_isolation(pool)
     compare_mem_configs(pool, problem)
 
     leftover = sorted(p.name for p in config.BOX_ROOT.iterdir()) if config.BOX_ROOT.is_dir() else []

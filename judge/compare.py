@@ -2,7 +2,6 @@
 
 归一化不能省：Windows 上编辑过的文件带 `\\r\\n`、编辑器自动补末尾换行、
 行末多敲了空格 —— 不处理就会出现「学生答案明明对却被判错」。
-规则照 isolate.md 第 7 节。
 """
 
 from __future__ import annotations

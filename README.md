@@ -185,19 +185,144 @@ gh api repos/EthanCaol/Mind-City-Course/hooks \
 
 ## 服务管理
 
-两个 **systemd 用户级服务**（均设了 `linger`，断 SSH 不死、开机自启）：
+三个 **systemd 用户级服务**（均设了 `linger`，断 SSH 不死、开机自启）：
 
 ```bash
 systemctl --user status  mind-city-docs      # 本地写作预览，127.0.0.1:8000
 systemctl --user status  mind-city-webhook   # 部署接收器，127.0.0.1:9000
+systemctl --user status  mind-city-judge     # 在线评测判题后端，127.0.0.1:9100
 
-systemctl --user restart mind-city-docs
 systemctl --user restart mind-city-webhook
+systemctl --user restart mind-city-judge
 
 journalctl --user -u mind-city-webhook -f    # 实时看部署日志
+journalctl --user -u mind-city-judge -f      # 实时看判题日志
 ```
 
 `mind-city-docs` 只绑本地回环，**不对公网提供内容**，仅供在服务器上写文档时预览。公网由 Caddy 直接托管 `/var/www/mind-city` 的静态文件。
+
+另外还有一个 **system 级服务** `isolate.service`，是在线评测的沙箱依赖，**必须常驻**：
+
+```bash
+systemctl is-active isolate                  # 应为 active
+sudo systemctl enable --now isolate          # 没起就拉起来
+```
+
+## 在线评测（OJ）
+
+作业页上的代码编辑框：学生粘代码 → 服务器用 isolate 沙箱编译运行 → 把每个测试点的
+输入、期望输出、实际输出都告诉他。全部测试点通过，「作业完成情况」页就点亮绿勾。
+
+日常使用和排错见 `judge/README.md`，下面只记服务器上的配置过程。
+
+### 组件
+
+| 组件 | 位置 |
+|---|---|
+| 前端 | 作业页里的 `<div id="judge" data-homework="...">` + `docs/assets/javascripts/judge.js` |
+| 判题后端 | `judge/` 目录（公开仓库），systemd 用户服务 `mind-city-judge`，监听 `127.0.0.1:9100` |
+| 沙箱 | `isolate` 2.7，源码编译装在 `/usr/local` |
+| 数据 | `judge/data/`，独立的 **private** 仓库 `EthanCaol/Mind-City-Course-OJ` |
+
+### 安装 isolate（一次性）
+
+isolate 不在 apt 源里，要源码编译。标 `[sudo]` 的必须在自己的终端执行。
+
+```bash
+# 1. 依赖  [sudo]
+#    本机 build-essential / pkg-config / libcap-dev / libsystemd-dev / git 已有，
+#    实际只补装了 libseccomp-dev —— v2.7 起必需，缺了报 seccomp.h not found。
+sudo apt install -y build-essential pkg-config libcap-dev libsystemd-dev libseccomp-dev git
+
+# 2. 编译（不需要 sudo）
+git clone https://github.com/ioi/isolate.git ~/isolate
+cd ~/isolate && git checkout v2.7 && make isolate
+
+# 3. 安装  [sudo]
+sudo make install
+
+# 4. 建 isolate 用户  [sudo]   ← 漏了这步 isolate 直接起不来
+#    config.c 里 subid_user=isolate 找不到用户就是 die()，没有回退分支。
+#    必须是普通用户（不能加 --system）：adduser 只给普通用户分配 subuid 段，
+#    而 config.c 拿这个段给每个 box 分独立 uid。
+sudo addgroup --quiet --system isolate
+sudo adduser --quiet --disabled-login --ingroup isolate \
+  --home /nonexistent --no-create-home --shell /bin/false --comment "" isolate
+
+# 5. 启用 cgroup 委派守护进程  [sudo]
+sudo systemctl daemon-reload
+sudo systemctl enable --now isolate
+```
+
+unit 由 `make install` 装到 `/usr/local/lib/systemd/system/`（这个目录本来就在
+systemd 的搜索路径里，**不需要** cp 到 `/etc/systemd/system`）。
+
+自检：
+
+```bash
+isolate --version           # 应输出 2.7
+isolate --print-cg-root     # 退出码 0 才算就绪，见下面「坑 ②」
+```
+
+`isolate-check-environment` 会报几项 FAIL/CAUTION（swap enabled、SMT enabled、
+ASLR enabled、THP），**都不是阻断项**，别去改 —— 尤其不要把 SMT 关掉，本机只有
+2 核，关了判题吞吐减半。它退出码是 1，别拿退出码当失败判据。
+
+编译用的源码放在 `~/isolate`，运行时用不到，可以删。
+
+### 数据仓库
+
+`judge/data/` 是一个独立的 private 仓库，**只有 `roster.csv` 和 `grades/<作业>.csv`**
+—— 学生源码判完即从数据库抹掉，一行都不落盘，也从不写进 git。
+
+```bash
+gh repo create EthanCaol/Mind-City-Course-OJ --private
+```
+
+它同时被外层公开仓库 gitignore。这是硬要求：里面有学生姓名学号；而且数据一旦提交
+进外层仓库，本地就有未推送的 commit，部署脚本的 `git pull --ff-only` 会失败，
+**整个文档站静默停止更新**。
+
+### 验证
+
+```bash
+python3 judge/tools/selftest_logic.py   # 纯逻辑，不需要沙箱、不需要 sudo
+python3 judge/tools/selfcheck.py        # 真沙箱：七种判题结论各造一个程序
+curl -s https://mind-city.com/judge/api/health
+```
+
+`selfcheck.py` 需要 `isolate.service` 在跑，否则开头就会提示并退出码 2。
+
+### 三个坑
+
+**① `--mem` 必须取 `--cg-mem` 的 2 倍，不能同值。**
+
+`RLIMIT_AS >= RSS` 恒成立，两者同值时 `RLIMIT_AS` 必然先触发：程序一次
+`malloc(400MB)` 在 256 MB 限制下直接返回 NULL，若它打印错误信息退出 1，就会被判成
+**RE（运行错误）而不是 MLE**，而 cgroup 的 `cg-mem` 停在 6.7 MB，根本达不到 MLE 判据。
+
+实测（同一个只申请 400 MB 的程序，2026-09-21）：
+
+| `--mem` / `--cg-mem` | 结论 | meta 里的 `cg-mem` |
+|---|---|---|
+| 256 MB / 256 MB（同值） | RE ← 错 | 6784 KB |
+| 512 MB / 256 MB（2 倍） | MLE ← 对 | 262144 KB |
+
+测这类程序时**必须让编译器消不掉内存操作**：`memset` 之后再也不读那块内存的话，
+`-O2` 会把整个 memset 当死代码删掉，程序根本没碰内存，测出来的结果全是假的
+（第一版测试程序就踩了这个，两种配法都「通过」）。
+
+**② `isolate.service` 停掉后 `--cg` 失效，但报错信息会误导。**
+
+`/run/isolate/cgroup` 这个文件**不会**跟着清理，它留着一条已经不存在的路径，所以
+报错看起来像配置写错了，实际只是服务没起。判题层的 `judge_ready()` 就是为此写的：
+读那个文件之后还要确认路径下真的有 `cgroup.procs`。
+
+**③ 关掉 Nagle，否则每个响应白等 40 ms。**
+
+`http.server` 的 `wfile` 是无缓冲的，响应头和响应体分两次 write，Nagle 会压住第二个
+包等对端的 ACK，而客户端此时在延迟确认。实测首字节从 56 ms 降到 14 ms。一个
+`disable_nagle_algorithm = True` 就够（`StreamRequestHandler` 现成的开关）。
 
 ## 排错
 

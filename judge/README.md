@@ -112,7 +112,7 @@ curl -X POST -H "Authorization: Bearer $TOKEN" https://mind-city.com/judge/api/a
 
 - **`--mem` 是 `--cg-mem` 的 2 倍，不要改成同值。** 两者同值时 `RLIMIT_AS` 必然先触发，
   程序 `malloc` 返回 NULL、`cg-mem` 达不到阈值，**MLE 会被误判成 RE**。实测数据见
-  仓库根目录的 `isolate.md` 第 4 节。
+  根目录 README 的「在线评测」一节。
 - **编译也在沙箱里跑**，因为学生代码在编译期也能作恶（超大全局数组、递归宏）。
 - **每个 isolate 子进程调用都带硬超时**，否则 isolate 自己卡住会把整条队列拖死。
 - **box 池在 worker 启动时会无条件 `reclaim_all()`**，回收上次崩溃留下的残骸。

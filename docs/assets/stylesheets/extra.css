@@ -628,6 +628,14 @@
   padding: 0.3rem 0.5rem;
   border: 0;
   border-bottom: 0.05rem solid var(--md-default-fg-color--lightest);
+  /* 列之间一条浅竖线，作业一多不容易看串列 */
+  border-right: 0.05rem solid var(--md-default-fg-color--lightest);
+}
+
+/* 最后一列右边不封口 */
+.md-typeset table.grades th:last-child,
+.md-typeset table.grades td:last-child {
+  border-right: 0;
 }
 
 /* 隔行淡底，74 行不这样的话很容易看串行 */
