@@ -131,6 +131,7 @@
     el.pre.textContent = "";
     el.pre.appendChild(highlight(el.code.value));
     renderGutter(el);
+    autosize(el);
     syncScroll(el);
   }
 
@@ -142,6 +143,24 @@
     var numbers = new Array(count);
     for (var i = 0; i < count; i++) numbers[i] = i + 1;
     el.gutter.textContent = numbers.join("\n") + "\n";
+  }
+
+  /** 输入框随内容变长。高度改在容器上 —— 三层都挂在容器上，改它才是三层一起长。
+   *
+   *  先把高度清回 CSS 里的基线值再量：textarea 的 scrollHeight 在内容装得下时
+   *  就等于自己的高度，不先缩回去，量出来的永远是「和现在一样高」，删行就缩不回来。 */
+  function autosize(el) {
+    var ed = el.code.parentNode;
+    var code = el.code;
+
+    ed.style.height = "";
+    // 横向滚动条和容器上下边框也得算进去：少这几像素内容就真的溢出，
+    // 一出滚动条三层的高度就对不上了
+    var extra =
+      (code.offsetHeight - code.clientHeight) + (ed.offsetHeight - ed.clientHeight);
+    var need = code.scrollHeight + extra;
+
+    if (need > ed.offsetHeight) ed.style.height = need + "px";
   }
 
   /** 三层一起滚。行号列只跟上下，不跟左右。 */
