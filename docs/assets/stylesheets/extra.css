@@ -338,25 +338,85 @@
   font-size: 0.75rem;
 }
 
-/* 代码输入框。用等宽字体，行高放宽一点，粘贴长代码时好读 */
-.md-typeset .judge__code {
-  display: block;
-  width: 100%;
-  min-height: 22rem;
-  padding: 0.8rem;
+/* 代码输入框。
+   textarea 自己没法给文字上色，所以背后垫一层 <pre> 显示高亮的副本：
+   textarea 的文字透明、只留光标，两层重叠，滚动同步（judge.js 里做）。
+   边框和内边距放在外层容器上，两层都贴边铺满，省得对不齐。 */
+.md-typeset .judge__editor {
+  position: relative;
+  height: 24rem;
   border: 0.05rem solid var(--md-default-fg-color--lighter);
   border-radius: 0.2rem;
   background-color: var(--md-code-bg-color);
-  color: var(--md-default-fg-color);
+  overflow: hidden;
+}
+
+.md-typeset .judge__editor:focus-within {
+  border-color: var(--md-accent-fg-color);
+}
+
+/* 这两条选择器里的每一项都必须完全一致，差一个像素两层就会错位 */
+.md-typeset .judge__editor .judge__highlight,
+.md-typeset .judge__editor .judge__code {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0.8rem;
+  border: 0;
+  border-radius: 0;
+  background: none;
   font-family: var(--md-code-font-family);
   font-size: 0.75rem;
   line-height: 1.6;
-  resize: vertical;
+  /* 用 pre 而不是 pre-wrap：代码不折行，横向滚动比折行好读，
+     也免去两层换行位置不一致的风险 */
+  white-space: pre;
+  overflow: auto;
+  tab-size: 4;
 }
 
-.md-typeset .judge__code:focus {
+/* 高亮层不收滚动条 —— 滚动条只在 textarea 上有，两层宽度才会一致 */
+.md-typeset .judge__editor .judge__highlight {
+  overflow: hidden;
+  pointer-events: none; /* 别挡住 textarea 的点击和选择 */
+  color: var(--md-default-fg-color);
+}
+
+.md-typeset .judge__editor .judge__code {
+  color: transparent;
+  caret-color: var(--md-default-fg-color);
+  resize: none;
+}
+
+.md-typeset .judge__editor .judge__code:focus {
   outline: none;
-  border-color: var(--md-accent-fg-color);
+}
+
+/* 选中区域的底色由 textarea 提供，透明文字照样能看出选中范围 */
+.md-typeset .judge__editor .judge__code::selection {
+  background-color: var(--md-accent-fg-color);
+}
+
+/* 语法着色。取的是 VSCode 暗色主题里那一套颜色，学生看着眼熟。 */
+.md-typeset .judge-syn--comment {
+  color: #7a8a99;
+  font-style: italic;
+}
+
+.md-typeset .judge-syn--preproc {
+  color: #82aaff;
+}
+
+.md-typeset .judge-syn--string {
+  color: #a5d6a7;
+}
+
+.md-typeset .judge-syn--number {
+  color: #f78c6c;
+}
+
+.md-typeset .judge-syn--keyword {
+  color: #c792ea;
 }
 
 /* 状态提示：排队中、判题中 */

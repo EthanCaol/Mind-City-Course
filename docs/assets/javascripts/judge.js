@@ -41,6 +41,67 @@
     });
   }
 
+  // ---------------------------------------------------------------- 代码高亮
+  //
+  // textarea 本身没法给文字上色，所以背后垫一层 <pre>：两边字体、行高、内边距
+  // 完全一致，textarea 的文字设成透明只留光标，滚动时把 <pre> 一起带着滚。
+  //
+  // 用一个正则一次扫完所有 token，比自己逐字符扫描简单得多，也够快 ——
+  // 学生的作业就几十行，每次敲键重新扫一遍是微秒级。
+
+  var C_RE =
+    /(\/\/[^\n]*|\/\*[\s\S]*?\*\/)|(^[ \t]*#[^\n]*)|("(?:\\.|[^"\\\n])*"?|'(?:\\.|[^'\\\n])*'?)|\b(0[xX][0-9a-fA-F]+|\d+)\b|\b(auto|break|case|char|const|continue|default|do|double|else|enum|extern|float|for|goto|if|inline|int|long|register|restrict|return|short|signed|sizeof|static|struct|switch|typedef|union|unsigned|void|volatile|while|_Bool)\b/gm;
+
+  // 下标对应 C_RE 里的捕获组序号
+  var C_CLASS = ["", "comment", "preproc", "string", "number", "keyword"];
+
+  function highlight(text) {
+    var frag = document.createDocumentFragment();
+    var last = 0;
+    var m;
+
+    C_RE.lastIndex = 0;
+    while ((m = C_RE.exec(text)) !== null) {
+      if (m[0].length === 0) {
+        C_RE.lastIndex++; // 空匹配会死循环
+        continue;
+      }
+      if (m.index > last) {
+        frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+      }
+      for (var g = 1; g <= 5; g++) {
+        if (m[g] === undefined) continue;
+        var span = document.createElement("span");
+        span.className = "judge-syn judge-syn--" + C_CLASS[g];
+        span.textContent = m[0];
+        frag.appendChild(span);
+        break;
+      }
+      last = m.index + m[0].length;
+    }
+    if (last < text.length) {
+      frag.appendChild(document.createTextNode(text.slice(last)));
+    }
+    // 末尾补个换行：最后一行是空行时 <pre> 高度会少一行，和高亮层就对不齐了
+    frag.appendChild(document.createTextNode("\n"));
+    return frag;
+  }
+
+  function highlightLayer() {
+    var code = $("judge-code");
+    var pre = $("judge-highlight");
+    return code && pre ? { code: code, pre: pre } : null;
+  }
+
+  function syncHighlight() {
+    var el = highlightLayer();
+    if (!el) return;
+    el.pre.textContent = "";
+    el.pre.appendChild(highlight(el.code.value));
+    el.pre.scrollTop = el.code.scrollTop;
+    el.pre.scrollLeft = el.code.scrollLeft;
+  }
+
   // ---------------------------------------------------------------- 渲染
 
   function renderProgress(text) {
@@ -349,6 +410,17 @@
     loadProblems();
     restoreLast();
     $("judge-submit").addEventListener("click", submit);
+
+    var el = highlightLayer();
+    if (el) {
+      syncHighlight();
+      el.code.addEventListener("input", syncHighlight);
+      // textarea 滚动时把背后的高亮层带着一起滚，否则两层会错位
+      el.code.addEventListener("scroll", function () {
+        el.pre.scrollTop = el.code.scrollTop;
+        el.pre.scrollLeft = el.code.scrollLeft;
+      });
+    }
   }
 
   if (document.readyState === "loading") {
