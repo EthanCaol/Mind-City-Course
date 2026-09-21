@@ -19,7 +19,7 @@
     1. 了解为什么用这套方案（可跳过）
     2. 启用 Windows 功能，安装 WSL2
     3. 安装 Ubuntu，创建 Linux 用户
-    4. 配置国内网络，安装 GCC / GDB
+    4. 配置国内网络，安装 GCC / G++ / GDB
     5. 写并运行第一个 C 程序
     6. 安装 VSCode，连接到 WSL
     7. （进阶）VSCode 详细配置视频
@@ -257,7 +257,7 @@ wsl --shutdown
 
     ![在开始菜单中把 Ubuntu-26.04 固定到开始屏幕](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913231050196.png)
 
-## 4. 配置网络并安装 GCC / GDB
+## 4. 配置网络并安装 GCC / G++ / GDB
 
 Ubuntu 的软件都要从网上下载，所以这一步先把网络理顺，再更新软件列表，最后装编译工具。
 
@@ -414,13 +414,21 @@ sudo apt upgrade -y
 
 `-y` 的意思是对所有「是否继续」的询问都自动回答「是」，省得你还需要手动确认。
 
-### 4.4 安装 GCC / GDB
+### 4.4 安装 GCC / G++ / GDB
 
 先说说这几个东西是干什么的：
 
 - **gcc**（GNU Compiler Collection，GNU 编译器套件）是 C语言的编译器：负责把 C 代码翻译成能跑的可执行程序
+- **g++** 是 C++ 的编译器：负责把 C++ 代码翻译成能跑的可执行程序。它和 gcc 用的是同一套编译器，只是默认行为不一样 —— 大致可以理解成 `gcc -lstdc++`，另外还会把源文件一律当成 C++ 来编译（哪怕文件后缀写的是 `.c`）
 - **gdb**（GNU Debugger）是 C语言的调试器：负责单步执行、看变量的值如何变化、定位程序是怎么崩溃报错的
-- **build-essential** 是一组基础编译工具的合集包：除了 gcc 和 g++，还包含 make 和 C 标准库的开发文件。只装 gcc 有时会因为缺头文件编译不过，装它一次到位，后面的《Make 构建工具》也要用它
+- **build-essential** 是一组基础编译工具的合集包：把上面的 gcc 和 g++ 都包了进去，另外还有 make 和 C 标准库的开发文件。只装 gcc 有时会因为缺头文件编译不过，装它一次到位，后面的《Make 构建工具》也要用它
+
+!!! warning "C++ 代码要用 g++ 编译"
+    C++ 里的 `cin` / `cout` / `std::string` / `std::vector` 都来自 C++ 标准库 libstdc++，gcc 按 C语言处理时不会自动链接它。所以拿 `gcc test.cpp` 编译 C++ 程序，常常是编译阶段看着没事，链接阶段却报一串 `undefined reference to ...` 的错 —— 不是代码写错了，只是少链接了 C++ 标准库。
+
+    写 C 就用 gcc、写 C++ 就用 g++，各用各的就不会碰上这种事。非要拿 gcc 编 C++ 的话，得自己把标准库补上：`gcc test.cpp -lstdc++ -o test`。
+
+    另外，如果当初只装了 gcc、跳过了 build-essential，机器上其实根本没有 g++，敲 `g++` 会直接提示 `command not found`。按上面那条命令把 `gcc g++ gdb build-essential` 一起装上就行。
 
 !!! warning "装之前先确认你做过 4.3 的 `sudo apt update`"
     这是同学漏得最多的一步。跳过它直接装，`apt` 手上还是一份很旧的软件列表，经常直接报 `E: Unable to locate package gcc`，或者装上一个早该换掉的旧版本。
@@ -434,16 +442,19 @@ sudo apt upgrade -y
 开始安装：
 
 ```bash title="Ubuntu 终端"
-sudo apt install -y gcc gdb build-essential
+sudo apt install -y gcc g++ gdb build-essential
 ```
 
 验证一下是否安装成功：
 
 ```bash title="Ubuntu 终端"
 gcc --version
+g++ --version
 ```
 
 ![gcc --version 的输出](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913232920110.png)
+
+两条都打印出版本号，说明 C 和 C++ 的编译器都装好了。`g++ --version` 的输出格式和上图一样。
 
 ## 5. 写第一个 C 程序
 
