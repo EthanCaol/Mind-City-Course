@@ -473,3 +473,45 @@
 .md-typeset .judge-reasons li {
   margin-bottom: 0.3em;
 }
+
+/* 编译错误的着色。gcc 的诊断行是 文件:行:列: error: 消息 这种固定格式，
+   judge.js 按它切出几段分别上色。不用引语法高亮库 —— 这不是 C 代码，
+   是编译器诊断，没有现成的 lexer 可用。
+   学生自己的源码会被 gcc 原样回显在消息下面，那些行不着色，保持原样。 */
+
+.md-typeset .judge__compile pre .judge-diag__loc {
+  color: var(--md-default-fg-color--lighter);
+}
+
+.md-typeset .judge__compile pre .judge-diag__kind {
+  font-weight: 700;
+}
+
+.md-typeset .judge__compile pre .judge-diag--error .judge-diag__kind {
+  color: #ff5252;
+}
+
+.md-typeset .judge__compile pre .judge-diag--warning .judge-diag__kind {
+  color: #ffa726;
+}
+
+.md-typeset .judge__compile pre .judge-diag--note .judge-diag__kind {
+  color: #42a5f5;
+}
+
+/* 指向出错那一列的小箭头。和它上面的诊断同色，扫一眼就知道错在哪一格。 */
+.md-typeset .judge__compile pre .judge-diag__caret {
+  font-weight: 700;
+}
+
+.md-typeset .judge__compile pre .judge-diag__caret--error {
+  color: #ff5252;
+}
+
+.md-typeset .judge__compile pre .judge-diag__caret--warning {
+  color: #ffa726;
+}
+
+.md-typeset .judge__compile pre .judge-diag__caret--note {
+  color: #42a5f5;
+}

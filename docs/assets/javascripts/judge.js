@@ -55,13 +55,71 @@
     show(node, !!message);
   }
 
+  // gcc 的诊断行：文件:行:列: error: 消息
+  var DIAG_RE = /^(.+?):(\d+):(\d+):\s*(fatal error|error|warning|note)\s*:/;
+  // 指向出错列的那一行，形如 `      |         ^`
+  var CARET_RE = /^\s*\|?\s*[\^~]+\s*$/;
+
+  /**
+   * 把一行 gcc 输出变成带颜色的节点。
+   *
+   * 全程用 DOM 节点拼，绝不用 innerHTML —— 编译器会把学生的源码原样回显出来，
+   * 拼字符串就等于把学生的代码当 HTML 执行了。
+   */
+  function diagLine(line, severity) {
+    var m = line.match(DIAG_RE);
+    if (m) {
+      var wrap = document.createElement("span");
+      wrap.className = "judge-diag judge-diag--" + severity;
+
+      var loc = document.createElement("span");
+      loc.className = "judge-diag__loc";
+      loc.textContent = m[1] + ":" + m[2] + ":" + m[3] + ": ";
+
+      var kind = document.createElement("span");
+      kind.className = "judge-diag__kind";
+      kind.textContent = m[4] + ":";
+
+      wrap.appendChild(loc);
+      wrap.appendChild(kind);
+      wrap.appendChild(document.createTextNode(line.slice(m[0].length)));
+      return wrap;
+    }
+
+    if (CARET_RE.test(line)) {
+      var caret = document.createElement("span");
+      caret.className = "judge-diag__caret judge-diag__caret--" + severity;
+      caret.textContent = line;
+      return caret;
+    }
+
+    return null;
+  }
+
   function renderCompileError(text) {
     var node = $("judge-compile-error");
     if (!text) {
       show(node, false);
       return;
     }
-    node.querySelector("pre").textContent = text;
+
+    var pre = node.querySelector("pre");
+    pre.textContent = "";
+
+    // 下面那个指列的 ^ 要跟它上面那条诊断同色，所以记着最近一条的级别
+    var severity = "error";
+    text.split("\n").forEach(function (line, i) {
+      if (i) pre.appendChild(document.createTextNode("\n"));
+      var m = line.match(DIAG_RE);
+      if (m) {
+        severity = /error/.test(m[4])
+          ? "error"
+          : m[4] === "warning"
+          ? "warning"
+          : "note";
+      }
+      pre.appendChild(diagLine(line, severity) || document.createTextNode(line));
+    });
     show(node, true);
   }
 
