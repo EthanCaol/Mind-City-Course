@@ -364,7 +364,7 @@
   border-radius: 0;
   background: none;
   font-family: var(--md-code-font-family);
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   line-height: 1.5;
   /* 用 pre 而不是 pre-wrap：代码不折行，横向滚动比折行好读，
      也免去几层换行位置不一致的风险 */
@@ -377,7 +377,7 @@
    而不是拼进高亮文本里。overflow:hidden 不妨碍用 scrollTop 程序化滚动。 */
 .md-typeset .judge__editor .judge__gutter {
   left: 0;
-  width: 3rem;
+  width: 2rem;
   padding: 0.7rem 0.5rem 0.7rem 0;
   text-align: right;
   color: var(--md-default-fg-color--lighter);
@@ -387,7 +387,7 @@
 
 .md-typeset .judge__editor .judge__highlight,
 .md-typeset .judge__editor .judge__code {
-  left: 3rem;
+  left: 2rem;
   right: 0;
   padding: 0.7rem 0.9rem;
 }
