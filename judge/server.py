@@ -170,18 +170,15 @@ class App:
             roster = self.roster.all()
             passed = {p.slug: db.passed_ids(self.conn, p.slug) for p in problems}
 
-        def row(sid: str, name: str) -> dict:
-            return {
-                "name": name,
+        # 顺序就是花名册文件里的顺序（助教在前，其余按姓名拼音），
+        # 页面上再排一遍反而会和助教看到的名单对不上。
+        # 助教名字后面加「（助教）」—— 他们和同学用同一套判题，但不是这个班的学生。
+        students = [
+            {
+                "name": name + ("（助教）" if sid in config.TUTORS else ""),
                 "passed": {slug: sid in ids for slug, ids in passed.items()},
             }
-
-        # 助教排最前面、名字后面加「（助教）」。他们和同学用同一套判题，
-        # 但不是这个班的学生，混在名单里不好认。
-        # 助教的顺序以 config.TUTORS 为准，其余按学号排。
-        students = [row(sid, roster[sid] + "（助教）") for sid in config.TUTORS if sid in roster]
-        students += [
-            row(sid, name) for sid, name in sorted(roster.items()) if sid not in config.TUTORS
+            for sid, name in roster.items()
         ]
 
         return 200, {

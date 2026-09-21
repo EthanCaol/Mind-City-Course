@@ -27,7 +27,12 @@ class RosterError(Exception):
 
 
 class Roster:
-    """线程安全的花名册。判题 worker 和 HTTP 线程都会读，push 线程会写。"""
+    """线程安全的花名册。判题 worker 和 HTTP 线程都会读，push 线程会写。
+
+    **文件里的行序会被保留**（`_by_id` 按文件顺序插入），「作业完成情况」页
+    直接用这个顺序显示。所以名单的排序是在 CSV 里定的，不在代码里：
+    助教在前，其余按姓名拼音。想改顺序就改 CSV。
+    """
 
     def __init__(self, path: Path) -> None:
         self.path = Path(path)
