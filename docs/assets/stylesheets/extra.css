@@ -277,3 +277,199 @@
 .md-nav--primary .md-nav__item--nested .md-nav__link svg {
   height: 1.2em;
 }
+
+/* ---------------------------------------------------------------------------
+   在线测评（docs/homework/在线评测.md）
+
+   页面骨架是那个 .md 文件里的裸 HTML 块，交互在
+   docs/assets/javascripts/judge.js，接口走 /judge/api/*。
+
+   配色一律复用 Material 的 --md-* 变量，不另维护一套颜色 —— 全站固定暗色
+   （slate/indigo），自己写死颜色迟早会对不上。
+   --------------------------------------------------------------------------- */
+
+.md-typeset .judge {
+  margin-top: 1.6em;
+}
+
+/* 顶部工具条：选作业、提交、查上次结果 */
+.md-typeset .judge__bar {
+  display: flex;
+  flex-wrap: wrap; /* 窄屏上让「查看最近一次结果」换行，不要挤成一团 */
+  gap: 0.8rem;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.md-typeset .judge__bar select {
+  flex: 1 1 14rem;
+  padding: 0.45rem 0.6rem;
+  border: 0.05rem solid var(--md-default-fg-color--lighter);
+  border-radius: 0.2rem;
+  background-color: var(--md-code-bg-color);
+  color: var(--md-default-fg-color);
+  font-size: 0.8rem;
+}
+
+.md-typeset .judge__bar button {
+  flex: none;
+  padding: 0.45rem 1.4rem;
+  border: none;
+  border-radius: 0.2rem;
+  background-color: var(--md-primary-fg-color);
+  color: var(--md-primary-bg-color);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.md-typeset .judge__bar button:hover:not(:disabled) {
+  background-color: var(--md-accent-fg-color);
+}
+
+/* 判题期间禁用，防止连点；别用 opacity 淡出，那样看不出是禁用还是没加载 */
+.md-typeset .judge__bar button:disabled {
+  cursor: not-allowed;
+  background-color: var(--md-default-fg-color--lighter);
+  color: var(--md-default-bg-color);
+}
+
+.md-typeset .judge__last {
+  font-size: 0.75rem;
+}
+
+/* 代码输入框。用等宽字体，行高放宽一点，粘贴长代码时好读 */
+.md-typeset .judge__code {
+  display: block;
+  width: 100%;
+  min-height: 22rem;
+  padding: 0.8rem;
+  border: 0.05rem solid var(--md-default-fg-color--lighter);
+  border-radius: 0.2rem;
+  background-color: var(--md-code-bg-color);
+  color: var(--md-default-fg-color);
+  font-family: var(--md-code-font-family);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+.md-typeset .judge__code:focus {
+  outline: none;
+  border-color: var(--md-accent-fg-color);
+}
+
+/* 状态提示：排队中、判题中 */
+.md-typeset .judge__progress {
+  margin: 0.9em 0 0;
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color--light);
+}
+
+/* 拒绝提交（学号不在名单、代码为空等）——这是学生要照着改的，做成告警样式 */
+.md-typeset .judge__error {
+  margin-top: 0.9em;
+  padding: 0.7rem 0.9rem;
+  border-left: 0.2rem solid var(--md-typeset-color-error, #ff5252);
+  border-radius: 0.2rem;
+  background-color: var(--md-code-bg-color);
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color);
+}
+
+/* 整份提交的结论 */
+.md-typeset .judge-summary {
+  margin-top: 1em;
+  padding: 0.7rem 0.9rem;
+  border-radius: 0.2rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.md-typeset .judge-summary--ac {
+  border-left: 0.2rem solid #4caf50;
+  background-color: var(--md-code-bg-color);
+  color: #4caf50;
+}
+
+.md-typeset .judge-summary--bad {
+  border-left: 0.2rem solid #ff9800;
+  background-color: var(--md-code-bg-color);
+  color: #ff9800;
+}
+
+/* 编译错误整段贴出来，学生要照着编译器的话改 */
+.md-typeset .judge__compile {
+  margin-top: 1em;
+  border-left: 0.2rem solid #ff5252;
+  border-radius: 0.2rem;
+  background-color: var(--md-code-bg-color);
+}
+
+.md-typeset .judge__compile p {
+  margin: 0;
+  padding: 0.7rem 0.9rem 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.md-typeset .judge__compile pre {
+  margin: 0;
+  padding: 0.7rem 0.9rem;
+  background: none;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  white-space: pre-wrap; /* 编译错误行可能很长，换行比横向滚动好读 */
+  word-break: break-word;
+}
+
+/* 逐测试点结果表 */
+.md-typeset table.judge-cases {
+  width: 100%;
+  margin-top: 1em;
+  font-size: 0.7rem;
+  table-layout: fixed;
+}
+
+.md-typeset table.judge-cases th,
+.md-typeset table.judge-cases td {
+  padding: 0.5rem 0.6rem;
+  vertical-align: top;
+  border: 0;
+  border-bottom: 0.05rem solid var(--md-default-fg-color--lightest);
+}
+
+/* 输入/期望/实际三列用等宽字体，且保留换行 —— 输出里的空行和缩进是有意义的 */
+.md-typeset .judge-cases__io {
+  font-family: var(--md-code-font-family);
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .judge-cases__idx {
+  width: 3.5rem;
+  text-align: center;
+  color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .judge-cases__verdict {
+  width: 5.5rem;
+  font-weight: 700;
+}
+
+/* 没过的测试点整行加重，扫一眼就知道该看哪几行 */
+.md-typeset tr.judge-cases__fail .judge-cases__verdict {
+  color: #ff9800;
+}
+
+.md-typeset .judge-reasons {
+  margin: 0.8em 0 0;
+  padding-left: 1.2em;
+  font-size: 0.75rem;
+  color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .judge-reasons li {
+  margin-bottom: 0.3em;
+}

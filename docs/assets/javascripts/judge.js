@@ -1,0 +1,301 @@
+/* 在线测评页面的交互。
+ *
+ * 这个文件全站加载（mkdocs.yml 的 extra_javascript），所以第一件事是看页面上
+ * 有没有 #judge 元素 —— 没有就直接退出，别的页面不该受影响。
+ *
+ * 接口在 /judge/api/*，由 Caddy 反代到本机的判题服务（127.0.0.1:9100）。
+ */
+(function () {
+  "use strict";
+
+  var API = "/judge/api";
+  var POLL_MS = 1500;
+  var TOKEN_KEY = "mind-city-judge-token";
+
+  var $ = function (id) {
+    return document.getElementById(id);
+  };
+
+  /** 把文本塞进元素，用 textContent 而不是 innerHTML —— 学生输出里可能有 < > */
+  function setText(node, text) {
+    node.textContent = text == null ? "" : String(text);
+  }
+
+  function show(node, visible) {
+    node.hidden = !visible;
+  }
+
+  function request(method, url, body) {
+    var opts = { method: method, headers: {} };
+    if (body !== undefined) {
+      opts.headers["Content-Type"] = "application/json";
+      opts.body = JSON.stringify(body);
+    }
+    return fetch(url, opts).then(function (resp) {
+      return resp.json().then(function (data) {
+        if (!resp.ok) {
+          throw new Error(data.error || "请求失败（HTTP " + resp.status + "）");
+        }
+        return data;
+      });
+    });
+  }
+
+  // ---------------------------------------------------------------- 渲染
+
+  function renderProgress(text) {
+    var node = $("judge-progress");
+    setText(node, text);
+    show(node, !!text);
+  }
+
+  function renderError(message) {
+    var node = $("judge-error");
+    setText(node, message);
+    show(node, !!message);
+  }
+
+  function renderCompileError(text) {
+    var node = $("judge-compile-error");
+    if (!text) {
+      show(node, false);
+      return;
+    }
+    node.querySelector("pre").textContent = text;
+    show(node, true);
+  }
+
+  function cell(row, text, className) {
+    var td = document.createElement("td");
+    setText(td, text);
+    if (className) td.className = className;
+    row.appendChild(td);
+    return td;
+  }
+
+  function renderCases(payload) {
+    var box = $("judge-cases");
+    box.textContent = "";
+
+    var summary = $("judge-summary");
+    if (payload.verdict === "AC") {
+      summary.className = "judge-summary judge-summary--ac";
+      setText(summary, "全部通过（" + payload.total + "/" + payload.total + "）");
+      show(summary, true);
+    } else if (payload.verdict) {
+      summary.className = "judge-summary judge-summary--bad";
+      setText(
+        summary,
+        payload.verdict_label +
+          "：通过 " +
+          payload.passed +
+          "/" +
+          payload.total +
+          " 个测试点"
+      );
+      show(summary, true);
+    } else {
+      show(summary, false);
+    }
+
+    renderCompileError(payload.compile_error);
+    if (!payload.cases || !payload.cases.length) {
+      show(box, false);
+      return;
+    }
+
+    var table = document.createElement("table");
+    table.className = "judge-cases";
+    var head = document.createElement("thead");
+    var headRow = document.createElement("tr");
+    ["测试点", "结果", "输入", "期望输出", "你的输出"].forEach(function (label) {
+      var th = document.createElement("th");
+      setText(th, label);
+      headRow.appendChild(th);
+    });
+    head.appendChild(headRow);
+    table.appendChild(head);
+
+    var body = document.createElement("tbody");
+    payload.cases.forEach(function (c) {
+      var tr = document.createElement("tr");
+      if (c.verdict !== "AC") tr.className = "judge-cases__fail";
+
+      cell(tr, c.index, "judge-cases__idx");
+      cell(tr, c.verdict_label || c.verdict, "judge-cases__verdict");
+
+      [
+        [c.stdin, c.verdict === "AC" ? "不必看" : ""],
+        [c.expected, ""],
+        [c.actual, ""]
+      ].forEach(function (pair) {
+        var text = pair[0];
+        if (text && text.length > 500) text = text.slice(0, 500) + "\n…（已截断）";
+        var td = cell(tr, text);
+        td.className = "judge-cases__io";
+      });
+
+      body.appendChild(tr);
+    });
+    table.appendChild(body);
+    box.appendChild(table);
+
+    // 失败的测试点把原因写在下面，比塞进表格里好读
+    var reasons = payload.cases
+      .filter(function (c) {
+        return c.verdict !== "AC" && c.reason;
+      })
+      .map(function (c) {
+        return "测试点 " + c.index + "：" + c.reason;
+      });
+    if (reasons.length) {
+      var ul = document.createElement("ul");
+      ul.className = "judge-reasons";
+      reasons.forEach(function (text) {
+        var li = document.createElement("li");
+        setText(li, text);
+        ul.appendChild(li);
+      });
+      box.appendChild(ul);
+    }
+
+    show(box, true);
+  }
+
+  // ---------------------------------------------------------------- 流程
+
+  var pollTimer = null;
+
+  function stopPolling() {
+    if (pollTimer) {
+      clearTimeout(pollTimer);
+      pollTimer = null;
+    }
+  }
+
+  function poll(id, token) {
+    request("GET", API + "/submissions/" + id + "?token=" + encodeURIComponent(token))
+      .then(function (payload) {
+        if (payload.status === "PENDING" || payload.status === "JUDGING") {
+          renderProgress(
+            payload.status === "PENDING"
+              ? "排队中，你前面还有 " + payload.queue_ahead + " 份…"
+              : "正在判题…"
+          );
+          pollTimer = setTimeout(function () {
+            poll(id, token);
+          }, POLL_MS);
+          return;
+        }
+
+        stopPolling();
+        renderProgress("");
+        $("judge-submit").disabled = false;
+        renderCases(payload);
+      })
+      .catch(function (err) {
+        stopPolling();
+        $("judge-submit").disabled = false;
+        renderError(err.message);
+      });
+  }
+
+  function submit() {
+    var code = $("judge-code").value;
+    var homework = $("judge-homework").value;
+
+    renderError("");
+    renderCompileError("");
+    show($("judge-cases"), false);
+    show($("judge-summary"), false);
+
+    if (!code.trim()) {
+      renderError("请先粘贴你的代码。");
+      return;
+    }
+
+    $("judge-submit").disabled = true;
+    renderProgress("提交中…");
+
+    request("POST", API + "/submit", { homework: homework, code: code })
+      .then(function (payload) {
+        // 记住查询码，刷新页面后还能查最近这一次的结果
+        try {
+          localStorage.setItem(
+            TOKEN_KEY,
+            JSON.stringify({ id: payload.id, token: payload.token })
+          );
+        } catch (e) {
+          /* 隐私模式下 localStorage 会抛异常，不影响判题 */
+        }
+        if (payload.duplicate) {
+          renderError("这份代码你交过了，下面是之前的结果。");
+        }
+        if (payload.status === "PENDING" || payload.status === "JUDGING") {
+          poll(payload.id, payload.token);
+        } else {
+          renderProgress("");
+          $("judge-submit").disabled = false;
+          renderCases(payload);
+        }
+      })
+      .catch(function (err) {
+        renderProgress("");
+        $("judge-submit").disabled = false;
+        renderError(err.message);
+      });
+  }
+
+  function loadProblems() {
+    var select = $("judge-homework");
+    request("GET", API + "/problems")
+      .then(function (data) {
+        select.textContent = "";
+        data.problems.forEach(function (p) {
+          var opt = document.createElement("option");
+          opt.value = p.slug;
+          setText(opt, p.title + "（" + p.total_cases + " 个测试点）");
+          select.appendChild(opt);
+        });
+        if (!data.problems.length) {
+          renderError("还没有配置任何作业题目，请联系助教。");
+        }
+      })
+      .catch(function (err) {
+        renderError("连不上判题服务：" + err.message);
+      });
+  }
+
+  function restoreLast() {
+    var saved;
+    try {
+      saved = JSON.parse(localStorage.getItem(TOKEN_KEY) || "null");
+    } catch (e) {
+      saved = null;
+    }
+    if (!saved || !saved.id || !saved.token) return;
+
+    var link = $("judge-last");
+    link.href = "#";
+    show(link, true);
+    link.addEventListener("click", function (ev) {
+      ev.preventDefault();
+      renderProgress("查询中…");
+      poll(saved.id, saved.token);
+    });
+  }
+
+  function init() {
+    if (!$("judge")) return; // 不是测评页
+
+    loadProblems();
+    restoreLast();
+    $("judge-submit").addEventListener("click", submit);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();

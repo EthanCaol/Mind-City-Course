@@ -8,6 +8,13 @@ __pycache__/
 .venv/
 venv/
 
+# 判题服务的运行时数据。这是一个独立的 private 仓库
+# （github.com/EthanCaol/Mind-City-Course-OJ），里面有学生姓名学号和提交记录，
+# 绝对不能进本仓库 —— 本仓库是 public 的。
+# 而且一旦往里提交，本地的 commit 会让部署脚本的 `git pull --ff-only` 失败，
+# 整个文档站会静默停止更新。
+judge/data/
+
 # 编辑器 / 系统
 .vscode/
 .idea/
