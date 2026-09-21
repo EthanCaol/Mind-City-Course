@@ -399,8 +399,7 @@
 
 /* 语法着色。取的是 VSCode 暗色主题里那一套颜色，学生看着眼熟。 */
 .md-typeset .judge-syn--comment {
-  color: #7a8a99;
-  font-style: italic;
+  color: #7a8a99; /* 靠低对比度弱化就够了，不要斜体 */
 }
 
 .md-typeset .judge-syn--preproc {
