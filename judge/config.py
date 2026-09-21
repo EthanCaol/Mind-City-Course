@@ -24,6 +24,11 @@ WORK_DIR = DATA_DIR / "work"
 
 ADMIN_TOKEN_PATH = Path.home() / ".config" / "mind-city" / "judge-admin-token"
 
+# 助教。他们和同学用同一套判题，也出现在花名册里，但不是这个班的学生。
+# 「作业完成情况」页把他们排在最前面，名字后面加「（助教）」。
+# 顺序就是这里的顺序；姓名仍然从花名册查，名单改了不用动这里。
+TUTORS = ("26113050003", "26113050344")
+
 # ---------------------------------------------------------------- isolate
 
 ISOLATE_BIN = "/usr/local/bin/isolate"
