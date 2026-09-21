@@ -48,7 +48,7 @@ icon: material/pencil-outline
   <div class="judge__editor">
     <pre class="judge__gutter" id="judge-gutter" aria-hidden="true"></pre>
     <pre class="judge__highlight" id="judge-highlight" aria-hidden="true"></pre>
-    <textarea id="judge-code" class="judge__code" spellcheck="false" placeholder="// 26113050003&#10;#include &lt;stdio.h&gt;&#10;&#10;int main(void) {&#10;    ...&#10;}"></textarea>
+    <textarea id="judge-code" class="judge__code" spellcheck="false" placeholder="// 26113050003&#10;// 上面第一行记得改成自己的学号&#10;// 先使用IDE写好代码，然后在你的电脑上跑一下样例&#10;// 等所有样例都过了，再把代码粘贴到这里进行提交&#10;// （助教服务器的性能比较拉，同学们尽量先自测再提交）"></textarea>
   </div>
 
   <p class="judge__progress" id="judge-progress" hidden></p>
