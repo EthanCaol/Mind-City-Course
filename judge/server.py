@@ -10,7 +10,6 @@ Caddy 把 https://mind-city.com/judge/api/* 反代到这里（127.0.0.1:9100）�
 from __future__ import annotations
 
 import datetime as dt
-import hashlib
 import hmac
 import json
 import logging
@@ -101,18 +100,12 @@ class App:
             if last and _seconds_since(last) < config.MIN_SUBMIT_INTERVAL_S:
                 return 429, {"error": "刚交过一份，请稍等几秒。"}
 
-            sha = hashlib_sha256(code)
-            dup = db.find_duplicate(self.conn, homework, student_id, sha)
-            if dup is not None and dup["status"] != db.SYSTEM_ERROR:
-                return 200, _submission_payload(self.conn, dup, problem, duplicate=True)
-
             sub_id = db.create_submission(
                 self.conn,
                 homework=homework,
                 student_id=student_id,
                 name=name,
                 source=code,
-                sha256=sha,
                 client_ip=client_ip,
             )
             row = db.get(self.conn, sub_id)
@@ -251,10 +244,6 @@ class App:
 # ---------------------------------------------------------------- 工具
 
 
-def hashlib_sha256(text: str) -> str:
-    return hashlib.sha256(text.encode("utf-8")).hexdigest()
-
-
 def _ago(seconds: int) -> str:
     return (dt.datetime.now() - dt.timedelta(seconds=seconds)).isoformat(timespec="seconds")
 
@@ -267,7 +256,7 @@ def _seconds_since(iso: str) -> float:
     return (dt.datetime.now() - then).total_seconds()
 
 
-def _submission_payload(conn, row: sqlite3.Row, problem, duplicate: bool = False) -> dict:
+def _submission_payload(conn, row: sqlite3.Row, problem) -> dict:
     """一份提交的完整结果。这是学生看到的核心内容：每个测试点的输入、
     期望输出、自己的实际输出。"""
     cases = []
@@ -307,8 +296,6 @@ def _submission_payload(conn, row: sqlite3.Row, problem, duplicate: bool = False
         "finished_at": row["finished_at"],
         "cases": cases,
     }
-    if duplicate:
-        payload["duplicate"] = True
     if row["status"] in (db.PENDING, db.JUDGING):
         payload["queue_ahead"] = db.queue_ahead(conn, row["id"])
     return payload

@@ -26,7 +26,6 @@ CREATE TABLE IF NOT EXISTS submissions (
     student_id    TEXT    NOT NULL,
     name          TEXT    NOT NULL,
     source        TEXT    NOT NULL,
-    source_sha256 TEXT    NOT NULL,
     access_token  TEXT    NOT NULL,
     status        TEXT    NOT NULL,
     verdict       TEXT,
@@ -42,10 +41,9 @@ CREATE TABLE IF NOT EXISTS submissions (
     finished_at   TEXT
 );
 
--- 同一份代码重复提交时直接返回原记录，不再判一次
-CREATE UNIQUE INDEX IF NOT EXISTS idx_dedup
-    ON submissions(homework, student_id, source_sha256);
-
+-- 不做去重：同一份代码重复提交会重新判一次。
+-- 「重判」这个功能已经没了（源码不存），重交一份相同的代码是学生唯一的
+-- 重新判题途径。防刷由速率限制负责（见 config 里的几个 RATE_LIMIT）。
 CREATE INDEX IF NOT EXISTS idx_queue ON submissions(status, id);
 CREATE INDEX IF NOT EXISTS idx_student ON submissions(homework, student_id, id DESC);
 
@@ -93,21 +91,19 @@ def create_submission(
     student_id: str,
     name: str,
     source: str,
-    sha256: str,
     client_ip: str | None,
 ) -> int:
     with conn:
         cur = conn.execute(
             """INSERT INTO submissions
-               (homework, student_id, name, source, source_sha256, access_token,
+               (homework, student_id, name, source, access_token,
                 status, created_at, client_ip)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
             (
                 homework,
                 student_id,
                 name,
                 source,
-                sha256,
                 secrets.token_urlsafe(16),
                 PENDING,
                 now(),
@@ -115,16 +111,6 @@ def create_submission(
             ),
         )
         return int(cur.lastrowid)
-
-
-def find_duplicate(
-    conn: sqlite3.Connection, homework: str, student_id: str, sha256: str
-) -> sqlite3.Row | None:
-    return conn.execute(
-        """SELECT * FROM submissions
-           WHERE homework=? AND student_id=? AND source_sha256=?""",
-        (homework, student_id, sha256),
-    ).fetchone()
 
 
 def claim_next(conn: sqlite3.Connection) -> sqlite3.Row | None:

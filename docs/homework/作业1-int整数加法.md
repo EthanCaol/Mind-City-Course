@@ -39,16 +39,20 @@ icon: material/pencil-outline
 
     学号必须在本课程名单里，否则会被拒绝。姓名不用写——系统按学号从名单里查。
 
+!!! note "先自测，再提交"
+    - 先使用 IDE 写好代码，然后在你的电脑上跑一下样例
+    - 等所有样例都过了，再把代码粘贴到这里进行提交
+    - 助教服务器的性能比较拉，同学们尽量先自测再提交
+
 <div class="judge" id="judge" data-homework="作业1">
   <div class="judge__bar">
     <button id="judge-submit" type="button">提交</button>
-    <a class="judge__last" id="judge-last" href="#" hidden>查看最近一次结果</a>
   </div>
 
   <div class="judge__editor">
     <pre class="judge__gutter" id="judge-gutter" aria-hidden="true"></pre>
     <pre class="judge__highlight" id="judge-highlight" aria-hidden="true"></pre>
-    <textarea id="judge-code" class="judge__code" spellcheck="false" placeholder="// 26113050003&#10;// 上面第一行记得改成自己的学号&#10;// 先使用IDE写好代码，然后在你的电脑上跑一下样例&#10;// 等所有样例都过了，再把代码粘贴到这里进行提交&#10;// （助教服务器的性能比较拉，同学们尽量先自测再提交）"></textarea>
+    <textarea id="judge-code" class="judge__code" spellcheck="false" placeholder="// 26113050003&#10;// 上面第一行记得改成自己的学号"></textarea>
   </div>
 
   <p class="judge__progress" id="judge-progress" hidden></p>

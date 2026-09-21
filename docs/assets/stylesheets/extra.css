@@ -334,10 +334,6 @@
   color: var(--md-default-bg-color);
 }
 
-.md-typeset .judge__last {
-  font-size: 0.75rem;
-}
-
 /* 代码输入框。
    textarea 自己没法给文字上色、也没法在左侧固定行号，所以叠三层：
    行号列 / 高亮副本 / textarea（文字透明，只留光标）。

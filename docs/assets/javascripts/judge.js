@@ -10,7 +10,6 @@
 
   var API = "/judge/api";
   var POLL_MS = 1500;
-  var TOKEN_KEY = "mind-city-judge-token";
 
   var $ = function (id) {
     return document.getElementById(id);
@@ -388,18 +387,6 @@
 
     request("POST", API + "/submit", { homework: homework, code: code })
       .then(function (payload) {
-        // 记住查询码，刷新页面后还能查最近这一次的结果
-        try {
-          localStorage.setItem(
-            TOKEN_KEY,
-            JSON.stringify({ id: payload.id, token: payload.token })
-          );
-        } catch (e) {
-          /* 隐私模式下 localStorage 会抛异常，不影响判题 */
-        }
-        if (payload.duplicate) {
-          renderError("这份代码你交过了，下面是之前的结果。");
-        }
         if (payload.status === "PENDING" || payload.status === "JUDGING") {
           poll(payload.id, payload.token);
         } else {
@@ -489,25 +476,6 @@
       });
   }
 
-  function restoreLast() {
-    var saved;
-    try {
-      saved = JSON.parse(localStorage.getItem(TOKEN_KEY) || "null");
-    } catch (e) {
-      saved = null;
-    }
-    if (!saved || !saved.id || !saved.token) return;
-
-    var link = $("judge-last");
-    link.href = "#";
-    show(link, true);
-    link.addEventListener("click", function (ev) {
-      ev.preventDefault();
-      renderProgress("查询中…");
-      poll(saved.id, saved.token);
-    });
-  }
-
   function init() {
     loadGrades(); // 「作业完成情况」页
 
@@ -518,7 +486,6 @@
       return;
     }
 
-    restoreLast();
     $("judge-submit").addEventListener("click", submit);
 
     var el = editorLayers();
