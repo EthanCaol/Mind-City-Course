@@ -292,23 +292,25 @@
   margin-top: 1.6em;
 }
 
-/* 顶部工具条：选作业、提交、查上次结果 */
+/* 顶部工具条。现在只剩「提交」一个按钮，那就让它和编辑框合成一块 ——
+   上面一条工具栏、下面编辑框，共用一圈边框和圆角，按钮才不是凭空悬着。
+   两块的中间那条线只由编辑框的上边框出（工具条这边不画），否则叠成两像素。 */
 .md-typeset .judge__bar {
   display: flex;
-  flex-wrap: wrap; /* 窄屏上让「查看最近一次结果」换行，不要挤成一团 */
-  gap: 0.8rem;
+  justify-content: flex-end; /* 就一个按钮，靠右才站得住 */
   align-items: center;
-  margin-bottom: 0.8rem;
+  padding: 0.4rem 0.6rem;
+  border: 0.05rem solid var(--md-default-fg-color--lighter);
+  border-bottom: none;
+  border-radius: 0.2rem 0.2rem 0 0;
+  background-color: var(--md-code-bg-color);
 }
 
-.md-typeset .judge__bar select {
-  flex: 1 1 14rem;
-  padding: 0.45rem 0.6rem;
-  border: 0.05rem solid var(--md-default-fg-color--lighter);
-  border-radius: 0.2rem;
-  background-color: var(--md-code-bg-color);
-  color: var(--md-default-fg-color);
-  font-size: 0.8rem;
+/* 光标在输入框里时整块一起亮。不这么写就只有下半截亮，接缝那条竖线从灰变蓝，
+   看着像两块没对齐。点「提交」只是按钮获得焦点，这条不会命中，也不会误亮。
+   （认不出 :has() 的浏览器就退回原来的样子，只是工具条不跟着亮，不算出错。） */
+.md-typeset .judge:has(.judge__code:focus) .judge__bar {
+  border-color: var(--md-accent-fg-color);
 }
 
 .md-typeset .judge__bar button {
@@ -345,7 +347,7 @@
      这个值再量内容，内容更多才撑高。所以这一条别删，删了量出来永远是当前高度。 */
   height: 24rem;
   border: 0.05rem solid var(--md-default-fg-color--lighter);
-  border-radius: 0.2rem;
+  border-radius: 0 0 0.2rem 0.2rem; /* 上圆角在工具条那边 */
   background-color: var(--md-code-bg-color);
   overflow: hidden;
 }
