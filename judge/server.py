@@ -168,7 +168,6 @@ class App:
             "message": reason,
             "queue_depth": depth,
             "roster_size": len(self.roster),
-            "roster_stale": self.roster.is_stale,
         }
 
     # ------------------------------------------------------------ 管理端
@@ -222,10 +221,16 @@ class App:
         return 200, {"ok": True}
 
     def admin_sync(self) -> tuple[int, dict]:
-        """立刻把提交记录推到备份仓库。"""
+        """立刻同步一次：拉花名册 + 推提交记录。
+
+        花名册只在服务启动时自动拉，改了名单又不想重启服务就用这个。
+        """
+        pulled = self.git.pull()
+        if pulled:
+            self.roster.reload_or_keep()
         committed = self.git.commit("判题记录（手动同步）")
         pushed = self.git.push()
-        return 200, {"committed": committed, "pushed": pushed}
+        return 200, {"roster_pulled": pulled, "committed": committed, "pushed": pushed}
 
     def admin_export(self, homework: str) -> str:
         """导出成绩 CSV：每人一行，第一次通过的时间。"""

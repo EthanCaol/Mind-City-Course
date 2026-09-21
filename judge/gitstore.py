@@ -194,20 +194,20 @@ class GitStore:
         )
 
     def sync_loop(self, stop_event: threading.Event, on_change=None) -> None:
-        """定时同步：花名册勤拉，提交记录每两天的凌晨四点半推一次。
+        """启动时拉一次花名册，之后提交记录每两天的凌晨四点半推一次。
+
+        花名册不再变了，所以没有轮询的必要。
 
         独立线程，判题 worker 不碰网络 —— 网络再慢再断也不影响判题。
         """
-        next_pull = 0.0  # 启动时立刻拉一次
+        # 拉不到就用本地已有的那份，不阻塞启动
+        if self.pull() and on_change is not None:
+            on_change()
+
         next_push_check = self._push_deadline()
 
         while not stop_event.is_set():
             now = time.monotonic()
-
-            if now >= next_pull:
-                next_pull = now + config.ROSTER_PULL_INTERVAL_S
-                if self.pull() and on_change is not None:
-                    on_change()
 
             if now >= next_push_check:
                 age = self.unpushed_age_s()
@@ -215,11 +215,9 @@ class GitStore:
                     # 正常情况 worker 每判一份就已经本地 commit 了，
                     # 这里兜底，顺手把可能漏掉的改动一起提上
                     self.commit("判题记录")
-                    # 失败就别等明天四点半了
-                    next_push_check = (
-                        self._push_deadline() if self.push() else now + config.PUSH_RETRY_S
-                    )
-                else:
-                    next_push_check = self._push_deadline()
+                    # 失败不重试：明天四点半还会检查，那时提交仍未推送、
+                    # 也仍然超过两天，自然会再推一次。失败会记进 journald。
+                    self.push()
+                next_push_check = self._push_deadline()
 
             stop_event.wait(60)

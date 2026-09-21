@@ -106,13 +106,3 @@ class Roster:
     def loaded_at(self) -> float | None:
         with self._lock:
             return self._loaded_at
-
-    @property
-    def is_stale(self) -> bool:
-        """超过 config.ROSTER_PULL_INTERVAL_S 的两倍没刷新过就算陈旧。"""
-        from . import config
-
-        with self._lock:
-            if self._loaded_at is None:
-                return True
-            return (time.time() - self._loaded_at) > 2 * config.ROSTER_PULL_INTERVAL_S
