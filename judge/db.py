@@ -232,6 +232,16 @@ def requeue(conn: sqlite3.Connection, submission_id: int) -> None:
         )
 
 
+def clear_source(conn: sqlite3.Connection, submission_id: int) -> None:
+    """判完立刻把源码抹掉。
+
+    源码只在排队期间存在 —— 不这么做 worker 就没法异步取件，但留着就等于
+    把学生一学期的代码全存档了。判完即清，谁都不留。
+    """
+    with conn:
+        conn.execute("UPDATE submissions SET source='' WHERE id=?", (submission_id,))
+
+
 # ---------------------------------------------------------------- 查询
 
 
@@ -360,6 +370,37 @@ def passed_students(conn: sqlite3.Connection, homework: str) -> dict[str, sqlite
         (homework,),
     ).fetchall()
     return {r["student_id"]: r for r in rows}
+
+
+def export_grades(
+    conn: sqlite3.Connection, homework: str, roster: dict[str, str]
+) -> list[str]:
+    """成绩单的 CSV 行。`roster` 是 学号→姓名。
+
+    没交的人也要占一行，助教一眼能看出谁还没交 —— 只列交过的人，"谁没交"
+    反而得自己比对名单。
+    """
+    passed = passed_students(conn, homework)
+    submitted = {
+        r["student_id"]
+        for r in conn.execute(
+            "SELECT DISTINCT student_id FROM submissions WHERE homework=?", (homework,)
+        )
+    }
+
+    rows = ["学号,姓名,是否通过,首次通过时间,通过测试点"]
+    for sid, name in sorted(roster.items()):
+        row = passed.get(sid)
+        if row:
+            rows.append(
+                f"{sid},{name},是,{row['finished_at']},"
+                f"{row['passed_cases']}/{row['total_cases']}"
+            )
+        elif sid in submitted:
+            rows.append(f"{sid},{name},否,,")
+        else:
+            rows.append(f"{sid},{name},未提交,,")
+    return rows
 
 
 def counts_by_verdict(conn: sqlite3.Connection, homework: str | None = None) -> dict[str, int]:

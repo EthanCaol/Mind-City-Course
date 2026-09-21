@@ -1,23 +1,21 @@
-"""私有数据仓库的同步：拉花名册、存提交记录。
+"""私有数据仓库的同步：拉花名册、推成绩单。
 
 仓库是 `EthanCaol/Mind-City-Course-OJ`（private），工作副本就是 `judge/data/`
 —— 它同时被外层公开仓库 gitignore 掉。这一点很关键：数据一旦提交进外层仓库，
 本地就有未推送的 commit，部署脚本的 `git pull --ff-only` 会失败，整个文档站静默停止更新。
 
+**仓库里只有花名册和成绩单，没有学生代码。** 学生源码判完即从数据库抹掉，
+一行都不落盘（见 db.clear_source）。
+
 **SQLite 是权威数据源，这个仓库只是耐久备份。** 所以推送失败不影响判题：
-worker 只调这里的本地磁盘操作（微秒级），联网的 push 交给独立的 sync 线程，
-失败就退避重试。
+worker 只调这里的本地写文件（微秒级），联网的 push 交给独立的 sync 线程。
 """
 
 from __future__ import annotations
 
-import datetime as dt
 import fcntl
-import json
 import logging
 import subprocess
-import threading
-import time
 from pathlib import Path
 
 from . import config
@@ -33,11 +31,6 @@ GIT_ENV = {
     "GIT_COMMITTER_NAME": "Mind City Judge",
     "GIT_COMMITTER_EMAIL": "judge@mind-city.com",
 }
-
-RECORDS = "records/submissions.jsonl"
-# JSONL 里截断输出：全量文本留在 SQLite 里，不然仓库会被撑到几百 MB
-TRUNCATE = 1024
-
 
 class GitStore:
     def __init__(self, repo_dir: Path = config.DATA_DIR) -> None:
@@ -94,21 +87,12 @@ class GitStore:
 
     # ------------------------------------------------------------ 写（纯本地）
 
-    def archive_source(self, homework: str, student_id: str, sha: str, source: str) -> Path:
-        """按内容 sha 命名存源码。同一份代码重复交只会有一个文件。"""
-        path = self.dir / "submissions" / homework / student_id / f"{sha[:12]}.c"
+    def write_grades(self, homework: str, rows: list[str]) -> Path:
+        """整份重写成绩单。服务是唯一写者，不会有冲突。"""
+        path = self.dir / "grades" / f"{homework}.csv"
         path.parent.mkdir(parents=True, exist_ok=True)
-        if not path.is_file():
-            path.write_text(source, encoding="utf-8")
+        path.write_text("\n".join(rows) + "\n", encoding="utf-8")
         return path
-
-    def append_record(self, record: dict) -> None:
-        """追加一行 JSONL。追加式写入，助教和服务同时推也不会冲突
-        （.gitattributes 里给这个文件配了 merge=union）。"""
-        path = self.dir / RECORDS
-        path.parent.mkdir(parents=True, exist_ok=True)
-        with path.open("a", encoding="utf-8") as fh:
-            fh.write(json.dumps(record, ensure_ascii=False) + "\n")
 
     def commit(self, message: str) -> bool:
         """纯本地提交，不联网。返回是否产生了一个新提交。"""
@@ -160,64 +144,13 @@ class GitStore:
         self._push_failures = 0
         return True
 
-    # ------------------------------------------------------------ 后台线程
+    # ------------------------------------------------------------ 启动时
 
-    def unpushed_age_s(self) -> float | None:
-        """最老的未推送提交距今多少秒。没有未推送的提交就返回 None。
+    def pull_roster_at_startup(self, on_change=None) -> None:
+        """服务启动时拉一次花名册，然后就不管了。
 
-        用提交时间而不是「启动后计时」来判断该不该推：服务重启得比推送间隔勤
-        的话，后者永远等不到那一轮。
+        名单不再变，所以没有轮询的必要。拉不到就用本地已有的那份。
+        放在独立线程里做，万一张网络慢也不至于拖住服务启动。
         """
-        if not self.ensure():
-            return None
-        ref = f"{config.GIT_REMOTE}/{config.GIT_BRANCH}"
-        try:
-            result = self._git(["log", "--format=%ct", f"{ref}..HEAD"], 15)
-        except subprocess.TimeoutExpired:
-            return None
-
-        stamps = [int(t) for t in result.stdout.split() if t.strip().isdigit()]
-        return time.time() - min(stamps) if stamps else None
-
-    @staticmethod
-    def seconds_until(hour: int, minute: int) -> float:
-        """距离下一个 HH:MM（本地时间）还有多少秒。"""
-        now = dt.datetime.now()
-        target = now.replace(hour=hour, minute=minute, second=0, microsecond=0)
-        if target <= now:
-            target += dt.timedelta(days=1)
-        return (target - now).total_seconds()
-
-    def _push_deadline(self) -> float:
-        return time.monotonic() + self.seconds_until(
-            config.PUSH_AT_HOUR, config.PUSH_AT_MINUTE
-        )
-
-    def sync_loop(self, stop_event: threading.Event, on_change=None) -> None:
-        """启动时拉一次花名册，之后提交记录每两天的凌晨四点半推一次。
-
-        花名册不再变了，所以没有轮询的必要。
-
-        独立线程，判题 worker 不碰网络 —— 网络再慢再断也不影响判题。
-        """
-        # 拉不到就用本地已有的那份，不阻塞启动
         if self.pull() and on_change is not None:
             on_change()
-
-        next_push_check = self._push_deadline()
-
-        while not stop_event.is_set():
-            now = time.monotonic()
-
-            if now >= next_push_check:
-                age = self.unpushed_age_s()
-                if age is not None and age >= config.PUSH_INTERVAL_S:
-                    # 正常情况 worker 每判一份就已经本地 commit 了，
-                    # 这里兜底，顺手把可能漏掉的改动一起提上
-                    self.commit("判题记录")
-                    # 失败不重试：明天四点半还会检查，那时提交仍未推送、
-                    # 也仍然超过两天，自然会再推一次。失败会记进 journald。
-                    self.push()
-                next_push_check = self._push_deadline()
-
-            stop_event.wait(60)

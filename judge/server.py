@@ -51,20 +51,20 @@ class App:
         self.admin_token = load_admin_token()
         self.git = GitStore()
         self.worker = JudgeWorker(self.db_path, self.roster, self.git)
-        self._stop = threading.Event()
-        self._syncer = threading.Thread(
-            target=self.git.sync_loop,
-            args=(self._stop, self.roster.reload_or_keep),
-            name="git-sync",
+        # 启动时拉一次花名册就跑完退出 —— 名单不再变，不需要常驻线程。
+        # 成绩单不再自动推送，要推就调 POST /api/admin/sync。
+        self._roster_pull = threading.Thread(
+            target=self.git.pull_roster_at_startup,
+            args=(self.roster.reload_or_keep,),
+            name="roster-pull",
             daemon=True,
         )
 
     def start(self) -> None:
+        self._roster_pull.start()
         self.worker.start()
-        self._syncer.start()
 
     def stop(self) -> None:
-        self._stop.set()
         self.worker.stop()
 
     # ------------------------------------------------------------ 提交
@@ -200,55 +200,24 @@ class App:
             ]
         }
 
-    def admin_source(self, sub_id: int) -> tuple[int, dict]:
-        with self.lock:
-            row = db.get(self.conn, sub_id)
-        if row is None:
-            return 404, {"error": "没有这份提交"}
-        return 200, {
-            "id": row["id"],
-            "student_id": row["student_id"],
-            "name": row["name"],
-            "source": row["source"],
-        }
-
-    def admin_rejudge(self, sub_id: int) -> tuple[int, dict]:
-        with self.lock:
-            if db.get(self.conn, sub_id) is None:
-                return 404, {"error": "没有这份提交"}
-            db.requeue(self.conn, sub_id)
-        self.worker.wake()
-        return 200, {"ok": True}
-
     def admin_sync(self) -> tuple[int, dict]:
-        """立刻同步一次：拉花名册 + 推提交记录。
+        """同步一次：拉花名册 + 推成绩单。
 
-        花名册只在服务启动时自动拉，改了名单又不想重启服务就用这个。
+        成绩单不再定时推送（仓库里只有名单和成绩，没有学生代码），
+        所以这是唯一的推送入口。
         """
         pulled = self.git.pull()
         if pulled:
             self.roster.reload_or_keep()
-        committed = self.git.commit("判题记录（手动同步）")
+        committed = self.git.commit("成绩单")
         pushed = self.git.push()
         return 200, {"roster_pulled": pulled, "committed": committed, "pushed": pushed}
 
     def admin_export(self, homework: str) -> str:
-        """导出成绩 CSV：每人一行，第一次通过的时间。"""
-        roster = self.roster.all()
+        """导出成绩 CSV。没提交的人也会占一行，标「未提交」。"""
         with self.lock:
-            passed = db.passed_students(self.conn, homework)
-
-        lines = ["学号,姓名,是否通过,首次通过时间,最好成绩"]
-        for sid, name in sorted(roster.items()):
-            row = passed.get(sid)
-            if row:
-                lines.append(
-                    f"{sid},{name},是,{row['finished_at']},"
-                    f"{row['passed_cases']}/{row['total_cases']}"
-                )
-            else:
-                lines.append(f"{sid},{name},否,,")
-        return "\n".join(lines) + "\n"
+            rows = db.export_grades(self.conn, homework, self.roster.all())
+        return "\n".join(rows) + "\n"
 
 
 # ---------------------------------------------------------------- 工具
@@ -414,23 +383,10 @@ def create_handler(app: App):
                 if route == "/api/admin/roster":
                     return 200, {"roster": app.roster.all()}
 
-                if route.startswith("/api/admin/source/"):
-                    sub_id = _int_or_none(route.rsplit("/", 1)[-1])
-                    return (
-                        app.admin_source(sub_id)
-                        if sub_id is not None
-                        else (404, {"error": "没有这份提交"})
-                    )
+                # 没有「看源码」和「重判」接口：源码判完即抹，服务手里没有。
+                # 这是「不保存学生提交」的直接代价。
 
-                if route.startswith("/api/admin/rejudge/") and method == "POST":
-                    sub_id = _int_or_none(route.rsplit("/", 1)[-1])
-                    return (
-                        app.admin_rejudge(sub_id)
-                        if sub_id is not None
-                        else (404, {"error": "没有这份提交"})
-                    )
-
-                # 提交记录一周才自动推一次，想立刻备份就手动触发
+                # 成绩单每两天才自动推一次，想立刻备份就手动触发
                 if route == "/api/admin/sync" and method == "POST":
                     return app.admin_sync()
 

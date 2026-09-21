@@ -14,7 +14,7 @@ import time
 from pathlib import Path
 
 from . import config, db, verdict as V
-from .gitstore import TRUNCATE, GitStore
+from .gitstore import GitStore
 from .isolate_runner import BoxPool, judge_ready
 from .judger import judge_submission
 from .problem import Problem, ProblemError, load_problem
@@ -166,40 +166,20 @@ class JudgeWorker(threading.Thread):
             outcome.passed,
             outcome.total,
         )
-        self._archive(row, outcome)
 
-    def _archive(self, row, outcome) -> None:
-        """把源码和结果写进备份仓库。
+        # 判完立刻抹掉源码 —— 判题是异步的，源码得在队列里待一会儿，
+        # 但没有理由把学生一学期的代码全存下来。
+        db.clear_source(conn, sub_id)
+        self._write_grades(conn, row["homework"])
 
-        全是本地磁盘操作，微秒级；联网推送交给 sync 线程，所以这里失败也
-        绝不能让判题结果受影响。
+    def _write_grades(self, conn, homework: str) -> None:
+        """重写成绩单。
+
+        只做本地写文件（微秒级），联网推送交给 sync 线程，所以这里失败
+        也不能让判题结果受影响。
         """
         try:
-            self.git.archive_source(
-                row["homework"], row["student_id"], row["source_sha256"], row["source"]
-            )
-            self.git.append_record(
-                {
-                    "id": row["id"],
-                    "homework": row["homework"],
-                    "student_id": row["student_id"],
-                    "name": row["name"],
-                    "verdict": outcome.verdict,
-                    "passed": outcome.passed,
-                    "total": outcome.total,
-                    "created_at": row["created_at"],
-                    "cases": [
-                        {
-                            "index": c.index,
-                            "verdict": c.verdict,
-                            "time_s": round(c.time_s, 4),
-                            "memory_kb": c.memory_kb,
-                            "actual": c.actual[:TRUNCATE],
-                        }
-                        for c in outcome.cases
-                    ],
-                }
-            )
-            self.git.commit(f"判题 #{row['id']} {row['student_id']} {outcome.verdict}")
+            rows = db.export_grades(conn, homework, self.roster.all())
+            self.git.write_grades(homework, rows)
         except Exception:
-            log.exception("写备份仓库失败（判题结果已入库，不受影响）")
+            log.exception("写成绩单失败（判题结果已入库，不受影响）")

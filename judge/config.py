@@ -20,10 +20,7 @@ PROBLEMS_DIR = BASE_DIR / "problems"
 
 DB_PATH = DATA_DIR / "judge.sqlite3"
 ROSTER_PATH = DATA_DIR / "roster.csv"
-SOURCES_DIR = DATA_DIR / "sources"
 WORK_DIR = DATA_DIR / "work"
-RECORDS_DIR = DATA_DIR / "records"
-GRADES_DIR = DATA_DIR / "grades"
 
 ADMIN_TOKEN_PATH = Path.home() / ".config" / "mind-city" / "judge-admin-token"
 
@@ -154,17 +151,6 @@ GIT_PUSH_TIMEOUT_S = 60
 
 # 花名册不再变了，只在服务启动时从数据仓库拉一次。想手动刷就调
 # POST /api/admin/sync，或者重启服务。
-
-# 提交记录每两天推一次。SQLite 在本机就是权威数据源，git 只是异地备份。
-# 代价：万一这台机器整个坏掉，最多会丢两天的记录。
 #
-# 计时方式见 gitstore.unpushed_age_s()：看的是「最老的未推送提交有多久了」，
-# 不是「服务启动后过了多久」。后者的话，服务只要重启得比这个间隔勤，
-# 推送就永远不会发生。
-PUSH_INTERVAL_S = 2 * 24 * 3600
-
-# 自动推送只在每天的这个时候检查一次：凌晨四点半，学生在睡觉，机器也闲。
-# 不在白天随机触发，免得多一份没必要的网络活动。
-# 配合上面的两天间隔，实际效果是「每两天的凌晨四点半推一次」。
-PUSH_AT_HOUR = 4
-PUSH_AT_MINUTE = 30
+# 成绩单**不自动推送** —— 仓库里只有名单和成绩，没有学生代码，没有定时
+# 备份的必要。想推就调 POST /api/admin/sync。

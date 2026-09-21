@@ -11,7 +11,7 @@ import re
 COMMENT_PREFIX = "//"
 STUDENT_ID_RE = re.compile(r"[0-9]{11}")
 
-FORMAT_HINT = "请在代码第一行写上你的学号，格式：// 26803070224"
+FORMAT_HINT = "请在代码第一行写上你的学号，格式：// 26113050003"
 
 
 def extract_student_id(source: str) -> str | None:
