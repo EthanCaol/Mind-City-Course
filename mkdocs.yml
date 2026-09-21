@@ -30,7 +30,7 @@ nav:
   - 站点计划: plan.md
   - 作业:
       - 作业完成情况: homework/作业完成情况.md
-      - 作业1：int整数加法: homework/作业1-int整数加法.md
+      - 作业1：整数加法: homework/作业1-整数加法.md
   - 实验课:
       - (0) Dev-C++ 环境搭建: setup/dev-cpp.md
       - (0) WSL2 环境搭建: setup/wsl2-vscode.md
