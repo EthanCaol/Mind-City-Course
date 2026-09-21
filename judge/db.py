@@ -372,6 +372,17 @@ def passed_students(conn: sqlite3.Connection, homework: str) -> dict[str, sqlite
     return {r["student_id"]: r for r in rows}
 
 
+def passed_ids(conn: sqlite3.Connection, homework: str) -> set[str]:
+    """该题目下通过过的学号。用于「作业完成情况」页。"""
+    return {
+        r["student_id"]
+        for r in conn.execute(
+            "SELECT DISTINCT student_id FROM submissions WHERE homework=? AND verdict='AC'",
+            (homework,),
+        )
+    }
+
+
 def export_grades(
     conn: sqlite3.Connection, homework: str, roster: dict[str, str]
 ) -> list[str]:

@@ -158,6 +158,30 @@ class App:
             ]
         }
 
+    def grades(self) -> tuple[int, dict]:
+        """作业完成情况：行是学生，列是作业。
+
+        这个接口是**公开**的（页面要显示全班完成情况），所以只回传姓名和
+        通过与否 —— 不给学号，也不给提交次数、耗时这些细节。姓名在本课程
+        名单里是唯一的，扫一眼就能找到自己。
+        """
+        with self.lock:
+            problems = list_problems()
+            roster = self.roster.all()
+            passed = {p.slug: db.passed_ids(self.conn, p.slug) for p in problems}
+
+        return 200, {
+            "homeworks": [{"slug": p.slug, "title": p.title} for p in problems],
+            "students": [
+                {
+                    "name": name,
+                    "passed": {slug: (sid in ids) for slug, ids in passed.items()},
+                }
+                # 按学号排，和花名册顺序一致；页面上只显示姓名
+                for sid, name in sorted(roster.items())
+            ],
+        }
+
     def health(self) -> tuple[int, dict]:
         ready, reason = judge_ready()
         with self.lock:
@@ -352,6 +376,9 @@ def create_handler(app: App):
 
             if route in ("/api/health", "/api/health/"):
                 return app.health()
+
+            if route in ("/api/grades", "/api/grades/"):
+                return app.grades()
 
             if route == "/api/submit" and method == "POST":
                 body = self._read_json()

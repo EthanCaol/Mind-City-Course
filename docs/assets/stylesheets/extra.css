@@ -604,3 +604,53 @@
 .md-typeset .judge__compile pre .judge-diag__caret--note {
   color: #42a5f5;
 }
+
+/* ---------------------------------------------------------------------------
+   作业完成情况（docs/homework/作业完成情况.md）
+
+   行是学生、列是作业的矩阵，表格由 judge.js 从 /judge/api/grades 现拉。
+   全班 74 行，所以要压扁一点、加斑马纹，不然扫起来很累。
+   --------------------------------------------------------------------------- */
+
+.md-typeset .grades-host {
+  margin-top: 1.4em;
+}
+
+.md-typeset .grades-loading {
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color--light);
+}
+
+.md-typeset table.grades {
+  width: 100%;
+  margin-top: 0;
+  font-size: 0.72rem;
+}
+
+.md-typeset table.grades th,
+.md-typeset table.grades td {
+  padding: 0.3rem 0.5rem;
+  border: 0;
+  border-bottom: 0.05rem solid var(--md-default-fg-color--lightest);
+}
+
+/* 隔行淡底，74 行不这样的话很容易看串行 */
+.md-typeset table.grades tbody tr:nth-child(even) {
+  background-color: var(--md-code-bg-color);
+}
+
+.md-typeset table.grades th {
+  color: var(--md-default-fg-color--light);
+  font-weight: 700;
+}
+
+.md-typeset .grades__name {
+  width: 9rem;
+  text-align: left;
+}
+
+.md-typeset .grades__cell {
+  width: 5rem;
+  text-align: center;
+  font-size: 0.85rem; /* 对勾是 emoji，比正文小一点才不突兀 */
+}

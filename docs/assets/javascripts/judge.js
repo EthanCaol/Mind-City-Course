@@ -371,7 +371,7 @@
 
   function submit() {
     var code = $("judge-code").value;
-    var homework = $("judge-homework").value;
+    var homework = boundHomework();
 
     renderError("");
     renderCompileError("");
@@ -415,23 +415,77 @@
       });
   }
 
-  function loadProblems() {
-    var select = $("judge-homework");
-    request("GET", API + "/problems")
-      .then(function (data) {
-        select.textContent = "";
-        data.problems.forEach(function (p) {
-          var opt = document.createElement("option");
-          opt.value = p.slug;
-          setText(opt, p.title + "（" + p.total_cases + " 个测试点）");
-          select.appendChild(opt);
-        });
-        if (!data.problems.length) {
-          renderError("还没有配置任何作业题目，请联系助教。");
+  /** 页面绑定的作业：`<div id="judge" data-homework="作业1">`。
+   *  编辑框长在作业页面里，所以作业是页面写死的，不用下拉框选。 */
+  function boundHomework() {
+    var root = $("judge");
+    return root ? root.getAttribute("data-homework") || "" : "";
+  }
+
+  // ------------------------------------------------------------ 作业完成情况
+
+  function renderGrades(host, data) {
+    host.textContent = "";
+
+    if (!data.students.length) {
+      host.textContent = "名单是空的。";
+      return;
+    }
+
+    var table = document.createElement("table");
+    table.className = "grades";
+
+    var head = document.createElement("thead");
+    var headRow = document.createElement("tr");
+    var corner = document.createElement("th");
+    corner.className = "grades__name";
+    setText(corner, "姓名");
+    headRow.appendChild(corner);
+
+    data.homeworks.forEach(function (hw) {
+      var th = document.createElement("th");
+      setText(th, hw.slug);
+      th.title = hw.title;
+      headRow.appendChild(th);
+    });
+    head.appendChild(headRow);
+    table.appendChild(head);
+
+    var body = document.createElement("tbody");
+    data.students.forEach(function (student) {
+      var tr = document.createElement("tr");
+
+      var name = document.createElement("td");
+      name.className = "grades__name";
+      setText(name, student.name);
+      tr.appendChild(name);
+
+      data.homeworks.forEach(function (hw) {
+        var td = document.createElement("td");
+        td.className = "grades__cell";
+        if (student.passed[hw.slug]) {
+          setText(td, "✅");
+          td.title = student.name + "：" + hw.title + " 已通过";
         }
+        tr.appendChild(td);
+      });
+
+      body.appendChild(tr);
+    });
+    table.appendChild(body);
+    host.appendChild(table);
+  }
+
+  function loadGrades() {
+    var host = $("grades");
+    if (!host) return;
+
+    request("GET", API + "/grades")
+      .then(function (data) {
+        renderGrades(host, data);
       })
       .catch(function (err) {
-        renderError("连不上判题服务：" + err.message);
+        setText(host, "读取失败：" + err.message);
       });
   }
 
@@ -455,9 +509,15 @@
   }
 
   function init() {
-    if (!$("judge")) return; // 不是测评页
+    loadGrades(); // 「作业完成情况」页
 
-    loadProblems();
+    if (!$("judge")) return; // 剩下的是作业页才需要的东西
+
+    if (!boundHomework()) {
+      renderError("这个页面没有配置作业编号（data-homework），请联系助教。");
+      return;
+    }
+
     restoreLast();
     $("judge-submit").addEventListener("click", submit);
 

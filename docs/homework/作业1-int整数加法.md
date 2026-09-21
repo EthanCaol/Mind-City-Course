@@ -25,13 +25,53 @@ icon: material/pencil-outline
     - 用 `scanf` 读入，注意取地址符 `&` 不要漏。
     - 代码要有缩进，关键的地方写上行注释。
 
-## 1. 评分要点
+## 1. 在线评测
+
+把代码粘进下面的框里提交，几秒后就能看到哪几个测试点没过。**每个测试点的输入、期望输出和你的实际输出都会显示出来**，方便自己定位问题。全过就算完成。
+
+!!! warning "代码第一行必须写学号"
+
+    注释符后面只能有学号，多一个字都不行：
+
+    ```c
+    // 26113050003
+    ```
+
+    学号必须在本课程名单里，否则会被拒绝。姓名不用写——系统按学号从名单里查。
+
+<div class="judge" id="judge" data-homework="作业1">
+  <div class="judge__bar">
+    <button id="judge-submit" type="button">提交</button>
+    <a class="judge__last" id="judge-last" href="#" hidden>查看最近一次结果</a>
+  </div>
+
+  <div class="judge__editor">
+    <pre class="judge__gutter" id="judge-gutter" aria-hidden="true"></pre>
+    <pre class="judge__highlight" id="judge-highlight" aria-hidden="true"></pre>
+    <textarea id="judge-code" class="judge__code" spellcheck="false" placeholder="// 26113050003&#10;#include &lt;stdio.h&gt;&#10;&#10;int main(void) {&#10;    ...&#10;}"></textarea>
+  </div>
+
+  <p class="judge__progress" id="judge-progress" hidden></p>
+  <p class="judge__error" id="judge-error" hidden></p>
+  <p class="judge-summary" id="judge-summary" hidden></p>
+
+  <div class="judge__compile" id="judge-compile-error" hidden>
+    <p>编译没有通过，编译器说：</p>
+    <pre></pre>
+  </div>
+
+  <div id="judge-cases" hidden></div>
+</div>
+
+同一份代码重复提交不会重复判题，直接返回上次的结果；改了代码再交就会重新判。判题用的是服务器的 `isolate` 沙箱：编译参数固定 `-O2 -std=c11`，每个测试点限时 1 秒、限内存 256 MB，沙箱内没有网络。
+
+## 2. 评分要点
 
 程序能编译通过、对给定输入输出正确，就能满分。交之前请自己先编译运行一遍，确认输出和样例一致。
 
-## 2. 提交方式
+## 3. 交到 eLearning
 
-在 eLearning 的作业区提交：<https://elearning.fudan.edu.cn/courses/114551/assignments/137188>
+在线评测只是自查工具，**正式提交仍然走 eLearning**：<https://elearning.fudan.edu.cn/courses/114551/assignments/137188>
 
 提交单个 `.c` 源文件即可，不要交 `.exe`，也不要打包压缩。文件命名为 `学号-姓名-作业1.c`。
 
