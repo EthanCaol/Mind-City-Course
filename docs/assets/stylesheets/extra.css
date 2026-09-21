@@ -405,6 +405,15 @@
   color: transparent;
   caret-color: var(--md-default-fg-color);
   resize: none;
+  /* 滚动条藏掉。三层里只有 textarea 会滚，行号列和高亮层都是 overflow:hidden，
+     滚动条一冒出来不仅闪一下，还要占掉十几个像素，三层就不一样宽了。
+     纵向本来也滚不动 —— 高度已经由 autosize() 撑到内容那么大。
+     横向还能滚，只是没有那根条：光标移出右边框时视图会跟着走。 */
+  scrollbar-width: none;
+}
+
+.md-typeset .judge__editor .judge__code::-webkit-scrollbar {
+  display: none;
 }
 
 .md-typeset .judge__editor .judge__code:focus {
