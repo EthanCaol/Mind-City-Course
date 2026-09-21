@@ -339,6 +339,12 @@ def create_handler(app: App):
         timeout = config.HANDLER_TIMEOUT_S
         server_version = "MindCityJudge"
 
+        # 关掉 Nagle。wfile 是无缓冲的，响应头和响应体会分两次 write，
+        # Nagle 会压住第二个包等对端的 ACK，而客户端又在延迟确认 ——
+        # 实测每个响应因此多花约 40ms（正是延迟确认的定时器长度）。
+        # 这个开关是 StreamRequestHandler 现成的，置 True 即设 TCP_NODELAY。
+        disable_nagle_algorithm = True
+
         # ---------------------------------------------------- 入口
 
         def do_GET(self) -> None:
