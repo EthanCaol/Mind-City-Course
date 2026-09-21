@@ -58,7 +58,7 @@ unit，user 级 unit 引用不到，所以没法靠 `After=` 保证顺序——�
   而且数据一旦提交进外层仓库，本地就有未推送的 commit，部署脚本的
   `git pull --ff-only` 会失败，**整个文档站静默停止更新**。
 
-同步节奏（`config.py` 里可调）：花名册每 5 分钟拉一次，提交记录**一周推一次**
+同步节奏（`config.py` 里可调）：花名册每 5 分钟拉一次，提交记录**每两天推一次**
 （推送失败 30 分钟后重试）。想立刻备份就手动触发：
 
 ```bash
@@ -66,7 +66,11 @@ TOKEN=$(cat ~/.config/mind-city/judge-admin-token)
 curl -X POST -H "Authorization: Bearer $TOKEN" https://mind-city.com/judge/api/admin/sync
 ```
 
-代价是这台机器整个坏掉的话最多丢一周记录，异地备份的意义仅此而已。
+判断该不该推，看的是**最老的未推送提交有多久了**（`unpushed_age_s()`），
+而不是「服务启动后过了多久」—— 后者的话，服务只要重启得比两天勤，
+推送就永远不会发生。
+
+代价是这台机器整个坏掉的话最多丢两天记录，异地备份的意义仅此而已。
 
 ## 加一份新作业
 

@@ -161,13 +161,30 @@ class GitStore:
 
     # ------------------------------------------------------------ 后台线程
 
+    def unpushed_age_s(self) -> float | None:
+        """最老的未推送提交距今多少秒。没有未推送的提交就返回 None。
+
+        用提交时间而不是「启动后计时」来判断该不该推：服务重启得比推送间隔勤
+        的话，后者永远等不到那一轮。
+        """
+        if not self.ensure():
+            return None
+        ref = f"{config.GIT_REMOTE}/{config.GIT_BRANCH}"
+        try:
+            result = self._git(["log", "--format=%ct", f"{ref}..HEAD"], 15)
+        except subprocess.TimeoutExpired:
+            return None
+
+        stamps = [int(t) for t in result.stdout.split() if t.strip().isdigit()]
+        return time.time() - min(stamps) if stamps else None
+
     def sync_loop(self, stop_event: threading.Event, on_change=None) -> None:
-        """定时同步：花名册勤拉，提交记录一周推一次。
+        """定时同步：花名册勤拉，提交记录每两天推一次。
 
         独立线程，判题 worker 不碰网络 —— 网络再慢再断也不影响判题。
         """
         next_pull = 0.0  # 启动时立刻拉一次
-        next_push = time.monotonic() + config.PUSH_INTERVAL_S
+        next_push_attempt = 0.0
 
         while not stop_event.is_set():
             now = time.monotonic()
@@ -177,14 +194,15 @@ class GitStore:
                 if self.pull() and on_change is not None:
                     on_change()
 
-            if now >= next_push:
-                # 正常情况下 worker 每判一份就已经本地 commit 了，
-                # 这里只是兜底，顺手把可能漏掉的改动一起提上
-                self.commit("判题记录")
-                if self.push():
-                    next_push = now + config.PUSH_INTERVAL_S
-                else:
-                    # 不能真等一周才重试
-                    next_push = now + config.PUSH_RETRY_S
+            if now >= next_push_attempt:
+                age = self.unpushed_age_s()
+                if age is not None and age >= config.PUSH_INTERVAL_S:
+                    # 正常情况 worker 每判一份就已经本地 commit 了，
+                    # 这里兜底，顺手把可能漏掉的改动一起提上
+                    self.commit("判题记录")
+                    if self.push():
+                        next_push_attempt = 0.0
+                    else:
+                        next_push_attempt = now + config.PUSH_RETRY_S
 
-            stop_event.wait(30)
+            stop_event.wait(60)
