@@ -339,9 +339,10 @@
 }
 
 /* 代码输入框。
-   textarea 自己没法给文字上色，所以背后垫一层 <pre> 显示高亮的副本：
-   textarea 的文字透明、只留光标，两层重叠，滚动同步（judge.js 里做）。
-   边框和内边距放在外层容器上，两层都贴边铺满，省得对不齐。 */
+   textarea 自己没法给文字上色、也没法在左侧固定行号，所以叠三层：
+   行号列 / 高亮副本 / textarea（文字透明，只留光标）。
+   三层字体、行高、上内边距必须逐像素一致，差一点就会错行。
+   滚动同步在 judge.js 里做。 */
 .md-typeset .judge__editor {
   position: relative;
   height: 24rem;
@@ -355,34 +356,54 @@
   border-color: var(--md-accent-fg-color);
 }
 
-/* 这两条选择器里的每一项都必须完全一致，差一个像素两层就会错位 */
+/* 这三条选择器里的每一项都必须完全一致 */
+.md-typeset .judge__editor .judge__gutter,
 .md-typeset .judge__editor .judge__highlight,
 .md-typeset .judge__editor .judge__code {
   position: absolute;
-  inset: 0;
+  top: 0;
+  bottom: 0;
   margin: 0;
-  padding: 0.8rem;
   border: 0;
   border-radius: 0;
   background: none;
   font-family: var(--md-code-font-family);
-  font-size: 0.75rem;
-  line-height: 1.6;
+  font-size: 0.65rem;
+  line-height: 1.5;
   /* 用 pre 而不是 pre-wrap：代码不折行，横向滚动比折行好读，
-     也免去两层换行位置不一致的风险 */
+     也免去几层换行位置不一致的风险 */
   white-space: pre;
-  overflow: auto;
+  overflow: hidden;
   tab-size: 4;
 }
 
-/* 高亮层不收滚动条 —— 滚动条只在 textarea 上有，两层宽度才会一致 */
+/* 行号列。只跟着上下滚，不跟着左右滚 —— 所以它是独立一层，
+   而不是拼进高亮文本里。overflow:hidden 不妨碍用 scrollTop 程序化滚动。 */
+.md-typeset .judge__editor .judge__gutter {
+  left: 0;
+  width: 3rem;
+  padding: 0.7rem 0.5rem 0.7rem 0;
+  text-align: right;
+  color: var(--md-default-fg-color--lighter);
+  border-right: 0.05rem solid var(--md-default-fg-color--lightest);
+  user-select: none; /* 全选代码时不要把行号一起选进去 */
+}
+
+.md-typeset .judge__editor .judge__highlight,
+.md-typeset .judge__editor .judge__code {
+  left: 3rem;
+  right: 0;
+  padding: 0.7rem 0.9rem;
+}
+
+/* 高亮层不收滚动条 —— 滚动条只在 textarea 上有，几层宽度才会一致 */
 .md-typeset .judge__editor .judge__highlight {
-  overflow: hidden;
   pointer-events: none; /* 别挡住 textarea 的点击和选择 */
   color: var(--md-default-fg-color);
 }
 
 .md-typeset .judge__editor .judge__code {
+  overflow: auto;
   color: transparent;
   caret-color: var(--md-default-fg-color);
   resize: none;

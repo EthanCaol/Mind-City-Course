@@ -118,19 +118,38 @@
     return frag;
   }
 
-  function highlightLayer() {
+  function editorLayers() {
     var code = $("judge-code");
     var pre = $("judge-highlight");
-    return code && pre ? { code: code, pre: pre } : null;
+    var gutter = $("judge-gutter");
+    return code && pre && gutter ? { code: code, pre: pre, gutter: gutter } : null;
   }
 
   function syncHighlight() {
-    var el = highlightLayer();
+    var el = editorLayers();
     if (!el) return;
+
     el.pre.textContent = "";
     el.pre.appendChild(highlight(el.code.value));
+    renderGutter(el);
+    syncScroll(el);
+  }
+
+  /** 行号。层数和源码行数严格对应，否则会和右边错行。 */
+  function renderGutter(el) {
+    // split("\n") 的长度就是行数：末尾有空行时也会算进去，
+    // 正好和高亮层末尾补的那个换行对齐
+    var count = el.code.value.split("\n").length;
+    var numbers = new Array(count);
+    for (var i = 0; i < count; i++) numbers[i] = i + 1;
+    el.gutter.textContent = numbers.join("\n") + "\n";
+  }
+
+  /** 三层一起滚。行号列只跟上下，不跟左右。 */
+  function syncScroll(el) {
     el.pre.scrollTop = el.code.scrollTop;
     el.pre.scrollLeft = el.code.scrollLeft;
+    el.gutter.scrollTop = el.code.scrollTop;
   }
 
   // ---------------------------------------------------------------- 渲染
@@ -442,14 +461,13 @@
     restoreLast();
     $("judge-submit").addEventListener("click", submit);
 
-    var el = highlightLayer();
+    var el = editorLayers();
     if (el) {
       syncHighlight();
       el.code.addEventListener("input", syncHighlight);
-      // textarea 滚动时把背后的高亮层带着一起滚，否则两层会错位
+      // textarea 滚动时把行号列和高亮层带着一起滚，否则几层会错位
       el.code.addEventListener("scroll", function () {
-        el.pre.scrollTop = el.code.scrollTop;
-        el.pre.scrollLeft = el.code.scrollLeft;
+        syncScroll(el);
       });
     }
   }
