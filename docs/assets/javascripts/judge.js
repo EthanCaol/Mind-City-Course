@@ -50,38 +50,69 @@
   // 学生的作业就几十行，每次敲键重新扫一遍是微秒级。
 
   var C_RE =
-    /(\/\/[^\n]*|\/\*[\s\S]*?\*\/)|(^[ \t]*#[^\n]*)|("(?:\\.|[^"\\\n])*"?|'(?:\\.|[^'\\\n])*'?)|\b(0[xX][0-9a-fA-F]+|\d+\.?\d*(?:[eE][+-]?\d+)?)[fFlLuU]*|\b(auto|break|case|char|const|continue|default|do|double|else|enum|extern|float|for|goto|if|inline|int|long|register|restrict|return|short|signed|sizeof|static|struct|switch|typedef|union|unsigned|void|volatile|while|_Bool)\b/gm;
+    /(\/\/[^\n]*|\/\*[\s\S]*?\*\/)|(^[ \t]*#[ \t]*\w+)|("(?:\\.|[^"\\\n])*"?|'(?:\\.|[^'\\\n])*'?)|\b(0[xX][0-9a-fA-F]+|\d+\.?\d*(?:[eE][+-]?\d+)?)[fFlLuU]*|\b(auto|break|case|char|const|continue|default|do|double|else|enum|extern|float|for|goto|if|inline|int|long|register|restrict|return|short|signed|sizeof|static|struct|switch|typedef|union|unsigned|void|volatile|while|_Bool)\b/gm;
+
+  // 预处理指令后面那一段单独取色：`#include <stdio.h>` 里的头文件名在
+  // GitHub Dark 主题里是字符串色，`#define MAX_ROWS` 里的宏名是紫色。
+  var PREPROC_TAIL_RE = /^[ \t]*(<[^>\n]*>|[A-Za-z_]\w*)/;
 
   // 下标对应 C_RE 里的捕获组序号
   var C_CLASS = ["", "comment", "preproc", "string", "number", "keyword"];
 
   function highlight(text) {
     var frag = document.createDocumentFragment();
+
+    function emit(from, to, cls) {
+      if (to <= from) return;
+      var piece = text.slice(from, to);
+      if (!cls) {
+        frag.appendChild(document.createTextNode(piece));
+        return;
+      }
+      var span = document.createElement("span");
+      span.className = "judge-syn judge-syn--" + cls;
+      span.textContent = piece;
+      frag.appendChild(span);
+    }
+
     var last = 0;
     var m;
-
     C_RE.lastIndex = 0;
+
     while ((m = C_RE.exec(text)) !== null) {
       if (m[0].length === 0) {
         C_RE.lastIndex++; // 空匹配会死循环
         continue;
       }
-      if (m.index > last) {
-        frag.appendChild(document.createTextNode(text.slice(last, m.index)));
-      }
+
+      var cls = null;
       for (var g = 1; g <= 5; g++) {
-        if (m[g] === undefined) continue;
-        var span = document.createElement("span");
-        span.className = "judge-syn judge-syn--" + C_CLASS[g];
-        span.textContent = m[0];
-        frag.appendChild(span);
-        break;
+        if (m[g] !== undefined) {
+          cls = C_CLASS[g];
+          break;
+        }
       }
+
+      emit(last, m.index, null);
+      emit(m.index, m.index + m[0].length, cls);
       last = m.index + m[0].length;
+
+      // 预处理行：指令本身已经染好了，后面跟着的头文件名 / 宏名单独取色。
+      // 在这里显式吃掉那一段，而不是往主正则里加规则 —— 加规则会误伤
+      // `a<b>c` 这类比较表达式。
+      if (cls === "preproc") {
+        var tail = PREPROC_TAIL_RE.exec(text.slice(last));
+        if (tail) {
+          var start = last + tail[0].indexOf(tail[1]);
+          emit(last, start, null);
+          emit(start, start + tail[1].length, tail[1][0] === "<" ? "string" : "macro");
+          last = start + tail[1].length;
+          C_RE.lastIndex = last;
+        }
+      }
     }
-    if (last < text.length) {
-      frag.appendChild(document.createTextNode(text.slice(last)));
-    }
+
+    emit(last, text.length, null);
     // 末尾补个换行：最后一行是空行时 <pre> 高度会少一行，和高亮层就对不齐了
     frag.appendChild(document.createTextNode("\n"));
     return frag;

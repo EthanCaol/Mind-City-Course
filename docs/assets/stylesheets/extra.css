@@ -397,25 +397,34 @@
   background-color: var(--md-accent-fg-color);
 }
 
-/* 语法着色。取的是 VSCode 暗色主题里那一套颜色，学生看着眼熟。 */
+/* 语法着色，直接照搬 GitHub Dark 主题的色值 —— 学生把代码贴进 VSCode
+   看到的就是这几颜色，两边一致他们才不会觉得「判题机看我的代码不一样」。
+   （色值是从主题定义里取的，不是肉眼估的。）
+   注意注释不要斜体：深色背景上斜体的中文和等宽字体都很难看。 */
 .md-typeset .judge-syn--comment {
-  color: #7a8a99; /* 靠低对比度弱化就够了，不要斜体 */
+  color: #6a737d;
 }
 
+/* #include / #define 这类指令，和关键字同色 */
 .md-typeset .judge-syn--preproc {
-  color: #82aaff;
+  color: #f97583;
+}
+
+/* #define 后面的宏名、#include 后面的头文件名之外的那一个标识符 */
+.md-typeset .judge-syn--macro {
+  color: #b392f0;
 }
 
 .md-typeset .judge-syn--string {
-  color: #a5d6a7;
+  color: #9ecbff;
 }
 
 .md-typeset .judge-syn--number {
-  color: #f78c6c;
+  color: #79b8ff;
 }
 
 .md-typeset .judge-syn--keyword {
-  color: #c792ea;
+  color: #f97583;
 }
 
 /* 状态提示：排队中、判题中 */
