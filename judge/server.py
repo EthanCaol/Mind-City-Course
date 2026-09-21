@@ -94,7 +94,14 @@ class App:
 
             since = _ago(config.RATE_LIMIT_WINDOW_S)
             if db.count_since(self.conn, homework, student_id, since) >= config.RATE_LIMIT_MAX_IN_WINDOW:
-                return 429, {"error": "提交太频繁了，请等几分钟再试。"}
+                # 文案跟着配置走，别写死「几分钟」——窗口一改就对不上了
+                minutes = max(1, round(config.RATE_LIMIT_WINDOW_S / 60))
+                return 429, {
+                    "error": (
+                        f"提交太频繁了。{minutes} 分钟内最多交 "
+                        f"{config.RATE_LIMIT_MAX_IN_WINDOW} 次，请稍后再试。"
+                    )
+                }
 
             last = db.last_submit_at(self.conn, homework, student_id)
             if last and _seconds_since(last) < config.MIN_SUBMIT_INTERVAL_S:

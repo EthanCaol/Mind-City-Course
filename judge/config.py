@@ -143,9 +143,11 @@ HANDLER_TIMEOUT_S = 15  # 挡 slowloris
 # ---------------------------------------------------------------- 限流
 
 MIN_SUBMIT_INTERVAL_S = 3  # 两次提交的最小间隔，防连点
-RATE_LIMIT_WINDOW_S = 600
-RATE_LIMIT_MAX_IN_WINDOW = 5  # 每学生每作业 10 分钟 5 次
-RATE_LIMIT_DAILY = 50
+# 每学生每作业，2 分钟内最多交 5 次。
+# 窗口开得小是有意的：重复提交不去重，学生改一版交一版是正常操作，
+# 卡太久会挡着人改错。
+RATE_LIMIT_WINDOW_S = 120
+RATE_LIMIT_MAX_IN_WINDOW = 5
 
 # ---------------------------------------------------------------- git
 
