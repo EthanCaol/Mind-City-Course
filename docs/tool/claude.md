@@ -43,7 +43,19 @@
 
 **Harness**（直译是「马具」，指围绕模型搭建的一整套工具链）决定模型能看到什么信息、能调用哪些工具、怎么把一个大任务拆成若干步。
 
-同一个模型，装进不同的 Harness 里，用起来的效果可以差很非常远。
+同一个模型，装进不同的 Harness 里，用起来的效果可以差很非常远。下面两期视频讲的都是这件事。
+
+一期是同一个模型分别放进 Claude Code 和 Hermes Agent 里跑：
+
+![Claude Code 与 Hermes Agent 对比视频封面](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260922164053870.png)
+
+<https://www.bilibili.com/video/BV1wk3w6kEzp>
+
+另一期讲的是 DeepSeek V4.1-Flash 换一种用法之后的表现：
+
+![DeepSeek V4.1-Flash 用法差异视频封面](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260922164233903.png)
+
+<https://www.bilibili.com/video/BV1Paeb6yEtJ>
 
 好的 Harness 能让模型自己读文件、跑命令、看报错、再改代码，几轮下来就把问题解决了，看上去就像「变聪明了」；而使用了差的 Harness，就算内置再强的模型也无法完成你想要的任务。
 
