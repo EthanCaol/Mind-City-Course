@@ -19,7 +19,7 @@
 
 ## 3. Git 与 GitHub 核心概念
 
-[《Git+Github核心概念大串讲，从零到一全攻略，详细实战教程》](https://www.bilibili.com/video/BV1ySLc6QEcB)
+[《Git+Github 详细实战教程》](https://www.bilibili.com/video/BV1ySLc6QEcB)
 
 ![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260922112640363.png)
 
