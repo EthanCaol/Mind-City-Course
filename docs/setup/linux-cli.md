@@ -2,8 +2,6 @@
 
 <p class="doc-meta"><span>负责助教：<strong>曹奕伦</strong></span><span>实验课时间：<strong>2026-9-23</strong></span></p>
 
-## 1. 入门教程：只学够用的 Linux
-
 强烈推荐这篇文档《只学够用的 Linux：零基础最小入门教程》：
 
 <https://zouht.com/4399.html>
