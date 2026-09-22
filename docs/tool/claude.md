@@ -47,11 +47,13 @@
 
 !!! quote "延伸阅读"
 
-    同一个模型分别放进 Claude Code 和 Hermes Agent 里跑：[《【避坑】选错agent害一生，同一个模型判若两人。Claude Code和Hermes Agent为什么差别这么大？》](https://www.bilibili.com/video/BV1wk3w6kEzp)
+    [《【避坑】选错agent害一生，同一个模型判若两人。Claude Code和Hermes Agent为什么差别这么大？》](https://www.bilibili.com/video/BV1wk3w6kEzp)
 
     ![Claude Code 与 Hermes Agent 对比视频封面](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260922164053870.png)
 
-    DeepSeek V4.1-Flash 换一种用法之后的表现：[《我以为DeepSeek V4.1 flash拉了，后来发现是自己用错了...》](https://www.bilibili.com/video/BV1Paeb6yEtJ)
+!!! quote "延伸阅读"
+
+    [《我以为DeepSeek V4.1 flash拉了，后来发现是自己用错了...》](https://www.bilibili.com/video/BV1Paeb6yEtJ)
 
     ![DeepSeek V4.1-Flash 用法差异视频封面](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260922164233903.png)
 
