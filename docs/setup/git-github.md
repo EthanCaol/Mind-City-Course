@@ -1,5 +1,30 @@
-
 # Git 与 GitHub 配置
 
-<p class="doc-meta"><span>负责助教：<strong>曹奕伦</strong></span><span>实验课时间：<strong>待定</strong></span></p>
+<p class="doc-meta"><span>负责助教：<strong>曹奕伦</strong></span><span>实验课时间：<strong>2026-9-23</strong></span></p>
 
+## 1. GitHub 与国内访问
+
+<https://www.bilibili.com/video/BV1eN411x7yW>
+
+![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260922112508055.png)
+
+## 2. GitHub 账号注册与网站界面
+
+<https://www.bilibili.com/cheese/play/ep1104757>
+
+!!! note "只看这期免费视频就行"
+    可以不用买系列课程，更详细的 Git 教程直接去看后面的视频就行。
+
+![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260922112622323.png)
+
+## 3. Git 与 GitHub 核心概念
+
+<https://www.bilibili.com/video/BV1ySLc6QEcB>
+
+![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260922112640363.png)
+
+## 4. GitHub-SSH 连接配置
+
+<https://www.bilibili.com/video/BV1Sx4y1y7B2>
+
+![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260922112657303.png)

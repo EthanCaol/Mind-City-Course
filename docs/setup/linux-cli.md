@@ -1,4 +1,27 @@
-
 # Linux 命令行基础
 
-<p class="doc-meta"><span>负责助教：<strong>曹奕伦</strong></span><span>实验课时间：<strong>待定</strong></span></p>
+<p class="doc-meta"><span>负责助教：<strong>曹奕伦</strong></span><span>实验课时间：<strong>2026-9-23</strong></span></p>
+
+这门课的实验环境是 Linux，编译、运行、调试都在终端里完成。本页不另行编写教程，只给出网上一份现成的入门材料。
+
+## 1. 入门教程：只学够用的 Linux
+
+推荐颢天的《只学够用的 Linux：零基础最小入门教程》：
+
+<https://zouht.com/4399.html>
+
+该文作者自己也录有一期视频：
+
+<https://www.bilibili.com/video/BV13ctf6RECM>
+
+这篇教程的写法是「最小但够用」：只保留最核心的知识，面向完全没有接触过 Linux 的读者。内容大致包括：
+
+- 内核与发行版、Shell 与命令的基本结构
+- 目录、文件和路径，以及 Linux 的目录结构约定
+- 复制、移动、重命名和删除
+- 文本的查看与编辑
+- 通配符、重定向、命令连接、变量、引号与转义
+- 用户、用户组和权限
+- 软件包管理
+- 远程连接和文件传输
+

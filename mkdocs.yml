@@ -35,11 +35,13 @@ nav:
       - (0) Dev-C++ 环境搭建: setup/dev-cpp.md
       - (0) WSL2 环境搭建: setup/wsl2-vscode.md
       - (0) macOS 环境搭建: setup/macos-vscode.md
+      - (1) Linux 命令行入门: setup/linux-cli.md
+      - (1) Git-GitHub 基础操作: setup/git-github.md
   - 工具:
       - VSCode 入门教程: tool/vscode.md
       - Claude 工具链配置: tool/claude.md
       - DeepSeek 工具链配置: tool/deepseek-harness.md
-      - 小工具推荐: tool/useful.md
+      - 实用小工具推荐: tool/useful.md
   - 题库:
       - 01-标识符常量与数据类型: question/01-标识符常量与数据类型.md
       - 02-格式化输入输出: question/02-格式化输入输出.md
