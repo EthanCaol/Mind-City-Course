@@ -35,7 +35,7 @@ nav:
       - (0) Dev-C++ 环境搭建: setup/dev-cpp.md
       - (0) WSL2 环境搭建: setup/wsl2-vscode.md
       - (0) macOS 环境搭建: setup/macos-vscode.md
-      - (1) Linux 命令行入门: setup/linux-cli.md
+      - (1) Linux 命令行基础: setup/linux-cli.md
       - (1) Git-GitHub 基础操作: setup/git-github.md
   - 工具:
       - VSCode 入门教程: tool/vscode.md
