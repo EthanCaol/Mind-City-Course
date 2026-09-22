@@ -6,7 +6,7 @@
 
 <https://zouht.com/4399.html>
 
-该文作者自己也录有一期视频：
+该文作者自己也给文档录了一期视频：
 
 <https://www.bilibili.com/video/BV13ctf6RECM>
 
