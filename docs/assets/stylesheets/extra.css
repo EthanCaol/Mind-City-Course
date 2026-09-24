@@ -639,7 +639,9 @@
   margin-bottom: 0.3rem;
   overflow-x: auto;
   overflow-y: hidden;
-  scrollbar-color: var(--md-default-fg-color--lighter) var(--md-code-bg-color);
+  /* 滑块淡、轨道透明。跟侧边栏那条同一套写法 —— 轨道一旦铺满颜色，
+     整条滚动条就变成一块横在表头下边的色块，很抢眼。 */
+  scrollbar-color: var(--md-default-fg-color--lighter) #0000;
 }
 
 /* 撑出滚动范围用的，只要宽度对，高度随便 */
@@ -647,23 +649,24 @@
   height: 1px;
 }
 
-/* 滚动条配色跟着主题走，跟侧边栏那条保持一致 */
 .md-typeset .matrix__bar::-webkit-scrollbar {
   height: 0.6rem;
 }
 
-.md-typeset .matrix__bar::-webkit-scrollbar-track {
-  background-color: var(--md-code-bg-color);
-  border-radius: 0.3rem;
+/* 两端的箭头按钮是 Chrome 默认画的，极简样式里不要 */
+.md-typeset .matrix__bar::-webkit-scrollbar-button {
+  display: none;
 }
 
+.md-typeset .matrix__bar::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* 也不做悬停变亮：侧边栏那条同样取消了悬停反馈，
+   主题强调色在这套暗色里很扎眼。 */
 .md-typeset .matrix__bar::-webkit-scrollbar-thumb {
   background-color: var(--md-default-fg-color--lighter);
   border-radius: 0.3rem;
-}
-
-.md-typeset .matrix__bar::-webkit-scrollbar-thumb:hover {
-  background-color: var(--md-default-fg-color--light);
 }
 
 .md-typeset .matrix-loading {
