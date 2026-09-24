@@ -22,7 +22,7 @@ icon: material/bookshelf
 - [C Primer Plus](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/C%20Primer%20Plus-%E7%AC%AC6%E7%89%88-%E4%B8%AD%E6%96%87%E7%89%88.pdf)（自学最推荐）
 - C++ Primer
 - C++ Primer Plus
-- Python 编程：从入门到实践
+- [Python 编程：从入门到实践](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/Python%E7%BC%96%E7%A8%8B%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E8%B7%B5.pdf)
 
 **计算机系统入门**
 
