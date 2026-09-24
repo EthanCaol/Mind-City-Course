@@ -25,6 +25,14 @@
    上差了将近一倍 —— 这是最容易估错的地方。
    --------------------------------------------------------------------------- */
 
+/* 大标题下面也画一条线，写法和下面 h2 那条一样。
+   主要作用是把标题和紧随其后的「本页最后更新于 …」（hooks/revision_notice.py
+   插进来的那行小字）分开 —— 不画线时那行小字像标题的一部分。 */
+.md-typeset h1 {
+  padding-bottom: 0.4rem;
+  border-bottom: 0.05rem solid var(--md-default-fg-color--lighter);
+}
+
 .md-typeset h2 {
   margin-top: 3.5em; /* ≈ 70px */
   /* 横线到下方正文的距离。Material 默认是 .64em（≈ 12.8px），对带横线的
