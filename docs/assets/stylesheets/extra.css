@@ -656,9 +656,22 @@
   font-weight: 700;
 }
 
-.md-typeset .matrix__name {
+/* 姓名列钉在左边：横向滚到右边几列时，不知道看的是哪一行这张表就白看了。
+
+   sticky 的格子必须有不透明的底色 —— 数据格会从它底下滚过去，底色透明就
+   直接透出来了。所以这里显式写死两种底，而不是让它跟随行底：
+   奇数行用页面底色，偶数行盖住上面那条斑马纹（选择器更具体，赢得过它）。 */
+.md-typeset table.matrix .matrix__name {
+  position: sticky;
+  left: 0;
+  z-index: 1;
   width: 9rem;
   text-align: left;
+  background-color: var(--md-default-bg-color);
+}
+
+.md-typeset table.matrix tbody tr:nth-child(even) .matrix__name {
+  background-color: var(--md-code-bg-color);
 }
 
 .md-typeset .matrix__cell {
