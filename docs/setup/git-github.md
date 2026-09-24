@@ -1,7 +1,5 @@
 # Git 与 GitHub 配置
 
-<p class="doc-meta"><span>负责助教：<strong>曹奕伦</strong></span><span>实验课时间：<strong>2026-9-30</strong></span></p>
-
 ## 1. GitHub 与国内访问
 
 [《全世界最强的网站，但是你却上不去？》](https://www.bilibili.com/video/BV1eN411x7yW)

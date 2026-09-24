@@ -64,14 +64,8 @@ def on_page_content(html, page, config, files):
 
     notice = _render_notice(stamp.group(0))
 
-    # 插到标题下方那组元信息之后。
-    #
-    # 优先排在 .doc-meta（负责助教 / 实验课时间）后面 —— 那行是文档的身份信息，
-    # 应该紧贴标题；提示排在它下面，两行小字连成一组。没有 .doc-meta 的页面
-    # 就退化为直接跟在 </h1> 后面；连 h1 都没有的（极少见）放到最前面。
-    match = re.search(r'<p class="doc-meta">.*?</p>', html, re.S) or re.search(
-        r"</h1>", html
-    )
+    # 插到标题下方。连 h1 都没有的（极少见）放到最前面。
+    match = re.search(r"</h1>", html)
     if match:
         return html[: match.end()] + "\n" + notice + html[match.end() :]
     return notice + html

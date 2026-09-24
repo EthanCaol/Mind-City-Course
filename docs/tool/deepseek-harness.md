@@ -1,8 +1,6 @@
 
 # DeepSeek Harness 配置
 
-<p class="doc-meta"><span>负责助教：<strong>曹奕伦</strong></span><span>实验课时间：<strong>待定</strong></span></p>
-
 !!! warning "开始之前：本篇用的是社区自制版，而且全程不需要科学上网"
 
     **一、这是社区自制版。** DSH Desktop **不是 DeepSeek 官方出品**，而是社区项目把官方的 DeepSeek Harness 打包成的桌面封装版。**官方版可能最近几天就会发布**，现在就想用起来的，本篇这套现在就能跑。

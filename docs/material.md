@@ -4,8 +4,6 @@ icon: material/bookshelf
 
 # 课程资料
 
-<p class="doc-meta"><span>负责助教：<strong>曹奕伦</strong></span><span>整理时间：<strong>2026-9-15</strong></span></p>
-
 本页汇总助教觉得实用的书目、网站和课件，以及每周的课程安排。
 
 ## 1. 推荐阅读书目

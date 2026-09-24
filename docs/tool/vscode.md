@@ -1,8 +1,6 @@
 
 # VSCode 入门教程
 
-<p class="doc-meta"><span>负责助教：<strong>曹奕伦</strong></span><span>实验课时间：<strong>待定</strong></span></p>
-
 ## 1. 跟着视频配置（强烈推荐）
 
 下面这两期视频讲得很细，**非常建议大家跟着做一遍**：

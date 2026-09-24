@@ -1,7 +1,5 @@
 # Dev-C++ 使用教程
 
-<p class="doc-meta"><span>负责助教：<strong>余仕达</strong></span><span>实验课时间：<strong>2026-9-16</strong></span></p>
-
 ## 1. 安装 Dev-C++
 
 ### 1.1 下载安装包

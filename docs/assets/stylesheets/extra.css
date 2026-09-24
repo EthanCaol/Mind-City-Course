@@ -166,45 +166,18 @@
 }
 
 /* ---------------------------------------------------------------------------
-   大标题下方的小字（负责助教 / 实验课时间）
-
-   用法：每项用一个 <span> 包起来，整行放在 <p class="doc-meta"> 里：
-
-       <p class="doc-meta"><span>负责助教：<strong>曹奕伦</strong></span><span>实验课时间：<strong>2026-9-16</strong></span></p>
-
-   之所以用 flex 而不是在 Markdown 里打空格：空格的宽度看不见也数不清，
-   改起来全靠猜。flex 的 gap 是一个明确的数字，想调多宽就改一个值。
-
-   样式做成「小一号 + 淡一档」，让它读起来像标题的附注而不是正文。
-
-   margin-top 是负值：Material 给 h1 设了 1.25em 的下边距（约 32px），
-   不减掉的话小字会离标题很远，看起来像独立的一段。
-   --------------------------------------------------------------------------- */
-
-.md-typeset .doc-meta {
-  display: flex;
-  flex-wrap: wrap; /* 窄屏放不下时自动换行，不会挤成一团 */
-  gap: 0.3rem 1.8rem; /* 行间距 0.3rem，两项之间 1.8rem ← 只改这个数字 */
-  font-size: 0.72rem; /* 正文是 0.8rem，收小一档 */
-  color: var(--md-default-fg-color--light);
-  margin-top: -1em;
-  /* 下边距特意留小：紧跟其后的是「最后更新」提示（见下方 .doc-updated），
-     两行小字属于同一组元信息，应该贴近。两者之间的空隙由这条 margin 决定，
-     与正文的距离则由 .doc-updated 的下边距负责。 */
-  margin-bottom: 0.4em;
-}
-
-/* ---------------------------------------------------------------------------
    页顶的「最后更新」提示
 
-   日期由 hooks/revision_notice.py 插到标题下方（排在 .doc-meta 之后），
-   这里只管样式。文案在 hook 文件里改。
+   日期由 hooks/revision_notice.py 插到标题下方，这里只管样式。
+   文案在 hook 文件里改。
    --------------------------------------------------------------------------- */
 
 .md-typeset .doc-updated {
-  font-size: 0.72rem; /* 与 .doc-meta 同字号，视觉上归为一组 */
+  font-size: 0.72rem; /* 正文是 0.8rem，收小一档 */
   color: var(--md-default-fg-color--light);
-  margin-top: 0; /* 与 .doc-meta 的下边距折叠，取较大者 */
+  /* 负值是为了抵消 Material 给 h1 设的 1.25em 下边距（约 32px），
+     不减掉的话小字会离标题很远，看起来像独立的一段。 */
+  margin-top: -1em;
   margin-bottom: 2em; /* 与正文拉开距离 */
 }
 

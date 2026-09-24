@@ -1,8 +1,6 @@
 
 # WSL2 + GCC + VSCode 环境搭建
 
-<p class="doc-meta"><span>负责助教：<strong>曹奕伦</strong></span><span>实验课时间：<strong>2026-9-16</strong></span></p>
-
 面向零基础、使用 Win11 操作系统的同学。全过程只需要在 Windows 终端里粘贴命令，**不需要任何前置知识**。中途遇到任何不懂的术语或者问题，请立即咨询 AI，或马上向助教求助。
 
 !!! tip "课程推荐 AI 工具"

@@ -1,8 +1,6 @@
 
 # Claude 和 DeepSeek 配置
 
-<p class="doc-meta"><span>负责助教：<strong>曹奕伦</strong></span><span>实验课时间：<strong>待定</strong></span></p>
-
 !!! warning "开始之前：整篇教程的前置基础是科学上网"
 
     Claude 的母公司 Anthropic **不向中国大陆和中国香港特别行政区提供服务**，直连一律返回 `App unavailable in region`。所以这篇教程**从头到尾都建立在科学上网的基础上** —— 下载客户端、安装 Claude Code 走的都是官方渠道。

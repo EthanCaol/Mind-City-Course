@@ -1,8 +1,6 @@
 
 # macOS + GCC + VSCode 环境搭建
 
-<p class="doc-meta"><span>负责助教：<strong>曹奕伦</strong></span><span>实验课时间：<strong>2026-9-16</strong></span></p>
-
 !!! warning "本篇内容由 AI 生成"
     助教没有使用过 Mac，所以本文的内容是由 AI 生成的，助教只做了**语法和逻辑上的初步校对**。
 
