@@ -2,9 +2,11 @@
 
 ## 大学生 Windows 基础
 
-[《大学生 Windows 基础》合集（共 15 期）](https://space.bilibili.com/3546676673382527/lists/5854446)
+!!! quote "合集"
 
-![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260924145519651.jpg)
+    [《大学生 Windows 基础》合集（共 15 期）](https://space.bilibili.com/3546676673382527/lists/5854446)
+
+    ![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260924145519651.jpg)
 
 - [年轻人不会电脑有错吗？【大学生Windows基础丨前言】](https://www.bilibili.com/video/BV1mwjnz8Eas)
 - [学会关机【大学生Windows基础01】](https://www.bilibili.com/video/BV1dd7nzjEBm)
@@ -24,9 +26,11 @@
 
 ## 浏览器基础教程
 
-[《浏览器基础教程》合集（共 5 期）](https://space.bilibili.com/3546676673382527/lists/8673062)
+!!! quote "合集"
 
-![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260924145519288.jpg)
+    [《浏览器基础教程》合集（共 5 期）](https://space.bilibili.com/3546676673382527/lists/8673062)
+
+    ![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260924145519288.jpg)
 
 - [前言&界面介绍【浏览器基础01】](https://www.bilibili.com/video/BV1Zr3E6jE6v)
 - [输入网址【浏览器基础02】](https://www.bilibili.com/video/BV1NpuP6jE2Q)

@@ -29,7 +29,7 @@
 !!! quote "延伸阅读"
     想弄明白 Unix 和 Linux 的演化与关系，可以看这期视频：[《操作系统发展史｜仿生之旅》](https://www.bilibili.com/video/BV1Zc411D7sG/)
 
-![《操作系统发展史》视频封面](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913211826711.jpg)
+    ![《操作系统发展史》视频封面](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913211826711.jpg)
 
 C语言就是为了 Unix 操作系统而生的。它不是先被设计好一门语言、再找个操作系统来跑，而是为了重写 Unix 才被造出来的，之后几十年语言和系统一起演化，所以 C语言里到处是 Unix 的影子：
 
@@ -41,7 +41,7 @@ C语言就是为了 Unix 操作系统而生的。它不是先被设计好一门�
 !!! quote "延伸阅读"
     想了解 GNU 计划和自由软件运动是怎么来的，可以看这期视频：[《计算机博物志·最后的黑客：理查德·马修·斯托曼》](https://www.bilibili.com/video/BV11R4y1b7zc)
 
-![GNU 计划与自由软件运动相关视频封面](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913211923938.jpg)
+    ![GNU 计划与自由软件运动相关视频封面](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260913211923938.jpg)
 
 并且 Unix 家族至今仍是世界上使用最广泛的操作系统：安卓手机的底层就是 Linux 内核，全世界的服务器跑的都是 Linux，路由器、机顶盒等所有智能设备里面也跑着它，包括 Mac 和 iPhone 的系统内核同样是 Unix 家族。
 

@@ -2,17 +2,21 @@
 
 强烈推荐这篇文档《只学够用的 Linux：零基础最小入门教程》：
 
-<https://zouht.com/4399.html>
+!!! quote "原文"
 
-![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260924145737281.png)
+    <https://zouht.com/4399.html>
+
+    ![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260924145737281.png)
 
 ------
 
 该文作者自己也给文档录了一期视频：
 
-<https://www.bilibili.com/video/BV13ctf6RECM>
+!!! quote "视频"
 
-![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260924145245076.png)
+    <https://www.bilibili.com/video/BV13ctf6RECM>
+
+    ![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260924145245076.png)
 
 这篇教程的写法是「最小但够用」：只保留最核心的知识，面向完全没有接触过 Linux 的读者。内容大致包括：
 

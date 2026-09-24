@@ -5,12 +5,14 @@
 
 下面这两期视频讲得很细，**非常建议大家跟着做一遍**：
 
-- [《VSCode 配置 | 外观 | 通用型扩展 | Minimal》](https://www.bilibili.com/video/BV1YW4y1M7uX)
-- [《VSCode 配置 | C/C++ | MakeFile | CMake | Minimal》](https://www.bilibili.com/video/BV1H24y1D7Kn)
+!!! quote "视频"
 
-![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260914214817142.jpg)
+    - [《VSCode 配置 | 外观 | 通用型扩展 | Minimal》](https://www.bilibili.com/video/BV1YW4y1M7uX)
+    - [《VSCode 配置 | C/C++ | MakeFile | CMake | Minimal》](https://www.bilibili.com/video/BV1H24y1D7Kn)
 
-![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260914214845964.jpg)
+    ![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260914214817142.jpg)
+
+    ![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260914214845964.jpg)
 
 
 ### 1.1 先新建一个配置文件（Profile）
