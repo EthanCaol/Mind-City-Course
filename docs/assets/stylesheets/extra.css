@@ -715,7 +715,7 @@
    得先滚到表尾才够得着。
    它不装内容，所以高度就是滚动条的高度（跟下面 ::-webkit-scrollbar 对齐）。 */
 .md-typeset .matrix__bar {
-  height: 0.4rem;
+  height: 0.3rem;
   margin-bottom: 0.3rem;
   overflow-x: auto;
   overflow-y: hidden;
@@ -727,7 +727,7 @@
 }
 
 .md-typeset .matrix__bar::-webkit-scrollbar {
-  height: 0.4rem;
+  height: 0.3rem;
 }
 
 /* 两端的箭头按钮是 Chrome 默认画的，极简样式里不要 */
@@ -739,7 +739,7 @@
    再深一档就成了横在表头下边的一条色块，比表格本身还抢眼。 */
 .md-typeset .matrix__bar::-webkit-scrollbar-track {
   background-color: var(--md-default-fg-color--lightest);
-  border-radius: 0.2rem;
+  border-radius: 0.15rem;
 }
 
 /* 滑块分常态、悬停、拖动三档，同一支灰的三种透明度。
@@ -747,7 +747,7 @@
    改成常亮不悬停的。 */
 .md-typeset .matrix__bar::-webkit-scrollbar-thumb {
   background-color: var(--md-default-fg-color--lighter);
-  border-radius: 0.2rem;
+  border-radius: 0.15rem;
 }
 
 .md-typeset .matrix__bar::-webkit-scrollbar-thumb:hover {
@@ -762,9 +762,9 @@
 
    这里必须用 @supports 圈起来，不能像侧边栏那样无条件写：scrollbar-color
    一旦不是 auto，上面那几条 ::-webkit-scrollbar 就全部作废，Chrome 会改按
-   平台默认画 —— 比 0.4rem 高，还要被 overflow-y 裁掉一截。侧边栏那条反
+   平台默认画 —— 比 0.3rem 高，还要被 overflow-y 裁掉一截。侧边栏那条反
    过来，Material 自己就是用标准属性写的，所以压悬停色只能写 scrollbar-color。
-   Firefox 认 thin，正好塞进 0.4rem。 */
+   Firefox 只有 thin 这一档可调，比 0.3rem 厚些，槽会裁掉一点。 */
 @supports not selector(::-webkit-scrollbar) {
   .md-typeset .matrix__bar {
     scrollbar-width: thin;
