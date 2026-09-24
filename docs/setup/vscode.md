@@ -7,10 +7,13 @@
 
 !!! quote "视频"
 
-    - [《VSCode 配置 | 外观 | 通用型扩展 | Minimal》](https://www.bilibili.com/video/BV1YW4y1M7uX)
-    - [《VSCode 配置 | C/C++ | MakeFile | CMake | Minimal》](https://www.bilibili.com/video/BV1H24y1D7Kn)
+    [《VSCode 配置 | 外观 | 通用型扩展 | Minimal》](https://www.bilibili.com/video/BV1YW4y1M7uX)
 
     ![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260914214817142.jpg)
+
+!!! quote "视频"
+
+    [《VSCode 配置 | C/C++ | MakeFile | CMake | Minimal》](https://www.bilibili.com/video/BV1H24y1D7Kn)
 
     ![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260914214845964.jpg)
 
