@@ -25,14 +25,14 @@
 - 软件包管理
 - 远程连接和文件传输
 
-## 阅读登记
+---
 
-读完这一篇的话，填上学号点一下就行。不计分，只是让助教知道大家跟到哪了。
+!!! todo "文档完成登记：告诉助教一下，你成功跑通了整个文档的流程"
 
-<div class="read" id="read" data-page="linux-cli">
-  <div class="read__bar">
-    <input id="read-id" class="read__input" type="text" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="11 位学号">
-    <button id="read-submit" type="button">我已读完</button>
-  </div>
-  <p class="read__note" id="read-note" hidden></p>
-</div>
+    <div class="read" id="read" data-page="linux-cli">
+      <div class="read__bar">
+        <input id="read-id" class="read__input" type="text" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="在这里输入你的学号">
+        <button id="read-submit" type="button">我已读完</button>
+      </div>
+      <p class="read__note" id="read-note" hidden></p>
+    </div>
