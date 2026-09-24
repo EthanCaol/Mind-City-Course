@@ -14,7 +14,6 @@ import time
 from pathlib import Path
 
 from . import config, db, verdict as V
-from .gitstore import GitStore
 from .isolate_runner import BoxPool, judge_ready
 from .judger import judge_submission
 from .problem import Problem, ProblemError, load_problem
@@ -38,11 +37,10 @@ def mem_available_kb() -> int:
 
 
 class JudgeWorker(threading.Thread):
-    def __init__(self, db_path: Path, roster: Roster, gitstore: GitStore | None = None) -> None:
+    def __init__(self, db_path: Path, roster: Roster) -> None:
         super().__init__(name="judge-worker", daemon=True)
         self.db_path = Path(db_path)
         self.roster = roster
-        self.git = gitstore or GitStore()
         self._wake = threading.Event()
         self._stop = threading.Event()
         self._pool = BoxPool()
@@ -170,16 +168,3 @@ class JudgeWorker(threading.Thread):
         # 判完立刻抹掉源码 —— 判题是异步的，源码得在队列里待一会儿，
         # 但没有理由把学生一学期的代码全存下来。
         db.clear_source(conn, sub_id)
-        self._write_grades(conn, row["homework"])
-
-    def _write_grades(self, conn, homework: str) -> None:
-        """重写成绩单。
-
-        只做本地写文件（微秒级），联网推送交给 sync 线程，所以这里失败
-        也不能让判题结果受影响。
-        """
-        try:
-            rows = db.export_grades(conn, homework, self.roster.all())
-            self.git.write_grades(homework, rows)
-        except Exception:
-            log.exception("写成绩单失败（判题结果已入库，不受影响）")

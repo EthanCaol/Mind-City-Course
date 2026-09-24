@@ -4,7 +4,7 @@
 测试点的输入和期望**不入库** —— 展示的时候直接从题目文件读，它们本来就是公开的。
 只存学生程序的实际输出。
 
-SQLite 是权威数据源；private 仓库里的 JSONL 只是它的耐久备份，推送失败不影响判题。
+SQLite 是权威数据源：花名册有 COS 上的权威副本，其余数据都从这两张表算出来。
 """
 
 from __future__ import annotations
@@ -377,18 +377,6 @@ def list_submissions(
     ).fetchall()
 
 
-def passed_students(conn: sqlite3.Connection, homework: str) -> dict[str, sqlite3.Row]:
-    """该题目下每个学号最好的一次 AC 记录，用于导出成绩。"""
-    rows = conn.execute(
-        """SELECT s.* FROM submissions s
-             JOIN (SELECT student_id, MIN(id) AS first_id FROM submissions
-                    WHERE homework=? AND verdict='AC' GROUP BY student_id) t
-               ON s.id = t.first_id""",
-        (homework,),
-    ).fetchall()
-    return {r["student_id"]: r for r in rows}
-
-
 def passed_ids(conn: sqlite3.Connection, homework: str) -> set[str]:
     """该题目下通过过的学号。用于「作业完成情况」页。"""
     return {
@@ -414,37 +402,6 @@ def read_ids(conn: sqlite3.Connection, page: str) -> set[str]:
         r["student_id"]
         for r in conn.execute("SELECT student_id FROM reads WHERE page=?", (page,))
     }
-
-
-def export_grades(
-    conn: sqlite3.Connection, homework: str, roster: dict[str, str]
-) -> list[str]:
-    """成绩单的 CSV 行。`roster` 是 学号→姓名。
-
-    没交的人也要占一行，助教一眼能看出谁还没交 —— 只列交过的人，"谁没交"
-    反而得自己比对名单。
-    """
-    passed = passed_students(conn, homework)
-    submitted = {
-        r["student_id"]
-        for r in conn.execute(
-            "SELECT DISTINCT student_id FROM submissions WHERE homework=?", (homework,)
-        )
-    }
-
-    rows = ["学号,姓名,是否通过,首次通过时间,通过测试点"]
-    for sid, name in sorted(roster.items()):
-        row = passed.get(sid)
-        if row:
-            rows.append(
-                f"{sid},{name},是,{row['finished_at']},"
-                f"{row['passed_cases']}/{row['total_cases']}"
-            )
-        elif sid in submitted:
-            rows.append(f"{sid},{name},否,,")
-        else:
-            rows.append(f"{sid},{name},未提交,,")
-    return rows
 
 
 def counts_by_verdict(conn: sqlite3.Connection, homework: str | None = None) -> dict[str, int]:

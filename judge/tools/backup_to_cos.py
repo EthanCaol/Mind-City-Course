@@ -3,11 +3,10 @@
 
     python3 judge/tools/backup_to_cos.py
 
-传三样，都落在桶里 `backup/` 下面，每次覆盖同名对象：
+传两样，都落在桶里 `backup/` 下面，每次覆盖同名对象：
 
     backup/judge.sqlite3    数据库快照
     backup/roster.csv       花名册
-    backup/grades/*.csv     成绩单
 
 **数据库不能直接 cp。** 这个库是 WAL 模式，主文件可能只有几十 KB，绝大部分数据还在
 `judge.sqlite3-wal` 里（实测主文件 48 KB / WAL 4.1 MB，直接拷主文件等于只备份了个壳）。
@@ -49,12 +48,9 @@ def snapshot_db(dest: Path) -> float:
     return dest.stat().st_size / 1e6
 
 
-def upload(local: Path, key: str, recursive: bool = False) -> None:
+def upload(local: Path, key: str) -> None:
     cmd = [config.COS_BIN, "-b", config.COS_BACKUP_BUCKET, "upload", "-f",
-           "-H", ACL_HEADER]
-    if recursive:
-        cmd.append("-r")
-    cmd += [str(local), key]
+           "-H", ACL_HEADER, str(local), key]
 
     done = subprocess.run(cmd, capture_output=True, text=True)
     if done.returncode != 0:
@@ -66,7 +62,6 @@ def upload(local: Path, key: str, recursive: bool = False) -> None:
 def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
 
-    grades = config.DATA_DIR / "grades"
     if not config.ROSTER_PATH.exists():
         raise SystemExit(f"花名册不存在：{config.ROSTER_PATH}")
 
@@ -78,13 +73,6 @@ def main() -> int:
 
         upload(snap, f"{config.COS_BACKUP_PREFIX}/judge.sqlite3")
         upload(config.ROSTER_PATH, f"{config.COS_BACKUP_PREFIX}/roster.csv")
-
-        # 成绩单是助教导出后才有的，平时这个目录是空的 —— 空目录不上传，
-        # 反正数据库快照里什么都有，成绩单随时能从它重新导出。
-        if grades.is_dir() and any(grades.iterdir()):
-            upload(grades, f"{config.COS_BACKUP_PREFIX}/grades", recursive=True)
-        else:
-            log.info("成绩单目录是空的，跳过")
 
     log.info("备份完成")
     return 0

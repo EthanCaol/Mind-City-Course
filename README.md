@@ -241,7 +241,7 @@ sudo systemctl enable --now isolate          # 没起就拉起来
 | 前端 | 作业页里的 `<div id="judge" data-homework="...">` + `docs/assets/javascripts/judge.js` |
 | 判题后端 | `judge/` 目录（公开仓库），systemd 用户服务 `mind-city-judge`，监听 `127.0.0.1:9100` |
 | 沙箱 | `isolate` 2.7，源码编译装在 `/usr/local` |
-| 数据 | `judge/data/`，独立的 **private** 仓库 `EthanCaol/Mind-City-Course-OJ` |
+| 数据 | `judge/data/`（本机，被外层仓库 gitignore）；花名册的权威副本在 COS 上 |
 
 ### 安装 isolate（一次性）
 
@@ -289,24 +289,28 @@ ASLR enabled、THP），**都不是阻断项**，别去改 —— 尤其不要�
 
 编译用的源码放在 `~/isolate`，运行时用不到，可以删。
 
-### 数据仓库
+### 数据
 
-`judge/data/` 是一个独立的 private 仓库，**只有 `roster.csv` 和 `grades/<作业>.csv`**
-—— 学生源码判完即从数据库抹掉，一行都不落盘，也从不写进 git。
+`judge/data/` 就是个本机目录（曾经是一个 private git 仓库，2026-09 起退役），
+学生源码判完即从数据库抹掉，一行都不落盘。数据本身两样：
 
-```bash
-gh repo create EthanCaol/Mind-City-Course-OJ --private
-```
+| 文件 | 说明 |
+|---|---|
+| `judge.sqlite3` | 权威数据源：结论、通过数、逐测试点判定。WAL 模式 |
+| `roster.csv` | 花名册。**权威副本在 COS 桶根**，服务启动时拉一次覆盖本地 |
 
-它同时被外层公开仓库 gitignore。这是硬要求：里面有学生姓名学号；而且数据一旦提交
-进外层仓库，本地就有未推送的 commit，部署脚本的 `git pull --ff-only` 会失败，
+`judge/data/` 被外层公开仓库 gitignore。这是硬要求：里面有学生姓名学号；而且数据一旦
+提交进外层仓库，本地就有未推送的 commit，部署脚本的 `git pull --ff-only` 会失败，
 **整个文档站静默停止更新**。
+
+改名单：改好本地那份 → `coscmd upload` 到桶根 → 重启判题服务。完整步骤见
+`judge/README.md`（含必须带 `x-cos-acl: private` 的原因）。
 
 ### 备份
 
 `mind-city-backup.timer` 每周一 04:00 跑 `judge/tools/backup_to_cos.py`，把**数据库快照
-和 `roster.csv` 覆盖式**传到 COS 的 `backup/` 前缀下（`grades/` 平时是空的就跳过）。
-这是除了数据仓库之外的第二份异地副本，也是助教不用 git 就能直接下载的那份。
+和 `roster.csv` 覆盖式**传到 COS 的 `backup/` 前缀下。这是助教不用 git、不用装 sqlite3
+就能直接下载的那份。
 
 两个要点：
 

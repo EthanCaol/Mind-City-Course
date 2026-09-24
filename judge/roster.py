@@ -1,10 +1,10 @@
 """花名册的读取、缓存与匹配。
 
 花名册是 `data/roster.csv`（两列：学号,姓名），由助教维护、判题服务**只读**。
-文件本体在一个独立的 private 仓库里（EthanCaol/Mind-City-Course-OJ），
-因为里面有学生姓名学号 —— 本仓库是 public 的，绝不能放进来。
+权威副本在 COS 上（桶根的 `roster.csv`，对象设成私有），因为里面有学生姓名学号
+—— 本仓库是 public 的，绝不能放进来。
 
-服务从 git 拉到新版本后调 `reload()`。加载失败时**保留旧数据**：
+服务启动时从 COS 拉到新版本后调 `reload()`。加载失败时**保留旧数据**：
 花名册拉不到不该让判题停摆，宁可继续用上一次的副本。
 """
 
@@ -13,9 +13,12 @@ from __future__ import annotations
 import csv
 import io
 import logging
+import subprocess
 import threading
 import time
 from pathlib import Path
+
+from . import config
 
 log = logging.getLogger("judge.roster")
 
@@ -111,3 +114,34 @@ class Roster:
     def loaded_at(self) -> float | None:
         with self._lock:
             return self._loaded_at
+
+
+def pull_from_cos(roster: Roster) -> bool:
+    """从 COS 拉一份花名册覆盖本地，再重新加载。返回是否更新成功。
+
+    拉不到（对象不存在、网络不通、超时）就继续用本地那份 —— 名单拉不到不该让判题停摆。
+    先下到临时文件再原子替换：中途断线会留下半截文件，而这份名单是权威的，
+    半截名单会让服务按错误的名单判分。
+
+    服务启动时在一个独立线程里调它，网络慢也不至于拖住启动。
+    """
+    tmp = roster.path.with_name(roster.path.name + ".tmp")
+    try:
+        done = subprocess.run(
+            [config.COS_BIN, "-b", config.COS_BACKUP_BUCKET, "download", "-f",
+             config.COS_ROSTER_KEY, str(tmp)],
+            capture_output=True, text=True, timeout=config.COS_TIMEOUT_S,
+        )
+    except subprocess.TimeoutExpired:
+        log.warning("从 COS 拉花名册超时，继续用本地那份")
+        return False
+
+    if done.returncode != 0 or not tmp.exists():
+        log.warning("从 COS 拉花名册失败，继续用本地那份：%s",
+                    (done.stderr or done.stdout).strip()[:200])
+        tmp.unlink(missing_ok=True)
+        return False
+
+    tmp.replace(roster.path)
+    log.info("花名册已从 COS 更新")
+    return roster.reload_or_keep()

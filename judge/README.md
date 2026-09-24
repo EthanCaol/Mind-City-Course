@@ -14,7 +14,7 @@ Caddy   handle /judge/api/*  → 127.0.0.1:9100
 mind-city-judge.service（systemd --user，标准库 http.server）
    ├─ SQLite 当队列 + 单 worker 线程（2 核机器，判题必须串行）
    ├─ isolate box：写 main.c → 编译 → 逐测试点 run → cleanup
-   └─ judge/data/（独立 private 仓库，git 推送由单独线程去抖批量做）
+   └─ judge/data/（本机目录；花名册启动时从 COS 拉，整份数据每周备份回 COS）
 ```
 
 服务是 user 级 unit，`Linger=yes` 已开，开机自启：
@@ -43,10 +43,9 @@ unit，user 级 unit 引用不到，所以没法靠 `After=` 保证顺序——�
 | `verdict.py` | meta → AC/WA/TLE/MLE/RE/CE/OLE |
 | `judger.py` | 判一份提交：编译一次 + 跑 N 个测试点 |
 | `worker.py` | 单 worker 线程、队列消费、重启恢复、内存闸门 |
-| `gitstore.py` | 私有数据仓库的拉取与推送 |
 | `server.py` | HTTP 接口 |
 | `problems/<作业>/` | 题面参数 + 测试点（公开仓库，随代码一起版本管理） |
-| `data/` | **独立 private 仓库**，见下 |
+| `data/` | 本机数据目录（被外层仓库 gitignore），见下 |
 
 ## 数据在哪
 
@@ -60,8 +59,8 @@ unit，user 级 unit 引用不到，所以没法靠 `After=` 保证顺序——�
 
 - **SQLite（`data/judge.sqlite3`）是权威数据源**：学号、姓名、结论、通过数、
   逐测试点的判定与耗时内存、学生那次的实际输出。全在本机。
-- `data/` 同时是一个**独立的 private git 仓库**（`EthanCaol/Mind-City-Course-OJ`），
-  里面只有 `roster.csv` 和 `grades/<作业>.csv`，是成绩的异地备份。
+- **花名册的权威副本在 COS 上**（桶根的 `roster.csv`，对象设成私有）。助教改完名单
+  上传，服务启动时拉一次到 `data/roster.csv`；拉不到就用本地那份，判题照常。
 - `data/` 在外层公开仓库里被 **gitignore** 掉。这一点是硬要求：里面有学生姓名学号。
   而且数据一旦提交进外层仓库，本地就有未推送的 commit，部署脚本的
   `git pull --ff-only` 会失败，**整个文档站静默停止更新**。
@@ -71,21 +70,25 @@ unit，user 级 unit 引用不到，所以没法靠 `After=` 保证顺序——�
 | 动作 | 时机 |
 |---|---|
 | 拉花名册 | **只在服务启动时拉一次**（名单不再变了，没有轮询的必要） |
-| 推成绩单 | **不自动推**，手动触发即可 |
+| 数据库快照 + 花名册备份到 COS | **每周一 04:00**（`mind-city-backup.timer`），覆盖式 |
 
-成绩单不自动推送，因为仓库里只有名单和成绩，没有学生代码，没有定时备份的必要。
-改了名单又不想重启服务，或者想把成绩推上去，手动触发：
+改名单的流程：改好本地那份 → 传到桶根 → 重启服务。
 
 ```bash
-TOKEN=$(cat ~/.config/mind-city/judge-admin-token)
-curl -X POST -H "Authorization: Bearer $TOKEN" https://mind-city.com/judge/api/admin/sync
+coscmd -b image-1379176255 upload -f -H "x-cos-acl: private" roster.csv roster.csv
+systemctl --user restart mind-city-judge
+journalctl --user -u mind-city-judge | grep 花名册     # 应看到「花名册已从 COS 更新」
 ```
 
-它做三件事：拉花名册、本地提交、推送到 private 仓库。失败会记进
-`journalctl --user -u mind-city-judge`。
+**别漏了 `x-cos-acl: private`**：那个桶是公开读的（站点的图挂在上面），漏了这个头
+就等于把学生姓名学号摊在公网上。传完拿不带签名的 curl 验一下，应当返回 403。
 
-**代价**：成绩单只在这台机器上（外加手动推上去的副本）。机器整个坏掉的话，
-上次推送之后的成绩就没了。真在意的话定期跑一下上面那条命令。
+**代价**：数据库只在这台机器上，最新的异地副本是周一凌晨那份 —— 一周内机器整个坏掉
+的话，这一周的成绩就没了。真在意的话手动跑一次：
+
+```bash
+systemctl --user start mind-city-backup.service
+```
 
 ## 加一份新作业
 
@@ -133,8 +136,7 @@ curl -X POST -H "Authorization: Bearer $TOKEN" https://mind-city.com/judge/api/a
 **页面清单写在 `config.READ_PAGES` 里**，不扫 docs 目录。加一篇带登记栏的实验课文档，
 要在那里补一条 —— 否则该页登记会返回「没有这一页」，总览页也不会出现那一列。
 
-`reads` 只存在 SQLite 里，不进 private 数据仓库，理由和成绩单不自动推送一样：
-不计分的数据没有定时备份的必要。
+`reads` 只存在 SQLite 里，跟着数据库一起每周备份到 COS —— 不计分，丢了也不影响成绩。
 
 ## 几个容易踩的地方
 

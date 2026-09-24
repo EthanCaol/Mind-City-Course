@@ -84,6 +84,11 @@ COS_BIN = "/home/ethan/miniconda3/bin/coscmd"
 COS_BACKUP_BUCKET = "image-1379176255"
 COS_BACKUP_PREFIX = "backup"
 
+# 花名册的权威副本放在桶根上，助教改完名单上传到这里，服务启动时拉一次。
+# 别跟 backup/roster.csv 搞混：那份是每周自动备份的产物，只读不回传。
+COS_ROSTER_KEY = "roster.csv"
+COS_TIMEOUT_S = 60
+
 # --cg 必须始终打开。不加就等于没做内存隔离：--mem 只落到 RLIMIT_AS，
 # 没有 cgroup 记账，meta 里也不会出现 cg-mem。
 USE_CG = True
@@ -194,15 +199,5 @@ MIN_SUBMIT_INTERVAL_S = 3  # 两次提交的最小间隔，防连点
 RATE_LIMIT_WINDOW_S = 120
 RATE_LIMIT_MAX_IN_WINDOW = 5
 
-# ---------------------------------------------------------------- git
-
-GIT_REMOTE = "origin"
-GIT_BRANCH = "main"
-GIT_PULL_TIMEOUT_S = 30
-GIT_PUSH_TIMEOUT_S = 60
-
-# 花名册不再变了，只在服务启动时从数据仓库拉一次。想手动刷就调
-# POST /api/admin/sync，或者重启服务。
-#
-# 成绩单**不自动推送** —— 仓库里只有名单和成绩，没有学生代码，没有定时
-# 备份的必要。想推就调 POST /api/admin/sync。
+# 花名册不再变了，只在服务启动时从 COS 拉一次（见 roster.pull_from_cos）。
+# 想手动刷就重启服务。

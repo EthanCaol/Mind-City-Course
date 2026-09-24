@@ -22,10 +22,9 @@ from urllib.parse import parse_qs, urlparse
 
 from . import config, db, verdict as V
 from .identity import FORMAT_HINT, STUDENT_ID_RE, extract_student_id
-from .gitstore import GitStore
 from .isolate_runner import judge_ready
 from .problem import ProblemError, list_problems, load_problem
-from .roster import Roster
+from .roster import Roster, pull_from_cos
 from .worker import JudgeWorker
 
 log = logging.getLogger("judge.server")
@@ -48,13 +47,11 @@ class App:
             raise SystemExit(f"花名册加载失败：{config.ROSTER_PATH}")
 
         self.admin_token = load_admin_token()
-        self.git = GitStore()
-        self.worker = JudgeWorker(self.db_path, self.roster, self.git)
-        # 启动时拉一次花名册就跑完退出 —— 名单不再变，不需要常驻线程。
-        # 成绩单不再自动推送，要推就调 POST /api/admin/sync。
+        self.worker = JudgeWorker(self.db_path, self.roster)
+        # 启动时从 COS 拉一次花名册就跑完退出 —— 名单不再变，不需要常驻线程。
         self._roster_pull = threading.Thread(
-            target=self.git.pull_roster_at_startup,
-            args=(self.roster.reload_or_keep,),
+            target=pull_from_cos,
+            args=(self.roster,),
             name="roster-pull",
             daemon=True,
         )
@@ -283,24 +280,8 @@ class App:
             ]
         }
 
-    def admin_sync(self) -> tuple[int, dict]:
-        """同步一次：拉花名册 + 推成绩单。
-
-        成绩单不再定时推送（仓库里只有名单和成绩，没有学生代码），
-        所以这是唯一的推送入口。
-        """
-        pulled = self.git.pull()
-        if pulled:
-            self.roster.reload_or_keep()
-        committed = self.git.commit("成绩单")
-        pushed = self.git.push()
-        return 200, {"roster_pulled": pulled, "committed": committed, "pushed": pushed}
-
-    def admin_export(self, homework: str) -> str:
-        """导出成绩 CSV。没提交的人也会占一行，标「未提交」。"""
-        with self.lock:
-            rows = db.export_grades(self.conn, homework, self.roster.all())
-        return "\n".join(rows) + "\n"
+    # 没有「导出成绩单」接口：成绩单这个中间产物整个去掉了。
+    # 数据都在库里的 submissions / case_results 两张表，要什么自己查。
 
 
 # ---------------------------------------------------------------- 工具
@@ -473,18 +454,11 @@ def create_handler(app: App):
                 if route == "/api/admin/submissions":
                     return app.admin_submissions(query)
 
-                if route == "/api/admin/export.csv":
-                    return 200, app.admin_export(query.get("homework", ""))
-
                 if route == "/api/admin/roster":
                     return 200, {"roster": app.roster.all()}
 
                 # 没有「看源码」和「重判」接口：源码判完即抹，服务手里没有。
                 # 这是「不保存学生提交」的直接代价。
-
-                # 成绩单每两天才自动推一次，想立刻备份就手动触发
-                if route == "/api/admin/sync" and method == "POST":
-                    return app.admin_sync()
 
             return 404, {"error": "not found"}
 
