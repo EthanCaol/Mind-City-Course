@@ -1,3 +1,6 @@
+---
+icon: material/tools
+---
 
 # 实用小工具推荐
 
