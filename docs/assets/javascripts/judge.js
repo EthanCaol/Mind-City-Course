@@ -594,7 +594,7 @@
       name 拿不到时不硬凑，用不带姓名的说法。 */
   function markRegistered(name) {
     var who = name ? name + " 同学，恭喜" : "恭喜同学，";
-    renderReadNote("✅ " + who + "你已经完成了这篇文档的配置流程", "done");
+    renderReadNote("✅ " + who + "你已经完成了这篇文档的配置流程！", "done");
   }
 
   function submitRead(page) {
