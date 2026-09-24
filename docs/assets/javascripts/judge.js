@@ -512,11 +512,36 @@
       mirror(bar, scroll);
     });
 
+    // 按住表格横向拖 = 拖上面那条假滚动条。真滚动条被 CSS 藏了（矩阵为了
+    // 钉住姓名列、又不让列头折行，只能这么办），拖动算是给它补个位置。
+    // 只认鼠标：触摸和触控板本来就能拖，抢过来只会更难用。
+    // 拖到哪由起点和位移算，跟 scrollLeft 直接挂钩，键盘、滚轮照样能用。
+    var dragFrom = null;
+    scroll.addEventListener("pointerdown", function (e) {
+      if (e.pointerType !== "mouse" || e.button !== 0) return;
+      dragFrom = e.clientX + scroll.scrollLeft;
+      scroll.classList.add("matrix--dragging");
+      scroll.setPointerCapture(e.pointerId);
+    });
+    scroll.addEventListener("pointermove", function (e) {
+      if (dragFrom === null) return;
+      scroll.scrollLeft = dragFrom - e.clientX;
+    });
+    function endDrag() {
+      dragFrom = null;
+      scroll.classList.remove("matrix--dragging");
+    }
+    scroll.addEventListener("pointerup", endDrag);
+    scroll.addEventListener("pointercancel", endDrag);
+
     // 假滚动条的滚动范围得跟表格一样宽，一条对一条才能同步到底。
     // 表格不溢出时整条收起来。宽度要等表格进了 DOM 才量得到。
     function layout() {
       barInner.style.width = table.scrollWidth + "px";
-      bar.hidden = table.scrollWidth <= scroll.clientWidth;
+      var overflows = table.scrollWidth > scroll.clientWidth;
+      bar.hidden = !overflows;
+      // 不溢出就别摆出「可以拖」的手势
+      scroll.classList.toggle("matrix--pannable", overflows);
     }
     layout();
     // 窗口变窄可能从「不溢出」变成「溢出」。一张页面上这个表格只渲染一次，

@@ -709,6 +709,19 @@
   display: none;
 }
 
+/* 表格比容器宽时按住能横向拖（事件在 judge.js 里挂），光标是唯一的提示 ——
+   滚动条被上面那条和 scrollbar-width: none 一起代掉了。
+   matrix--pannable 由 judge.js 按「有没有溢出」开关，不溢出就不摆这个手势。 */
+.md-typeset .matrix--pannable {
+  cursor: grab;
+}
+
+.md-typeset .matrix--dragging {
+  cursor: grabbing;
+  /* 拖动时别顺手把格子里的文字选蓝 */
+  user-select: none;
+}
+
 /* 表格上边那条横向滚动条。
    CSS 没法把容器自己的滚动条挪到上边，所以另做一个光杆 div，由 judge.js
    跟真正的滚动区双向镜像 scrollLeft。表格 74 行，滚动条落在最底下的话，
