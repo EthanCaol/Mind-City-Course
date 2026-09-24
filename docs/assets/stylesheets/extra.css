@@ -281,38 +281,38 @@
    标题底色、标题图标、标题后面的颜色 —— 颜色按 Material 自己的写法直接写 hex
    （它的类型色本来就是逐个写死的，没有变量可复用）。
 
-   配色用的就是内置 warning 那一套 #ff9100（连 1a 的透明度也照抄），只有图标不同：
-   warning 是三角感叹号，todo 是 Material Design Icons 的 checkbox-marked-outline
+   配色用的就是内置 abstract 那一套 #00b0ff（连 1a 的透明度也照抄），只有图标不同：
+   abstract 是摘要图标，todo 是 Material Design Icons 的 checkbox-marked-outline
    （一个带勾的方框），跟内置类型一样内联成 data-URI。
-   换句话说，todo 和 warning 长得几乎一样，区别只在图标和语义 —— 这是有意为之，
-   嫌和 warning 撞脸就把下面五处 hex 一起换掉。
+   换句话说，todo 和 abstract 长得几乎一样，区别只在图标和语义 —— 这是有意为之，
+   想换个色就把下面五处 hex 一起改掉（在 main.css 里搜内置类型就能抄到别的配色）。
    --------------------------------------------------------------------------- */
 
 .md-typeset .admonition.todo,
 .md-typeset details.todo {
-  border-color: #ff9100;
+  border-color: #00b0ff;
 }
 
 .md-typeset .admonition.todo:focus-within,
 .md-typeset details.todo:focus-within {
-  box-shadow: 0 0 0 0.2rem #ff91001a;
+  box-shadow: 0 0 0 0.2rem #00b0ff1a;
 }
 
 .md-typeset .todo > .admonition-title,
 .md-typeset .todo > summary {
-  background-color: #ff91001a;
+  background-color: #00b0ff1a;
 }
 
 .md-typeset .todo > .admonition-title::before,
 .md-typeset .todo > summary::before {
-  background-color: #ff9100;
+  background-color: #00b0ff;
   -webkit-mask-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,19H5V5H15V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V11H19M7.91,10.08L6.5,11.5L11,16L21,6L19.59,4.58L11,13.17L7.91,10.08Z"/></svg>');
   mask-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,19H5V5H15V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V11H19M7.91,10.08L6.5,11.5L11,16L21,6L19.59,4.58L11,13.17L7.91,10.08Z"/></svg>');
 }
 
 .md-typeset .todo > .admonition-title::after,
 .md-typeset .todo > summary::after {
-  color: #ff9100;
+  color: #00b0ff;
 }
 
 /* ---------------------------------------------------------------------------
