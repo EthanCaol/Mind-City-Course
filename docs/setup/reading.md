@@ -2,7 +2,7 @@
 icon: material/check-all
 ---
 
-# 阅读进度
+# 文档阅读进度
 
 !!! abstract "表格说明"
     每次刷新页面都会实时从数据库读取
