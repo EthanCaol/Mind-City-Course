@@ -75,6 +75,15 @@ BOX_ROOT = Path("/var/local/lib/isolate")
 # （见根目录 README 的「三个坑」②），所以必须再去检查该路径是否真的有 cgroup.procs。
 CGROUP_FILE = Path("/run/isolate/cgroup")
 
+# ---------------------------------------------------------------- 备份
+
+# 每周一 04:00 由 mind-city-backup.timer 调 judge/tools/backup_to_cos.py。
+# 桶就是 coscmd 平时用的那个（配置在 ~/.cos.conf），对象一律显式设成私有读 ——
+# 这个桶是公开读的，站点的图挂在上面。
+COS_BIN = "/home/ethan/miniconda3/bin/coscmd"
+COS_BACKUP_BUCKET = "image-1379176255"
+COS_BACKUP_PREFIX = "backup"
+
 # --cg 必须始终打开。不加就等于没做内存隔离：--mem 只落到 RLIMIT_AS，
 # 没有 cgroup 记账，meta 里也不会出现 cg-mem。
 USE_CG = True

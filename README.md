@@ -199,6 +199,15 @@ journalctl --user -u mind-city-webhook -f    # 实时看部署日志
 journalctl --user -u mind-city-judge -f      # 实时看判题日志
 ```
 
+另有一个**定时任务** `mind-city-backup.timer`，每周一 04:00 把判题数据同步到 COS
+（细节见「在线评测 → 备份」）：
+
+```bash
+systemctl --user list-timers mind-city-backup.timer   # 下次触发时间
+systemctl --user start mind-city-backup.service       # 手动跑一次
+journalctl --user -u mind-city-backup.service         # 看上次跑的结果
+```
+
 `mind-city-docs` 只绑本地回环，**不对公网提供内容**，仅供在服务器上写文档时预览。公网由 Caddy 直接托管 `/var/www/mind-city` 的静态文件。
 
 **找不到的地址一律 302 回首页**，配置在 `/etc/caddy/Caddyfile` 的 `handle_errors` 里
@@ -292,6 +301,25 @@ gh repo create EthanCaol/Mind-City-Course-OJ --private
 它同时被外层公开仓库 gitignore。这是硬要求：里面有学生姓名学号；而且数据一旦提交
 进外层仓库，本地就有未推送的 commit，部署脚本的 `git pull --ff-only` 会失败，
 **整个文档站静默停止更新**。
+
+### 备份
+
+`mind-city-backup.timer` 每周一 04:00 跑 `judge/tools/backup_to_cos.py`，把**数据库快照
+和 `roster.csv` 覆盖式**传到 COS 的 `backup/` 前缀下（`grades/` 平时是空的就跳过）。
+这是除了数据仓库之外的第二份异地副本，也是助教不用 git 就能直接下载的那份。
+
+两个要点：
+
+- **每个对象都带 `x-cos-acl: private`。** 那个桶是公开读的（站点的图挂在上面），漏了
+  这个头就等于把学生姓名学号摊在公网上。传完拿不带签名的 curl 验一下，应当 403：
+
+  ```bash
+  curl -sI https://image-1379176255.cos.ap-shanghai.myqcloud.com/backup/roster.csv
+  ```
+
+- **数据库不能直接 cp。** 库是 WAL 模式，主文件可能只有几十 KB，直接拷主文件拿到的
+  未必是全量。脚本走 sqlite3 的在线备份 API，源库同时在写也能拿到一致的快照；想确认
+  传对了，比较两边 `SELECT COUNT(*) FROM submissions` 的行数即可。
 
 ### 验证
 
