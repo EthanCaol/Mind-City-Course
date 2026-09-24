@@ -864,3 +864,15 @@ icon: material/notebook-outline
         题面把"选答试题多于 5 道"和"有不合理得分或其他错误"分开写，程序里也分开判：`s[i] > FULL` 或数据不齐归到"不合理得分或其他错误"，答过的题不够 5 道归到"选答不足"。两者的处置相同——整行作废。
 
     > 易错：① 把"前 5 道"理解成"第 1～5 题"；② 负数得分也被判成不合理，结果所有考生全部作废；③ 统计各题平均分时也只用前 5 道，漏掉第 6 题以后的数据；④ 某道题没人答时直接除以 0；⑤ 作废的行仍被计进实考人数，导致等级人数之和和实考人数对不上。
+
+---
+
+!!! todo "习题自测登记：做完了这一章的习题，在这里登记一下"
+
+    <div class="read" id="read" data-page="chapter-8" data-done="你已经把这一章的习题过了一遍！">
+      <div class="read__bar">
+        <input id="read-id" class="read__input" type="text" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="在这里输入你的学号">
+        <button id="read-submit" type="button">我已做完</button>
+      </div>
+      <p class="read__note" id="read-note" hidden></p>
+    </div>

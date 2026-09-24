@@ -43,6 +43,7 @@ nav:
       - (4) Linux 命令行基础: setup/linux-cli.md
       - (5) Git-GitHub 基础操作: setup/git-github.md
   - 教材习题:
+      - 习题自测进度: homework-book/reading.md
       - 第二章：基本数据类型: homework-book/chapter-2.md
       - 第三章：结构化程序设计: homework-book/chapter-3.md
       - 第四章：数组: homework-book/chapter-4.md

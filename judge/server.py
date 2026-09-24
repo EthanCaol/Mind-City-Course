@@ -179,7 +179,7 @@ class App:
 
         挡得住抄错学号，挡不住冒用同学的学号 —— 这不是成绩，够用了。
         """
-        if page not in dict(config.READ_PAGES):
+        if page not in dict(config.ALL_READ_PAGES):
             return 404, {"error": "没有这一页"}
 
         if not isinstance(student_id, str) or not STUDENT_ID_RE.fullmatch(student_id):
@@ -202,7 +202,7 @@ class App:
         这里**不查花名册**：只回「登记过没有」，不区分「不在名单里」和「没登记」，
         接口就没法拿来试探学号是否属于本课程。
         """
-        if page not in dict(config.READ_PAGES):
+        if page not in dict(config.ALL_READ_PAGES):
             return 404, {"error": "没有这一页"}
 
         with self.lock:
@@ -210,12 +210,17 @@ class App:
 
         return 200, {"registered": at is not None, "registered_at": at}
 
-    def reads(self) -> tuple[int, dict]:
-        """阅读进度：行是学生，列是实验课页面。和作业完成情况同构，也是公开接口。"""
-        with self.lock:
-            read = {page: db.read_ids(self.conn, page) for page, _ in config.READ_PAGES}
+    def reads(self, group: str = "") -> tuple[int, dict]:
+        """阅读进度：行是学生，列是页面。和作业完成情况同构，也是公开接口。
 
-        return 200, self._grid(list(config.READ_PAGES), read)
+        分两组：实验课文档（setup，默认）和教材习题（book）。两张总览页各取一组，
+        否则一张表里会同时出现文档和习题的列。
+        """
+        pages = config.BOOK_PAGES if group == "book" else config.READ_PAGES
+        with self.lock:
+            read = {page: db.read_ids(self.conn, page) for page, _ in pages}
+
+        return 200, self._grid(list(pages), read)
 
     def _grid(self, columns: list[tuple[str, str]], done: dict[str, set[str]]):
         """两个完成情况页共用的表格数据：行是学生、列是作业/页面。
@@ -435,7 +440,7 @@ def create_handler(app: App):
                 return app.grades()
 
             if route in ("/api/reads", "/api/reads/"):
-                return app.reads()
+                return app.reads(query.get("group", ""))
 
             if route == "/api/read" and method == "POST":
                 body = self._read_json()

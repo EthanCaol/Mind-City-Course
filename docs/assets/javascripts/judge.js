@@ -616,10 +616,14 @@
   }
 
   /** 登记过之后：输入框和按钮都留着不动，只在下面加一行恭喜。
-      name 拿不到时不硬凑，用不带姓名的说法。 */
+      name 拿不到时不硬凑，用不带姓名的说法。后半句按页面的 data-done 走：
+      实验课页面是「跑通了配置流程」，习题页面是「过了一遍习题」。 */
   function markRegistered(name) {
     var who = name ? name + " 同学，恭喜" : "恭喜同学，";
-    renderReadNote("✅ " + who + "你已经完成了这篇文档的配置流程！", "done");
+    var root = $("read");
+    var tail = (root && root.getAttribute("data-done")) ||
+      "你已经完成了这篇文档的配置流程！";
+    renderReadNote("✅ " + who + tail, "done");
   }
 
   function submitRead(page) {
@@ -682,8 +686,16 @@
 
   function init() {
     loadGrid($("grades"), API + "/grades"); // 「作业完成情况」页
-    loadGrid($("reads"), API + "/reads"); // 「阅读进度」页
-    initRead(); // 实验课页面末尾的登记栏
+
+    // 「阅读进度」和「习题自测进度」两个总览页共用这一个元素，
+    // 各自靠 data-group 取自己那一组，免得两张表都列出全部 16 列。
+    var grid = $("reads");
+    if (grid) {
+      var group = grid.getAttribute("data-group");
+      loadGrid(grid, API + "/reads" + (group ? "?group=" + encodeURIComponent(group) : ""));
+    }
+
+    initRead(); // 页面末尾的登记栏
 
     if (!$("judge")) return; // 剩下的是作业页才需要的东西
 

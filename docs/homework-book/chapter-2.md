@@ -795,3 +795,15 @@ int main()
     > 真机实测（gcc 15.2.0，-O2 -std=gnu23 -Wall）：输入 `12 5`，输出"12 大于 5"、"12 不等于 5"、"12 不能被 5 整除（商 2 余 2）"；输入 `15 5`，输出"15 大于 5"、"15 不等于 5"、"15 能被 5 整除（15 / 5 = 3）"；输入 `5 5`，输出"5 等于 5"、"5 能被 5 整除（5 / 5 = 1）"；输入 `3 12`，输出"3 小于 12"、"3 不等于 12"、"3 不能被 12 整除（商 0 余 3）"；输入 `12 0`，输出"12 大于 0"、"12 不等于 0"、"12 不能被 0 整除"。
 
     > 易错：① 用 `else if` 把几条关系串成互斥；② 拿 `a / b` 当整除判据；③ `b == 0` 的时候直接去算 `a % b`。
+
+---
+
+!!! todo "习题自测登记：做完了这一章的习题，在这里登记一下"
+
+    <div class="read" id="read" data-page="chapter-2" data-done="你已经把这一章的习题过了一遍！">
+      <div class="read__bar">
+        <input id="read-id" class="read__input" type="text" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="在这里输入你的学号">
+        <button id="read-submit" type="button">我已做完</button>
+      </div>
+      <p class="read__note" id="read-note" hidden></p>
+    </div>

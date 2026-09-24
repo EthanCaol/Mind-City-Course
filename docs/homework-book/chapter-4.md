@@ -1228,3 +1228,15 @@ a[]={4,5,6,7,8,9,0,1,2,3}
     > 真机实测（gcc 15.2.0，-O2 -std=gnu23 -Wall）：四组输入各跑一次。`"  hello \t  world  \n"` 整理后是 `hello world`（前导两个空格、中间一个制表符加两个空格、末尾两个空格加换行全部处理掉）；全是空白符的 `" \t\n "` 整理后是空串；本来就干净的 `"abc"` 原样不变；`"  a  "` 得到 `a`。
 
     > 易错：① 只删前导和后随，忘了把中间连续的空格压成一个；② 空白判定只写 `' '`，制表符和换行漏掉；③ 结尾那个空格忘了退回去，字符串变成 `hello world `（末尾多一个空格）；④ 另开一个数组接结果，把整理过的内容放到别处去（题目要的是就地把这个字符串整理好）。
+
+---
+
+!!! todo "习题自测登记：做完了这一章的习题，在这里登记一下"
+
+    <div class="read" id="read" data-page="chapter-4" data-done="你已经把这一章的习题过了一遍！">
+      <div class="read__bar">
+        <input id="read-id" class="read__input" type="text" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="在这里输入你的学号">
+        <button id="read-submit" type="button">我已做完</button>
+      </div>
+      <p class="read__note" id="read-note" hidden></p>
+    </div>

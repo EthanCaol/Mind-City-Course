@@ -1246,3 +1246,15 @@ void main()
     > 真机实测（gcc 15.2.0，-O2 -std=gnu23 -Wall）：上面这份修改后的程序编译运行，输出 6 行 `ABC`、`BAC`、`ACB`、`CAB`、`CBA`、`BCA`，与逐层推演的顺序逐行吻合；把 `str` 换成 `"ABCD"` 再跑一遍是 24 行（4! = 24），确证它生成的确实是全排列。
 
     > 易错：① 以为会按字典序打印（`BAC` 排在 `ACB` 前面）；② 忽略“换回来”那三行，不回溯的话输出会少项或重复；③ 把 `k` 当数组下标直接读 `s[k]`（循环里用的是 `s[k-1]`）；④ 以为打印的是下标或长度而不是字符串本身。
+
+---
+
+!!! todo "习题自测登记：做完了这一章的习题，在这里登记一下"
+
+    <div class="read" id="read" data-page="chapter-6" data-done="你已经把这一章的习题过了一遍！">
+      <div class="read__bar">
+        <input id="read-id" class="read__input" type="text" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="在这里输入你的学号">
+        <button id="read-submit" type="button">我已做完</button>
+      </div>
+      <p class="read__note" id="read-note" hidden></p>
+    </div>

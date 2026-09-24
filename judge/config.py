@@ -48,6 +48,23 @@ READ_PAGES: tuple[tuple[str, str], ...] = (
     ("git-github", "Git-GitHub 基础操作"),
 )
 
+# 教材习题的「自测登记」栏。和上面的 READ_PAGES 同构、共用一张表，只是分成两组：
+# 两张总览页各取自己那一组，否则「文档阅读进度」里会冒出习题的列，反过来也一样。
+# 加一章就补一条，slug 要跟页面上 `data-page` 一致。
+BOOK_PAGES: tuple[tuple[str, str], ...] = (
+    ("chapter-2", "第二章：基本数据类型"),
+    ("chapter-3", "第三章：结构化程序设计"),
+    ("chapter-4", "第四章：数组"),
+    ("chapter-5", "第五章：函数"),
+    ("chapter-6", "第六章：指针和引用"),
+    ("chapter-7", "第七章：结构和链表"),
+    ("chapter-8", "第八章：数据文件处理技术"),
+    ("chapter-9", "第九章：算法设计技术基础"),
+)
+
+# 登记接口认的全部页面 —— 不管哪一组，页面存在就能登记。
+ALL_READ_PAGES = READ_PAGES + BOOK_PAGES
+
 # ---------------------------------------------------------------- isolate
 
 ISOLATE_BIN = "/usr/local/bin/isolate"

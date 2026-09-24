@@ -959,3 +959,15 @@ gcd(a, b) = ⎨ gcd(a-b, b)    , a > b
         单单重复 `#define` 同一个宏（内容一样）是允许的，所以只放宏定义的头文件重复包含往往看不出问题。麻烦出在头文件里有变量定义、结构体定义的时候，那时第二次定义就是硬错误。卫士是提前把这类问题挡掉，代价只有三行。还有一种写法是 `#pragma once`，gcc 支持，但它不在 C 标准里。
 
     > 易错：① 头文件里忘了 `#include <stdio.h>`，宏体用到的 `printf` 靠包含它的源文件去提供；② 卫士的宏名和别处撞了（比如用了太普通的 `ITEMS`）；③ `#endif` 后面的注释写不写都行，但 `#ifndef` 与 `#endif` 必须配成对；④ 三个宏各抄一遍正文，改一处要改三处。
+
+---
+
+!!! todo "习题自测登记：做完了这一章的习题，在这里登记一下"
+
+    <div class="read" id="read" data-page="chapter-5" data-done="你已经把这一章的习题过了一遍！">
+      <div class="read__bar">
+        <input id="read-id" class="read__input" type="text" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="在这里输入你的学号">
+        <button id="read-submit" type="button">我已做完</button>
+      </div>
+      <p class="read__note" id="read-note" hidden></p>
+    </div>

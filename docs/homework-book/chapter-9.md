@@ -1037,3 +1037,15 @@ icon: material/notebook-outline
         行号从 0 涨到 `R-1` 要走 `R-1` 次向下，列号从 0 涨到 `C-1` 要走 `C-1` 次向右，两次动作的先后可以换，但各自次数不变，所以任何一条路线都经过 `(R-1) + (C-1) + 1 = R + C - 1` 个位置。示例里是 `4 + 5 - 1 = 8` 个位置，与输出的路线长度一致。
 
     > 易错：① 把"只能按列或按行增加的方向前进"读成"可以左右横跳，只要最后到终点"（那样问题完全不同）；② 用贪心代替动态规划（每步挑杂物多的邻居），结果不一定最优；③ 回推路线时拿当前格的杂物数或 `f` 值去比（要比的是两个前驱的 `f` 值）；④ 第一行、第一列也去取 `max`（它们只有一个来向，另一侧要按 0 或按"不存在"处理）；⑤ 输出路线时忘了把倒推得到的次序反过来（从终点写到起点）。
+
+---
+
+!!! todo "习题自测登记：做完了这一章的习题，在这里登记一下"
+
+    <div class="read" id="read" data-page="chapter-9" data-done="你已经把这一章的习题过了一遍！">
+      <div class="read__bar">
+        <input id="read-id" class="read__input" type="text" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="在这里输入你的学号">
+        <button id="read-submit" type="button">我已做完</button>
+      </div>
+      <p class="read__note" id="read-note" hidden></p>
+    </div>

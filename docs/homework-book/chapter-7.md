@@ -1970,3 +1970,15 @@ n 级法雷（Forder）序列 Fₙ 是将分母小于等于 n 的不可约真分
     > 真机实测（gcc 15.2.0，-O2 -std=gnu23 -Wall）：S₁ = {2,3,5,6}、S₂ = {3,4,6,8}，三个结果分别是 `{2,3,4,5,6,8}`、`{2,5}`、`{3,6}`，与题干样例一致；三次运算之后重新打印，"原来的 S1" 仍是 `{2,3,5,6}`、"原来的 S2" 仍是 `{3,4,6,8}`。
 
     > 易错：① 直接把 S1 的表元搬进结果（那就变成改 S1 了，和题 14 的做法混了）；② 差集和交集里对每个 `p` 都让 `s2` 从头找一遍，复杂度退化成 O(n·m)；③ 结果为空集时忘了返回 `NULL`，或者返回了栈上哨兵的地址（函数返回后它就不存在了）；④ 求差集时把相等的表元留下——差集要删的正是这些。
+
+---
+
+!!! todo "习题自测登记：做完了这一章的习题，在这里登记一下"
+
+    <div class="read" id="read" data-page="chapter-7" data-done="你已经把这一章的习题过了一遍！">
+      <div class="read__bar">
+        <input id="read-id" class="read__input" type="text" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="在这里输入你的学号">
+        <button id="read-submit" type="button">我已做完</button>
+      </div>
+      <p class="read__note" id="read-note" hidden></p>
+    </div>

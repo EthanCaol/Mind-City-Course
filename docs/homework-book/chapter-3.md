@@ -1275,3 +1275,15 @@ fᵢ=(int)(cⁱ/sqrt(5)+0.5)  /*0.5 是补偿计算误差*/
         `double` 只有约 16 位有效数字，精度一路收紧到 `1e-15` 以下时，`low` 和 `high` 的差值已经落在浮点分辨率以下，`high - low` 可能永远降不到 `eps`，循环就停不下来。本题取 `1e-6` 到 `1e-12` 都合适。
 
     > 易错：① 更新方向搞反（`f(mid)` 与 `f(low)` 同号时去改 `high`），区间会朝着没有根的那一半收缩，结果是错的；② 判同号时把 `f(low)` 写成了 `f(high)`；③ 循环条件写成 `high - low > 0`，浮点数永远等不到相等，死循环；④ 忘了 `f(x)` 里的 `x * x * x`，把 `x³` 写成 `x * 3`。
+
+---
+
+!!! todo "习题自测登记：做完了这一章的习题，在这里登记一下"
+
+    <div class="read" id="read" data-page="chapter-3" data-done="你已经把这一章的习题过了一遍！">
+      <div class="read__bar">
+        <input id="read-id" class="read__input" type="text" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="在这里输入你的学号">
+        <button id="read-submit" type="button">我已做完</button>
+      </div>
+      <p class="read__note" id="read-note" hidden></p>
+    </div>
