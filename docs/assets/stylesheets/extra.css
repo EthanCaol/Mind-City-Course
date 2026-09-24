@@ -154,22 +154,19 @@
    会换成 --md-accent-fg-color —— 在本站是 indigo，一个饱和的靛蓝，在暗色
    背景上非常刺眼。这里把所有状态都钉回常态的淡色，等于取消悬停反馈。
 
-   Chrome / Edge / Safari 用下面那组 ::-webkit-scrollbar，Firefox 用
-   scrollbar-color。
+   压住它的只能是一句无条件的 scrollbar-color：Material 自己就用标准属性
+   驱动侧边栏这条（常态 --lighter，悬停换成强调色），所以 Chrome 里
+   ::-webkit-scrollbar 那组本来就不生效 —— 标准属性一非 auto，伪元素那条路
+   整条作废（理由详见下面 matrix__bar 那段）。写成 @supports 兜底只等于把
+   悬停那一档还给 Material，滑过去就是一条靛蓝的滑块。
 
-   scrollbar-color 不能和那组并排写。Chrome 121 起，scrollbar-color 或
-   scrollbar-width 的计算值只要不是 auto，浏览器就整条忽略
-   ::-webkit-scrollbar 系列 —— 连 Material 自己的 .2rem 细条也一起作废，
-   这条滚动条会退回平台默认的粗度（本站一直就是这样）。所以标准属性只写给
-   不认 ::-webkit-scrollbar 的浏览器。
+   下面那组 ::-webkit-scrollbar 是 Safari 的路径，留着一并压住。
    --------------------------------------------------------------------------- */
 
-@supports not selector(::-webkit-scrollbar) {
-  .md-sidebar__scrollwrap,
-  .md-sidebar__scrollwrap:focus-within,
-  .md-sidebar__scrollwrap:hover {
-    scrollbar-color: var(--md-default-fg-color--lighter) #0000;
-  }
+.md-sidebar__scrollwrap,
+.md-sidebar__scrollwrap:focus-within,
+.md-sidebar__scrollwrap:hover {
+  scrollbar-color: var(--md-default-fg-color--lighter) #0000;
 }
 
 .md-sidebar__scrollwrap::-webkit-scrollbar-thumb,
@@ -763,9 +760,10 @@
 
 /* Firefox 那条：颜色同上，但只有常态 —— 标准属性没有悬停和拖动态。
 
-   只能写在 @supports 里，理由同侧边栏那条：scrollbar-color 一旦不是 auto，
-   上面那几条 ::-webkit-scrollbar 就全部作废，Chrome 会按平台默认画 ——
-   比 0.4rem 高，还要被 overflow-y 裁掉一截。
+   这里必须用 @supports 圈起来，不能像侧边栏那样无条件写：scrollbar-color
+   一旦不是 auto，上面那几条 ::-webkit-scrollbar 就全部作废，Chrome 会改按
+   平台默认画 —— 比 0.4rem 高，还要被 overflow-y 裁掉一截。侧边栏那条反
+   过来，Material 自己就是用标准属性写的，所以压悬停色只能写 scrollbar-color。
    Firefox 认 thin，正好塞进 0.4rem。 */
 @supports not selector(::-webkit-scrollbar) {
   .md-typeset .matrix__bar {
