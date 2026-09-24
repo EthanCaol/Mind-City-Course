@@ -1,10 +1,8 @@
 # Linux 命令行基础
 
-强烈推荐这篇文档《只学够用的 Linux：零基础最小入门教程》：
-
 !!! quote "原文"
 
-    <https://zouht.com/4399.html>
+    同学们阅读这篇文档 [《只学够用的 Linux：零基础最小入门教程》](https://zouht.com/4399.html)
 
     ![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260924145737281.png)
 
@@ -14,7 +12,7 @@
 
 !!! quote "视频"
 
-    <https://www.bilibili.com/video/BV13ctf6RECM>
+    [《只学够用的 Linux：长度正好的零基础入门教程》](https://www.bilibili.com/video/BV13ctf6RECM)
 
     ![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260924145245076.png)
 
