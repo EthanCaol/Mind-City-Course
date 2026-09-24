@@ -819,11 +819,6 @@
   align-items: center;
 }
 
-/* 登记过之后整条收掉，只留下面那行「已登记：...」 */
-.md-typeset .read--done .read__bar {
-  display: none;
-}
-
 .md-typeset .read__input {
   flex: 1 1 10rem;
   min-width: 0; /* 不加这个，flex 子项会拒绝收缩到内容宽度以下 */
@@ -866,13 +861,20 @@
   color: var(--md-default-bg-color);
 }
 
-/* 状态行：成功走灰字，出错换红字。
-   这里不照抄判题那边的告警框 —— 那是个大块，长在页面末尾会抢戏；
-   而且同一行还要兼任「已登记：...」的展示，做成框反而别扭。 */
+/* 状态行：登记成功是一行恭喜，出错是红字。两种状态共用这一个元素，
+   所以默认样式给得中性，具体颜色由后面的修饰类决定。
+   不照抄判题那边的告警框 —— 那是个大块，长在页面末尾会抢戏。 */
 .md-typeset .read__note {
   margin-top: 0.6em;
   font-size: 0.72rem;
   color: var(--md-default-fg-color--light);
+}
+
+/* 「✅ 恭喜你已经完成了这篇文档」：比出错提示稍大一点，
+   它是给学生的反馈，不是脚注。绿色的只是 emoji 本身，文字仍用正文色。 */
+.md-typeset .read__note--done {
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color);
 }
 
 .md-typeset .read__note--bad {

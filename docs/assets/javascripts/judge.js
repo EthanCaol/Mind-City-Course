@@ -562,25 +562,25 @@
     }
   }
 
-  /** 状态行：成功和报错共用一行，报错时换个颜色。 */
-  function renderReadNote(text, bad) {
+  /** 状态行：登记成功的恭喜、出错的红字，共用这一个元素。
+      kind 传 "done" 或 "bad"；不传就是普通提示。 */
+  function renderReadNote(text, kind) {
     var node = $("read-note");
-    node.className = "read__note" + (bad ? " read__note--bad" : "");
+    node.className = "read__note" + (kind ? " read__note--" + kind : "");
     setText(node, text);
     show(node, !!text);
   }
 
-  /** 已登记：收掉输入栏，只留一行「已登记：...」。 */
-  function markRegistered(at) {
-    $("read").className = "read read--done";
-    renderReadNote("已登记：" + (at || "").replace("T", " ").slice(0, 16));
+  /** 登记过之后：输入框和按钮都留着不动，只在下面加一行恭喜。 */
+  function markRegistered() {
+    renderReadNote("✅ 恭喜你已经完成了这篇文档", "done");
   }
 
   function submitRead(page) {
     var sid = $("read-id").value.trim();
 
     if (!/^[0-9]{11}$/.test(sid)) {
-      renderReadNote("学号是 11 位数字，请检查一下。", true);
+      renderReadNote("学号是 11 位数字，请检查一下。", "bad");
       return;
     }
 
@@ -589,11 +589,11 @@
     request("POST", API + "/read", { page: page, student_id: sid })
       .then(function (data) {
         rememberSid(sid);
-        markRegistered(data.registered_at);
+        markRegistered();
       })
       .catch(function (err) {
         $("read-submit").disabled = false;
-        renderReadNote(err.message, true);
+        renderReadNote(err.message, "bad");
       });
   }
 
@@ -603,7 +603,7 @@
 
     var page = root.getAttribute("data-page") || "";
     if (!page) {
-      renderReadNote("这个页面没有配置页面编号（data-page），请联系助教。", true);
+      renderReadNote("这个页面没有配置页面编号（data-page），请联系助教。", "bad");
       return;
     }
 
@@ -628,7 +628,7 @@
     request("GET", API + "/read?page=" + encodeURIComponent(page) +
       "&sid=" + encodeURIComponent(sid))
       .then(function (data) {
-        if (data.registered) markRegistered(data.registered_at);
+        if (data.registered) markRegistered();
       })
       .catch(function () {});
   }
