@@ -57,6 +57,16 @@ CREATE TABLE IF NOT EXISTS case_results (
     actual_output TEXT,
     PRIMARY KEY (submission_id, case_index)
 );
+
+-- 「读完了这一篇」的登记。不计分，只是让助教知道学生跟到哪了。
+-- 主键就是 (学号, 页面)，重复登记靠 INSERT OR IGNORE 吃掉，所以表大小有上界
+-- （合法学号数 × READ_PAGES 的条数），不需要限流。
+CREATE TABLE IF NOT EXISTS reads (
+    student_id TEXT NOT NULL,
+    page       TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    PRIMARY KEY (student_id, page)
+);
 """
 
 
@@ -228,6 +238,27 @@ def clear_source(conn: sqlite3.Connection, submission_id: int) -> None:
         conn.execute("UPDATE submissions SET source='' WHERE id=?", (submission_id,))
 
 
+def mark_read(
+    conn: sqlite3.Connection, *, page: str, student_id: str
+) -> tuple[bool, str]:
+    """登记一次阅读。返回 (这次是不是第一次, 登记时间)。
+
+    用 INSERT OR IGNORE 而不是改时间：登记是进度同步，助教要知道的是「他什么时候
+    读到这一篇的」，重复点击不该把那个时间推后。顺带让接口变成幂等的，学生多点两下
+    也不会有副作用。
+    """
+    with conn:
+        cur = conn.execute(
+            "INSERT OR IGNORE INTO reads (student_id, page, created_at) VALUES (?, ?, ?)",
+            (student_id, page, now()),
+        )
+        row = conn.execute(
+            "SELECT created_at FROM reads WHERE student_id=? AND page=?",
+            (student_id, page),
+        ).fetchone()
+    return cur.rowcount > 0, row["created_at"]
+
+
 # ---------------------------------------------------------------- 查询
 
 
@@ -366,6 +397,22 @@ def passed_ids(conn: sqlite3.Connection, homework: str) -> set[str]:
             "SELECT DISTINCT student_id FROM submissions WHERE homework=? AND verdict='AC'",
             (homework,),
         )
+    }
+
+
+def read_at(conn: sqlite3.Connection, page: str, student_id: str) -> str | None:
+    """某人在某页登记的时间，没登记过返回 None。"""
+    row = conn.execute(
+        "SELECT created_at FROM reads WHERE student_id=? AND page=?", (student_id, page)
+    ).fetchone()
+    return row["created_at"] if row else None
+
+
+def read_ids(conn: sqlite3.Connection, page: str) -> set[str]:
+    """该页面下登记过的学号。用于「阅读进度」页。"""
+    return {
+        r["student_id"]
+        for r in conn.execute("SELECT student_id FROM reads WHERE page=?", (page,))
     }
 
 

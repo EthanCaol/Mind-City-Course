@@ -29,6 +29,19 @@ ADMIN_TOKEN_PATH = Path.home() / ".config" / "mind-city" / "judge-admin-token"
 # 顺序就是这里的顺序；姓名仍然从花名册查，名单改了不用动这里。
 TUTORS = ("26113050003", "26113050344")
 
+# 带「阅读登记」栏的实验课页面。slug 就是页面里 `data-page` 的值，也是总览页的列名；
+# title 只用在悬停提示上。顺序就是列的顺序。
+#
+# 这里**手工维护**，不去扫 docs 目录：服务只认这几个 slug，多一个少一个都由这份清单说了算。
+# 加了新的实验课页面就在末尾补一条，否则总览页不会出现那一列（页面上的登记栏会报「没有这一页」）。
+READ_PAGES: tuple[tuple[str, str], ...] = (
+    ("dev-cpp", "Dev-C++ 环境搭建"),
+    ("wsl2-vscode", "WSL2 环境搭建"),
+    ("macos-vscode", "macOS 环境搭建"),
+    ("linux-cli", "Linux 命令行基础"),
+    ("git-github", "Git-GitHub 基础操作"),
+)
+
 # ---------------------------------------------------------------- isolate
 
 ISOLATE_BIN = "/usr/local/bin/isolate"

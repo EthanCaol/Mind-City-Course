@@ -87,3 +87,15 @@
    ![控制台运行结果](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260914141700011.png)
 
 控制台显示「请按任意键继续」时，按任意键关闭窗口。回到编辑器后，可以修改双引号中的文字，保存并再次按 ++f11++ 查看新结果。
+
+## 阅读登记
+
+读完这一篇的话，填上学号点一下就行。不计分，只是让助教知道大家跟到哪了。
+
+<div class="read" id="read" data-page="dev-cpp">
+  <div class="read__bar">
+    <input id="read-id" class="read__input" type="text" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="11 位学号">
+    <button id="read-submit" type="button">我已读完</button>
+  </div>
+  <p class="read__note" id="read-note" hidden></p>
+</div>

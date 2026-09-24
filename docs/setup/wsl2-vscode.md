@@ -660,3 +660,15 @@ wsl --import Ubuntu-26.04 D:\Ubuntu-26.04 D:\Ubuntu-26.04.tar
     如果电脑实际只插了一块物理硬盘，C 盘和 D 盘只是同一块盘上的两个虚拟分区，并且 C 盘空间快炸了，那「把系统搬到 D 盘」就只是把左手倒右手。
 
     这种情况下的重点不是搬文件，而是应该去合并分区。
+
+## 阅读登记
+
+读完这一篇的话，填上学号点一下就行。不计分，只是让助教知道大家跟到哪了。
+
+<div class="read" id="read" data-page="wsl2-vscode">
+  <div class="read__bar">
+    <input id="read-id" class="read__input" type="text" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="11 位学号">
+    <button id="read-submit" type="button">我已读完</button>
+  </div>
+  <p class="read__note" id="read-note" hidden></p>
+</div>

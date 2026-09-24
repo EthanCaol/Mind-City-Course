@@ -492,3 +492,15 @@ source ~/.zshrc
 - [ ] 按 ++f5++ 能启动调试，程序停在红点上，左侧「变量」面板能看到变量的值
 
 有哪条勾不上，或者中间哪一步卡住了，直接在微信群里问，或者把报错信息发给助教。
+
+## 阅读登记
+
+读完这一篇的话，填上学号点一下就行。不计分，只是让助教知道大家跟到哪了。
+
+<div class="read" id="read" data-page="macos-vscode">
+  <div class="read__bar">
+    <input id="read-id" class="read__input" type="text" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="11 位学号">
+    <button id="read-submit" type="button">我已读完</button>
+  </div>
+  <p class="read__note" id="read-note" hidden></p>
+</div>

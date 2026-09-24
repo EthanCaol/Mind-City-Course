@@ -9,11 +9,12 @@
 from __future__ import annotations
 
 import sys
+import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from judge import config  # noqa: E402
+from judge import config, db  # noqa: E402
 from judge.compare import compare, normalize  # noqa: E402
 from judge.identity import extract_student_id  # noqa: E402
 from judge.problem import list_problems, load_problem  # noqa: E402
@@ -108,6 +109,39 @@ def test_roster() -> None:
     check("花名册 · 教师已剔除", ro.lookup("04356"), None)
 
 
+# ---------------------------------------------------------------- 阅读登记
+
+def test_reads() -> None:
+    """登记、查状态、按页收集学号。用临时库，不碰 judge/data/ 里的生产数据。"""
+    with tempfile.TemporaryDirectory() as tmp:
+        conn = db.connect(Path(tmp) / "t.sqlite3")
+        db.init_db(conn)
+
+        first, at = db.mark_read(conn, page="linux-cli", student_id=SID)
+        check("登记 · 第一次算新增", first, True)
+        check("登记 · 只有一行", db.read_ids(conn, "linux-cli"), {SID})
+
+        # 幂等：重复登记不新增，也不改动首次时间
+        again, at2 = db.mark_read(conn, page="linux-cli", student_id=SID)
+        check("登记 · 重复不算新增", again, False)
+        check("登记 · 重复不改时间", at2, at)
+        check("登记 · 重复后仍是一行", db.read_ids(conn, "linux-cli"), {SID})
+
+        # 换一页是另一条记录
+        other, _ = db.mark_read(conn, page="git-github", student_id=SID)
+        check("登记 · 换一页算新增", other, True)
+        check("登记 · 两页互不影响", db.read_at(conn, "linux-cli", SID), at)
+
+        check("登记 · 查得到", db.read_at(conn, "linux-cli", SID), at)
+        check("登记 · 没登记过的页", db.read_at(conn, "make", SID), None)
+        check("登记 · 没登记过的人", db.read_at(conn, "linux-cli", "26803070225"), None)
+
+        db.mark_read(conn, page="linux-cli", student_id="26803070225")
+        check("登记 · 按页收集学号", db.read_ids(conn, "linux-cli"), {SID, "26803070225"})
+        check("登记 · 没人登记的页", db.read_ids(conn, "make"), set())
+        conn.close()
+
+
 # ---------------------------------------------------------------- 题目
 
 def test_problem() -> None:
@@ -125,7 +159,7 @@ def test_problem() -> None:
 # ---------------------------------------------------------------- main
 
 def main() -> int:
-    for fn in (test_identity, test_compare, test_roster, test_problem):
+    for fn in (test_identity, test_compare, test_roster, test_reads, test_problem):
         fn()
 
     print(f"通过 {_passed} 项")

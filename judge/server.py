@@ -21,7 +21,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
 from . import config, db, verdict as V
-from .identity import FORMAT_HINT, extract_student_id
+from .identity import FORMAT_HINT, STUDENT_ID_RE, extract_student_id
 from .gitstore import GitStore
 from .isolate_runner import judge_ready
 from .problem import ProblemError, list_problems, load_problem
@@ -166,23 +166,71 @@ class App:
         """
         with self.lock:
             problems = list_problems()
-            roster = self.roster.all()
             passed = {p.slug: db.passed_ids(self.conn, p.slug) for p in problems}
 
-        # 顺序就是花名册文件里的顺序（助教在前，其余按姓名拼音），
-        # 页面上再排一遍反而会和助教看到的名单对不上。
-        # 助教名字后面加「（助教）」—— 他们和同学用同一套判题，但不是这个班的学生。
-        students = [
-            {
-                "name": name + ("（助教）" if sid in config.TUTORS else ""),
-                "passed": {slug: sid in ids for slug, ids in passed.items()},
-            }
-            for sid, name in roster.items()
-        ]
+        return 200, self._grid(
+            [(p.slug, p.title) for p in problems], passed
+        )
 
-        return 200, {
-            "homeworks": [{"slug": p.slug, "title": p.title} for p in problems],
-            "students": students,
+    # ------------------------------------------------------------ 阅读登记
+
+    def mark_read(self, page: str, student_id: str) -> tuple[int, dict]:
+        """登记一次阅读。不计分，所以校验和判题一样是弱校验：学号在名单里就受理。
+
+        挡得住抄错学号，挡不住冒用同学的学号 —— 这不是成绩，够用了。
+        """
+        if page not in dict(config.READ_PAGES):
+            return 404, {"error": "没有这一页"}
+
+        if not isinstance(student_id, str) or not STUDENT_ID_RE.fullmatch(student_id):
+            return 400, {"error": "学号是 11 位数字，请检查一下。"}
+
+        if self.roster.lookup(student_id) is None:
+            return 403, {"error": f"学号 {student_id} 不在本课程名单里，请核对。"}
+
+        with self.lock:
+            first, at = db.mark_read(self.conn, page=page, student_id=student_id)
+
+        return 200, {"page": page, "registered_at": at, "already": not first}
+
+    def read_status(self, page: str, student_id: str) -> tuple[int, dict]:
+        """查一个人在这一页登记过没有。
+
+        这里**不查花名册**：只回「登记过没有」，不区分「不在名单里」和「没登记」，
+        接口就没法拿来试探学号是否属于本课程。
+        """
+        if page not in dict(config.READ_PAGES):
+            return 404, {"error": "没有这一页"}
+
+        with self.lock:
+            at = db.read_at(self.conn, page, student_id)
+
+        return 200, {"registered": at is not None, "registered_at": at}
+
+    def reads(self) -> tuple[int, dict]:
+        """阅读进度：行是学生，列是实验课页面。和作业完成情况同构，也是公开接口。"""
+        with self.lock:
+            read = {page: db.read_ids(self.conn, page) for page, _ in config.READ_PAGES}
+
+        return 200, self._grid(list(config.READ_PAGES), read)
+
+    def _grid(self, columns: list[tuple[str, str]], done: dict[str, set[str]]):
+        """两个完成情况页共用的表格数据：行是学生、列是作业/页面。
+
+        顺序就是花名册文件里的顺序（助教在前，其余按姓名拼音），页面上再排一遍
+        反而会和助教看到的名单对不上。助教名字后面加「（助教）」—— 他们和同学
+        用同一套系统，但不是这个班的学生。
+        """
+        roster = self.roster.all()
+        return {
+            "columns": [{"slug": slug, "title": title} for slug, title in columns],
+            "students": [
+                {
+                    "name": name + ("（助教）" if sid in config.TUTORS else ""),
+                    "done": {slug: sid in ids for slug, ids in done.items()},
+                }
+                for sid, name in roster.items()
+            ],
         }
 
     def health(self) -> tuple[int, dict]:
@@ -382,6 +430,16 @@ def create_handler(app: App):
 
             if route in ("/api/grades", "/api/grades/"):
                 return app.grades()
+
+            if route in ("/api/reads", "/api/reads/"):
+                return app.reads()
+
+            if route == "/api/read" and method == "POST":
+                body = self._read_json()
+                return app.mark_read(body.get("page", ""), body.get("student_id", ""))
+
+            if route in ("/api/read", "/api/read/"):
+                return app.read_status(query.get("page", ""), query.get("sid", ""))
 
             if route == "/api/submit" and method == "POST":
                 body = self._read_json()

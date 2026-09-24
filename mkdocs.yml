@@ -32,6 +32,7 @@ nav:
       - 作业完成情况: homework/作业完成情况.md
       - 作业1：整数加法: homework/作业1-整数加法.md
   - 实验课:
+      - 阅读进度: reading.md
       - (0) Dev-C++ 环境搭建: setup/dev-cpp.md
       - (0) WSL2 环境搭建: setup/wsl2-vscode.md
       - (0) macOS 环境搭建: setup/macos-vscode.md

@@ -430,9 +430,13 @@
     return root ? root.getAttribute("data-homework") || "" : "";
   }
 
-  // ------------------------------------------------------------ 作业完成情况
+  // ------------------------------------------------------------ 完成情况表格
+  //
+  // 「作业完成情况」和「阅读进度」共用这套渲染：行是学生，列是作业/文档，
+  // 格子里一个勾。两个接口（/api/grades、/api/reads）返回的结构完全一样
+  // （columns + students[].done），所以后端那边也是同一段代码生成的。
 
-  function renderGrades(host, data) {
+  function renderGrid(host, data) {
     host.textContent = "";
 
     if (!data.students.length) {
@@ -441,19 +445,19 @@
     }
 
     var table = document.createElement("table");
-    table.className = "grades";
+    table.className = "grid";
 
     var head = document.createElement("thead");
     var headRow = document.createElement("tr");
     var corner = document.createElement("th");
-    corner.className = "grades__name";
+    corner.className = "grid__name";
     setText(corner, "姓名");
     headRow.appendChild(corner);
 
-    data.homeworks.forEach(function (hw) {
+    data.columns.forEach(function (col) {
       var th = document.createElement("th");
-      setText(th, hw.slug);
-      th.title = hw.title;
+      setText(th, col.slug);
+      th.title = col.title;
       headRow.appendChild(th);
     });
     head.appendChild(headRow);
@@ -464,16 +468,16 @@
       var tr = document.createElement("tr");
 
       var name = document.createElement("td");
-      name.className = "grades__name";
+      name.className = "grid__name";
       setText(name, student.name);
       tr.appendChild(name);
 
-      data.homeworks.forEach(function (hw) {
+      data.columns.forEach(function (col) {
         var td = document.createElement("td");
-        td.className = "grades__cell";
-        if (student.passed[hw.slug]) {
+        td.className = "grid__cell";
+        if (student.done[col.slug]) {
           setText(td, "✅");
-          td.title = student.name + "：" + hw.title + " 已通过";
+          td.title = student.name + "：" + col.title + " 已完成";
         }
         tr.appendChild(td);
       });
@@ -484,21 +488,110 @@
     host.appendChild(table);
   }
 
-  function loadGrades() {
-    var host = $("grades");
+  function loadGrid(host, url) {
     if (!host) return;
 
-    request("GET", API + "/grades")
+    request("GET", url)
       .then(function (data) {
-        renderGrades(host, data);
+        renderGrid(host, data);
       })
       .catch(function (err) {
         setText(host, "读取失败：" + err.message);
       });
   }
 
+  // ------------------------------------------------------------ 阅读登记
+  //
+  // 实验课页面末尾那一栏。学生填学号点一下，助教就知道他读到哪了。
+  //
+  // 学号记在 localStorage 里，下次打开同一篇就能直接显示「已登记」，不用重填。
+  // 存不上（隐私模式、被禁用）就静默跳过 —— 那不致命，不该让「登记成功了」
+  // 显示成报错。
+
+  var SID_KEY = "mind-city.student-id";
+
+  function rememberedSid() {
+    try {
+      return localStorage.getItem(SID_KEY) || "";
+    } catch (e) {
+      return "";
+    }
+  }
+
+  function rememberSid(sid) {
+    try {
+      localStorage.setItem(SID_KEY, sid);
+    } catch (e) {
+      /* 记不住就算了 */
+    }
+  }
+
+  /** 状态行：成功和报错共用一行，报错时换个颜色。 */
+  function renderReadNote(text, bad) {
+    var node = $("read-note");
+    node.className = "read__note" + (bad ? " read__note--bad" : "");
+    setText(node, text);
+    show(node, !!text);
+  }
+
+  /** 已登记：收掉输入栏，只留一行「已登记：...」。 */
+  function markRegistered(at) {
+    $("read").className = "read read--done";
+    renderReadNote("已登记：" + (at || "").replace("T", " ").slice(0, 16));
+  }
+
+  function submitRead(page) {
+    var sid = $("read-id").value.trim();
+
+    if (!/^[0-9]{11}$/.test(sid)) {
+      renderReadNote("学号是 11 位数字，请检查一下。", true);
+      return;
+    }
+
+    renderReadNote("");
+    $("read-submit").disabled = true;
+    request("POST", API + "/read", { page: page, student_id: sid })
+      .then(function (data) {
+        rememberSid(sid);
+        markRegistered(data.registered_at);
+      })
+      .catch(function (err) {
+        $("read-submit").disabled = false;
+        renderReadNote(err.message, true);
+      });
+  }
+
+  function initRead() {
+    var root = $("read");
+    if (!root) return;
+
+    var page = root.getAttribute("data-page") || "";
+    if (!page) {
+      renderReadNote("这个页面没有配置页面编号（data-page），请联系助教。", true);
+      return;
+    }
+
+    $("read-submit").addEventListener("click", function () {
+      submitRead(page);
+    });
+
+    var sid = rememberedSid();
+    if (!sid) return;
+
+    // 上次填过，先回填再问一次状态。查不动就算了，不打扰正在读文档的人。
+    $("read-id").value = sid;
+    request("GET", API + "/read?page=" + encodeURIComponent(page) +
+      "&sid=" + encodeURIComponent(sid))
+      .then(function (data) {
+        if (data.registered) markRegistered(data.registered_at);
+      })
+      .catch(function () {});
+  }
+
   function init() {
-    loadGrades(); // 「作业完成情况」页
+    loadGrid($("grades"), API + "/grades"); // 「作业完成情况」页
+    loadGrid($("reads"), API + "/reads"); // 「阅读进度」页
+    initRead(); // 实验课页面末尾的登记栏
 
     if (!$("judge")) return; // 剩下的是作业页才需要的东西
 
