@@ -293,9 +293,13 @@
   border-color: #00b0ff;
 }
 
+/* 点进块里的输入框时，提示块不发光。
+   Material 的基础规则给所有 .admonition:focus-within 加了外发光，内置类型各自
+   换成自己的颜色；todo 这里直接顶掉。注意不能只是把这条删掉 —— 删了会回落到
+   基础规则，亮成主题的蓝色。这里把静止状态的阴影还回去，聚焦前后完全一样。 */
 .md-typeset .admonition.todo:focus-within,
 .md-typeset details.todo:focus-within {
-  box-shadow: 0 0 0 0.2rem #00b0ff1a;
+  box-shadow: var(--md-shadow-z1);
 }
 
 .md-typeset .todo > .admonition-title,
