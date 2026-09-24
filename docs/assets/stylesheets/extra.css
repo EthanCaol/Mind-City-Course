@@ -604,8 +604,15 @@
    全班 74 行，所以要压扁一点、加斑马纹，不然扫起来很累。
    --------------------------------------------------------------------------- */
 
+/* 表格自己滚，而不是让整页滚。
+   - overflow: auto —— 列一多（阅读进度现在 8 列，还会加）表格就比内容区宽。
+     宁可横向滚，也不要把 dev-cpp 这种列头折成两行：折了就对不上是哪一列。
+   - max-height —— 横向滚动条出现在滚动区底部，74 行的表格不限高就等于不存在。
+     限高之后它一直在视野里，不用先滚到底再横着拉。 */
 .md-typeset .grid-host {
   margin-top: 1.4em;
+  overflow: auto;
+  max-height: 72vh;
 }
 
 .md-typeset .grid-loading {
@@ -617,6 +624,7 @@
   width: 100%;
   margin-top: 0;
   font-size: 0.72rem;
+  white-space: nowrap; /* 列头不折行，表格按内容撑开 */
 }
 
 .md-typeset table.grid th,
@@ -634,19 +642,46 @@
   border-right: 0;
 }
 
-/* 隔行淡底，74 行不这样的话很容易看串行 */
+/* 隔行淡底，74 行不这样的话很容易看串行。
+   奇数行也要给个不透明的底色 —— 下面姓名列粘住时要靠它挡住从底下滚过去的格子，
+   行底透明的话那些格子会透出来。 */
+.md-typeset table.grid tbody tr {
+  background-color: var(--md-default-bg-color);
+}
+
 .md-typeset table.grid tbody tr:nth-child(even) {
   background-color: var(--md-code-bg-color);
 }
 
-.md-typeset table.grid th {
+/* 表头吸顶：滚到第 40 行也知道每一列是什么 */
+.md-typeset table.grid thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: var(--md-default-bg-color);
   color: var(--md-default-fg-color--light);
   font-weight: 700;
 }
 
-.md-typeset .grid__name {
+/* 姓名列吸左：横向滚动时不显示姓名，这张表就白看了。
+   底色跟着所在行走，所以要连偶数行那条一起写（选择器更具体，能盖住上面那条）。 */
+.md-typeset table.grid .grid__name {
+  position: sticky;
+  left: 0;
+  z-index: 1;
   width: 9rem;
   text-align: left;
+  background-color: var(--md-default-bg-color);
+}
+
+.md-typeset table.grid tbody tr:nth-child(even) .grid__name {
+  background-color: var(--md-code-bg-color);
+}
+
+/* 左上角那一格同时吸顶又吸左，要压住另外两个，否则被它们盖掉 */
+.md-typeset table.grid thead th.grid__name {
+  z-index: 3;
+  background-color: var(--md-default-bg-color);
 }
 
 .md-typeset .grid__cell {

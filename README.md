@@ -358,6 +358,7 @@ gh api repos/EthanCaol/Mind-City-Course/hooks/678947351/deliveries \
 | 日志报 `mkdocs: command not found`（退出码 127） | systemd 的 `PATH` 不含 miniconda。部署脚本开头已显式 `PATH="$HOME/miniconda3/bin:$PATH"`，**改动脚本时不要删掉这行** |
 | GitHub 投递显示 `FAILED` / `context deadline exceeded` | **GitHub webhook 超时只有 10 秒**。接收器必须验签后立刻返回（现为 202），部署丢到后台线程跑。**不要把它改回同步执行**——失败的投递不会自动重试，push 会静默丢失 |
 | 构建失败但站点还在 | 预期行为。脚本先构建到 staging，成功才同步，构建失败时线上保持旧版 |
+| 日志报 `Cannot fast-forward to multiple branches`（退出码 128） | 部署的 `git pull` 和**别人在同一个仓库里跑的 `git fetch`/`git pull` 撞了**，两个进程抢着写 `.git/FETCH_HEAD`，同一条 `main` 被写了两遍，`merge --ff-only` 见到多个 head 就拒绝。本地 `git pull` 看起来一切正常，重跑一次部署脚本即可。**不要在可能触发部署的时间窗口里手动对这个仓库跑 fetch/pull** |
 | 中文标题锚点变成 `_1`/`_2` | `mkdocs.yml` 的 `toc.slugify` 配置被改动了，见下 |
 
 ## 灾难恢复：从零重建
