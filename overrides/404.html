@@ -1,0 +1,24 @@
+{#-
+  覆盖主题自带的 404 页（material/templates/404.html）。
+
+  为什么走主题覆盖而不是往 docs/ 里放一个 404.html：MkDocs 的 404 页是**主题模板渲染
+  出来的**，docs/ 下同名的静态文件会被静默丢掉（试过，site/404.html 里出来的仍是主题
+  那一版，没有任何警告）。
+
+  停两秒再回首页 —— 立刻跳走的话，「地址不对」这件事就看不见了，输错地址的人只会觉得
+  页面怪而不知道该改地址。题库改名、章节调整都会留下这种旧地址。
+
+  页面本身仍是主题的完整外壳（顶栏、目录、搜索都在），所以这两秒里学生有得可点，
+  不用干等。
+-#}
+{% extends "main.html" %}
+
+{% block extrahead %}
+  <meta http-equiv="refresh" content="2; url={{ config.site_url }}">
+{% endblock %}
+
+{% block content %}
+  <h1>404</h1>
+  <p>这个地址不存在，两秒后自动回到<a href="{{ config.site_url }}">首页</a>。</p>
+  <p>如果你是从收藏夹或旧链接点进来的，多半是页面改过名。</p>
+{% endblock %}

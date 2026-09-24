@@ -6,6 +6,9 @@ docs_dir: docs
 theme:
   name: material
   language: zh
+  # 主题覆盖目录。目前只放了一个 404.html（改成「两秒后回首页」）。
+  # 注意：docs/ 下同名的 404.html 是无效的，404 由主题模板渲染，见覆盖文件的注释。
+  custom_dir: overrides
   icon:
     logo: material/city
   features:

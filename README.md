@@ -15,6 +15,8 @@
 ├── mkdocs.yml         # 站点配置：主题、导航(nav)、Markdown 扩展、hooks
 ├── hooks/
 │   └── revision_notice.py   # 构建钩子：把「最后更新」提示从页脚挪到标题下方
+├── overrides/
+│   └── 404.html       # 主题覆盖：404 页改成「两秒后回首页」
 ├── docs/
 │   ├── index.md       # 首页
 │   ├── material.md    # 课程资料：网站、书目、课件链接、每周课程安排
@@ -200,6 +202,19 @@ journalctl --user -u mind-city-judge -f      # 实时看判题日志
 ```
 
 `mind-city-docs` 只绑本地回环，**不对公网提供内容**，仅供在服务器上写文档时预览。公网由 Caddy 直接托管 `/var/www/mind-city` 的静态文件。
+
+## 404 页与错误处理
+
+404 页由 `overrides/404.html`（主题覆盖）生成，样式跟站点一致，打开后两秒回首页。
+**注意不要往 `docs/` 里放 404.html** —— 404 是主题模板渲染出来的，docs 下同名的静态
+文件会被静默丢掉，没有任何警告。
+
+Caddy 这边还要配 `handle_errors` 才会把这一页发出去（不配的话只回一个空响应体，
+浏览器显示它自己的报错）。两个坑：
+
+- 必须 `not path /judge/*`。判题接口用 404 表达「没有这份提交」「没有这一页」这类
+  正常结果，换成 HTML 前端会拿到解析不了的内容
+- `handle_errors` 在自己的块里要重新写一次 `root`，`handle` 块里那条不跨块生效
 
 另外还有一个 **system 级服务** `isolate.service`，是在线评测的沙箱依赖，**必须常驻**：
 
