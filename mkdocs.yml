@@ -28,9 +28,9 @@ nav:
   - 站点首页: index.md
   - 课程资料: material.md
   - 站点计划: plan.md
-  - 作业:
-      - 作业完成情况: homework/completion.md
-      - 作业1：整数加法: homework/01-add.md
+  - 编程作业:
+      - 作业完成情况: homework-code/completion.md
+      - 作业1：整数加法: homework-code/01-add.md
   - 实验课文档:
       - 文档阅读进度: setup/reading.md
       - 实用工具推荐: setup/useful.md
@@ -42,6 +42,15 @@ nav:
       - (3) VSCode 入门教程: setup/vscode.md
       - (4) Linux 命令行基础: setup/linux-cli.md
       - (5) Git-GitHub 基础操作: setup/git-github.md
+  - 教材习题:
+      - 第二章：基本数据类型: homework-book/chapter-2.md
+      - 第三章：结构化程序设计: homework-book/chapter-3.md
+      - 第四章：数组: homework-book/chapter-4.md
+      - 第五章：函数: homework-book/chapter-5.md
+      - 第六章：指针和引用: homework-book/chapter-6.md
+      - 第七章：结构和链表: homework-book/chapter-7.md
+      - 第八章：数据文件处理技术: homework-book/chapter-8.md
+      - 第九章：算法设计技术基础: homework-book/chapter-9.md
   - 题库:
       - 01-标识符常量与数据类型: question/01-identifiers-types.md
       - 02-格式化输入输出: question/02-format-io.md

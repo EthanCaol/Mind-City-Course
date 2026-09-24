@@ -15,6 +15,7 @@ icon: material/bookshelf
 **课程教材**
 
 - [C语言程序设计（第3版）](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%88%E7%AC%AC3%E7%89%88%EF%BC%89.pdf)
+- [C语言程序设计-习题解答（第3版）](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1-%E4%B9%A0%E9%A2%98%E8%A7%A3%E7%AD%94%EF%BC%88%E7%AC%AC3%E7%89%88%EF%BC%89.pdf)
 
 **语言基础**
 

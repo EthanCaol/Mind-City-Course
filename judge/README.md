@@ -6,7 +6,7 @@
 ## 运行方式
 
 ```
-浏览器  https://mind-city.com/homework/01-add/
+浏览器  https://mind-city.com/homework-code/01-add/
    │       页面由 MkDocs 构建，JS 调站内 API
    ▼
 Caddy   handle /judge/api/*  → 127.0.0.1:9100

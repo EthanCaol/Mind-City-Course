@@ -332,7 +332,7 @@
 }
 
 /* ---------------------------------------------------------------------------
-   在线测评（docs/homework/01-add.md）
+   在线测评（docs/homework-code/01-add.md）
 
    页面骨架是那个 .md 文件里的裸 HTML 块，交互在
    docs/assets/javascripts/judge.js，接口走 /judge/api/*。
@@ -677,7 +677,7 @@
 }
 
 /* ---------------------------------------------------------------------------
-   完成情况矩阵（docs/homework/completion.md、docs/setup/reading.md）
+   完成情况矩阵（docs/homework-code/completion.md、docs/setup/reading.md）
 
    行是学生、列是作业或实验课文档，表格由 judge.js 从 /judge/api/grades
    和 /judge/api/reads 现拉。两个接口返回的结构一样，这里也共用一套样式。

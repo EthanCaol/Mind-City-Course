@@ -20,3 +20,6 @@ judge/data/
 .idea/
 .DS_Store
 *.swp
+
+# 教材扫描件 81MB、受版权保护，不进 public 仓库
+docs/homework-book/*.pdf
