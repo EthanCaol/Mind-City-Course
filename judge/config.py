@@ -42,7 +42,6 @@ READ_PAGES: tuple[tuple[str, str], ...] = (
     ("dsh", "DSH 工具链配置"),
     ("dev-cpp", "Dev-C++ 环境搭建"),
     ("wsl2", "WSL2 环境搭建"),
-    ("macos", "macOS 环境搭建"),
     ("vscode", "VSCode 入门教程"),
     ("linux-cli", "Linux 命令行基础"),
     ("git-github", "Git-GitHub 基础操作"),
