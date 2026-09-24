@@ -34,11 +34,10 @@
 - [实用功能&设置【浏览器基础04】](https://www.bilibili.com/video/BV1d3hc6kECV)
 - [插件扩展【浏览器基础05】](https://www.bilibili.com/video/BV1MUtB6wEmo)
 
-!!! tip "阅读登记"
+!!! todo "文档完成登记：让助教知道，你成功跑通了文档流程"
 
     <div class="read" id="read" data-page="win11">
       <div class="read__bar">
-        <span class="read__hint">文档完成登记：让助教知道你成功跑通了文档流程</span>
         <input id="read-id" class="read__input" type="text" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="11 位学号">
         <button id="read-submit" type="button">我已读完</button>
       </div>

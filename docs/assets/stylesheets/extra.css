@@ -270,6 +270,52 @@
 }
 
 /* ---------------------------------------------------------------------------
+   自定义提示块类型：todo
+
+   Material 9.7.7 只内置 12 种类型（note / abstract / info / tip / success /
+   question / warning / failure / danger / bug / example / quote），没有 todo。
+   直接写 !!! todo 只会套上基础样式：一条蓝边框，标题既没有图标也没有底色，
+   混在其他提示块里一眼就是半成品。
+
+   所以照内置类型的写法补一套。内置类型一共就这五条规则 —— 边框、聚焦外发光、
+   标题底色、标题图标、标题后面的颜色 —— 颜色按 Material 自己的写法直接写 hex
+   （它的类型色本来就是逐个写死的，没有变量可复用）。
+
+   配色用的就是内置 warning 那一套 #ff9100（连 1a 的透明度也照抄），只有图标不同：
+   warning 是三角感叹号，todo 是 Material Design Icons 的 checkbox-marked-outline
+   （一个带勾的方框），跟内置类型一样内联成 data-URI。
+   换句话说，todo 和 warning 长得几乎一样，区别只在图标和语义 —— 这是有意为之，
+   嫌和 warning 撞脸就把下面五处 hex 一起换掉。
+   --------------------------------------------------------------------------- */
+
+.md-typeset .admonition.todo,
+.md-typeset details.todo {
+  border-color: #ff9100;
+}
+
+.md-typeset .admonition.todo:focus-within,
+.md-typeset details.todo:focus-within {
+  box-shadow: 0 0 0 0.2rem #ff91001a;
+}
+
+.md-typeset .todo > .admonition-title,
+.md-typeset .todo > summary {
+  background-color: #ff91001a;
+}
+
+.md-typeset .todo > .admonition-title::before,
+.md-typeset .todo > summary::before {
+  background-color: #ff9100;
+  -webkit-mask-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,19H5V5H15V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V11H19M7.91,10.08L6.5,11.5L11,16L21,6L19.59,4.58L11,13.17L7.91,10.08Z"/></svg>');
+  mask-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,19H5V5H15V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V11H19M7.91,10.08L6.5,11.5L11,16L21,6L19.59,4.58L11,13.17L7.91,10.08Z"/></svg>');
+}
+
+.md-typeset .todo > .admonition-title::after,
+.md-typeset .todo > summary::after {
+  color: #ff9100;
+}
+
+/* ---------------------------------------------------------------------------
    在线测评（docs/homework/01-add.md）
 
    页面骨架是那个 .md 文件里的裸 HTML 块，交互在
@@ -768,17 +814,6 @@
   border: 0.05rem solid var(--md-default-fg-color--lighter);
   border-radius: 0.2rem;
   background-color: var(--md-code-bg-color);
-}
-
-/* 条内最上面那句说明。颜色跟判题工具条的 .judge__hint 一致，字号再小一档
-   （0.72rem，跟下面那行「已登记：...」同一个尺码）——它比输入框里的字更次要。
-   flex-basis 给 100%，让它自己占满一行，把输入框和按钮挤到下一行：
-   这句话二十多个字，跟输入框并排会把输入框压得只剩几厘米。 */
-.md-typeset .read__hint {
-  flex: 1 1 100%;
-  margin-left: 0.3rem; /* 别贴着条的左边框，跟里面的输入框错开一点 */
-  font-size: 0.72rem;
-  color: var(--md-default-fg-color--light);
 }
 
 /* 登记过之后整条收掉，只留下面那行「已登记：...」 */
