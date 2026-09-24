@@ -236,3 +236,14 @@ npx @deepseek-ai/dsh web
 !!! tip "通过 SSH 启动时不会自动打开浏览器"
     它只会把宿主机上的地址打印出来，转发到你本机是需要你自己配置 SSH 客户端和端口转发（VSCode Remote 一般会自动帮你转）。转发好之后，在本机浏览器里打开那个地址就行。
 
+## 阅读登记
+
+读完这一篇的话，填上学号点一下就行。不计分，只是让助教知道大家跟到哪了。
+
+<div class="read" id="read" data-page="dsh">
+  <div class="read__bar">
+    <input id="read-id" class="read__input" type="text" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="11 位学号">
+    <button id="read-submit" type="button">我已读完</button>
+  </div>
+  <p class="read__note" id="read-note" hidden></p>
+</div>

@@ -30,14 +30,20 @@ ADMIN_TOKEN_PATH = Path.home() / ".config" / "mind-city" / "judge-admin-token"
 TUTORS = ("26113050003", "26113050344")
 
 # 带「阅读登记」栏的实验课页面。slug 就是页面里 `data-page` 的值，也是总览页的列名；
-# title 只用在悬停提示上。顺序就是列的顺序。
+# title 只用在悬停提示上。顺序就是总览页列的顺序，这里跟侧边栏「实验课文档」一致。
 #
 # 这里**手工维护**，不去扫 docs 目录：服务只认这几个 slug，多一个少一个都由这份清单说了算。
-# 加了新的实验课页面就在末尾补一条，否则总览页不会出现那一列（页面上的登记栏会报「没有这一页」）。
+# 加了新的实验课页面就在对应位置补一条，否则总览页不会出现那一列（页面上的登记栏会报「没有这一页」）。
+#
+# 「文档阅读进度」和「实用工具推荐」不在里面 —— 前者是总览页自己，后者是查资料用的，
+# 都不属于「按顺序读下来」的进度。
 READ_PAGES: tuple[tuple[str, str], ...] = (
+    ("claude", "Claude 工具链配置"),
+    ("dsh", "DSH 工具链配置"),
     ("dev-cpp", "Dev-C++ 环境搭建"),
-    ("wsl2-vscode", "WSL2 环境搭建"),
-    ("macos-vscode", "macOS 环境搭建"),
+    ("wsl2", "WSL2 环境搭建"),
+    ("macos", "macOS 环境搭建"),
+    ("vscode", "VSCode 入门教程"),
     ("linux-cli", "Linux 命令行基础"),
     ("git-github", "Git-GitHub 基础操作"),
 )

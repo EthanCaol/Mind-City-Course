@@ -2,7 +2,7 @@
 # macOS + GCC + VSCode 环境搭建
 
 !!! warning "本篇内容由 AI 生成"
-    助教没有使用过 Mac，所以本文的内容是由 AI 生成的，助教只做了**语法和逻辑上的初步校对**。
+    助教没有使用过 Mac，所以本文的内容完全是由 AI 生成的。
 
     如果你在 Mac 上遇到问题，请**优先向 AI 咨询**，或者向助教求助。
 
@@ -497,7 +497,7 @@ source ~/.zshrc
 
 读完这一篇的话，填上学号点一下就行。不计分，只是让助教知道大家跟到哪了。
 
-<div class="read" id="read" data-page="macos-vscode">
+<div class="read" id="read" data-page="macos">
   <div class="read__bar">
     <input id="read-id" class="read__input" type="text" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="11 位学号">
     <button id="read-submit" type="button">我已读完</button>
