@@ -444,6 +444,17 @@
       return;
     }
 
+    // 横向滚动条做在表格**上面**。CSS 挪不动容器自己的滚动条（只能在下边），
+    // 所以另做一个光杆 div，跟真正的滚动区双向镜像 scrollLeft。
+    // 74 行的表，滚动条在底下的话得先滚到表尾才够得着。
+    var bar = document.createElement("div");
+    bar.className = "matrix__bar";
+    var barInner = document.createElement("div");
+    bar.appendChild(barInner);
+
+    var scroll = document.createElement("div");
+    scroll.className = "matrix__scroll";
+
     var table = document.createElement("table");
     table.className = "matrix";
 
@@ -485,7 +496,32 @@
       body.appendChild(tr);
     });
     table.appendChild(body);
-    host.appendChild(table);
+    scroll.appendChild(table);
+    host.appendChild(bar);
+    host.appendChild(scroll);
+
+    // 两条滚动条互相镜像。scroll 事件是异步派发的，用标志位挡不住回环 ——
+    // 直接比数值：相等就什么都不做，来回赋值自然收敛。
+    function mirror(from, to) {
+      if (to.scrollLeft !== from.scrollLeft) to.scrollLeft = from.scrollLeft;
+    }
+    scroll.addEventListener("scroll", function () {
+      mirror(scroll, bar);
+    });
+    bar.addEventListener("scroll", function () {
+      mirror(bar, scroll);
+    });
+
+    // 假滚动条的滚动范围得跟表格一样宽，一条对一条才能同步到底。
+    // 表格不溢出时整条收起来。宽度要等表格进了 DOM 才量得到。
+    function layout() {
+      barInner.style.width = table.scrollWidth + "px";
+      bar.hidden = table.scrollWidth <= scroll.clientWidth;
+    }
+    layout();
+    // 窗口变窄可能从「不溢出」变成「溢出」。一张页面上这个表格只渲染一次，
+    // 所以监听器不会越积越多。
+    window.addEventListener("resize", layout);
   }
 
   function loadGrid(host, url) {

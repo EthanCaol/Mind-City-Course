@@ -610,13 +610,60 @@
    它已经不是表格了。矩阵用 matrix，也是这个原因。
    --------------------------------------------------------------------------- */
 
+.md-typeset .matrix-host {
+  margin-top: 1.4em;
+}
+
 /* 列多了（阅读进度现在 8 列，还会加）就横向滚，而不是把列头折成两行 ——
    dev-cpp 折成 dev- / cpp 之后就对不上是哪一列了。
    注意只滚横向：表格一旦限高，页面里就会多出一条纵向滚动条，
    74 行的表套在一条窄缝里翻，比直接滚页面难受得多。 */
-.md-typeset .matrix-host {
-  margin-top: 1.4em;
+.md-typeset .matrix__scroll {
   overflow-x: auto;
+  /* 自己不画横向滚动条 —— 上面那条已经代表它了。
+     Firefox 认 scrollbar-width，Chrome/Safari 认 ::-webkit-scrollbar。 */
+  scrollbar-width: none;
+}
+
+.md-typeset .matrix__scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* 表格上边那条横向滚动条。
+   CSS 没法把容器自己的滚动条挪到上边，所以另做一个光杆 div，由 judge.js
+   跟真正的滚动区双向镜像 scrollLeft。表格 74 行，滚动条落在最底下的话，
+   得先滚到表尾才够得着。
+   它不装内容，所以高度就是滚动条的高度（跟下面 ::-webkit-scrollbar 对齐）。 */
+.md-typeset .matrix__bar {
+  height: 0.6rem;
+  margin-bottom: 0.3rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-color: var(--md-default-fg-color--lighter) var(--md-code-bg-color);
+}
+
+/* 撑出滚动范围用的，只要宽度对，高度随便 */
+.md-typeset .matrix__bar > div {
+  height: 1px;
+}
+
+/* 滚动条配色跟着主题走，跟侧边栏那条保持一致 */
+.md-typeset .matrix__bar::-webkit-scrollbar {
+  height: 0.6rem;
+}
+
+.md-typeset .matrix__bar::-webkit-scrollbar-track {
+  background-color: var(--md-code-bg-color);
+  border-radius: 0.3rem;
+}
+
+.md-typeset .matrix__bar::-webkit-scrollbar-thumb {
+  background-color: var(--md-default-fg-color--lighter);
+  border-radius: 0.3rem;
+}
+
+.md-typeset .matrix__bar::-webkit-scrollbar-thumb:hover {
+  background-color: var(--md-default-fg-color--light);
 }
 
 .md-typeset .matrix-loading {
