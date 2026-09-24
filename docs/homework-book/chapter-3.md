@@ -1,7 +1,3 @@
----
-icon: material/notebook-outline
----
-
 # 第三章 · 结构化程序设计
 
 《C语言程序设计（第3版）》第 3 章课后习题，共 24 题。

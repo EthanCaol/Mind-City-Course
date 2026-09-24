@@ -1,7 +1,3 @@
----
-icon: material/notebook-outline
----
-
 # 第五章 · 函数
 
 《C语言程序设计（第3版）》第 5 章课后习题，共 16 题。

@@ -1,7 +1,3 @@
----
-icon: material/notebook-outline
----
-
 # 第八章 · 数据文件处理技术
 
 《C语言程序设计（第3版）》第 8 章课后习题，共 10 题。

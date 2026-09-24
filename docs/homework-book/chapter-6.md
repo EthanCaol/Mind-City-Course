@@ -1,7 +1,3 @@
----
-icon: material/notebook-outline
----
-
 # 第六章 · 指针和引用
 
 《C语言程序设计（第3版）》第 6 章课后习题，共 20 题。

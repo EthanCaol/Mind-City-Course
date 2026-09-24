@@ -1,7 +1,3 @@
----
-icon: material/notebook-outline
----
-
 # 第九章 · 算法设计技术基础
 
 《C语言程序设计（第3版）》第 9 章课后习题，共 9 题。
