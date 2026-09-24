@@ -29,6 +29,16 @@
 
 ---
 
+!!! quote "延伸阅读：vim"
+
+    在命令行里改文件绕不开编辑器。Linux 上最经典的编辑器就是 vim，几乎所有服务器都预装了它，而别的编辑器多半没有。
+
+    [《保姆级入门：Vim 编辑器》](https://www.bilibili.com/video/BV13t4y1t7Wg)
+
+    ![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260924173435000.jpg)
+
+---
+
 !!! todo "文档完成登记：告诉助教一下，你成功跑通了整个文档的流程"
 
     <div class="read" id="read" data-page="linux-cli">
