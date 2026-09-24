@@ -870,31 +870,11 @@
   color: var(--md-default-fg-color--light);
 }
 
-/* 「恭喜同学，你已经完成了这篇文档的配置流程」：比出错提示稍大一点，
-   它是给学生的反馈，不是脚注。 */
+/* 「✅ 恭喜同学，你已经完成了这篇文档的配置流程」：比出错提示稍大一点，
+   它是给学生的反馈，不是脚注。那个绿勾就是文案里的 ✅，没有另画图标。 */
 .md-typeset .read__note--done {
   font-size: 0.8rem;
   color: var(--md-default-fg-color);
-}
-
-/* 前面那个绿色的勾。用内联 SVG 当遮罩画，跟 todo 提示块的图标是同一个做法。
-   不用 ✅ emoji：它是张彩色方图，各平台字形还不一样，跟这里的文字排版对不齐；
-   自己画的话颜色和大小都能跟正文对上。图标取自 Material Design Icons 的
-   check-circle，颜色用 Material 的 success 绿。 */
-.md-typeset .read__note--done::before {
-  content: "";
-  display: inline-block;
-  width: 0.9em;
-  height: 0.9em;
-  margin-right: 0.4em;
-  vertical-align: -0.12em; /* 跟文字基线对齐，纯靠 eye ball 调的 */
-  background-color: #00c853;
-  -webkit-mask-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z"/></svg>');
-  mask-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z"/></svg>');
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
 }
 
 .md-typeset .read__note--bad {
