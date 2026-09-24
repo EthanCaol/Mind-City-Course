@@ -445,12 +445,12 @@
     }
 
     var table = document.createElement("table");
-    table.className = "grid";
+    table.className = "matrix";
 
     var head = document.createElement("thead");
     var headRow = document.createElement("tr");
     var corner = document.createElement("th");
-    corner.className = "grid__name";
+    corner.className = "matrix__name";
     setText(corner, "姓名");
     headRow.appendChild(corner);
 
@@ -468,13 +468,13 @@
       var tr = document.createElement("tr");
 
       var name = document.createElement("td");
-      name.className = "grid__name";
+      name.className = "matrix__name";
       setText(name, student.name);
       tr.appendChild(name);
 
       data.columns.forEach(function (col) {
         var td = document.createElement("td");
-        td.className = "grid__cell";
+        td.className = "matrix__cell";
         if (student.done[col.slug]) {
           setText(td, "✅");
           td.title = student.name + "：" + col.title + " 已完成";

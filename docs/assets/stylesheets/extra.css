@@ -597,36 +597,42 @@
 }
 
 /* ---------------------------------------------------------------------------
-   完成情况矩阵（docs/homework/completion.md、docs/reading.md）
+   完成情况矩阵（docs/homework/completion.md、docs/setup/reading.md）
 
    行是学生、列是作业或实验课文档，表格由 judge.js 从 /judge/api/grades
    和 /judge/api/reads 现拉。两个接口返回的结构一样，这里也共用一套样式。
    全班 74 行，所以要压扁一点、加斑马纹，不然扫起来很累。
+
+   **这张表的 class 不能叫 grid。** Material 自带 `.md-typeset .grid`
+   （卡片宫格），会把 `display` 改成 `grid` —— 表格于是变成 Grid 容器，
+   `<thead>` 和 `<tbody>` 成了两个独立的 grid item，各自按自己的内容算列宽。
+   表现是表头和数据错开一整列，而且怎么调表格自己的 CSS 都没用：
+   它已经不是表格了。矩阵用 matrix，也是这个原因。
    --------------------------------------------------------------------------- */
 
 /* 列多了（阅读进度现在 8 列，还会加）就横向滚，而不是把列头折成两行 ——
    dev-cpp 折成 dev- / cpp 之后就对不上是哪一列了。
    注意只滚横向：表格一旦限高，页面里就会多出一条纵向滚动条，
    74 行的表套在一条窄缝里翻，比直接滚页面难受得多。 */
-.md-typeset .grid-host {
+.md-typeset .matrix-host {
   margin-top: 1.4em;
   overflow-x: auto;
 }
 
-.md-typeset .grid-loading {
+.md-typeset .matrix-loading {
   font-size: 0.8rem;
   color: var(--md-default-fg-color--light);
 }
 
-.md-typeset table.grid {
+.md-typeset table.matrix {
   width: 100%;
   margin-top: 0;
   font-size: 0.72rem;
   white-space: nowrap; /* 列头不折行，表格按内容撑开 */
 }
 
-.md-typeset table.grid th,
-.md-typeset table.grid td {
+.md-typeset table.matrix th,
+.md-typeset table.matrix td {
   padding: 0.3rem 0.5rem;
   border: 0;
   border-bottom: 0.05rem solid var(--md-default-fg-color--lightest);
@@ -635,27 +641,27 @@
 }
 
 /* 最后一列右边不封口 */
-.md-typeset table.grid th:last-child,
-.md-typeset table.grid td:last-child {
+.md-typeset table.matrix th:last-child,
+.md-typeset table.matrix td:last-child {
   border-right: 0;
 }
 
 /* 隔行淡底，74 行不这样的话很容易看串行 */
-.md-typeset table.grid tbody tr:nth-child(even) {
+.md-typeset table.matrix tbody tr:nth-child(even) {
   background-color: var(--md-code-bg-color);
 }
 
-.md-typeset table.grid thead th {
+.md-typeset table.matrix thead th {
   color: var(--md-default-fg-color--light);
   font-weight: 700;
 }
 
-.md-typeset .grid__name {
+.md-typeset .matrix__name {
   width: 9rem;
   text-align: left;
 }
 
-.md-typeset .grid__cell {
+.md-typeset .matrix__cell {
   width: 5rem;
   text-align: center;
   font-size: 0.85rem; /* 对勾是 emoji，比正文小一点才不突兀 */

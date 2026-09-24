@@ -13,6 +13,6 @@ icon: material/check-all
 
 登记不计分。进度跟不上、或者中间哪一步卡住了，都可以在课程微信群里问。
 
-<div id="reads" class="grid-host">
-  <p class="grid-loading"></p>
+<div id="reads" class="matrix-host">
+  <p class="matrix-loading"></p>
 </div>
