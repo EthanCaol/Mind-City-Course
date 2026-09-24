@@ -100,7 +100,9 @@ plugins:
       enable_creation_date: false
       fallback_to_build_date: true
   - open-in-new-tab:
-      add_icon: true        # 站外链接后面加一个小箭头图标
+      # 站外链接仍然在新标签页打开（由插件的 JS 负责），只是不显示那个 ↗ 小箭头：
+      # 列表里一行一个链接时，箭头太抢眼，而且「是链接」本身已经靠颜色区分了。
+      add_icon: false
   # 构建时抓取外部资源（Google Fonts、站外图片）并本地化。
   # 学生无需访问 fonts.googleapis.com（内地不可达）。必须放在最后。
   - privacy
