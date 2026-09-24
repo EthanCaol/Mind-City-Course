@@ -8,6 +8,8 @@
 
 <https://www.bilibili.com/video/BV13ctf6RECM>
 
+![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260924145245076.png)
+
 这篇教程的写法是「最小但够用」：只保留最核心的知识，面向完全没有接触过 Linux 的读者。内容大致包括：
 
 - 内核与发行版、Shell 与命令的基本结构
