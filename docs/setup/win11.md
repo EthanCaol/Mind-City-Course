@@ -36,10 +36,9 @@
 
 !!! tip "阅读登记"
 
-    文档完成登记：让助教知道你成功跑通了文档流程
-
     <div class="read" id="read" data-page="win11">
       <div class="read__bar">
+        <span class="read__hint">文档完成登记：让助教知道你成功跑通了文档流程</span>
         <input id="read-id" class="read__input" type="text" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="11 位学号">
         <button id="read-submit" type="button">我已读完</button>
       </div>

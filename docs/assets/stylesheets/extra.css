@@ -770,6 +770,15 @@
   background-color: var(--md-code-bg-color);
 }
 
+/* 条内左侧那句说明，字号和颜色跟判题工具条的 .judge__hint 一致。
+   flex-basis 给 100%，让它自己占满一行，把输入框和按钮挤到下一行：
+   这句话二十多个字，跟输入框并排会把输入框压得只剩几厘米。 */
+.md-typeset .read__hint {
+  flex: 1 1 100%;
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color--light);
+}
+
 /* 登记过之后整条收掉，只留下面那行「已登记：...」 */
 .md-typeset .read--done .read__bar {
   display: none;

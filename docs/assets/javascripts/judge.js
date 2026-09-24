@@ -611,6 +611,15 @@
       submitRead(page);
     });
 
+    // 输入框里按回车等同于点「我已读完」。按钮在提交期间是禁用的，
+    // 这里跟着一起挡，免得连按回车重复提交。
+    $("read-id").addEventListener("keydown", function (e) {
+      if (e.key !== "Enter") return;
+      e.preventDefault();
+      if ($("read-submit").disabled) return;
+      submitRead(page);
+    });
+
     var sid = rememberedSid();
     if (!sid) return;
 
