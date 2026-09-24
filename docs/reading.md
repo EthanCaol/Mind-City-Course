@@ -1,5 +1,5 @@
 ---
-icon: material/book-check
+icon: material/check-all
 ---
 
 # 阅读进度
