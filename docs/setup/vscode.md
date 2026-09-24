@@ -17,6 +17,12 @@
 
     ![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260914214845964.jpg)
 
+!!! quote "合集"
+
+    [《VSCode 教程》合集（共 29 期）](https://space.bilibili.com/103466775/lists/4080160)
+
+    ![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260924171329632.jpg)
+
 
 ### 1.1 先新建一个配置文件（Profile）
 
