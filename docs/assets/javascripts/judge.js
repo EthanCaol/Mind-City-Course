@@ -545,6 +545,7 @@
   // 显示成报错。
 
   var SID_KEY = "mind-city.student-id";
+  var NAME_KEY = "mind-city.student-name";
 
   function rememberedSid() {
     try {
@@ -562,6 +563,24 @@
     }
   }
 
+  /** 姓名只用来做那句「×× 同学，恭喜…」。存在本地是为了下次打开不用再问服务端
+      （GET 那个接口故意不查花名册），换台电脑就拿不到，退回不带姓名的说法。 */
+  function rememberedName() {
+    try {
+      return localStorage.getItem(NAME_KEY) || "";
+    } catch (e) {
+      return "";
+    }
+  }
+
+  function rememberName(name) {
+    try {
+      localStorage.setItem(NAME_KEY, name || "");
+    } catch (e) {
+      /* 记不住就算了 */
+    }
+  }
+
   /** 状态行：登记成功的恭喜、出错的红字，共用这一个元素。
       kind 传 "done" 或 "bad"；不传就是普通提示。 */
   function renderReadNote(text, kind) {
@@ -571,9 +590,12 @@
     show(node, !!text);
   }
 
-  /** 登记过之后：输入框和按钮都留着不动，只在下面加一行恭喜。 */
-  function markRegistered() {
-    renderReadNote("✅ 恭喜你已经完成了这篇文档", "done");
+  /** 登记过之后：输入框和按钮都留着不动，只在下面加一行恭喜。
+      行首那个绿勾是 CSS 画的（.read__note--done::before），不在文案里。
+      name 拿不到时不硬凑，用不带姓名的说法。 */
+  function markRegistered(name) {
+    var who = name ? name + " 同学，恭喜" : "恭喜同学，";
+    renderReadNote(who + "你已经完成了这篇文档的配置流程", "done");
   }
 
   function submitRead(page) {
@@ -589,7 +611,8 @@
     request("POST", API + "/read", { page: page, student_id: sid })
       .then(function (data) {
         rememberSid(sid);
-        markRegistered();
+        rememberName(data.name);
+        markRegistered(data.name);
       })
       .catch(function (err) {
         $("read-submit").disabled = false;
@@ -628,7 +651,7 @@
     request("GET", API + "/read?page=" + encodeURIComponent(page) +
       "&sid=" + encodeURIComponent(sid))
       .then(function (data) {
-        if (data.registered) markRegistered();
+        if (data.registered) markRegistered(rememberedName());
       })
       .catch(function () {});
   }

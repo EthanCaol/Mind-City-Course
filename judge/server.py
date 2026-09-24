@@ -185,13 +185,16 @@ class App:
         if not isinstance(student_id, str) or not STUDENT_ID_RE.fullmatch(student_id):
             return 400, {"error": "学号是 11 位数字，请检查一下。"}
 
-        if self.roster.lookup(student_id) is None:
+        name = self.roster.lookup(student_id)
+        if name is None:
             return 403, {"error": f"学号 {student_id} 不在本课程名单里，请核对。"}
 
         with self.lock:
             first, at = db.mark_read(self.conn, page=page, student_id=student_id)
 
-        return 200, {"page": page, "registered_at": at, "already": not first}
+        # 顺带把姓名回给前端：登记成功后要显示「张三 同学，恭喜…」，而页面手里只有学号。
+        # 代价是这一个公开接口可以用学号换姓名（本来 403 和 200 就已经能试出学号在不在名单里）。
+        return 200, {"page": page, "registered_at": at, "already": not first, "name": name}
 
     def read_status(self, page: str, student_id: str) -> tuple[int, dict]:
         """查一个人在这一页登记过没有。
