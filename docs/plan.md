@@ -6,24 +6,26 @@ icon: material/clipboard-list
 
 ## 近期项目
 
-| 项目             | 当前进展 | 内容描述                                                                                      |
-| ---------------- | -------- | --------------------------------------------------------------------------------------------- |
-| dev-cpp          | ✅ 已完成 | Dev-C++ 的安装与使用，不想装 WSL 时的备选                                                     |
-| wsl2-vscode      | ✅ 已完成 | 让 Windows 11 的 WSL2 能用 VSCode 开发                                                        |
-| vscode           | ✅ 已完成 | VSCode 入门：新建配置文件、Code Runner 编译运行命令的逐段拆解                                 |
-| claude           | ✅ 已完成 | 用 CC Switch 把 Claude 客户端接到 DeepSeek，含终端版 Claude Code 与 VSCode 扩展，需要科学上网 |
-| deepseek-harness | ✅ 已完成 | 社区版 DSH Desktop 与官方 dsh 命令行的配置，全程不需要科学上网                                |
-| linux-cli        | ✅ 已完成 | Linux 命令行基础                                                                              |
-| git-github       | ✅ 已完成 | Git 与 GitHub 配置                                                                            |
-| win11            | ✅ 已完成 | Windows 11 的基础使用与浏览器基础，两个 B 站合集                                              |
-| gcc-gdb          | ⬜ 施工中 | GCC 与 GDB 入门                                                                               |
-| vscode-debug     | ⬜ 施工中 | VSCode 的调试与任务配置：`tasks.json` 与 `launch.json`                                        |
-| make             | ⬜ 施工中 | Make 构建工具                                                                                 |
-| cmake            | ⬜ 施工中 | CMake 构建工具                                                                                |
-| vscode-markdown  | ⬜ 施工中 | VSCode 的 Markdown 编辑与预览                                                                 |
-| python-env       | ⬜ 施工中 | Python 环境配置：Miniconda                                                                    |
-| python-syntax    | ⬜ 施工中 | Python 语法入门                                                                               |
-| python-jupyter   | ⬜ 施工中 | Jupyter Notebook 的使用                                                                       |
+| 项目            | 当前进展  | 内容描述                                                                                 |
+| --------------- | --------- | ---------------------------------------------------------------------------------------- |
+| reading         | ✅ 已完成 | 每篇文档末尾登记学号，汇总成全班的阅读进度表                                             |
+| useful          | ✅ 已完成 | PixPin 截图取字、PicGo 图床、Ente Auth 两步验证                                          |
+| win11           | ✅ 已完成 | Windows 11 基础操作与浏览器基础，各配一个 B 站合集                                       |
+| claude          | ✅ 已完成 | Claude 桌面版经 CC Switch 接 DeepSeek，含终端版 Claude Code 与 VSCode 扩展，需要科学上网 |
+| dsh             | ✅ 已完成 | 社区版 DSH Desktop 与官方 dsh 命令行的配置，全程不需要科学上网                           |
+| dev-cpp         | ✅ 已完成 | Dev-C++ 的安装、中文界面与编译运行，不想装 WSL 时的过渡选择                              |
+| wsl2            | ✅ 已完成 | WSL2 与 Ubuntu 的安装、GCC/GDB 配置、VSCode 连 WSL，含备份与迁移到 D 盘                  |
+| vscode          | ✅ 已完成 | 新建配置文件（Profile）、Code Runner 编译运行命令的逐段拆解                              |
+| linux-cli       | ✅ 已完成 | 转载《只学够用的 Linux》最小入门教程，配作者录的一期视频                                 |
+| git-github      | ✅ 已完成 | GitHub 访问、注册、核心概念与 SSH 连接，四期视频                                         |
+| gcc-gdb         | ⬜ 施工中 | GCC 与 GDB 入门                                                                          |
+| vscode-debug    | ⬜ 施工中 | VSCode 的调试与任务配置：`tasks.json` 与 `launch.json`                                   |
+| make            | ⬜ 施工中 | Make 构建工具                                                                            |
+| cmake           | ⬜ 施工中 | CMake 构建工具                                                                           |
+| vscode-markdown | ⬜ 施工中 | VSCode 的 Markdown 编辑与预览                                                            |
+| python-env      | ⬜ 施工中 | Python 环境配置：Miniconda                                                               |
+| python-syntax   | ⬜ 施工中 | Python 语法入门                                                                          |
+| python-jupyter  | ⬜ 施工中 | Jupyter Notebook 的使用                                                                  |
 
 ## 未来项目
 
