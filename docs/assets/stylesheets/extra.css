@@ -832,8 +832,10 @@
   font-size: 0.8rem;
 }
 
+/* 点进去不变色：边框保持原来的浅灰，也不画浏览器的默认轮廓。
+   原来这里会把边框点亮成 accent 色，跟上面说的「框里套框」一样，都是多余的装饰。
+   聚焦反馈只剩光标本身。 */
 .md-typeset .read__input:focus {
-  border-color: var(--md-accent-fg-color);
   outline: none;
 }
 
