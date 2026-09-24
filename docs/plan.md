@@ -15,7 +15,7 @@ icon: material/clipboard-list
 | deepseek-harness | ✅ 已完成 | 社区版 DSH Desktop 与官方 dsh 命令行的配置，全程不需要科学上网                                |
 | linux-cli        | ✅ 已完成 | Linux 命令行基础                                                                              |
 | git-github       | ✅ 已完成 | Git 与 GitHub 配置                                                                            |
-| win              | ⬜ 施工中 | Win11 的基础使用教程                                                                          |
+| win11            | ✅ 已完成 | Windows 11 的基础使用与浏览器基础，两个 B 站合集                                              |
 | gcc-gdb          | ⬜ 施工中 | GCC 与 GDB 入门                                                                               |
 | vscode-debug     | ⬜ 施工中 | VSCode 的调试与任务配置：`tasks.json` 与 `launch.json`                                        |
 | make             | ⬜ 施工中 | Make 构建工具                                                                                 |
