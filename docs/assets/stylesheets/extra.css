@@ -770,12 +770,14 @@
   background-color: var(--md-code-bg-color);
 }
 
-/* 条内左侧那句说明，字号和颜色跟判题工具条的 .judge__hint 一致。
+/* 条内最上面那句说明。颜色跟判题工具条的 .judge__hint 一致，字号再小一档
+   （0.72rem，跟下面那行「已登记：...」同一个尺码）——它比输入框里的字更次要。
    flex-basis 给 100%，让它自己占满一行，把输入框和按钮挤到下一行：
    这句话二十多个字，跟输入框并排会把输入框压得只剩几厘米。 */
 .md-typeset .read__hint {
   flex: 1 1 100%;
-  font-size: 0.8rem;
+  margin-left: 0.3rem; /* 别贴着条的左边框，跟里面的输入框错开一点 */
+  font-size: 0.72rem;
   color: var(--md-default-fg-color--light);
 }
 
