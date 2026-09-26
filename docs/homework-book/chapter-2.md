@@ -289,7 +289,7 @@ int main()
 
         顺带对齐一下标准：
 
-        - `float` → IEEE 754 binary32，单精度，32 位
+        - `float` → IEEE 754 binary32，单精度，32 位（1 位符号 + 8 位阶码 + 23 位尾数）
         - `double` → IEEE 754 binary64，双精度，64 位（1 位符号 + 11 位阶码 + 52 位尾数）
         - `long double` → 平台相关，x86 上通常是 80 位扩展精度，不完全是标准规定的
 
