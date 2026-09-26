@@ -205,12 +205,12 @@ void printDict(struct Node *h, char *fname){
 
 ??? note "答案"
 
-    | 空  | 答案               |
-    | --- | ------------------ |
-    | (4) | `#define MAXN 101` |
-    | (5) | `return;`          |
-    | (6) | `p = h->next`      |
-    | (7) | `fclose(fp);`      |
+    | 序号 | 答案               |
+    | ---- | ------------------ |
+    | (4)  | `#define MAXN 101` |
+    | (5)  | `return;`          |
+    | (6)  | `p = h->next`      |
+    | (7)  | `fclose(fp);`      |
 
 ??? note "解析"
 
