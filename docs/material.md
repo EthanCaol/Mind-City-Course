@@ -60,13 +60,6 @@ icon: material/bookshelf
 - [《操作系统发展史｜仿生之旅》](https://www.bilibili.com/video/BV1Zc411D7sG/)
 - [《计算机博物志·最后的黑客：理查德·马修·斯托曼》](https://www.bilibili.com/video/BV11R4y1b7zc)
 
-**工具：编辑器和开发环境**
-
-- [VSCode 教程合集](https://space.bilibili.com/103466775/lists/4080160)
-- [《VSCode 配置 | 外观 | 通用型扩展 | Minimal》](https://www.bilibili.com/video/BV1YW4y1M7uX)
-- [《VSCode 配置 | C/C++ | MakeFile | CMake | Minimal》](https://www.bilibili.com/video/BV1H24y1D7Kn)
-- [《保姆级入门：Vim 编辑器》](https://www.bilibili.com/video/BV13t4y1t7Wg)
-
 **进阶：计算机系统和操作系统**
 
 - [《深入理解计算机系统》(CSAPP) 配套讲解](https://www.bilibili.com/video/BV1cD4y1D7uR)
