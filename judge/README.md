@@ -1,0 +1,161 @@
+# 在线测评判题后端
+
+学生把 C 代码粘进网页 → 在 isolate 沙箱里编译运行 → 把每个测试点的输入、期望输出、
+实际输出告诉他。全部测试点通过后即登记为通过。
+
+## 运行方式
+
+```
+浏览器  https://mind-city.com/homework-code/01-add/
+   │       页面由 MkDocs 构建，JS 调站内 API
+   ▼
+Caddy   handle /judge/api/*  → 127.0.0.1:9100
+   ▼
+mind-city-judge.service（systemd --user，标准库 http.server）
+   ├─ SQLite 当队列 + 单 worker 线程（2 核机器，判题必须串行）
+   ├─ isolate box：写 main.c → 编译 → 逐测试点 run → cleanup
+   └─ judge/data/（本机目录；花名册启动时从 COS 拉，整份数据每周备份回 COS）
+```
+
+服务是 user 级 unit，`Linger=yes` 已开，开机自启：
+
+```bash
+systemctl --user status mind-city-judge
+systemctl --user restart mind-city-judge
+journalctl --user -u mind-city-judge -f
+```
+
+**`isolate.service` 必须常驻**（`sudo systemctl enable --now isolate`）。它是 system 级
+unit，user 级 unit 引用不到，所以没法靠 `After=` 保证顺序——服务是在每次开判前用
+`judge_ready()` 主动探测的。未启动时提交会留在队列里，学生看到「判题机维护中」而不是报错。
+
+## 目录
+
+| 路径 | 说明 |
+|---|---|
+| `config.py` | 全部可调常量与路径。isolate 参数只在这里定义，不要分散到其它文件 |
+| `identity.py` | 学号的正则，判题和阅读登记共用 |
+| `roster.py` | 花名册读取与匹配 |
+| `compare.py` | 输出归一化与比对 |
+| `problem.py` | 题目与测试点加载 |
+| `db.py` | SQLite 读写（两张表） |
+| `isolate_runner.py` | isolate 子进程编排、meta 解析、就绪探测 |
+| `verdict.py` | meta → AC/WA/TLE/MLE/RE/CE/OLE |
+| `judger.py` | 判一份提交：编译一次 + 跑 N 个测试点 |
+| `worker.py` | 单 worker 线程、队列消费、重启恢复、内存闸门 |
+| `server.py` | HTTP 接口 |
+| `problems/<作业>/` | 题面参数 + 测试点（公开仓库，随代码一起版本管理） |
+| `data/` | 本机数据目录（被外层仓库 gitignore），见下 |
+
+## 数据在哪
+
+**学生源码不留档。** 它只在排队期间待在数据库里（判题是异步的，worker 需要能取出待判的提交），
+判完立刻由 `db.clear_source()` 抹掉，一行都不落盘，也从不写进 git。
+代价是没有「看提交的源码」和「重判」这两个功能 —— 服务本身确实没有保存。
+所以**重复提交不做去重**：同一份代码再交一次会重新判一遍，这是学生唯一的
+重判途径。提交频率由速率限制控制（`config.py` 里的几个 `RATE_LIMIT`）。
+
+留下的只有判题结论：
+
+- **SQLite（`data/judge.sqlite3`）是权威数据源**：学号、姓名、结论、通过数、
+  逐测试点的判定与耗时内存、学生那次的实际输出。全在本机。
+- **花名册的权威副本在 COS 上**（桶根的 `roster.csv`，对象设成私有）。助教改完名单
+  上传，服务启动时拉一次到 `data/roster.csv`；拉不到就用本地那份，判题照常。
+- `data/` 在外层公开仓库里被 **gitignore** 掉。这一点是硬要求：里面有学生姓名学号。
+  而且数据一旦提交进外层仓库，本地就有未推送的 commit，部署脚本的
+  `git pull --ff-only` 会失败，**整个文档站静默停止更新**。
+
+同步节奏：
+
+| 动作 | 时机 |
+|---|---|
+| 拉花名册 | **只在服务启动时拉一次**（名单不再变了，没有轮询的必要） |
+| 数据库快照 + 花名册备份到 COS | **每周一 04:00**（`mind-city-backup.timer`），覆盖式 |
+
+改名单的流程：改好本地那份 → 传到桶根 → 重启服务。
+
+```bash
+coscmd -b image-1379176255 upload -f -H "x-cos-acl: private" roster.csv roster.csv
+systemctl --user restart mind-city-judge
+journalctl --user -u mind-city-judge | grep 花名册     # 应看到「花名册已从 COS 更新」
+```
+
+**不要漏掉 `x-cos-acl: private`**：那个桶是公开读的（站点的图挂在上面），漏了这个头
+就等于把学生姓名学号暴露在公网上。传完用不带签名的 curl 验证，应当返回 403。
+
+**代价**：数据库只在这台机器上，最新的异地副本是周一凌晨那份 —— 一周内机器整个坏掉
+的话，这一周的成绩就没了。需要的话手动跑一次：
+
+```bash
+systemctl --user start mind-city-backup.service
+```
+
+## 加一份新作业
+
+1. 建 `problems/<作业名>/problem.json`：
+
+   ```json
+   {
+     "title": "作业 2：xxx",
+     "compile_flags": ["-O2", "-std=gnu23", "-Wall", "-DONLINE_JUDGE"],
+     "run_limits": { "time_s": 1, "wall_time_s": 3, "cg_mem_kb": 262144, "mem_kb": 524288 }
+   }
+   ```
+
+2. 放测试点：`problems/<作业名>/cases/public/01.in`、`01.out`、`02.in`…（按文件名排序）
+
+3. 重启服务：`systemctl --user restart mind-city-judge`
+
+前端会自动从 `/judge/api/problems` 拿到新题目，不用改页面。
+
+要加隐藏测试点：把文件放到 `cases/hidden/`，接口层会自动抹掉它们的输入输出，
+学生只看到「未通过」。现在还没用上，但字段和加载逻辑都留好了。
+
+## 阅读登记
+
+实验课文档末尾有一栏「我已读完」：学生填学号点一下，登记进 `reads` 表（学号、页面、
+首次登记时间）。`docs/reading.md` 把它按「行是学生、列是页面」显示出来，助教能看出
+谁没有读、哪一篇卡住的人多 —— 这是文档更新节奏唯一的数据来源。
+
+登记**不计分**，所以校验是弱校验，和判题一样只认「学号在花名册里」。重复点击不新增
+记录，也不改动首次时间：助教要知道的是「他什么时候读到这一篇的」。主键就是
+(学号, 页面)，合法学号数 × 页面数是固定的，表大小有上界，因此不需要额外限流。
+
+| 接口 | 说明 |
+|---|---|
+| `POST /api/read` `{page, student_id}` | 登记，幂等。学号不在名单里返回 403。返回体里带 `name` |
+| `GET /api/read?page=&sid=` | 查一个人登记过没有。**不查花名册**，不区分「不在名单」和「没登记」 |
+| `GET /api/reads` | 公开总览，行是学生、列是页面，和 `/api/grades` 同构 |
+
+`POST` 之所以把 `name` 一起回给前端，是因为登记成功后文档里要显示「张三 同学，恭喜…」，
+而页面手里只有学生填的那个学号。**代价要清楚**：这个公开接口从此可以用学号换姓名
+（11 位学号枚举量不大）。它本身是个弱校验接口 —— 200 和 403 原来就能试出一个学号
+在不在名单里 —— 但如果认为这个代价不可接受，把 `name` 去掉即可，
+前端在拿不到姓名时会退回不带姓名的说法，不会报错。
+
+**页面清单写在 `config.READ_PAGES` 里**，不扫 docs 目录。加一篇带登记栏的实验课文档，
+要在那里补一条 —— 否则该页登记会返回「没有这一页」，总览页也不会出现那一列。
+
+`reads` 只存在 SQLite 里，跟着数据库一起每周备份到 COS —— 不计分，丢了也不影响成绩。
+
+## 几个需要注意的地方
+
+- **`--mem` 是 `--cg-mem` 的 2 倍，不要改成同值。** 两者同值时 `RLIMIT_AS` 必然先触发，
+  程序 `malloc` 返回 NULL、`cg-mem` 达不到阈值，**MLE 会被误判成 RE**。实测数据见
+  根目录 README 的「在线评测」一节。
+- **编译也在沙箱里跑**，因为学生代码在编译期也能造成问题（超大全局数组、递归宏）。
+- **每个 isolate 子进程调用都带硬超时**，否则 isolate 卡住会使整条队列停止处理。
+- **box 池在 worker 启动时会无条件 `reclaim_all()`**，回收上次崩溃留下的 box。
+  `--cleanup` 对不存在的 box 是安全的，所以可以放心调用。
+- **meta 文件是宿主侧路径，`--stdin/--stdout/--stderr` 是 box 内相对路径**，
+  而且都必须在 `--cleanup` 之前读完。
+- **内存闸门**：开判前读 `/proc/meminfo`，`MemAvailable` 低于 400 MB 就暂缓。
+  这台机器只有 2 GB，判题服务使机器大量使用 swap 会很难恢复。
+
+## 身份校验的强度
+
+**这是弱校验。** 学号由学生在作业页面的输入框里填、跟着提交一起发过来，只要能对上
+花名册就受理——挡得住抄错学号，挡不住「故意冒用同学学号且知道其姓名」。在课程练习场景
+下足够，对成绩敏感的场景要另加提交码。
+
+代码里也不会去读姓名：记录里的姓名一律从花名册查，学生写什么都不影响。

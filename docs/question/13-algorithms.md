@@ -1,0 +1,1156 @@
+# 知识点 13 · 算法编程题
+
+### 1 · 数组原地插入（保持有序）
+
+在一个已按升序排列的数组中插入一个数，插入后数组仍保持升序。例如原数组 `a[N] = {1, 3, 5, 7, 9}` 在插入 `x=4` 后变为 `a[N] = {1, 3, 4, 5, 7, 9}`。
+要求在原数组上进行插入，不能使用其他辅助数据结构。注意特殊情况：如果原数组已满，不做任何插入，返回原大小；如果原数组为空，则插入。（10 分）
+
+【程序框架】
+
+```c
+#include <stdio.h>
+#define N 20
+
+/* 在升序数组 a 中插入 x，返回新的实际长度*/
+int insert(int a[], int n, int x) {
+    //请补充代码实现
+}
+
+int main(void) {
+    int a[N] = {1, 3, 5, 7, 9};
+    int n = 5;          //当前实际元素个数
+    int x, i;
+    printf("Input number to insert: ");
+    scanf("%d", &x);
+    n = insert(a, n, x);
+    printf("After insertion:\n");
+    for (i = 0; i < n; i++) printf("%d ", a[i]);
+    return 0;
+}
+```
+
+??? note "答案"
+
+    ```c
+    int insert(int a[], int n, int x) {
+        int i;
+
+        /* 数组已满 */
+        if (n >= N)
+            return n;
+
+        /* 数组为空 */
+        if (n == 0) {
+            a[0] = x;
+            return 1;
+        }
+
+        /* 元素后移，插入元素 */
+        for (i = n - 1; i >= 0 && a[i] > x; i--) {
+            a[i + 1] = a[i];
+        }
+        a[i + 1] = x;
+
+        return n + 1;
+    }
+    ```
+
+??? note "解析"
+
+    通用做法：从后往前找位置并同步后移，一次遍历完成"定位 + 腾位"。
+
+    ```c
+    for (i = n - 1; i >= 0 && a[i] > x; i--)
+        a[i + 1] = a[i];     // 边找位置边后移
+    a[i + 1] = x;            // 落位
+    n++;
+    ```
+
+    > 为什么从后往前？ 从前往后会覆盖掉还没搬走的数据。
+
+    本题要点：
+
+    1. 两个边界必须先处理：数组满（`n >= N`）直接返回 `n`；数组空（`n == 0`）写 `a[0]` 返回 1。
+       > 注意数组空的情况其实上面的循环也能处理（`i = -1`，循环不执行，`a[0] = x`），但题目明确要求考虑，写上更符合题意。
+    2. 循环条件 `a[i] > x` 用严格大于：这样等于 `x` 的元素不会后移，新元素插在已有相等元素之前。
+    3. `return n + 1`：函数返回的是新的实际长度，不是下标。题目框架里是 `n = insert(a, n, x);`，返回错就等于把数组截断/越界。
+    4. 边界清单（自己写完后逐条自测）：空数组、已满、比所有元素都小（插最前）、比所有元素都大（插末尾）、与已有元素相等。
+
+    > 材料上写明："90% 为程序正确性，10% 为可读性、书写风格等其他质量指标"。
+    > 注释（"数组已满""元素后移"）、缩进、变量命名属于后一部分；材料上这份答案的注释可作参照。
+
+---
+
+### 2 · 链表冒泡排序（读文件建表 + 冒泡）
+
+（2.1）完善函数 `readListFromFile`，实现从一个文本文件中读数据形成一个未排序的链表，链表要求采用带有辅助表元的链表（5 分）。
+（2.2）实现函数 `bubbleSortList`，将这个链表使用冒泡算法进行排序（10 分）。
+
+样例：文本文件包含 `5 2 8 1 9`
+
+- `readListFromFile` 返回链表：`5->2->8->1->9`
+- `bubbleSortList` 返回排序链表：`1->2->5->8->9`
+
+【程序框架】
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+/* 链表结点定义 */
+typedef struct Node {
+    int data;
+    struct Node *next;
+} Node;
+
+/* 从文件中读数据，建立链表 */
+Node *readListFromFile(const char *filename) {
+    FILE *fp;
+    Node *head, *tail, *p;
+    int x;
+    fp = fopen(filename, "r");
+    if (fp == NULL) {
+        printf("Cannot open file!\n");
+        return NULL;
+    }
+    /* 创建头结点（辅助表元） */
+    head = (Node *)malloc(sizeof(Node));
+    head->next = NULL;
+    tail = head;
+    //请补充代码实现（2.1）
+}
+
+/* 使用冒泡排序对链表进行升序排序 */
+void bubbleSortList(Node *head) {
+    //请补充代码实现（2.2）
+}
+
+/* 释放链表 */
+void freeList(Node *head) {
+    Node *p;
+    while (head != NULL) {
+        p = head;
+        head = head->next;
+        free(p);
+    }
+}
+
+int main(void) {
+    Node *list;
+    list = readListFromFile("data.txt");
+    if (list == NULL) return 1;
+    bubbleSortList(list);
+    freeList(list);
+    return 0;
+}
+```
+
+??? note "答案"
+
+    材料上的答案（2.1）：
+
+    ```c
+        /* 读取数据并建立链表 */
+        while (fscanf(fp, "%d", &x) == 1) {
+            p = (Node *)malloc(sizeof(Node));
+            p->data = x;
+            p->next = NULL;
+            tail->next = p;      /* 接到尾部 */
+            tail = p;            /* 尾指针后移 */
+        }
+        fclose(fp);
+        return head;
+    ```
+
+    材料上的答案（2.2）：
+
+    === "写法一：直接对链表冒泡"
+
+        ```c
+        void bubbleSortList(Node *head) {
+            Node *p, *q;
+            int temp;
+            int swapped;
+
+            if (head == NULL || head->next == NULL)
+                return;
+
+            do {
+                swapped = 0;
+                p = head->next;                       /* 第一个数据结点 */
+                while (p != NULL && p->next != NULL) {
+                    q = p->next;
+                    if (p->data > q->data) {
+                        temp = p->data;
+                        p->data = q->data;
+                        q->data = temp;
+                        swapped = 1;
+                    }
+                    p = p->next;
+                }
+            } while (swapped);
+        }
+        ```
+
+    === "写法二：拷到数组排完再写回"
+
+        ```c
+        void bubbleSortList(Node *head) {
+            int *arr;
+            int n = 0, i, j, temp;
+            Node *p;
+
+            if (head == NULL || head->next == NULL) return;
+
+            /* 1. 统计链表长度 */
+            p = head->next;
+            while (p != NULL) { n++; p = p->next; }
+
+            /* 2. 分配辅助数组 */
+            arr = (int *)malloc(n * sizeof(int));
+            if (arr == NULL) { printf("Memory allocation failed!\n"); return; }
+
+            /* 3. 链表数据复制到数组 */
+            p = head->next;
+            for (i = 0; i < n; i++) { arr[i] = p->data; p = p->next; }
+
+            /* 4. 冒泡排序数组（升序） */
+            for (i = 0; i < n - 1; i++)
+                for (j = 0; j < n - 1 - i; j++)
+                    if (arr[j] > arr[j + 1]) {
+                        temp = arr[j]; arr[j] = arr[j + 1]; arr[j + 1] = temp;
+                    }
+
+            /* 5. 排序后的数组写回链表 */
+            p = head->next;
+            for (i = 0; i < n; i++) { p->data = arr[i]; p = p->next; }
+
+            /* 6. 释放数组 */
+            free(arr);
+        }
+        ```
+
+??? note "解析"
+
+    通用做法（链表冒泡的核心）：只交换结点的 `data`，不交换结点本身（交换结点要动 3 个指针，容易出错）。
+
+    ```c
+    do {
+        swapped = 0;
+        p = head->next;                      // 从第一个数据结点开始
+        while (p != NULL && p->next != NULL) {
+            q = p->next;
+            if (p->data > q->data) {
+                temp = p->data; p->data = q->data; q->data = temp;
+                swapped = 1;
+            }
+            p = p->next;
+        }
+    } while (swapped);
+    ```
+
+    （2.1 读文件建表）要点：
+
+    1. `while (fscanf(fp, "%d", &x) == 1)` —— `fscanf` 返回成功读入的项数，读到文件尾返回 `EOF`，所以用 `== 1` 判断最稳妥。
+       > 不要用 `while (!feof(fp))`——`feof` 要等读失败之后才置位，会多处理一次。
+    2. 尾插法需要 `tail` 指针：`tail->next = p; tail = p;`，两步缺一不可（只写第一句会让所有结点都挂在同一个位置）。
+    3. 别忘了 `fclose(fp)`，也别漏 `fopen` 判空（框架里已给）。
+    4. 返回 `head`（辅助表元），不是 `head->next` —— 因为题目要求"带有辅助表元的链表"。
+
+    （2.2 冒泡）要点：
+
+    - 两种写法都接受。链表冒泡（只换 `data`）不额外占内存；数组冒泡写起来简单、不易错，但要多一份 `O(n)` 空间。
+    - `swapped` 标志位：如果没有发生任何交换，说明已有序，提前退出——这是冒泡排序的常用优化。
+    - 内层循环条件 `p != NULL && p->next != NULL`：因为要访问 `p->next->data`，必须保证 `p->next` 非空，否则段错误。
+    - 数组版冒泡的内层边界是 `n-1-i`：每轮结束最大的元素已经"沉"到末尾，不用再比。
+    - 空表 / 单结点（`head->next == NULL`）要直接返回，否则 `do-while` 也能正确结束，只是多执行一轮。
+
+---
+
+### 3 · 二分查找
+
+假设整数数组 `a[N]` 已按从小到大顺序排序，请补充完善 `binary_search` 函数，使用二分法查找给定的 `key`。如果找到 `key`，返回 `key` 在数组中的下标；否则，返回 -1。（14 分）
+
+```c
+#include <stdio.h>
+
+int binary_search(int a[], int N, int key) {
+    //请补充代码实现
+}
+
+int main() {
+    int a[] = {1, 3, 5, 7, 9, 11, 13, 15, 17};    // 已排序的数组
+    int N = sizeof(a) / sizeof(a[0]);
+    int key = 7;                                    // 查找的目标值
+    int index = binary_search(a, N, key);
+    if (index != -1)
+        printf("找到key %d，索引为：%d\n", key, index);
+    else
+        printf("未找到key %d\n", key);
+    return 0;
+}
+```
+
+??? note "答案"
+
+    ```c
+    int binary_search(int a[], int N, int key) {
+        int left = 0, right = N - 1;
+        while (left <= right) {                    // (1) 循环条件，继续查找直到 left 大于 right
+            int mid = (left + right) / 2;          // (2) 计算中间位置
+            if (a[mid] == key)                     // (3) 如果找到 key，返回 mid
+                return mid;
+            else if (a[mid] > key)                 // (4) 如果 key 小于 a[mid]，在左边查找
+                right = mid - 1;
+            else {                                 // (5) 如果 key 大于 a[mid]，在右边查找
+                left = mid + 1;
+            }
+        }
+        return -1;                                 // (6) 如果没有找到 key，返回 -1
+    }
+    ```
+
+??? note "解析"
+
+    通用做法：`left` / `right` 双闭区间，`while (left <= right)`，`mid` 与 `key` 比较后收缩区间。
+
+    二分的三个要点，写错一个会死循环：
+
+    1. `while (left <= right)` —— 必须是 `<=`（区间是闭区间 `[left, right]`，`left == right` 时还有一个元素要看）。
+    2. `right = mid - 1` / `left = mid + 1` —— 必须是 `±1`，否则区间不收缩 → 死循环。
+    3. `mid = (left + right) / 2` —— 整数除法自动向下取整。
+       > 进阶：`(left + right)` 可能溢出 `int`，工程上写 `left + (right - left) / 2`。两种写法都对。
+
+    手动验算：`a = {1,3,5,7,9,11,13,15,17}`，`N=9`，`key=7`
+
+    | 轮次 | left | right | mid | a[mid] | 动作              |
+    | ---- | ---- | ----- | --- | ------ | ----------------- |
+    | 1    | 0    | 8     | 4   | 9      | 9 > 7 → right = 3 |
+    | 2    | 0    | 3     | 1   | 3      | 3 < 7 → left = 2  |
+    | 3    | 2    | 3     | 2   | 5      | 5 < 7 → left = 3  |
+    | 4    | 3    | 3     | 3   | 7      | 相等 → 返回 3 ✅   |
+
+    边界自测：`key` 比所有元素都小 / 都大（都返回 -1）｜`key` 正好是 `a[0]` / `a[N-1]`｜`N == 0`（此时 `right = -1`，循环不进，返回 -1）｜数组中有重复元素时返回的是中间某一个（题目未要求返回最左或最右）。
+
+---
+
+### 4 · 数组双指针划分（快排 partition · 程序补完）
+
+给定一个整数数组 `b[M]`，将数组中所有大于 0 的数移到数组的左侧，所有小于等于 0 的数移到数组的右侧，最后每 5 个数一行打印输出。要求不使用额外数组或其他数据结构。（每空 3 分，共 18 分）
+【举例】`int b[10] = {3, -2, 0, 5, -1, 4, -3, 2, 0, -5};`
+程序执行后：`b` 数组变为 `[3, 2, 4, 5, -1, 0, -3, -2, 0, -5]`
+
+```c
+#include <stdio.h>
+
+int main() {
+    int b[] = {3, -2, 0, 5, -1, 4, -3, 2, 0, -5};
+    int M =    (1)    / sizeof(int);
+    int i = 0, j = M - 1;
+    while (    (2)    ) {
+        while (    (3)    && i < j ) i++;
+        while (b[j] <= 0 && i < j )    (4)    ;
+        if (    (5)    ) {
+            int temp = b[i];
+            b[i] = b[j];
+            b[j] = temp;
+        }
+    }
+    for(int k = 0; k < M; k++) {
+        printf("%d ", b[k]);
+        if (    (6)    )
+            printf("\n");
+    }
+}
+```
+
+??? note "答案"
+
+    | 序号 | 答案                                                 |
+    | ---- | ---------------------------------------------------- |
+    | (1)  | `sizeof(b)`                                          |
+    | (2)  | `i < j`                                              |
+    | (3)  | `b[i] > 0`                                           |
+    | (4)  | `j--`                                                |
+    | (5)  | `i < j`                                              |
+    | (6)  | `0 == (k+1) % 5` 或 `(k+1) % 5 == 0` 或 `k % 5 == 4` |
+
+??? note "解析"
+
+    通用做法：`i` 从左往右找"该在右边的"，`j` 从右往左找"该在左边的"，交换。
+
+    ```c
+    while (i < j) {
+        while (左区条件 && i < j) i++;
+        while (右区条件 && i < j) j--;
+        if (i < j) swap(b[i], b[j]);
+    }
+    ```
+
+    逐空分析：
+
+    - (1) 经典的"求数组元素个数"惯用法：`sizeof(b) / sizeof(int)`。
+    - (2) 外层循环条件 `i < j`：两指针相遇即停。
+    - (3) 左指针 `i` 一直右移，跳过已经在左边（即 > 0）的元素，停在第一个"不该在左边"的位置。
+    - (4) 右指针 `j` 一直左移，条件是 `b[j] <= 0`（已在右边），所以循环体里写 `j--`。
+    - (5) 只有当两指针还没交错时才交换（`i < j`），否则会把刚换好的又换回去。
+    - (6) 每 5 个换一行：`k` 从 0 开始，所以 `(k+1) % 5 == 0` 时换行（即第 5、10、15… 个之后）。
+      > 三种写法等价：
+      > - `(k+1) % 5 == 0` —— 最直观
+      > - `k % 5 == 4` —— 最简洁
+      > 注意 `0 == (k+1) % 5` 这种"常量放左边"的写法是防御性编程风格（避免误写成 `=`），材料上的答案就把它列在第一位。
+
+    > 这就是快排 `partition` 的同构模板。两个 `&& i < j` 不能漏，漏了会越界（`i` 会一直增加到 `M`）。
+    > 第 (6) 空这种"每 k 个换行"的写法在打印题里常出现。
+
+---
+
+### 5 · 两个有序链表归并
+
+编写实现两个有序链表合并成一个有序链表的函数，假定两个链表中没有重复节点。（13 分）
+表元节点的数据结构定义如下：
+
+```c
+struct intNode{
+    int data;
+    struct intNode *next;
+};
+```
+
+函数声明为：
+
+```c
+struct intNode *merge(struct intNode *h1, struct intNode *h2);
+```
+
+『要求』 将表头为 `h2` 的链表中的数据合并到表头为 `h1` 的链表中，并返回。不要新建链表。
+
+??? note "答案"
+
+    参考实现（假设链表带辅助表元 —— 与其他题一致）：
+
+    ```c
+    struct intNode *merge(struct intNode *h1, struct intNode *h2)
+    {
+        struct intNode *p1 = h1;      /* h1 的有序部分尾指针 */
+        struct intNode *p2 = h2;      /* h2 待处理部分的前驱 */
+        struct intNode *t;
+
+        while (p1->next != NULL && p2->next != NULL) {
+            if (p1->next->data <= p2->next->data) {
+                p1 = p1->next;                    /* h1 的结点已在正确位置，推进 */
+            } else {
+                t = p2->next;                     /* 摘下 h2 的当前结点 */
+                p2->next = t->next;
+                t->next = p1->next;               /* 插到 p1 之后 */
+                p1->next = t;
+                p1 = t;                           /* 已有序部分推进一格 */
+            }
+        }
+        if (p1->next == NULL)
+            p1->next = p2->next;                  /* h1 走完，把 h2 剩余的整段接上 */
+
+        return h1;
+    }
+    ```
+
+    参考实现（链表不带辅助表元时）：
+
+    ```c
+    struct intNode *merge(struct intNode *h1, struct intNode *h2)
+    {
+        struct intNode dummy;                     /* 栈上的临时辅助表元 */
+        struct intNode *tail = &dummy;
+
+        while (h1 != NULL && h2 != NULL) {
+            if (h1->data <= h2->data) { tail->next = h1; h1 = h1->next; }
+            else                      { tail->next = h2; h2 = h2->next; }
+            tail = tail->next;
+        }
+        tail->next = (h1 != NULL) ? h1 : h2;      /* 接上剩下的一段 */
+        return dummy.next;
+    }
+    ```
+
+??? note "解析"
+
+    通用做法：两个指针各自沿一条链走，每次取较小的那一个，取完把另一条整段挂上（与数组版归并、多项式加法同构）。
+
+    1. "不要新建链表"= 复用原有结点，只改 `next` 指针。任何 `malloc` 新结点的写法都不符合要求。
+    2. `while` 的终止条件：只要有一条链走完就停，然后把另一条整段挂上去——这是归并的关键简化（不用逐个搬）。
+    3. `tail->next = (h1 != NULL) ? h1 : h2;` 一行搞定"哪条还有剩"。
+    4. 相等时取 `h1`（`<=`）保证稳定性（相等元素保持"h1 在前"的原有相对顺序）。注意：这条只对归并成立，插入排序里不是这么回事。
+    5. 两版实现的区别只在"有没有辅助表元"：带辅助表元的版本把头结点当哨兵，直接改写 `h1` 的链；不带辅助表元的版本在栈上造一个 `dummy` 当哨兵，最后 `return dummy.next`——这才是"不新建链表"又能省掉首结点特判的标准技巧。
+    6. 边界自测：一条为空（直接返回另一条）｜两条都空｜一条比另一条全部小｜必须不产生新结点。
+    7. 代价分析：本算法 `O(n+m)` 时间、`O(1)` 额外空间。
+
+---
+
+### 6 · 综合算法 kmeans
+
+`kmeans` 是一类常用的聚类算法。以二维空间中的 `n` 个点为例，算法将 `n` 个点分为 `k` 类，每一类有一个中心点。
+算法过程：
+
+1. 首先随机从 `n` 个点中选择 `k` 个点作为初始的中心点（生成随机数可调用 `rand()`）。
+2. 对每个点进行循环遍历，计算它与 `k` 个中心点的距离，将它分配到最近的中心点对应的聚类集合中（距离采用欧几里得距离）。
+3. 对于每个聚类，更新中心点为分配到该中心点聚类的所有数据点的质心（坐标值等于所有坐标的平均值）。
+
+重复执行上述 (2)-(3) 两步，直到达到迭代上限，或者点的聚类编号在迭代中不再被修改，循环终止。（11 分）
+
+数据结构：
+
+```c
+struct DataPoint{
+    double coordinates[2];   //二维空间
+    int cluster;
+};
+
+struct ClusterCenter {
+    double coordinates[2];
+};
+```
+
+函数声明：
+
+```c
+void kMeans(struct DataPoint points[], int numPoints,
+            struct ClusterCenter centers[], int k);
+```
+
+其中 `points` 表示数据的数组，`numPoints` 是对应的数据点数，`centers` 对应的是 `k` 个中心点的数组。聚类的结果存入到 `DataPoint` 数组每个点的 `cluster` 成员中，聚类中心点更新到 `centers` 数组中。
+
+??? note "答案"
+
+    ```c
+    #include <stdlib.h>
+    #include <math.h>
+
+    #define MAX_ITER 100
+
+    void kMeans(struct DataPoint points[], int numPoints,
+                struct ClusterCenter centers[], int k)
+    {
+        int i, j, iter, changed, cnt, bestCluster;
+        double sumX, sumY, dx, dy, dist, bestDist;
+
+        /* (1) 随机选 k 个点作为初始中心 */
+        for (i = 0; i < k; i++) {
+            int idx = rand() % numPoints;
+            centers[i].coordinates[0] = points[idx].coordinates[0];
+            centers[i].coordinates[1] = points[idx].coordinates[1];
+        }
+
+        for (iter = 0; iter < MAX_ITER; iter++) {
+            changed = 0;
+
+            /* (2) 把每个点分配到最近的中心 */
+            for (i = 0; i < numPoints; i++) {
+                bestDist = -1.0;
+                bestCluster = 0;
+                for (j = 0; j < k; j++) {
+                    dx = points[i].coordinates[0] - centers[j].coordinates[0];
+                    dy = points[i].coordinates[1] - centers[j].coordinates[1];
+                    dist = dx * dx + dy * dy;      /* 比较距离平方即可，省一次开方 */
+                    if (bestDist < 0 || dist < bestDist) {
+                        bestDist = dist;
+                        bestCluster = j;
+                    }
+                }
+                if (points[i].cluster != bestCluster) {
+                    points[i].cluster = bestCluster;
+                    changed = 1;
+                }
+            }
+            if (!changed) break;                   /* 聚类不再变化，提前结束 */
+
+            /* (3) 更新中心为各簇质心 */
+            for (j = 0; j < k; j++) {
+                sumX = sumY = 0.0;
+                cnt = 0;
+                for (i = 0; i < numPoints; i++) {
+                    if (points[i].cluster == j) {
+                        sumX += points[i].coordinates[0];
+                        sumY += points[i].coordinates[1];
+                        cnt++;
+                    }
+                }
+                if (cnt > 0) {                     /* ★ 空簇要跳过，否则除零 */
+                    centers[j].coordinates[0] = sumX / cnt;
+                    centers[j].coordinates[1] = sumY / cnt;
+                }
+            }
+        }
+    }
+    ```
+
+??? note "解析"
+
+    通用做法（综合算法题）：按题目给的三步流程逐条翻译成循环，一步一段代码，最后处理两个终止条件和健壮性。
+
+    本题的要点：
+
+    1. "最近"用距离平方比较即可：`dx*dx + dy*dy` 不用开方，省一次 `sqrt`，结果完全等价（因为平方在正数上单调）。
+    2. `bestDist` 初值要给 -1 或一个"不可能达到的大值"，配合 `bestDist < 0 ||` 判断，才能正确初始化第一个中心。这是本题容易写错的地方。
+    3. `if (cnt > 0)` 的空簇保护：如果某个簇没有任何点（初始中心选得不好时会发生），`sumX/cnt` 会除零。这是本题需要处理的健壮性问题。
+    4. 终止条件要两个都写：达到迭代上限 `MAX_ITER`，或聚类不再变化（用 `changed` 标志位）。
+    5. `changed` 的判定要放在赋值之前比较：`if (points[i].cluster != bestCluster) { ...; changed = 1; }`。
+    6. 数据都是 `double`：除法、累加要用双精度，别用 `int` 接收（`1/2` 会变成 0）。
+    7. 边界自测：`k = 1`｜`k = numPoints`｜`numPoints` 很小 / `k` 比 `numPoints` 大｜所有点重合（质心仍是同一点）。
+
+---
+
+### 7 · 矩阵范数
+
+!!! note "扫描件里没有留存题面文字"
+    扫描件里这道题的题面文字没有留存，只留下了这段程序。下面是由代码反推的题意，不是题干原文，别当题干背。
+
+题意（反推）：输入 `m`、`n`，再输入一个字符串 `s`，然后是 `m×n` 矩阵。若 `s` 为 `"Col"` 或 `"1"`，输出列和范数（各列元素和的最大值）；若 `s` 为 `"Row"` 或 `"Infinity"`，输出行和范数（各行元素和的最大值）；否则输出"输入的范数类型不合法"。
+
+??? note "答案"
+
+    ```c
+    #include <stdio.h>
+    #include <string.h>
+    #define max(a,b) a>b?a:b
+
+    int main() {
+        int m, n;
+        char s[10] = {0};
+        int A[100][100] = { 0 };
+        int norm = -1;
+        scanf("%d %d", &m, &n);
+        scanf("%s", s);
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                scanf("%d", &A[i][j]);
+            }
+        }
+        if (strcmp(s, "Col") == 0 || strcmp(s, "1") == 0) {
+            for (int j = 0; j < n; j++) {
+                int col_sum = 0;
+                for (int i = 0; i < m; i++) {
+                    col_sum += A[i][j];
+                }
+                norm = max(norm, col_sum);
+            }
+            printf("该矩阵的列和范数为%d", norm);
+        }
+        else if (strcmp(s, "Row") == 0 || strcmp(s, "Infinity") == 0) {
+            for (int i = 0; i < m; i++) {
+                int row_sum = 0;
+                for (int j = 0; j < n; j++) {
+                    row_sum += A[i][j];
+                }
+                norm = max(norm, row_sum);
+            }
+            printf("该矩阵的行和范数为%d", norm);
+        }
+        else {
+            printf("输入的范数类型不合法");
+        }
+        return 0;
+    }
+    ```
+
+??? note "解析"
+
+    可借鉴的写法：
+
+    - `strcmp(s, "Col") == 0` 字符串比较必须用 `strcmp`（不能 `==`），这是本课程的重点。
+    - `#define max(a,b) a>b?a:b` —— 这里恰好没出问题，但这个宏的展开本身有问题，工程上应写 `#define max(a,b) ((a)>(b)?(a):(b))`。
+    - `char s[10] = {0};` 初始化清零，避免脏数据。
+    - `norm` 初值 `-1`、`A` 清零：矩阵元素和可能是负数 / 0，初值取值不当会算错最大值。
+    - 行列遍历的顺序：列和是"外层列、内层行"（`A[i][j]` 两个下标顺序容易写反），这是本题容易出错的地方。
+
+    > 这道题把"输入一个类型字符串 → 分两支处理 → 否则报错"的结构套在矩阵求和上。
+
+---
+
+### 8 · 合并两个有序数组
+
+!!! note "扫描件里没有留存题面文字"
+    扫描件里这道题的题面文字没有留存，只留下了这段程序。下面是由代码反推的题意，不是题干原文，别当题干背。
+
+题意（反推）：输入两个已升序排列的数组（先给第一个的长度 `n` 和 `n` 个数，再给第二个的长度 `m` 和 `m` 个数），把它们合并成一个有序数组并按"数字之间空格分隔、末尾不带空格"的格式输出，共 `n+m` 个数。
+
+??? note "答案"
+
+    ```c
+    #include <stdio.h>
+
+    int main() {
+        int n, m, i, j, k;
+        scanf("%d", &n);
+        int nums1[100];
+        for (i = 0; i < n; i++) scanf("%d", &nums1[i]);
+        scanf("%d", &m);
+        int nums2[100];
+        for (i = 0; i < m; i++) scanf("%d", &nums2[i]);
+        int merged[200];
+        i = 0; j = 0; k = 0;
+        while (i < n && j < m) {
+            if (nums1[i] <= nums2[j]) merged[k++] = nums1[i++];
+            else                      merged[k++] = nums2[j++];
+        }
+        while (i < n) merged[k++] = nums1[i++];     /* 收尾：把剩余的搬过来 */
+        while (j < m) merged[k++] = nums2[j++];
+        for (i = 0; i < n + m - 1; i++)
+            printf("%d ", merged[i]);
+        printf("%d", merged[n + m - 1]);            /* 最后一个不带空格 */
+        return 0;
+    }
+    ```
+
+??? note "解析"
+
+    这就是归并排序的 `merge` 步骤，和链表版的归并是同一个骨架。
+
+    - 两个 `while` 收尾循环不能省 —— 一条链走完后，另一条剩下的元素要原样搬过去（因为两条各自已经有序）。
+    - `nums1[i] <= nums2[j]` 用 `<=` 保证稳定性（相等时先取前一个数组的）。
+    - 输出格式是易错点：前 `n+m-1` 个后面跟空格，最后一个单独 `printf` 不带空格——这是 OJ 题的常见要求，别在循环里统一加空格。
+    - 复杂度：`O(n+m)` 时间（每个元素只被搬一次），`O(n+m)` 额外空间（数组版）；链表版可以做到 `O(1)` 额外空间。
+
+---
+
+### 9 · 二维前缀和（程序填空）
+
+!!! note "扫描件里没有留存题面文字"
+    扫描件里这道题的题面文字和程序代码都没有留存，只留下了答案（`PS: (2)和(3)顺序可换` + 6 个空的答案），无法反推出完整的题目代码。
+
+    下面是按材料上留下的答案反推的题意，不是题干原文，别当题干背：从答案可反推是在求二维前缀和（`prefixSum[i][j]` 表示左上角 `(0,0)` 到 `(i,j)` 的子矩阵元素之和）。
+
+??? note "答案"
+
+    | 序号 | 答案                      |
+    | ---- | ------------------------- |
+    | (1)  | `&matrix[i][j]`           |
+    | (2)  | `prefixSum[i][j - 1]`     |
+    | (3)  | `prefixSum[i - 1][j]`     |
+    | (4)  | `&&`                      |
+    | (5)  | `q >= 1`                  |
+    | (6)  | `prefixSum[p - 1][q - 1]` |
+
+??? note "解析"
+
+    二维前缀和递推公式：
+
+    ```
+    prefixSum[i][j] = matrix[i][j] + prefixSum[i][j-1] + prefixSum[i-1][j] - prefixSum[i-1][j-1]
+    ```
+
+    - (1) `&matrix[i][j]`：`scanf` 读二维数组元素要取地址；二维数组的 `[i][j]` 是 `int` 值，不是地址。
+    - (2)(3)：容斥原理——左边一块 + 上边一块，但左上角那块被加了两次，所以最后要减去 `prefixSum[i-1][j-1]`（这个"减"写在题干代码里还是靠 (2)(3) 补，题目没有留存代码，总之两项相加的顺序可换）。
+    - (4) `&&`：两个下标都要 `>= 1` 才能往上/往左取，两个条件用逻辑与连接。
+    - (5) `q >= 1`：与 `p >= 1` 对称的另一半边界条件。
+    - (6) `prefixSum[p - 1][q - 1]`：容斥里被重复加的那一块，对应"减去"的一项。
+
+    > （题目备注："(2) 和 (3) 顺序可换"——加法满足交换律，印证了这个公式。）
+
+---
+
+### 10 · 冒泡降序 + 递归阶乘
+
+根据已定义的主函数完成程序，实现如下功能的两个函数（6 分）：
+1) 对输入的长度为 `n` 的数组，使用 `sort` 函数中的冒泡排序将其从大到小排序。
+2) 使用 `fac` 函数，利用递归的方法求 1) 得到的数组中的最大值的阶乘（不考虑溢出）。
+
+```c
+#include<stdio.h>
+
+int main() {
+    int a[100], i, n;
+    scanf("%d", &n);
+    for (i = 0;i < n;i++) {
+        scanf("%d", &a[i]);
+    }
+    sort(a,n);
+    printf("%d", fac(a[0]));
+}
+```
+
+??? note "答案"
+
+    ```c
+    void sort(int a[], int n) {
+        int i, j, t;
+        for (i = 0; i < n - 1; i++) {
+            for (j = 0; j < n - 1 - i; j++) {
+                if (a[j] < a[j + 1]) {          /* 降序：前面小就交换 */
+                    t = a[j];
+                    a[j] = a[j + 1];
+                    a[j + 1] = t;
+                }
+            }
+        }
+    }
+
+    int fac(int n) {
+        if (n <= 1)
+            return 1;                            /* 递归出口 */
+        return n * fac(n - 1);                   /* 递归式 */
+    }
+    ```
+
+??? note "解析"
+
+    通用做法：冒泡排序由控制趟数的外层循环和比较交换的内层循环组成；递归由递归出口和递归式组成。
+
+    - `sort` 的边界：外层 `n-1` 趟、内层 `n-1-i` 次，都别写成 `n`（否则越界）。
+    - 降序写法：`if (a[j] < a[j+1])` 就交换 → 小的往后沉 → 结果是降序。（升序时的交换条件是 `a[j] > a[j+1]`。）
+    - `fac` 的两要素：
+      1. 递归出口 `n <= 1 → return 1`（`0! = 1! = 1`）；
+      2. 递归式 `n * fac(n-1)`。
+    - 为什么取 `a[0]`：降序排完后 `a[0]` 就是最大值。
+    - 边界自测：`n = 1`（`a[0]` 就是最大值）｜数组里有 0 或 1（`fac` 返回 1）｜负数（本题没要求，按题目不溢出处理即可）。
+    - 材料上写明：编程题 90% 为正确性，10% 为可读性 / 书写风格；循环变量命名、注释（"降序：前面小就交换"）属于后一部分。
+
+    > 注意题目代码的两个小问题（不算题目要求的范围）：
+    >
+    > 1. `int main()` 没有 `return 0;`（C99 起允许省略，但严格说应写）
+    > 2. `sort` 和 `fac` 在 `main` 之前没有声明/定义 → gcc 14 起这是硬错误（`error: implicit declaration of function`），不是警告，`-w` 也压不住（gcc 15.2.0 实测：编译直接失败）
+
+    > 正确做法是在 `main` 上方加函数原型，或把函数定义挪到 `main` 之前。
+
+---
+
+### 11 · 两个多项式的加法
+
+利用已有的部分代码，完成实现以下功能的程序：假定有两个使用链表存储的多项式 A 和 B，求它们的和多项式 C 并打印。例如 `A = 3.2x³ + 2.1x¹`，`B = 1.1x⁴ + 1`，则 `C = 1.1x⁴ + 3.2x³ + 2.1x¹ + 1`。（13 分）
+注意：
+1) 多项式链表的表元定义为结构体 `poly`，包括 `double` 类型的系数、`int` 类型的指数，还有指向下一表元的指针；
+2) 多项式链表 A、B 的表元顺序根据指数从大到小排列，要求和多项式 C 也满足该顺序要求。所有指数均为正整数；
+3) 下面已给出部分主函数代码，输入函数 `readpoly` 视为已知，不需编写。直接实现结构体 `poly`、函数 `sumpoly` 与 `output` 即可。
+
+```c
+#include<stdio.h>
+#include<stdlib.h>
+
+//请编写函数与结构体
+
+int main() {
+    struct poly * ha, *hb, *hc;   //三个多项式的头
+    ha = readpoly();              //读入 ha，readpoly 视为已知，无需实现
+    hb = readpoly();              //读入 hb，readpoly 视为已知，无需实现
+    hc = sumpoly(ha, hb);         //下列函数需要实现
+    outprint(hc);
+    return 0;
+}
+```
+
+!!! note "函数名以框架代码为准"
+    题面第 3 条写的是实现 `sumpoly` 与 `output`，但框架代码里 `main` 调用的却是 `outprint`，两者必有一处不一致（可能是原卷笔误，也可能是扫描时认错了字）。
+
+    材料上的实现用的也是 `outprint`。照着框架代码写 `outprint`，写成 `output` 会因找不到该函数而链接失败。
+
+??? note "答案"
+
+    ```c
+    /* ① 结构体定义 */
+    struct poly {
+        double coef;              /* 系数 */
+        int    exp;               /* 指数 */
+        struct poly *next;
+    };
+
+    /* ② 多项式相加 */
+    struct poly *sumpoly(struct poly *ha, struct poly *hb) {
+        struct poly *hc = NULL, *tail = NULL, *node;
+        double coef;
+        int    exp;
+        int    take_a, take_b;
+
+        while (ha != NULL || hb != NULL) {
+            take_a = take_b = 0;
+
+            if (ha != NULL && hb != NULL) {
+                if (ha->exp > hb->exp) {              /* A 的指数大 */
+                    coef = ha->coef; exp = ha->exp; take_a = 1;
+                } else if (hb->exp > ha->exp) {       /* B 的指数大 */
+                    coef = hb->coef; exp = hb->exp; take_b = 1;
+                } else {                              /* 指数相同 → 合并同类项 */
+                    coef = ha->coef + hb->coef; exp = ha->exp;
+                    take_a = take_b = 1;
+                }
+            } else if (ha != NULL) {                  /* B 走完了，搬 A 的 */
+                coef = ha->coef; exp = ha->exp; take_a = 1;
+            } else {                                  /* A 走完了，搬 B 的 */
+                coef = hb->coef; exp = hb->exp; take_b = 1;
+            }
+
+            if (take_a) ha = ha->next;
+            if (take_b) hb = hb->next;
+
+            if (coef == 0.0) continue;                /* 系数为 0 的项不建结点 */
+
+            node = (struct poly *)malloc(sizeof(struct poly));
+            node->coef = coef;
+            node->exp  = exp;
+            node->next = NULL;
+
+            if (hc == NULL) hc = tail = node;         /* 第一个结点 */
+            else { tail->next = node; tail = node; }  /* 尾插 */
+        }
+        return hc;
+    }
+
+    /* ③ 输出 */
+    void outprint(struct poly *hc) {
+        struct poly *p = hc;
+        if (p == NULL) { printf("0\n"); return; }
+
+        while (p != NULL) {
+            if (p->exp == 0)      printf("%.1f", p->coef);           /* 常数项 */
+            else if (p->exp == 1) printf("%.1fx", p->coef);          /* 一次项 */
+            else                  printf("%.1fx^%d", p->coef, p->exp);
+            p = p->next;
+            if (p != NULL) printf(" + ");
+        }
+        printf("\n");
+    }
+    ```
+
+??? note "解析"
+
+    解题骨架（三条主线）：
+
+    ① 归并式双指针 —— 这是常用模板，和"两个有序链表合并"完全同构：
+
+    ```
+    while (A 还有 或 B 还有) {
+        if (A 的指数 > B 的指数)      取 A 的，A 前进；
+        else if (B 的指数 > A 的指数) 取 B 的，B 前进；
+        else                          系数相加，两者都前进；   ← 唯一的差别在这里
+    }
+    ```
+
+    > 与"合并有序链表"的唯一区别：指数相等时要合并同类项（系数相加），而不是简单地接上去。
+
+    ② 尾插法建新表 —— 需要 `tail` 指针，`tail->next = node; tail = node;`
+
+    ③ 边界处理：
+
+    - 某条链走完 → 把另一条整段接上（代码里是继续逐个搬，也可以直接 `tail->next = ha; break;` 加快）；
+    - 系数为 0 的项要丢掉（否则输出会出现 `0.0x^5` 这种）；
+    - 结果为空（所有项都抵消了）要打印 `0`，不能什么都不打。
+
+    本例题的演算：
+
+    - A：`(3.2, 3) → (2.1, 1)`
+    - B：`(1.1, 4) → (1.0, 0)`
+
+    | 步骤 | 比较              | 产生结点   | C 的状态        |
+    | ---- | ----------------- | ---------- | --------------- |
+    | 1    | A.exp=3 < B.exp=4 | `(1.1, 4)` | `1.1x⁴`         |
+    | 2    | A.exp=3 > B.exp=0 | `(3.2, 3)` | `1.1x⁴ → 3.2x³` |
+    | 3    | A.exp=1 > B.exp=0 | `(2.1, 1)` | `+ 2.1x`        |
+    | 4    | A 空，搬 B        | `(1.0, 0)` | `+ 1.0`         |
+
+    实际输出串是 `1.1x^4 + 3.2x^3 + 2.1x + 1.0`（注意：题干里写的 `2.1x¹ + 1` 是数学写法；程序按 `outprint` 的格式打出来，一次项不带指数、常数项按 `%.1f` 打成 `1.0`）。
+
+    > 输出格式分三个分支：`exp == 0` 打系数、`exp == 1` 打 `系数x`（不打 `x^1`）、其余打 `系数x^指数`；项与项之间用 `" + "` 连接，最后一个后面不加。这正是字符串处理题的常见写法。
+
+---
+
+### 12 · 数组算法 · 多数投票（抵消法）
+
+写出下面程序的功能和执行后的显示结果。
+
+```c
+#include<stdio.h>
+
+int main() {
+    unsigned int nums[20] = { 3, 2, 3, 2, 4, 4, 4, 2, 4, 1, 2, 4, 4, 4, 4, 4, 1, 2, 4, 4 };
+    int target = -1;
+    int count = 0;
+    for (int i = 0; i < 20; i++) {
+        if (target != -1 && target != nums[i]) {
+            count--;
+            if (count == 0) {
+                target = -1;
+            }
+        }
+        else {
+            target = nums[i];
+            count++;
+        }
+    }
+    printf("%d", target);
+    return 0;
+}
+```
+
+??? note "答案"
+
+    功能：求长度为 N 的（非负）数组 nums 中出现次数大于 ⌊n/2⌋ 的元素 target，如果没有这样的元素则 target 为 -1。
+
+    执行结果：target 的值为 4。
+
+??? note "解析"
+
+    这是经典的 Boyer–Moore 多数投票算法，核心思路叫"抵消法"：`target` 是当前候选，`count` 是它的"净票数"——遇到与候选相同的数就 `count++`，遇到不同的数就 `count--`，一旦 `count` 减到 0 说明候选被消耗光，于是 `target` 重置为 -1、由后面的数重新当候选。
+
+    因为多数元素的个数超过一半，两两配对抵消之后剩下的候选必然还是它，所以最后 `target` 就是答案。
+
+    本题中数一遍可知 4 在 20 个数里出现了 11 次（> 10），故输出 `4`。
+
+    注意这段代码只选出候选、没有第二步验证——严格来说若数组里不存在多数元素，残留的候选需要再扫一遍计数确认，本题因多数元素确实存在而省略了这一步。
+
+---
+
+### 13 · 级数求和（递推项防溢出）
+
+编程计算 `e = 1 + 1/1! + 1/2! + … + 1/n!` 的值并输出（设 n = 20）。
+
+> （本题只给了文字题目、没有框架代码，所以要自己写完整程序。）
+
+??? note "答案"
+
+    ```c
+    #include <stdio.h>
+
+    int main(void)
+    {
+        int n = 20, i;
+        double e = 1.0;
+        double term = 1.0;          /* term 里放 1/i!，先从 1/0! = 1 起步 */
+
+        for (i = 1; i <= n; i++) {
+            term /= i;              /* 递推：1/i! = 1/(i-1)! / i */
+            e += term;
+        }
+
+        printf("e = %.9f\n", e);
+        return 0;
+    }
+    ```
+
+    输出：
+
+    ```
+    e = 2.718281828
+    ```
+
+??? note "解析"
+
+    解题思路：级数求和由初始化累加器、一层循环、每轮更新通项三部分组成。这题的通项是 `1/i!`，关键在于通项怎么算才不出错。
+
+    易错点 1：累加项必须是浮点。 如果写成 `e += 1 / fact;`（两个 int 相除），`1/2` 在 C 里是整数除法，结果直接是 0，`i >= 2` 之后全加 0，最后只会输出 1（或 2），这是本题容易出错的地方。
+
+    只要除法两边有一个是 `double`，整个除法就是浮点除法——所以要么写 `1.0 / fact`，要么像上面的递推写法那样让 `term` 本身是 `double`。
+
+    易错点 2：阶乘会溢出。 `int` 最大约 2.1×10⁹，而 `13! = 6227020800` 已经超了——gcc 15.2.0 实测：用 `int` 存 `13!` 得到的是 1932053504，完全是错的；
+
+    但此时它被当作 `double` 参与除法，程序照样编译通过、照样输出一个看似正常的数值，静默出错，不容易发现。两种正确做法：
+
+    - 方案 A（推荐，本文答案用的）——递推通项：`term /= i` 让 `term` 从 `1/0! = 1` 一路变成 `1/1!`、`1/2!`……中间值永远在 (0, 1] 之间，根本不存在溢出问题，而且每次循环只做一次除法，是 O(n)。
+    - 方案 B——阶乘用 `long long`：`20! ≈ 2.43×10¹⁸`，`long long` 上限约 9.2×10¹⁸，装得下。写法（下面是循环体片段，不是完整程序，替换方案 A 里的循环体即可，实测输出同为 `2.718281828`）：
+
+      ```c
+      long long fact = 1;
+      for (i = 1; i <= n; i++) {
+          fact *= i;
+          e += 1.0 / fact;        /* 注意是 1.0，不是 1 */
+      }
+      ```
+
+    为什么推荐 A：如果题目把 n 开大（比如 n = 100），`long long` 也会溢出，只有递推 `term /= i` 不受影响；不必每次重算一遍阶乘，也省掉了"重算阶乘"那种 O(n²) 的双层循环写法。
+
+    易错点 3：初值。 `e = 1.0` 对应级数开头那个独立的 `1`（即 `1/0!`），循环从 `i = 1` 开始累加 `1/1!` 起，两者合起来才是完整的 `1 + 1/1! + 1/2! + …`。若把 `e` 初始化成 0，就会少掉 1。
+
+    结果校验：`n = 20` 时 `e = 2.718281828…`，正是自然常数 e；
+
+    用 Python 的 `sum(1/math.factorial(i) for i in range(21))` 独立复算，同样是 `2.718281828`，与 gcc 实测输出完全一致。
+
+---
+
+### 14 · 字符串处理 · 最大字符与末位交换
+
+在字符串中找到最大的字符，并与最后一个字符交换。
+
+> （本题只有这一行文字题干，没有给框架代码，所以下面写完整程序。）
+
+??? note "答案"
+
+    ```c
+    #include <stdio.h>
+    #include <string.h>
+    #define MAXN 100
+
+    /* 把字符串中最大的字符与最后一个字符交换 */
+    void swapMaxWithLast(char str[])
+    {
+        int len = (int)strlen(str);
+        int i, maxIdx;
+        char t;
+
+        if (len <= 1)               /* 空串或只有一个字符：无需交换 */
+            return;
+
+        maxIdx = 0;                 /* 先假设第 0 个字符最大 */
+        for (i = 1; i < len; i++)   /* 从下标 1 开始逐个比较 */
+            if (str[i] > str[maxIdx])
+                maxIdx = i;         /* 只记下标，不记字符本身 */
+
+        if (maxIdx != len - 1) {    /* 最大的已经在末尾就不用换 */
+            t = str[maxIdx];
+            str[maxIdx] = str[len - 1];
+            str[len - 1] = t;
+        }
+    }
+
+    int main(void)
+    {
+        char s[MAXN];
+
+        printf("请输入字符串: ");
+        if (scanf("%99s", s) != 1)  /* 约定：串内不含空格 */
+            return 0;
+
+        swapMaxWithLast(s);
+        printf("结果: %s\n", s);
+        return 0;
+    }
+    ```
+
+    运行示例（真实运行结果）：
+
+    ```
+    输入: helloworld      输出: hellodorlw
+    输入: ZzAa            输出: ZaAz
+    输入: abcd            输出: abcd      （最大字符 'd' 本来就在末尾，不变）
+    ```
+
+??? note "解析"
+
+    三个步骤，题面要求什么就写什么：
+
+    1. 先求串长：`len = strlen(str)`（要 `#include <string.h>`）。`strlen` 数的是 `'\0'` 之前的字符个数、不含结束符，所以最后一个字符的下标是 `len - 1`——这个"−1"是本题第一个常见错点。
+    2. 定位最大字符的下标：用逐个比较法，`maxIdx` 先取 0，然后 `i` 从 1 扫到 `len - 1`，遇到更大的字符就更新 `maxIdx`。关键：存的是下标 `maxIdx`，不是字符 `maxChar`——因为最后要"交换位置"，只记字符值的话还得回头再找一遍它在哪。比较用 `>`，比的是 ASCII 码。
+    3. 与最后一个字符交换：经典三行交换，对象是 `str[maxIdx]` 和 `str[len - 1]`（下面三行是片段，不是完整程序）：
+
+       ```c
+       t = str[maxIdx];  str[maxIdx] = str[len - 1];  str[len - 1] = t;
+       ```
+
+    边界情况（题目未写明，属于"程序其他质量指标"涵盖的范围）：
+
+    - 空串 `""`：`len == 0`，这时 `len - 1 == -1`，如果直接访问 `str[len - 1]` 就是 `str[-1]` 数组越界（读的是数组前面的垃圾数据）。所以函数开头必须先 `if (len <= 1) return;` 排除这种情况。
+    - 长度为 1：`len == 1`，最大的字符就是它自己，交换是空操作，不会有错；与空串合并成一句 `if (len <= 1) return;`，同时处理两种情况。
+    - 最大字符恰好是最后一个字符：如 `"abcd"`、`"abcz"`，此时 `maxIdx == len - 1`，交换自己等于没换。加一句 `if (maxIdx != len - 1)` 只是让意图更清楚，去掉这个判断结果也对（实测 `"abcd"` 输出仍是 `abcd`）。
+
+    易错点：
+
+    - 在函数里用 `sizeof(str)/sizeof(str[0])` 求长度是错的——数组名作参数传给函数后已经退化成指针，`sizeof(str)` 得到的是指针大小（64 位机上是 8），不是数组长度，必须用 `strlen`。（只有在定义它的 `main` 里对数组名用 `sizeof` 才得到正确的长度。）
+    - 扫描时误把结束符也拿去比：写成 `for (i = 0; i <= len; i++)` 会把 `'\0'`（值是 0）也参与比较。它的值最小，通常看不出问题，但这是越界写法。
+    - 大小写敏感：ASCII 里 `'a' = 97` 大于 `'Z' = 90`，所以串里混有大写字母时，"最大"会落在小写字母上（实测输入 `ZzAa` 得到 `ZaAz`——最大是 `'z'` 而不是 `'Z'`）。原题没规定，按 ASCII 比较即可。
+    - 若输入的串可能含空格，`scanf("%s")` 会在空格处截断，应改用 `fgets(s, MAXN, stdin)`（并注意手动去掉末尾的 `'\n'`）。
+
+---
+
+## 说明
+
+以下是题目本身的不一致 / 无法核实之处，正文按最稳妥的方式处理，记录在此：
+
+1. 多项式加法题题面与框架代码的函数名冲突（题 11）：题面第 3 条要求实现 `output`，框架代码 `main` 调用的却是 `outprint`，两者必有一处不一致（可能是原卷笔误，也可能是扫描时认错了字）。正文按框架代码写 `outprint`（材料上的实现用的也是 `outprint`）。若两种写法同时出现，以框架代码为准。
+2. 题 5（归并两个有序链表）的"带不带辅助表元"题目没有明说：题目只给了 `struct intNode` 定义和函数声明，没说链表有没有辅助表元。正文两版实现都给出（带辅助表元 / 不带辅助表元），并注明"假设带辅助表元——与其他题一致"。答题时按其他题的约定判断。
+3. 三处题干缺失（题 7 矩阵范数、题 8 合并两个有序数组、题 9 二维前缀和）：这三题的材料都只留下了答案。题 7、题 8 的题意是从材料上留下的代码反推的（不是题干原文），题 9 连代码都没有留存，只有 6 个空的答案，因此只能给出答案表 + 前缀和递推公式。三题均已按"扫描件里没有留存题面文字，由材料上的代码反推"标注，未编造题干。

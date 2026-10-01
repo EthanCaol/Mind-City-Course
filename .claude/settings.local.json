@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(*)",
+      "Fetch(*)",
+      "PowerShell(*)",
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "WebSearch(*)",
+      "WebFetch(*)",
+      "TaskCreate(*)",
+      "TaskUpdate(*)",
+      "TaskGet(*)",
+      "TaskList(*)",
+      "Agent(*)",
+      "Skill(*)",
+      "EnterPlanMode",
+      "ExitPlanMode",
+      "AskUserQuestion(*)",
+      "NotebookEdit(*)",
+      "Monitor(*)",
+      "PushNotification(*)",
+      "CronCreate(*)",
+      "CronDelete(*)",
+      "CronList(*)",
+      "ScheduleWakeup(*)",
+      "RemoteTrigger(*)",
+      "mcp__ide__executeCode"
+    ]
+  }
+}

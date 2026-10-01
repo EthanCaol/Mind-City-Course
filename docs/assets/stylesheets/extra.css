@@ -1,0 +1,960 @@
+/* ---------------------------------------------------------------------------
+   本站的视觉微调。字体定义在 fonts.css，这里只放间距、排版一类的覆盖。
+
+   这些都是对 Material 默认值的覆盖，不是新增功能。想调整时直接改下面的
+   数字即可，改完存盘预览站会自动刷新。
+   --------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+   加大章节之间的留白
+
+   Material 的默认值（h2 上边距 1.6em、hr 上下各 1.5em）在长教程里偏紧，
+   章节之间容易糊成一片，学生滚动时不好判断「这是一个新的部分」。
+
+   注意 CSS 的 margin 折叠规则：相邻元素的上下 margin 不会相加，而是取
+   较大者。所以分隔线的下边距和标题的上边距叠加后取较大者，而不是相加。
+
+   调数值前先看这个换算表（浏览器默认 16px 字号时）：
+
+       .md-typeset 基准字号 = 0.8rem   = 12.8px
+       h2 的字号 = 1.5625em = 20px  → h2 上的 1em ≈ 20px
+       h3 的字号 = 1.25em   = 16px  → h3 上的 1em ≈ 16px
+       hr 继承基准字号      = 12.8px → hr 上的 1em ≈ 12.8px
+
+   em 是相对「元素自己的字号」算的，所以同样是 1em，写在 h2 上和写在 hr
+   上差了将近一倍 —— 这是最容易估错的地方。
+   --------------------------------------------------------------------------- */
+
+/* 大标题下面也画一条线，写法和下面 h2 那条一样。
+   主要作用是把标题和紧随其后的「本页最后更新于 …」（hooks/revision_notice.py
+   插进来的那行小字）分开 —— 不画线时那行小字像标题的一部分。 */
+.md-typeset h1 {
+  padding-bottom: 0.4rem;
+  border-bottom: 0.05rem solid var(--md-default-fg-color--lighter);
+}
+
+.md-typeset h2 {
+  margin-top: 3.5em; /* ≈ 70px */
+  /* 横线到下方正文的距离。Material 默认是 .64em（≈ 12.8px），对带横线的
+     标题来说偏紧，横线会贴着下一段文字。这里放到 1em（≈ 20px）。 */
+  margin-bottom: 1em;
+  padding-top: 0.2em;
+  /* 标题下方的横线。用 border-bottom 而不是给文字加 text-decoration:
+     前者横跨整个内容宽度，起的是分割作用；后者只贴着文字走，没法承担
+     章节分隔的职责。 */
+  padding-bottom: 0.4em; /* 文字与横线之间留一点空隙 */
+  border-bottom: 0.05rem solid var(--md-default-fg-color--lighter);
+}
+
+/* 注：Material 自己的 hr 用的是 --md-default-fg-color--lightest，比这里更淡。
+   那条线在暗色主题下几乎看不见，而这里要的是能读出层级的结构线，
+   所以用亮一档的 --lighter。嫌重就换成 --lightest。 */
+
+.md-typeset h3 {
+  margin-top: 2.8em; /* ≈ 45px */
+}
+
+.md-typeset h4 {
+  margin-top: 2em; /* ≈ 32px */
+}
+
+/* ---------------------------------------------------------------------------
+   所有标题统一加粗
+
+   Material 默认的字重方案是「字号越大越细」：h1 / h2 都是 300，h3 是 400，
+   h4 以下才用 700。这套在英文排版里显得轻盈，但对中文有个副作用 ——
+
+   Roboto 不含汉字，中文由系统字体渲染，而多数中文字体没有 Light 字重，
+   浏览器只能拿常规体顶上。于是同一行标题里，英文部分是细体、中文部分是
+   常规体，粗细对不上。统一成 700 之后两边都是明确的一档。
+
+   覆盖 h1~h3 即可，h4~h6 在 Material 里本来就已经是 700。
+   层级改由字号区分：h1 = 2em、h2 = 1.5625em、h3 = 1.25em。
+
+   注：Roboto 只加载了 300 / 400 / 700 三档，没有 500 / 600，所以「半粗」
+   实际会回落到 700。
+   --------------------------------------------------------------------------- */
+
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3 {
+  font-weight: 700;
+}
+
+/* ---------------------------------------------------------------------------
+   正文行高与段落间距
+
+   Material 默认的段落间距是 1em。中文没有西文的词间空格，行与行更容易
+   糊在一起，把行高稍微拉开一点可读性会好很多。
+   --------------------------------------------------------------------------- */
+
+.md-typeset {
+  line-height: 1.75;
+}
+
+.md-typeset p {
+  margin: 1.2em 0;
+}
+
+/* 列表项之间也稍微拉开，避免密集的条目连成一片 */
+.md-typeset li {
+  margin-bottom: 0.35em;
+}
+
+/* ---------------------------------------------------------------------------
+   列表与后文之间留出更大的间隔
+
+   Material 给 ul/ol 的上下边距都是 1em，和段落的 1.2em 几乎一样。题库里
+   「引导句 + 选项列表 + 解析」挨在一起时，列表和它下面的段落看起来是糊成
+   一块的。把下边距提到 2.2em（先试过 1.6em，还是偏挤），列表读起来才是
+   一个独立的块。
+
+   上边距**不动**：列表上面通常是引导句（「逐项排雷——」「参考答案：」），
+   贴紧一点反而更像它的标题，拉开了会误以为和列表没关系。
+
+   想调松紧只改下面这一个数字。
+   --------------------------------------------------------------------------- */
+
+.md-typeset ul,
+.md-typeset ol {
+  margin-bottom: 2.2em; /* 1em → 2.2em */
+}
+
+/* ---------------------------------------------------------------------------
+   右侧目录（TOC）加宽、字号收小
+
+   Material 默认给侧边栏 12.1rem 宽、导航字号 .7rem。中文标题本来就长，
+   加上章节编号（「4.2 配置网络代理（可选）」）后经常折成两行，目录看起来
+   很碎。加宽 + 收小字号两边一起使劲，容量约提升 24%。
+
+   注意两个选择器都是左右共用的，必须限定到右侧：
+     .md-sidebar            → 左右侧边栏都是这个类
+     .md-sidebar--secondary → 只有右侧目录
+     .md-nav                → 左右导航都是这个类
+     .md-nav--primary       → 左侧站点导航
+     .md-nav--secondary     → 右侧目录
+
+   字号那条要连嵌套的 .md-nav 一起写：Material 给每个 .md-nav 都单独设了
+   .7rem，只改最外层的话，子条目会因为自己的 .md-nav 规则而保持原大小。
+   --------------------------------------------------------------------------- */
+
+.md-sidebar--secondary {
+  width: 15rem; /* 12.1rem → 加宽约 24% */
+}
+
+.md-nav--secondary,
+.md-nav--secondary .md-nav {
+  font-size: 0.65rem; /* .7rem → 收小约 7% */
+}
+
+/* ---------------------------------------------------------------------------
+   侧边栏滚动条：取消悬停时的高亮
+
+   Material 给滚动条设了三段状态，常态是淡色，但鼠标移上去（以及键盘聚焦）
+   会换成 --md-accent-fg-color —— 在本站是 indigo，一个饱和的靛蓝，在暗色
+   背景上非常刺眼。这里把所有状态都钉回常态的淡色，等于取消悬停反馈。
+
+   压住它的只能是一句无条件的 scrollbar-color：Material 自己就用标准属性
+   驱动侧边栏这条（常态 --lighter，悬停换成强调色），所以 Chrome 里
+   ::-webkit-scrollbar 那组本来就不生效 —— 标准属性一非 auto，伪元素那条路
+   整条作废（理由详见下面 matrix__bar 那段）。写成 @supports 兜底只等于把
+   悬停那一档还给 Material，滑过去就是一条靛蓝的滑块。
+
+   下面那组 ::-webkit-scrollbar 是 Safari 的路径，留着一并压住。
+   --------------------------------------------------------------------------- */
+
+.md-sidebar__scrollwrap,
+.md-sidebar__scrollwrap:focus-within,
+.md-sidebar__scrollwrap:hover {
+  scrollbar-color: var(--md-default-fg-color--lighter) #0000;
+}
+
+.md-sidebar__scrollwrap::-webkit-scrollbar-thumb,
+.md-sidebar__scrollwrap:focus-within::-webkit-scrollbar-thumb,
+.md-sidebar__scrollwrap:hover::-webkit-scrollbar-thumb,
+.md-sidebar__scrollwrap:focus-within::-webkit-scrollbar-thumb:hover,
+.md-sidebar__scrollwrap:hover::-webkit-scrollbar-thumb:hover {
+  background-color: var(--md-default-fg-color--lighter);
+}
+
+/* ---------------------------------------------------------------------------
+   滚动条两端的小三角
+
+   Chrome 里只要元素被 ::-webkit-scrollbar 系列的**任何一条**规则碰到，整条
+   滚动条就切到自定义模式，而没写到的部分仍按默认画 —— 上面侧边栏那条只写了
+   thumb，两端的小三角和轨道就都留着。所以这里不逐个元素写，全站去掉。
+   --------------------------------------------------------------------------- */
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* 轨道不铺底色。铺了之后滚动条看起来是一条有边框的长条，而不是浮在背景
+   上的一个滑块。 */
+.md-sidebar__scrollwrap::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* ---------------------------------------------------------------------------
+   页顶的「最后更新」提示
+
+   日期由 hooks/revision_notice.py 插到标题下方，这里只管样式。
+   文案在 hook 文件里改。
+   --------------------------------------------------------------------------- */
+
+.md-typeset .doc-updated {
+  font-size: 0.72rem; /* 正文是 0.8rem，收小一档 */
+  color: var(--md-default-fg-color--light);
+  /* 负值是为了抵消 Material 给 h1 设的 1.25em 下边距（约 32px），
+     不减掉的话小字会离标题很远，看起来像独立的一段。 */
+  margin-top: -1em;
+  margin-bottom: 2em; /* 与正文拉开距离 */
+}
+
+/* 隐藏页脚原本的「最后更新」——已经移到页顶，不隐藏会显示两次。
+   Material 只用到这个 aside 的日期部分（没配 repo_url，不含源码链接），
+   整块隐藏没有副作用。 */
+.md-source-file {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------------
+   首页底部的源码仓库卡片
+
+   为什么不用 shields.io / github-readme-stats 那类徽章：
+   本站启用了 privacy 插件，构建时会把外链图片抓成本地副本 —— 徽章会被冻结
+   成构建那一刻的样子，star 数变成一张静态图，还不如不放；更麻烦的是构建跑在
+   --strict 下，这类第三方服务一旦抽风就会让构建失败、把整个部署卡住。
+   所以这里纯 CSS 画一张，不依赖任何外部服务。
+
+   卡片也特意不显示 star / fork 数：那要么再引入一个外部接口（同样的问题），
+   要么构建时去问 GitHub API（每次 push 都多一个能搞挂部署的环节）。
+   --------------------------------------------------------------------------- */
+
+.md-typeset .repo-card {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-top: 1.5em;
+  padding: 1.1rem 1.3rem;
+  /* 左边一道主色竖条当地标。用 border-left 而不是另外塞一个 div，
+     省一层结构，也保证它一定顺着卡片圆角走。 */
+  border: 0.05rem solid var(--md-default-fg-color--lightest);
+  border-left: 0.2rem solid var(--md-primary-fg-color);
+  border-radius: 0.3rem;
+  background-color: var(--md-code-bg-color);
+}
+
+/* flex: none 是关键：仓库名比较长，默认的 flex-shrink 会把图标压扁 */
+.md-typeset .repo-card__logo {
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: 0.15rem; /* 跟右侧第一行文字的视觉中心对齐 */
+  fill: var(--md-default-fg-color--light);
+}
+
+.md-typeset .repo-card__name {
+  font-family: var(--md-code-font-family);
+  font-weight: 700;
+}
+
+.md-typeset .repo-card__desc {
+  margin: 0.35em 0 0; /* 段落默认上下都有 margin，这里只要一点上间距 */
+  font-size: 0.85em;
+  color: var(--md-default-fg-color--light);
+}
+
+/* ---------------------------------------------------------------------------
+   二级栏目里的页面图标调小
+
+   Material 把导航里的页面图标统一设成 1.3em（main.css 里的 `.md-nav__link svg`），
+   frontmatter 的 icon 只能换图形、改不了尺寸。这里把「栏目下的子页面」这一层单独压小。
+
+   导航里带图标的页面一共四个：首页、课程资料、站点计划是顶级条目，只有作业 1 挂在
+   「编程作业」栏目下面，所以这条实际上只作用于它一个。
+
+   要再调大小：只改下面那条 height。默认是 1.3em，现在比它小一档。
+   --------------------------------------------------------------------------- */
+
+.md-nav--primary .md-nav__item--nested .md-nav__link svg {
+  height: 1.2em;
+}
+
+/* ---------------------------------------------------------------------------
+   自定义提示块类型：todo
+
+   Material 9.7.7 只内置 12 种类型（note / abstract / info / tip / success /
+   question / warning / failure / danger / bug / example / quote），没有 todo。
+   直接写 !!! todo 只会套上基础样式：一条蓝边框，标题既没有图标也没有底色，
+   混在其他提示块里一眼就是半成品。
+
+   所以照内置类型的写法补一套。内置类型一共就这五条规则 —— 边框、聚焦外发光、
+   标题底色、标题图标、标题后面的颜色 —— 颜色按 Material 自己的写法直接写 hex
+   （它的类型色本来就是逐个写死的，没有变量可复用）。
+
+   配色用的就是内置 abstract 那一套 #00b0ff（连 1a 的透明度也照抄），只有图标不同：
+   abstract 是摘要图标，todo 是 Material Design Icons 的 checkbox-marked-outline
+   （一个带勾的方框），跟内置类型一样内联成 data-URI。
+   换句话说，todo 和 abstract 长得几乎一样，区别只在图标和语义 —— 这是有意为之，
+   想换个色就把下面五处 hex 一起改掉（在 main.css 里搜内置类型就能抄到别的配色）。
+   --------------------------------------------------------------------------- */
+
+.md-typeset .admonition.todo,
+.md-typeset details.todo {
+  border-color: #00b0ff;
+}
+
+/* 点进块里的输入框时，提示块不发光。
+   Material 的基础规则给所有 .admonition:focus-within 加了外发光，内置类型各自
+   换成自己的颜色；todo 这里直接顶掉。注意不能只是把这条删掉 —— 删了会回落到
+   基础规则，亮成主题的蓝色。这里把静止状态的阴影还回去，聚焦前后完全一样。 */
+.md-typeset .admonition.todo:focus-within,
+.md-typeset details.todo:focus-within {
+  box-shadow: var(--md-shadow-z1);
+}
+
+.md-typeset .todo > .admonition-title,
+.md-typeset .todo > summary {
+  background-color: #00b0ff1a;
+}
+
+.md-typeset .todo > .admonition-title::before,
+.md-typeset .todo > summary::before {
+  background-color: #00b0ff;
+  -webkit-mask-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,19H5V5H15V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V11H19M7.91,10.08L6.5,11.5L11,16L21,6L19.59,4.58L11,13.17L7.91,10.08Z"/></svg>');
+  mask-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,19H5V5H15V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V11H19M7.91,10.08L6.5,11.5L11,16L21,6L19.59,4.58L11,13.17L7.91,10.08Z"/></svg>');
+}
+
+.md-typeset .todo > .admonition-title::after,
+.md-typeset .todo > summary::after {
+  color: #00b0ff;
+}
+
+/* ---------------------------------------------------------------------------
+   在线测评（docs/homework-code/01-add.md）
+
+   页面骨架是那个 .md 文件里的裸 HTML 块，交互在
+   docs/assets/javascripts/judge.js，接口走 /judge/api/*。
+
+   配色一律复用 Material 的 --md-* 变量，不另维护一套颜色 —— 全站固定暗色
+   （slate/indigo），自己写死颜色迟早会对不上。
+   --------------------------------------------------------------------------- */
+
+.md-typeset .judge {
+  margin-top: 1.6em;
+}
+
+/* 顶部工具条：左边填学号，右边「提交」。
+   它和编辑框合成一块 —— 上面一条工具栏、下面编辑框，共用一圈边框和圆角。
+   两块的中间那条线只由编辑框的上边框出（工具条这边不画），否则叠成两像素。 */
+.md-typeset .judge__bar {
+  display: flex;
+  flex-wrap: wrap; /* 窄屏上让学号框自己换行，别把按钮挤出去 */
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.4rem 0.6rem;
+  border: 0.05rem solid var(--md-default-fg-color--lighter);
+  border-bottom: none;
+  border-radius: 0.2rem 0.2rem 0 0;
+  background-color: var(--md-code-bg-color);
+}
+
+/* 学号框前面那句说明。用 label 配 for，点这行字就能聚焦到输入框。 */
+.md-typeset .judge__label {
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color--light);
+}
+
+/* 光标在输入框里时整块一起亮。不这么写就只有下半截亮，接缝那条竖线从灰变蓝，
+   看着像两块没对齐。点「提交」只是按钮获得焦点，这条不会命中，也不会误亮。
+   （认不出 :has() 的浏览器就退回原来的样子，只是工具条不跟着亮，不算出错。） */
+.md-typeset .judge:has(.judge__code:focus) .judge__bar {
+  border-color: var(--md-accent-fg-color);
+}
+
+.md-typeset .judge__bar button {
+  flex: none;
+  /* 用 auto 外边距顶到最右，不用 justify-content：换行后按钮单独一行时，
+     auto 外边距照样把它顶到右边，justify-content 就会把它甩回左边 */
+  margin-left: auto;
+  padding: 0.45rem 1.4rem;
+  border: none;
+  border-radius: 0.2rem;
+  background-color: var(--md-primary-fg-color);
+  color: var(--md-primary-bg-color);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.md-typeset .judge__bar button:hover:not(:disabled) {
+  background-color: var(--md-accent-fg-color);
+}
+
+/* 判题期间禁用，防止连点；别用 opacity 淡出，那样看不出是禁用还是没加载 */
+.md-typeset .judge__bar button:disabled {
+  cursor: not-allowed;
+  background-color: var(--md-default-fg-color--lighter);
+  color: var(--md-default-bg-color);
+}
+
+/* 代码输入框。
+   textarea 自己没法给文字上色、也没法在左侧固定行号，所以叠三层：
+   行号列 / 高亮副本 / textarea（文字透明，只留光标）。
+   三层字体、行高、上内边距必须逐像素一致，差一点就会错行。
+   滚动同步在 judge.js 里做。 */
+.md-typeset .judge__editor {
+  position: relative;
+  /* 基线高度，也就是最小高度：judge.js 的 autosize() 每次输入都先把高度清回
+     这个值再量内容，内容更多才撑高。所以这一条别删，删了量出来永远是当前高度。 */
+  height: 24rem;
+  border: 0.05rem solid var(--md-default-fg-color--lighter);
+  border-radius: 0 0 0.2rem 0.2rem; /* 上圆角在工具条那边 */
+  background-color: var(--md-code-bg-color);
+  overflow: hidden;
+}
+
+.md-typeset .judge__editor:focus-within {
+  border-color: var(--md-accent-fg-color);
+}
+
+/* 这三条选择器里的每一项都必须完全一致 */
+.md-typeset .judge__editor .judge__gutter,
+.md-typeset .judge__editor .judge__highlight,
+.md-typeset .judge__editor .judge__code {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  font-family: var(--md-code-font-family);
+  font-size: 0.6rem;
+  line-height: 1.5;
+  /* 用 pre 而不是 pre-wrap：代码不折行，横向滚动比折行好读，
+     也免去几层换行位置不一致的风险 */
+  white-space: pre;
+  overflow: hidden;
+  tab-size: 4;
+}
+
+/* 行号列。只跟着上下滚，不跟着左右滚 —— 所以它是独立一层，
+   而不是拼进高亮文本里。overflow:hidden 不妨碍用 scrollTop 程序化滚动。 */
+.md-typeset .judge__editor .judge__gutter {
+  left: 0;
+  width: 2rem;
+  padding: 0.7rem 0.5rem 0.7rem 0;
+  text-align: right;
+  color: var(--md-default-fg-color--lighter);
+  border-right: 0.05rem solid var(--md-default-fg-color--lightest);
+  user-select: none; /* 全选代码时不要把行号一起选进去 */
+}
+
+.md-typeset .judge__editor .judge__highlight,
+.md-typeset .judge__editor .judge__code {
+  left: 2rem;
+  right: 0;
+  padding: 0.7rem 0.9rem;
+}
+
+/* 高亮层不收滚动条 —— 滚动条只在 textarea 上有，几层宽度才会一致 */
+.md-typeset .judge__editor .judge__highlight {
+  pointer-events: none; /* 别挡住 textarea 的点击和选择 */
+  color: var(--md-default-fg-color);
+}
+
+.md-typeset .judge__editor .judge__code {
+  overflow: auto;
+  color: transparent;
+  caret-color: var(--md-default-fg-color);
+  resize: none;
+  /* 滚动条藏掉。三层里只有 textarea 会滚，行号列和高亮层都是 overflow:hidden，
+     滚动条一冒出来不仅闪一下，还要占掉十几个像素，三层就不一样宽了。
+     纵向本来也滚不动 —— 高度已经由 autosize() 撑到内容那么大。
+     横向还能滚，只是没有那根条：光标移出右边框时视图会跟着走。 */
+  scrollbar-width: none;
+}
+
+.md-typeset .judge__editor .judge__code::-webkit-scrollbar {
+  display: none;
+}
+
+.md-typeset .judge__editor .judge__code:focus {
+  outline: none;
+}
+
+/* 选中区域的底色由 textarea 提供 —— 它的文字是透明的，选中范围只能靠底色显示。
+   但底色不能是实心的：textarea 压在高亮层上面，实心底色会把底下的字整块盖住，
+   看着就是一段一段的蓝方块。所以用半透明的强调色，让字透出来。
+   认不出 color-mix 的浏览器会退回系统默认的选中色（也是一块纯色，跟改之前
+   一样，不会更糟）。 */
+.md-typeset .judge__editor .judge__code::selection {
+  background-color: color-mix(in srgb, var(--md-accent-fg-color) 20%, transparent);
+}
+
+/* 语法着色，直接照搬 GitHub Dark 主题的色值 —— 学生把代码贴进 VSCode
+   看到的就是这几颜色，两边一致他们才不会觉得「判题机看我的代码不一样」。
+   （色值是从主题定义里取的，不是肉眼估的。）
+   注意注释不要斜体：深色背景上斜体的中文和等宽字体都很难看。 */
+.md-typeset .judge-syn--comment {
+  color: #6a737d;
+}
+
+/* #include / #define 这类指令，和关键字同色 */
+.md-typeset .judge-syn--preproc {
+  color: #f97583;
+}
+
+/* #define 后面的宏名、#include 后面的头文件名之外的那一个标识符 */
+.md-typeset .judge-syn--macro {
+  color: #b392f0;
+}
+
+.md-typeset .judge-syn--string {
+  color: #9ecbff;
+}
+
+.md-typeset .judge-syn--number {
+  color: #79b8ff;
+}
+
+.md-typeset .judge-syn--keyword {
+  color: #f97583;
+}
+
+/* 状态提示：排队中、判题中 */
+.md-typeset .judge__progress {
+  margin: 0.9em 0 0;
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color--light);
+}
+
+/* 拒绝提交（学号不在名单、代码为空等）——这是学生要照着改的，做成告警样式 */
+.md-typeset .judge__error {
+  margin-top: 0.9em;
+  padding: 0.7rem 0.9rem;
+  border-left: 0.2rem solid var(--md-typeset-color-error, #ff5252);
+  border-radius: 0.2rem;
+  background-color: var(--md-code-bg-color);
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color);
+}
+
+/* 整份提交的结论 */
+.md-typeset .judge-summary {
+  margin-top: 1em;
+  padding: 0.7rem 0.9rem;
+  border-radius: 0.2rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.md-typeset .judge-summary--ac {
+  border-left: 0.2rem solid #4caf50;
+  background-color: var(--md-code-bg-color);
+  color: #4caf50;
+}
+
+.md-typeset .judge-summary--bad {
+  border-left: 0.2rem solid #ff9800;
+  background-color: var(--md-code-bg-color);
+  color: #ff9800;
+}
+
+/* 编译错误整段贴出来，学生要照着编译器的话改 */
+.md-typeset .judge__compile {
+  margin-top: 1em;
+  border-left: 0.2rem solid #ff5252;
+  border-radius: 0.2rem;
+  background-color: var(--md-code-bg-color);
+}
+
+.md-typeset .judge__compile p {
+  margin: 0;
+  padding: 0.7rem 0.9rem 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.md-typeset .judge__compile pre {
+  margin: 0;
+  padding: 0.7rem 0.9rem;
+  background: none;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  white-space: pre-wrap; /* 编译错误行可能很长，换行比横向滚动好读 */
+  word-break: break-word;
+}
+
+/* 逐测试点结果表。窄屏下五列挤不下就横向滚 —— 滚动条就在表格底下，够得着，
+   所以不像矩阵那样另做一条假的。 */
+.md-typeset .judge-cases__scroll {
+  overflow-x: auto;
+}
+
+.md-typeset table.judge-cases {
+  width: 100%;
+  /* 再窄就别让三列输出碎成一条一条，宁可横向滚 */
+  min-width: 34rem;
+  margin-top: 1em;
+  font-size: 0.7rem;
+  table-layout: fixed;
+}
+
+/* 表头和数据都左对齐。th 的浏览器默认值是居中，而格子里是左对齐的，两者错开
+   小半格，看着就像行头没对上。 */
+.md-typeset table.judge-cases th,
+.md-typeset table.judge-cases td {
+  padding: 0.5rem 0.6rem;
+  vertical-align: top;
+  border: 0;
+  border-bottom: 0.05rem solid var(--md-default-fg-color--lightest);
+  text-align: left;
+}
+
+/* 前两列的宽度得写在表头的 th 上：这张表是 table-layout: fixed，列宽只认第一行，
+   写在 body 的 td 上不生效 —— 原来就写在 td 上，所以一直没生效。 */
+.md-typeset table.judge-cases thead th:first-child {
+  width: 3.5rem;
+  text-align: center;
+}
+
+.md-typeset table.judge-cases thead th:nth-child(2) {
+  width: 5.5rem;
+}
+
+/* 输入/期望/实际三列用等宽字体，且保留换行 —— 输出里的空行和缩进是有意义的 */
+.md-typeset .judge-cases__io {
+  font-family: var(--md-code-font-family);
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .judge-cases__idx {
+  text-align: center;
+  color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .judge-cases__verdict {
+  font-weight: 700;
+}
+
+/* 没过的测试点整行加重，扫一眼就知道该看哪几行 */
+.md-typeset tr.judge-cases__fail .judge-cases__verdict {
+  color: #ff9800;
+}
+
+.md-typeset .judge-reasons {
+  margin: 0.8em 0 0;
+  padding-left: 1.2em;
+  font-size: 0.75rem;
+  color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .judge-reasons li {
+  margin-bottom: 0.3em;
+}
+
+/* 编译错误的着色。gcc 的诊断行是 文件:行:列: error: 消息 这种固定格式，
+   judge.js 按它切出几段分别上色。不用引语法高亮库 —— 这不是 C 代码，
+   是编译器诊断，没有现成的 lexer 可用。
+   学生自己的源码会被 gcc 原样回显在消息下面，那些行不着色，保持原样。 */
+
+.md-typeset .judge__compile pre .judge-diag__loc {
+  color: var(--md-default-fg-color--lighter);
+}
+
+.md-typeset .judge__compile pre .judge-diag__kind {
+  font-weight: 700;
+}
+
+.md-typeset .judge__compile pre .judge-diag--error .judge-diag__kind {
+  color: #ff5252;
+}
+
+.md-typeset .judge__compile pre .judge-diag--warning .judge-diag__kind {
+  color: #ffa726;
+}
+
+.md-typeset .judge__compile pre .judge-diag--note .judge-diag__kind {
+  color: #42a5f5;
+}
+
+/* 指向出错那一列的小箭头。和它上面的诊断同色，扫一眼就知道错在哪一格。 */
+.md-typeset .judge__compile pre .judge-diag__caret {
+  font-weight: 700;
+}
+
+.md-typeset .judge__compile pre .judge-diag__caret--error {
+  color: #ff5252;
+}
+
+.md-typeset .judge__compile pre .judge-diag__caret--warning {
+  color: #ffa726;
+}
+
+.md-typeset .judge__compile pre .judge-diag__caret--note {
+  color: #42a5f5;
+}
+
+/* ---------------------------------------------------------------------------
+   完成情况矩阵（docs/homework-code/completion.md、docs/setup/reading.md）
+
+   行是学生、列是作业或实验课文档，表格由 judge.js 从 /judge/api/grades
+   和 /judge/api/reads 现拉。两个接口返回的结构一样，这里也共用一套样式。
+   全班 74 行，所以要压扁一点、加斑马纹，不然扫起来很累。
+
+   **这张表的 class 不能叫 grid。** Material 自带 `.md-typeset .grid`
+   （卡片宫格），会把 `display` 改成 `grid` —— 表格于是变成 Grid 容器，
+   `<thead>` 和 `<tbody>` 成了两个独立的 grid item，各自按自己的内容算列宽。
+   表现是表头和数据错开一整列，而且怎么调表格自己的 CSS 都没用：
+   它已经不是表格了。矩阵用 matrix，也是这个原因。
+   --------------------------------------------------------------------------- */
+
+.md-typeset .matrix-host {
+  margin-top: 1.4em;
+}
+
+/* 列多了（阅读进度现在 8 列，还会加）就横向滚，而不是把列头折成两行 ——
+   dev-cpp 折成 dev- / cpp 之后就对不上是哪一列了。
+   注意只滚横向：表格一旦限高，页面里就会多出一条纵向滚动条，
+   74 行的表套在一条窄缝里翻，比直接滚页面难受得多。 */
+.md-typeset .matrix__scroll {
+  overflow-x: auto;
+  /* 自己不画横向滚动条 —— 上面那条已经代表它了。
+     Firefox 认 scrollbar-width，Chrome/Safari 认 ::-webkit-scrollbar。 */
+  scrollbar-width: none;
+}
+
+.md-typeset .matrix__scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* 表格比容器宽时按住能横向拖（事件在 judge.js 的 attachPan 里挂）。矩阵这边
+   光标是唯一的提示 —— 滚动条被上面那条和 scrollbar-width: none 一起代掉了；
+   结果表还留着真滚动条。pan--pannable 由 judge.js 按「有没有溢出」开关，
+   不溢出就不摆这个手势。 */
+.md-typeset .pan--pannable {
+  cursor: grab;
+}
+
+.md-typeset .pan--dragging {
+  cursor: grabbing;
+  /* 拖动时别顺手把格子里的文字选蓝 */
+  user-select: none;
+}
+
+/* 表格上边那条横向滚动条。
+   CSS 没法把容器自己的滚动条挪到上边，所以另做一个光杆 div，由 judge.js
+   跟真正的滚动区双向镜像 scrollLeft。表格 74 行，滚动条落在最底下的话，
+   得先滚到表尾才够得着。
+   它不装内容，所以高度就是滚动条的高度（跟下面 ::-webkit-scrollbar 对齐）。 */
+.md-typeset .matrix__bar {
+  height: 0.3rem;
+  margin-bottom: 0.3rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* 撑出滚动范围用的，只要宽度对，高度随便 */
+.md-typeset .matrix__bar > div {
+  height: 1px;
+}
+
+.md-typeset .matrix__bar::-webkit-scrollbar {
+  height: 0.3rem;
+}
+
+/* 两端的箭头按钮是 Chrome 默认画的，极简样式里不要 */
+.md-typeset .matrix__bar::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* 轨道留一层最淡的底色，当滑块来回跑的那条槽。
+   再深一档就成了横在表头下边的一条色块，比表格本身还抢眼。 */
+.md-typeset .matrix__bar::-webkit-scrollbar-track {
+  background-color: var(--md-default-fg-color--lightest);
+  border-radius: 0.15rem;
+}
+
+/* 滑块分常态、悬停、拖动三档，同一支灰的三种透明度。
+   不用强调色：本站的 indigo 在这套暗色里很扎眼，侧边栏那条就是为此
+   改成常亮不悬停的。 */
+.md-typeset .matrix__bar::-webkit-scrollbar-thumb {
+  background-color: var(--md-default-fg-color--lighter);
+  border-radius: 0.15rem;
+}
+
+.md-typeset .matrix__bar::-webkit-scrollbar-thumb:hover {
+  background-color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .matrix__bar::-webkit-scrollbar-thumb:active {
+  background-color: var(--md-default-fg-color);
+}
+
+/* Firefox 那条：颜色同上，但只有常态 —— 标准属性没有悬停和拖动态。
+
+   这里必须用 @supports 圈起来，不能像侧边栏那样无条件写：scrollbar-color
+   一旦不是 auto，上面那几条 ::-webkit-scrollbar 就全部作废，Chrome 会改按
+   平台默认画 —— 比 0.3rem 高，还要被 overflow-y 裁掉一截。侧边栏那条反
+   过来，Material 自己就是用标准属性写的，所以压悬停色只能写 scrollbar-color。
+   Firefox 只有 thin 这一档可调，比 0.3rem 厚些，槽会裁掉一点。 */
+@supports not selector(::-webkit-scrollbar) {
+  .md-typeset .matrix__bar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--md-default-fg-color--lighter)
+      var(--md-default-fg-color--lightest);
+  }
+}
+
+.md-typeset .matrix-loading {
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color--light);
+}
+
+.md-typeset table.matrix {
+  width: 100%;
+  margin-top: 0;
+  font-size: 0.72rem;
+  white-space: nowrap; /* 列头不折行，表格按内容撑开 */
+}
+
+.md-typeset table.matrix th,
+.md-typeset table.matrix td {
+  padding: 0.3rem 0.5rem;
+  border: 0;
+  border-bottom: 0.05rem solid var(--md-default-fg-color--lightest);
+  /* 列之间一条浅竖线，作业一多不容易看串列 */
+  border-right: 0.08rem solid var(--md-default-fg-color--lightest);
+}
+
+/* 最后一列右边不封口 */
+.md-typeset table.matrix th:last-child,
+.md-typeset table.matrix td:last-child {
+  border-right: 0;
+}
+
+/* 隔行淡底，74 行不这样的话很容易看串行 */
+.md-typeset table.matrix tbody tr:nth-child(even) {
+  background-color: var(--md-code-bg-color);
+}
+
+.md-typeset table.matrix thead th {
+  color: var(--md-default-fg-color--light);
+  font-weight: 700;
+}
+
+/* 姓名列钉在左边：横向滚到右边几列时，不知道看的是哪一行这张表就白看了。
+
+   sticky 的格子必须有不透明的底色 —— 数据格会从它底下滚过去，底色透明就
+   直接透出来了。所以这里显式写死两种底，而不是让它跟随行底：
+   奇数行用页面底色，偶数行盖住上面那条斑马纹（选择器更具体，赢得过它）。 */
+.md-typeset table.matrix .matrix__name {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  width: 9rem;
+  text-align: left;
+  background-color: var(--md-default-bg-color);
+}
+
+.md-typeset table.matrix tbody tr:nth-child(even) .matrix__name {
+  background-color: var(--md-code-bg-color);
+}
+
+.md-typeset .matrix__cell {
+  width: 5rem;
+  text-align: center;
+  font-size: 0.85rem; /* 对勾是 emoji，比正文小一点才不突兀 */
+}
+
+/* ---------------------------------------------------------------------------
+   阅读登记栏（实验课文档末尾）
+
+   控件和在线评测的 .judge__bar 是同一套：一个输入框 + 右边一个按钮。
+
+   工具条本身不画框、不铺底色、不留内边距。它现在装在 !!! todo 提示块里，
+   自己再画一圈就是「框里套框」，看着很挤；输入框和按钮各自带着边框，
+   已经够区分了，工具条只负责排一行。
+   --------------------------------------------------------------------------- */
+
+.md-typeset .read {
+  margin-top: 1em;
+}
+
+.md-typeset .read__bar {
+  display: flex;
+  flex-wrap: wrap; /* 窄屏上让输入框自己换行，别把按钮挤出去 */
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* 阅读登记栏和判题工具条共用这一个输入框样式：结构一样（框 + 右边的按钮），
+   里面填的又都是学号，没必要各写一套。 */
+.md-typeset .judge__id,
+.md-typeset .read__input {
+  flex: 1 1 10rem;
+  min-width: 0; /* 不加这个，flex 子项会拒绝收缩到内容宽度以下 */
+  padding: 0.45rem 0.6rem;
+  border: 0.05rem solid var(--md-default-fg-color--lighter);
+  border-radius: 0.2rem;
+  background-color: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  font-family: var(--md-code-font, monospace); /* 学号是数字串，等宽好核对 */
+  font-size: 0.8rem;
+}
+
+/* 点进去不变色：边框保持原来的浅灰，也不画浏览器的默认轮廓。
+   原来这里会把边框点亮成 accent 色，跟上面说的「框里套框」一样，都是多余的装饰。
+   聚焦反馈只剩光标本身。 */
+.md-typeset .judge__id:focus,
+.md-typeset .read__input:focus {
+  outline: none;
+}
+
+.md-typeset .read__bar button {
+  flex: none;
+  margin-left: auto;
+  padding: 0.45rem 1.4rem;
+  border: none;
+  border-radius: 0.2rem;
+  background-color: var(--md-primary-fg-color);
+  color: var(--md-primary-bg-color);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.md-typeset .read__bar button:hover:not(:disabled) {
+  background-color: var(--md-accent-fg-color);
+}
+
+.md-typeset .read__bar button:disabled {
+  cursor: not-allowed;
+  background-color: var(--md-default-fg-color--lighter);
+  color: var(--md-default-bg-color);
+}
+
+/* 状态行：登记成功是一行恭喜，出错是红字。两种状态共用这一个元素，
+   所以默认样式给得中性，具体颜色由后面的修饰类决定。
+   不照抄判题那边的告警框 —— 那是个大块，长在页面末尾会抢戏。 */
+.md-typeset .read__note {
+  margin-top: 0.6em;
+  font-size: 0.72rem;
+  color: var(--md-default-fg-color--light);
+}
+
+/* 「✅ 恭喜同学，你已经完成了这篇文档的配置流程！」：比出错提示稍大一点，
+   它是给学生的反馈，不是脚注。那个绿勾就是文案里的 ✅，没有另画图标。 */
+.md-typeset .read__note--done {
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color);
+}
+
+.md-typeset .read__note--bad {
+  color: var(--md-typeset-color-error, #ff5252);
+}
