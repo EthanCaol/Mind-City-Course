@@ -37,6 +37,7 @@ nav:
   - 实验课文档:
       - 文档阅读进度: setup/reading.md
       - 实用工具推荐: setup/useful.md
+      - (0) 自制CPU-图灵完备游戏: setup/turing-complete.md
       - (0) Win11 基础教程: setup/win11.md
       - (1) Claude 工具链配置: setup/claude.md
       - (1) DSH 工具链配置 (可选): setup/dsh.md
