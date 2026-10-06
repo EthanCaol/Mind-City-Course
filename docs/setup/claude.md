@@ -368,7 +368,7 @@ curl -fsSL https://claude.ai/install.sh | bash
     ```
 
 !!! tip "`code` 提示找不到命令"
-    这个命令要装了 VSCode **并且连上 WSL** 之后才生效（见 WSL2 环境搭建那篇的第 6 步）。没安装时直接用记事本那条 —— WSL 能直接调用 Windows 的程序，记事本打开的确实就是 WSL 里的那份 `~/.bashrc`。
+    这个命令要装了 VSCode **并且连上 WSL** 之后才生效（见 WSL 环境搭建那篇的第 6 步）。没安装时直接用记事本那条 —— WSL 能直接调用 Windows 的程序，记事本打开的确实就是 WSL 里的那份 `~/.bashrc`。
 
 把下面这段粘到文件**末尾**，注意把 Key 替换成你之前存下来的那个：
 
@@ -440,7 +440,7 @@ cc
 
     截图里那行 `Extension is enabled on 'SSH: mind-city'`，意思是「已经在这个远程环境里启用了」。
 
-    WSL 用户的情况相同：**Windows 那一侧和 WSL 那一侧各装一份**。在扩展面板里点 **「Install in WSL: Ubuntu」** 那个按钮就行 —— 和 WSL2 环境搭建那篇里装 C/C++ 扩展时是同一个按钮。
+    WSL 用户的情况相同：**Windows 那一侧和 WSL 那一侧各装一份**。在扩展面板里点 **「Install in WSL: Ubuntu」** 那个按钮就行 —— 和 WSL 环境搭建那篇里装 C/C++ 扩展时是同一个按钮。
 
 ### 9.2 从内置终端里启动
 

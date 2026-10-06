@@ -14,7 +14,7 @@ icon: material/clipboard-list
 | claude          | ✅ 已完成 | Claude 桌面版经 CC Switch 接 DeepSeek，含终端版 Claude Code 与 VSCode 扩展，需要科学上网 |
 | dsh             | ✅ 已完成 | 官方 DeepSeek Harness 桌面端与官方 dsh 命令行的配置，全程不需要科学上网                  |
 | dev-cpp         | ✅ 已完成 | Dev-C++ 的安装、中文界面与编译运行，不想装 WSL 时的过渡选择                              |
-| wsl2            | ✅ 已完成 | WSL2 与 Ubuntu 的安装、GCC/GDB 配置、VSCode 连 WSL，含备份与迁移到 D 盘                  |
+| wsl             | ✅ 已完成 | WSL 与 Ubuntu 的安装、GCC/GDB 配置、VSCode 连 WSL，含备份与迁移到 D 盘                   |
 | vscode          | ✅ 已完成 | 新建配置文件（Profile）、Code Runner 编译运行命令的逐段拆解                              |
 | linux-cli       | ✅ 已完成 | 转载《只学够用的 Linux》最小入门教程，配作者录的一期视频                                 |
 | git-github      | ✅ 已完成 | GitHub 访问、注册、核心概念与 SSH 连接，四期视频                                         |

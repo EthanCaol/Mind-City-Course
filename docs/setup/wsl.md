@@ -1,5 +1,5 @@
 
-# WSL2 + GCC + VSCode 环境搭建
+# WSL + GCC + VSCode 环境搭建
 
 面向零基础、使用 Win11 操作系统的同学。全过程只需要在 Windows 终端里粘贴命令，**不需要任何前置知识**。中途遇到不理解的术语或者问题，可以咨询 AI，或向助教求助。
 
@@ -15,7 +15,7 @@
     本文按顺序做完这 7 步，你就有了一个完整的 C语言开发环境：
 
     1. 了解为什么用这套方案（可跳过）
-    2. 启用 Windows 功能，安装 WSL2
+    2. 启用 Windows 功能，安装 WSL
     3. 安装 Ubuntu，创建 Linux 用户
     4. 配置国内网络，安装 GCC / G++ / GDB
     5. 写并运行第一个 C 程序
@@ -51,10 +51,10 @@ C语言就是为了 Unix 操作系统而生的。它不是先被设计好一门�
 
 WSL 的全称是 **Windows Subsystem for Linux**，中文叫**「适用于 Linux 的 Windows 子系统」**。它是微软官方提供的一个功能：让你在 Windows 里直接跑一个真正的 Linux 系统 —— 不用装虚拟机软件，也不用装双系统，在 Windows 的终端里敲 Linux 命令就能用。
 
-现在的 WSL2 用的是微软自己编译的真正的 Linux 内核，跑在轻量虚拟化上。
+WSL 用的是微软自己编译的真正的 Linux 内核，跑在轻量虚拟化上。
 
 - **工具链完整**：`gcc` / `g++` / `gdb` / `make` 这一整套都是 Linux 原生的，编译、调试、内存检查都有标准做法。
-- **性能优异**：WSL2 是真正的 Linux 内核，不是模拟层，编译和运行速度跟原生 Linux 基本没差别，而不是像 VMware 之类的模拟器那样慢很多。
+- **性能优异**：WSL 是真正的 Linux 内核，不是模拟层，编译和运行速度跟原生 Linux 基本没差别，而不是像 VMware 之类的模拟器那样慢很多。
 - **环境隔离**：Linux 开发环境和 Windows 主机互不干扰，环境搞坏了花几秒钟就能直接删掉重装，Windows 本身不受任何影响。
 - **文件系统互通**：Windows 的文件资源管理器能直接看到 WSL 里的文件，反过来也一样。
 
@@ -74,7 +74,7 @@ VSCode 是目前使用人数最多的代码编辑器，插件生态丰富、社�
 
 Dev-C++ 的更新停在 2005 年，内置的是 2004 年的 GCC-3.4.2 和 2002 年的 GDB-5.2.1。它底层是一套跑在 Windows 上的 MinGW-w64 (GCC) 工具链，编译简单 C 程序没问题，但编译复杂偏底层的程序会碰到不少问题。
 
-## 2. 启用 Windows 功能并安装 WSL2 工具
+## 2. 启用 Windows 功能并安装 WSL
 
 ### 2.1 启用 Windows 功能
 
@@ -110,9 +110,9 @@ Dev-C++ 的更新停在 2005 年，内置的是 2004 年的 GCC-3.4.2 和 2002 �
 
 ### 2.2 安装 WSL 本体
 
-下载并运行安装包 `wsl.2.7.14.0.x64.msi`：
+下载并运行安装包 `wsl.3.0.1.0.x64.msi`：
 
-- **直接下载**：<https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/wsl.2.7.14.0.x64.msi>
+- **直接下载**：<https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/wsl.3.0.1.0.x64.msi>
 - **官方最新版**：<https://github.com/microsoft/wsl/releases>
 
 !!! warning "GitHub 访问"
@@ -665,7 +665,7 @@ wsl --import Ubuntu-26.04 D:\Ubuntu-26.04 D:\Ubuntu-26.04.tar
 
 !!! todo "文档完成登记：完成本文全部流程后告知助教"
 
-    <div class="read" id="read" data-page="wsl2">
+    <div class="read" id="read" data-page="wsl">
       <div class="read__bar">
         <input id="read-id" class="read__input" type="text" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="在这里输入你的学号">
         <button id="read-submit" type="button">我已读完</button>
