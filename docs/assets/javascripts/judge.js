@@ -512,9 +512,11 @@
 
     var head = document.createElement("thead");
     var headRow = document.createElement("tr");
+    // 左上角这格只占位，不写字：第一列本来就是姓名，表头再写一遍是重复，
+    // 而下面统计行的「完成人数」又顶在同一个位置。格子得留着，否则表头和
+    // 表体的列宽会错开。
     var corner = document.createElement("th");
     corner.className = "matrix__name";
-    setText(corner, "姓名");
     headRow.appendChild(corner);
 
     data.columns.forEach(function (col) {
