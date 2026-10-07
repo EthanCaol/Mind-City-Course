@@ -527,6 +527,30 @@
     table.appendChild(head);
 
     var body = document.createElement("tbody");
+
+    // 表体第一行是各列的完成人数，括号里是班级人数，写死。
+    // 助教和同学共用一张花名册，但不是这个班的学生，不计数 ——
+    // 「（助教）」这个后缀是服务端加在姓名后面的，就按它认。
+    var students = data.students.filter(function (s) {
+      return s.name.indexOf("（助教）") < 0;
+    });
+    var stat = document.createElement("tr");
+    stat.className = "matrix__stat";
+    var statName = document.createElement("td");
+    statName.className = "matrix__name";
+    setText(statName, "完成人数（72）");
+    stat.appendChild(statName);
+    data.columns.forEach(function (col) {
+      var count = students.filter(function (s) {
+        return s.done[col.slug];
+      }).length;
+      var td = document.createElement("td");
+      td.className = "matrix__cell";
+      setText(td, String(count));
+      stat.appendChild(td);
+    });
+    body.appendChild(stat);
+
     data.students.forEach(function (student) {
       var tr = document.createElement("tr");
 
