@@ -241,6 +241,17 @@ gh api repos/EthanCaol/Mind-City-Course/hooks \
 
 脚本是幂等的，重复执行安全。它自行处理 `flock` 锁，并发调用时后到的会直接跳过。
 
+### 下载文件（安装包与课件）
+
+安装包和电子书不走仓库，放在 `/var/www/mind-city/downloads/`，由现有 `root + file_server` 直接服务，地址 `https://mind-city.com/downloads/<文件名>`，**不需要单独的 Caddy handle 块**。
+
+- **源头是 COS 桶 `mind-city-1379176255`**，部署脚本每次跑 `coscmd download -r -s --skipmd5` 增量同步过来。`-s` 按文件名和大小跳过没变的文件，所以只有新增或改动过的对象产生流量，其余一秒跑完。同步失败只记日志、不中断部署，`downloads/` 保持上一次的内容。
+- **部署脚本的 `rsync` 带了 `--exclude=/downloads/`**。这个目录不由 mkdocs 产出，去掉排除项后每次部署的 `--delete` 都会把它清空。
+- **文件不在仓库里，所以不需要 `.gitignore` 条目**。也别改成软链接指回家目录：`/home/ethan` 权限是 `750`，Caddy 以 `caddy` 用户运行，进不去。
+- **文档里写绝对地址** `https://mind-city.com/downloads/...`，不要写相对路径 `/downloads/...`：有链接用的是 `<...>` 自动链接形式，Markdown 只把带协议头的内容识别为链接。
+- **PDF 点开即下载**，靠 Caddyfile 里静态块的一行 `header /downloads/*.pdf Content-Disposition "attachment"`；规则限定在这个前缀下，站点其他内容不受影响。
+- **COS 上这批对象已显式设为 private**（桶本身仍是 `anyone: READ`）。对象原本只有 owner 的 FULL_CONTROL，公开读是从桶继承的，coscmd 的 `putobjectacl` 只能追加授权、无法撤回，要用底层 SDK 的 `put_object_acl(..., ACL='private')` 写显式 ACL 才能打断继承。**新上传的对象会默认继承桶的公开读**，上传时带 `x-cos-acl: private`，或传完再设一次。
+
 ### 服务管理
 
 systemd **用户级**服务（均设了 `linger`，断 SSH 不死、开机自启）：
