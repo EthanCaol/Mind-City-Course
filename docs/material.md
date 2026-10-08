@@ -4,13 +4,18 @@ icon: material/bookshelf
 
 # 课程资料
 
-本页汇总助教觉得实用的书目、网站和课件，以及每周的课程安排。
+## 1. 课件
 
-## 1. 推荐阅读书目
+- [26程设-第0讲-课程简介.pdf](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC0%E8%AE%B2-%E8%AF%BE%E7%A8%8B%E7%AE%80%E4%BB%8B.pdf)
+- [26程设-第1讲-程序设计基础.pdf](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC1%E8%AE%B2-%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%80.pdf)
+- [26程设-第2讲-基本数据及其运算-1.pdf](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC2%E8%AE%B2-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%8F%8A%E5%85%B6%E8%BF%90%E7%AE%97-1.pdf)
+- [26程设-第3讲-基本数据及其运算-2.pdf](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC3%E8%AE%B2-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%8F%8A%E5%85%B6%E8%BF%90%E7%AE%97-2.pdf)
+- [26程设-第4讲-结构化程序设计-1.pdf](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC4%E8%AE%B2-%E7%BB%93%E6%9E%84%E5%8C%96%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1-1.pdf)
 
-这些书在[助教的电子书库](https://drive.google.com/drive/folders/1ocKcs9ZWBz9OqYgbICC1kCDKlZxVbdfb)里都有，或者也可以去 [Z-lib 电子书库](https://zh.z-library.sk/)下载当前最新版
+!!! tip "课件会陆续补齐"
+    后面的讲次上传之后，会在这里和下面的课程安排里一起更新。
 
-带链接的可以直接点开下载电子版。
+## 2. 推荐阅读书目
 
 **课程教材**
 
@@ -40,43 +45,19 @@ icon: material/bookshelf
 - 算法导论（CLRS）
 - 动手学深度学习（D2L.ai）
 
-## 2. 常用网站
+## 3. 常用网站
 
-| 网站                                                                                       | 功能描述                                                   |
-| ------------------------------------------------------------------------------------------ | ---------------------------------------------------------- |
-| [菜鸟教程 · C语言](https://www.runoob.com/cprogramming)                                    | 精练全面的语法教程                                         |
-| [OI Wiki](https://oi-wiki.org/)                                                            | 算法竞赛的知识整合站点，可用于学算法、查模板               |
-| [CS 自学指南](https://csdiy.wiki/)                                                         | 北大学长写的计算机自学指南，汇总了国内外优质课程和自学路线 |
-| [力扣题库](https://leetcode.cn/problemset/)                                                | 在线题库，可用于找题练习                                   |
-| [Compiler Explorer](https://godbolt.org/)                                                  | 在线编译器，左边写 C代码，右边实时看对应的汇编             |
-| [Z-lib 电子书库](https://zh.z-library.sk/)                                                 | 电子书下载站，需要科学上网                                 |
-| [助教的电子书库](https://drive.google.com/drive/folders/1ocKcs9ZWBz9OqYgbICC1kCDKlZxVbdfb) | 放在谷歌硬盘上，需要科学上网                               |
+| 网站                                                                                         | 功能描述                                       |
+| -------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| [菜鸟教程 · C语言](https://www.runoob.com/cprogramming)                                      | 精练全面的语法教程                             |
+| [Compiler Explorer](https://godbolt.org/)                                                    | 在线编译器，左边写 C代码，右边实时看对应的汇编 |
+| [OI Wiki](https://oi-wiki.org/)                                                              | 算法竞赛的知识整合站点，可用于学算法、查模板   |
+| [CS 自学指南](https://csdiy.wiki/)                                                           | 计算机自学指南，汇总了国内外优质课程和自学路线 |
+| [力扣题库](https://leetcode.cn/problemset/)                                                  | 在线题库，可用于找题练习                       |
+| [谷歌硬盘电子书库](https://drive.google.com/drive/folders/1ocKcs9ZWBz9OqYgbICC1kCDKlZxVbdfb) | 放在谷歌硬盘上，需要科学上网                   |
+| [Z-lib 电子书库](https://zh.z-library.sk/)                                                   | 电子书下载站，需要科学上网                     |
 
-## 3. 视频推荐
-
-**科普：计算机的历史和原理**
-
-- [《计算机科学速成课》](https://www.bilibili.com/video/BV1EW411u7th)
-- [《操作系统发展史｜仿生之旅》](https://www.bilibili.com/video/BV1Zc411D7sG/)
-- [《计算机博物志·最后的黑客：理查德·马修·斯托曼》](https://www.bilibili.com/video/BV11R4y1b7zc)
-
-**进阶：计算机系统和操作系统**
-
-- [《深入理解计算机系统》(CSAPP) 配套讲解](https://www.bilibili.com/video/BV1cD4y1D7uR)
-- [2026 南京大学《操作系统原理》（蒋炎岩）](https://space.bilibili.com/202224425/lists/7587348)
-
-## 4. 课件
-
-- [26程设-第0讲-课程简介.pdf](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC0%E8%AE%B2-%E8%AF%BE%E7%A8%8B%E7%AE%80%E4%BB%8B.pdf)
-- [26程设-第1讲-程序设计基础.pdf](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC1%E8%AE%B2-%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%80.pdf)
-- [26程设-第2讲-基本数据及其运算-1.pdf](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC2%E8%AE%B2-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%8F%8A%E5%85%B6%E8%BF%90%E7%AE%97-1.pdf)
-- [26程设-第3讲-基本数据及其运算-2.pdf](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC3%E8%AE%B2-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%8F%8A%E5%85%B6%E8%BF%90%E7%AE%97-2.pdf)
-- [26程设-第4讲-结构化程序设计-1.pdf](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC4%E8%AE%B2-%E7%BB%93%E6%9E%84%E5%8C%96%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1-1.pdf)
-
-!!! tip "课件会陆续补齐"
-    后面的讲次上传之后，会在这里和下面的课程安排里一起更新。
-
-## 5. 课程安排
+## 4. 课程安排
 
 | 课程周            | 时间     | 内容                         | 课件<br>(对应上面的PDF文件) |
 | ----------------- | -------- | ---------------------------- | --------------------------- |
@@ -98,7 +79,7 @@ icon: material/bookshelf
 | 第 16 周          | 12月24日 | 数据文件处理技术<br>期末复习 | 第14讲                      |
 | 第 17 周-第 18 周 | 待定     | 期末考试                     |                             |
 
-## 6. 教材目录
+## 5. 教材目录
 
 这是课程教材《C语言程序设计（第3版）》的章节结构。
 
