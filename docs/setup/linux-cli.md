@@ -58,7 +58,7 @@
 
 想要完整学习，可以同时看这本：
 
-- [《Linux命令行与shell脚本编程大全》（第4版）](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/Linux%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%B8%8Eshell%E8%84%9A%E6%9C%AC%E7%BC%96%E7%A8%8B%E5%A4%A7%E5%85%A8-%E7%AC%AC4%E7%89%88.pdf)
+- [《Linux命令行与shell脚本编程大全》（第4版）](https://mind-city.com/downloads/Linux%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%B8%8Eshell%E8%84%9A%E6%9C%AC%E7%BC%96%E7%A8%8B%E5%A4%A7%E5%85%A8-%E7%AC%AC4%E7%89%88.pdf)
 
 书籍内容分两部分：
 

@@ -6,11 +6,11 @@ icon: material/bookshelf
 
 ## 1. 课件
 
-- [26程设-第0讲-课程简介.pdf](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC0%E8%AE%B2-%E8%AF%BE%E7%A8%8B%E7%AE%80%E4%BB%8B.pdf)
-- [26程设-第1讲-程序设计基础.pdf](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC1%E8%AE%B2-%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%80.pdf)
-- [26程设-第2讲-基本数据及其运算-1.pdf](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC2%E8%AE%B2-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%8F%8A%E5%85%B6%E8%BF%90%E7%AE%97-1.pdf)
-- [26程设-第3讲-基本数据及其运算-2.pdf](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC3%E8%AE%B2-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%8F%8A%E5%85%B6%E8%BF%90%E7%AE%97-2.pdf)
-- [26程设-第4讲-结构化程序设计-1.pdf](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC4%E8%AE%B2-%E7%BB%93%E6%9E%84%E5%8C%96%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1-1.pdf)
+- [26程设-第0讲-课程简介.pdf](https://mind-city.com/downloads/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC0%E8%AE%B2-%E8%AF%BE%E7%A8%8B%E7%AE%80%E4%BB%8B.pdf)
+- [26程设-第1讲-程序设计基础.pdf](https://mind-city.com/downloads/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC1%E8%AE%B2-%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%80.pdf)
+- [26程设-第2讲-基本数据及其运算-1.pdf](https://mind-city.com/downloads/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC2%E8%AE%B2-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%8F%8A%E5%85%B6%E8%BF%90%E7%AE%97-1.pdf)
+- [26程设-第3讲-基本数据及其运算-2.pdf](https://mind-city.com/downloads/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC3%E8%AE%B2-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%8F%8A%E5%85%B6%E8%BF%90%E7%AE%97-2.pdf)
+- [26程设-第4讲-结构化程序设计-1.pdf](https://mind-city.com/downloads/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC4%E8%AE%B2-%E7%BB%93%E6%9E%84%E5%8C%96%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1-1.pdf)
 
 !!! tip "课件会陆续补齐"
     后面的讲次上传之后，会在这里和下面的课程安排里一起更新。
@@ -19,20 +19,20 @@ icon: material/bookshelf
 
 **课程教材**
 
-- [C语言程序设计（第3版）](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%88%E7%AC%AC3%E7%89%88%EF%BC%89.pdf)
-- [C语言程序设计-习题解答（第3版）](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1-%E4%B9%A0%E9%A2%98%E8%A7%A3%E7%AD%94%EF%BC%88%E7%AC%AC3%E7%89%88%EF%BC%89.pdf)
+- [C语言程序设计（第3版）](https://mind-city.com/downloads/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%EF%BC%88%E7%AC%AC3%E7%89%88%EF%BC%89.pdf)
+- [C语言程序设计-习题解答（第3版）](https://mind-city.com/downloads/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1-%E4%B9%A0%E9%A2%98%E8%A7%A3%E7%AD%94%EF%BC%88%E7%AC%AC3%E7%89%88%EF%BC%89.pdf)
 
 **语言基础**
 
-- [C语言程序设计：现代方法](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/C%e8%af%ad%e8%a8%80%e7%a8%8b%e5%ba%8f%e8%ae%be%e8%ae%a1-%e7%8e%b0%e4%bb%a3%e6%96%b9%e6%b3%95%ef%bc%88%e7%ac%ac2%e7%89%88-%e4%bf%ae%e8%ae%a2%e7%89%88%ef%bc%89.pdf)
-- [C Primer Plus](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/C%20Primer%20Plus-%E7%AC%AC6%E7%89%88-%E4%B8%AD%E6%96%87%E7%89%88.pdf)（推荐用于自学）
+- [C语言程序设计：现代方法](https://mind-city.com/downloads/C%e8%af%ad%e8%a8%80%e7%a8%8b%e5%ba%8f%e8%ae%be%e8%ae%a1-%e7%8e%b0%e4%bb%a3%e6%96%b9%e6%b3%95%ef%bc%88%e7%ac%ac2%e7%89%88-%e4%bf%ae%e8%ae%a2%e7%89%88%ef%bc%89.pdf)
+- [C Primer Plus](https://mind-city.com/downloads/C%20Primer%20Plus-%E7%AC%AC6%E7%89%88-%E4%B8%AD%E6%96%87%E7%89%88.pdf)（推荐用于自学）
 - C++ Primer
 - C++ Primer Plus
-- [Python 编程：从入门到实践](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/Python%E7%BC%96%E7%A8%8B%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E8%B7%B5.pdf)
+- [Python 编程：从入门到实践](https://mind-city.com/downloads/Python%E7%BC%96%E7%A8%8B%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E8%B7%B5.pdf)
 
 **Linux 与命令行**
 
-- [Linux命令行与shell脚本编程大全（第4版）](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/Linux%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%B8%8Eshell%E8%84%9A%E6%9C%AC%E7%BC%96%E7%A8%8B%E5%A4%A7%E5%85%A8-%E7%AC%AC4%E7%89%88.pdf)
+- [Linux命令行与shell脚本编程大全（第4版）](https://mind-city.com/downloads/Linux%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%B8%8Eshell%E8%84%9A%E6%9C%AC%E7%BC%96%E7%A8%8B%E5%A4%A7%E5%85%A8-%E7%AC%AC4%E7%89%88.pdf)
 
 **计算机系统入门**
 

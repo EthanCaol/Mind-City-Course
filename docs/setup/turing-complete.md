@@ -9,7 +9,7 @@ Turing Complete 是一款从逻辑门开始、逐关搭建出计算机的闯关�
 | 用途         | 地址                                                                        |
 | ------------ | --------------------------------------------------------------------------- |
 | Steam 商店页 | <https://store.steampowered.com/app/1444480/Turing_Complete>                |
-| 试玩直接下载   | <https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/Turing.Complete.v2.1.34.zip> |
+| 试玩直接下载   | <https://mind-city.com/downloads/Turing.Complete.v2.1.34.zip> |
 
 ## 攻略
 

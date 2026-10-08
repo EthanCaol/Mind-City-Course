@@ -112,7 +112,7 @@ Dev-C++ 的更新停在 2005 年，内置的是 2004 年的 GCC-3.4.2 和 2002 �
 
 下载并运行安装包 `wsl.3.0.1.0.x64.msi`：
 
-- **直接下载**：<https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/wsl.3.0.1.0.x64.msi>
+- **直接下载**：<https://mind-city.com/downloads/wsl.3.0.1.0.x64.msi>
 - **官方最新版**：<https://github.com/microsoft/wsl/releases>
 
 !!! warning "GitHub 访问"
@@ -162,7 +162,7 @@ wsl --install -d Ubuntu-26.04
 !!! tip "还是慢？用助教准备的离线安装包"
     助教已经提前把安装包传到了腾讯云存储桶。**直接下载，然后双击这个文件，系统就会自动把它装好**，全程不用敲命令：
 
-    **下载**：<https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/ubuntu-26.04.1-wsl-amd64.wsl>
+    **下载**：<https://mind-city.com/downloads/ubuntu-26.04.1-wsl-amd64.wsl>
 
     下载完在「下载」文件夹里找到它，双击，等安装窗口跑完就行 —— 效果和上面那条命令完全一样。
 
@@ -531,7 +531,7 @@ gcc hello.c -o hello   # 编译代码，得到可执行文件 hello
 
 下载 VSCode 的 Windows 版安装包，双击安装：
 
-- **直接下载**：<https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/VSCodeUserSetup-x64-1.137.0.exe>
+- **直接下载**：<https://mind-city.com/downloads/VSCodeUserSetup-x64-1.137.0.exe>
 - **官方最新版**：<https://code.visualstudio.com/Download>
 
 安装向导里的**「通过 Code 打开」**和**「添加到 PATH」**两个选项都勾上：
