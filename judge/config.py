@@ -44,10 +44,10 @@ READ_PAGES: tuple[tuple[str, str], ...] = (
     ("dev-cpp", "Dev-C++ 环境搭建"),
     ("wsl", "WSL 环境搭建"),
     ("vscode", "VSCode 入门教程"),
+    ("vscode-debug", "VSCode 调试教程"),
     ("linux-cli", "Linux 命令行基础"),
     ("git-github", "Git-GitHub 基础操作"),
     ("markdown", "Markdown 笔记仓库"),
-    ("vscode-debug", "VSCode 调试教程"),
 )
 
 # 教材习题的「自测登记」栏。和上面的 READ_PAGES 同构、共用一张表，只是分成两组：
