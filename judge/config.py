@@ -46,6 +46,7 @@ READ_PAGES: tuple[tuple[str, str], ...] = (
     ("vscode", "VSCode 入门教程"),
     ("linux-cli", "Linux 命令行基础"),
     ("git-github", "Git-GitHub 基础操作"),
+    ("markdown", "Markdown 笔记仓库"),
     ("vscode-debug", "VSCode 调试教程"),
 )
 

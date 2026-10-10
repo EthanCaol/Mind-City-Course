@@ -46,6 +46,7 @@ nav:
       - (3) VSCode 入门教程: setup/vscode.md
       - (4) Linux 命令行基础: setup/linux-cli.md
       - (5) Git-GitHub 基础操作: setup/git-github.md
+      - (6) Markdown 笔记仓库: setup/markdown.md
       - (7) VSCode 调试教程: setup/vscode-debug.md
   - 教材习题:
       - 习题自测进度: homework-book/reading.md
@@ -91,6 +92,12 @@ markdown_extensions:
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.inlinehilite
+  # 把 $...$ 转成 \(...\)、$$...$$ 转成 \[...\]，交给 MathJax 渲染。
+  # MathJax 脚本没有放进 extra_javascript —— 只有需要公式的页面自己引一次，
+  # 其他页面不为此多加载 2 MB（tex-svg 输出，不含字体，压缩后约 680 KB）。
+  # 见 setup/markdown.md 正文。
+  - pymdownx.arithmatex:
+      generic: true
   - pymdownx.snippets:
       base_path: docs       # 让 --8<-- "code/hello.c" 这种简写路径可用
   - pymdownx.tabbed:
