@@ -340,6 +340,12 @@ user-invocable: true
 
 建好之后敲 `/push` 即可使用。技能是在启动 Claude Code 时载入的，刚建好的要下一次启动才会出现在 `/` 列表里。约定集中在这两个文件里，要加新规则直接跟 Claude 说即可，不需要自己去翻语法。
 
+# 助教的 VSCode 完整配置文件
+
+```json title="settings.json"
+--8<-- "code/settings.json"
+```
+
 ---
 
 !!! todo "文档完成登记：完成本文全部流程后告知助教"

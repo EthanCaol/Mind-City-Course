@@ -1,0 +1,217 @@
+{
+    "window.zoomLevel": 0,
+    "window.zoomPerWindow": true,
+    "window.commandCenter": true,
+    "window.title": "${rootName}",
+    "window.newWindowProfile": "Default",
+    
+    "window.dialogStyle": "custom",
+    "window.restoreWindows": "none",
+    "window.menuBarVisibility": "hidden",
+    "window.enableMenuBarMnemonics": false,
+    "window.newWindowDimensions": "maximized",
+    "security.workspace.trust.enabled": false,
+
+
+
+    "workbench.colorTheme": "GitHub Dark",
+    "workbench.iconTheme": "vscode-icons",
+    "workbench.productIconTheme": "fluent-icons",
+
+    "workbench.settings.editor": "json",
+    "workbench.experimental.modernUI": false,
+    "workbench.layoutControl.enabled": false,
+    "workbench.panel.defaultLocation": "right",
+    "workbench.editorLargeFileConfirmation": 4,
+    "workbench.navigationControl.enabled": false,
+    "workbench.secondarySideBar.defaultVisibility": "hidden",
+
+    "workbench.editor.useModal": "off",
+    "workbench.editor.wrapTabs": true,
+    "workbench.editor.empty.hint": "hidden",
+    "workbench.editor.scrollToSwitchTabs": true,
+    "workbench.editor.alwaysShowEditorActions": true,
+    "workbench.editor.doubleClickTabToToggleEditorGroupSizes": "off",
+    "workbench.editor.customLabels.enabled": true,
+    "workbench.editor.customLabels.patterns": {
+        "**/SKILL.md": "${dirname} /SKILL.md",
+    },
+
+
+
+    "explorer.confirmDelete": false,
+    "explorer.confirmDragAndDrop": false,
+    "explorer.confirmPasteNative": false,
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.incrementalNaming": "smart",
+    "explorer.fileNesting.patterns": {
+        "package.json": "package-lock.json",
+        "pyproject.toml": "uv.lock",
+    },
+
+
+
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 300,
+    "files.exclude": {
+        "**/.gitignore": true,
+        "**/.gitkeep": true,
+
+        "**/__pycache__": true,
+        "**/uv.lock": true,
+    },
+
+
+
+    "editor.tabSize": 4,
+    "editor.fontSize": 15,
+    "editor.lineHeight": 1.65,
+    "editor.fontLigatures": false,
+    "editor.fontFamily": "Cascadia Code",
+    "editor.lightbulb.enabled": "off",
+
+
+
+    "terminal.integrated.fontSize": 14,
+    "terminal.integrated.fontFamily": "Cascadia Code",
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+
+    "terminal.integrated.inheritEnv": false,
+    "terminal.integrated.initialHint": false,
+    "terminal.integrated.enableMultiLinePasteWarning": "never",
+
+
+
+    "scm.diffDecorations": "none",
+    "search.useIgnoreFiles": true,
+    "network.meteredConnection": "off",
+    "extensions.ignoreRecommendations": true,
+    "settingsSync.keybindingsPerPlatform": false,
+    "vsicons.dontShowNewVersionMessage": true,
+
+
+
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "git.enableSmartCommit": true,
+    "git.decorations.enabled": false,
+    "git.openRepositoryInParentFolders": "never",
+
+
+
+    "github.copilot.nextEditSuggestions.enabled": false,
+    "github.copilot.chat.localeOverride": "zh-CN",
+    "claudeCode.useTerminal": true,
+
+
+
+    "markdown.preview.breaks": true,
+    "markdown.preview.fontSize": 15,
+    "markdown.preview.linkify": true,
+    "markdown.preview.lineHeight": 1.6,
+    "markdown.preview.markEditorSelection": false,
+    "markdown.preview.scrollPreviewWithEditor": true,
+    "markdown.preview.scrollEditorWithPreview": false,
+    "markdown.preview.doubleClickToSwitchToEditor": true,
+    "markdown.preview.fontFamily": "Cascadia Code",
+    "markdown.styles": [ "https://cdn.jsdelivr.net/gh/EthanCaol/mathpix-markdown-studio@f9822203519b440daed65d5d767af4425e9cb1e2/styles/Markdown.css" ],
+    "[markdown]": {
+        "editor.wordWrap": "off",
+        "editor.wordWrapColumn": 60,
+        "editor.tabSize": 4,
+        "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+    },
+
+
+
+    "code-runner.saveAllFilesBeforeRun": true,
+    "code-runner.runInTerminal": true,
+    "code-runner.executorMap": {
+        "typescript": "cd $dir && npm run dev",
+        "python": "cd $dir && python $fileName",
+        "cpp": "cd $dir && g++ -o $fileNameWithoutExt $fileName && $dir$fileNameWithoutExt",
+        "c": "cd $dir && gcc -o $fileNameWithoutExt $fileName && $dir$fileNameWithoutExt",
+    },
+    "code-runner.executorMapByFileExtension": {
+        ".cu": "cd $dir && nvcc $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+        ".vue": "cd $dir && npm run dev",
+    },
+
+
+
+    "bashIde.shfmt.path": "shfmt",
+    "bashIde.shellcheckPath": "shellcheck",
+    "[shellscript]": {
+        "editor.defaultFormatter": "mads-hartmann.bash-ide-vscode"
+    },
+
+
+
+    "C_Cpp.default.cStandard": "gnu23",
+    "C_Cpp.default.cppStandard": "gnu++23",
+    "C_Cpp.formatting": "clangFormat",
+    "C_Cpp.clang_format_sortIncludes": false,
+    "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: WebKit, IndentWidth: 4, ColumnLimit: 120, AlignTrailingComments: true, IndentCaseLabels: true, BreakTemplateDeclarations: true }",
+
+    "C_Cpp.inlayHints.parameterNames.enabled": true,
+    "C_Cpp.inlayHints.referenceOperator.enabled": false,
+    "C_Cpp.inlayHints.autoDeclarationTypes.enabled": true,
+    "C_Cpp.inlayHints.autoDeclarationTypes.showOnLeft": true,
+    "C_Cpp.inlayHints.parameterNames.hideLeadingUnderscores": false,
+    "C_Cpp.inlayHints.parameterNames.suppressWhenArgumentContainsName": false,
+
+
+
+    "makefile.makePath": "make",
+    "makefile.configureOnOpen": false,
+    "makefile.configureOnEdit": false,
+    "makefile.makefilePath": "${workspaceFolder}/Makefile",
+
+    "cmake.cmakePath": "cmake",
+    "cmake.configureOnOpen": false,
+    "cmake.configureOnEdit": false,
+    "cmake.generator": "Unix Makefiles",
+    "cmake.buildBeforeRun": true,
+    "cmake.clearOutputBeforeBuild": true,
+    "cmake.sourceDirectory": "${workspaceFolder}",
+    "cmake.buildDirectory": "${workspaceFolder}/build",
+    "cmake.debugConfig": { "args": [] },
+    "cmake.pinnedCommands": [
+        "workbench.action.tasks.configureTaskRunner",
+        "workbench.action.tasks.runTask"
+    ],
+
+
+
+    "python.analysis.typeCheckingMode": "off",
+    "python.analysis.inlayHints.variableTypes": true,
+    "python.analysis.inlayHints.functionReturnTypes": true,
+    "python.analysis.inlayHints.callArgumentNames": "partial",
+    "python.terminal.activateEnvironment": false,
+    "python.terminal.activateEnvInCurrentTerminal": false,
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+    },
+
+
+
+    "jupyter.askForKernelRestart": false,
+    "jupyter.interactiveWindow.textEditor.executeSelection": true,
+
+    "notebook.markup.fontSize": 20,
+    "notebook.stickyScroll.enabled": true,
+    "notebook.output.fontSize": 15,
+    "notebook.output.lineHeight": 0,
+    "notebook.output.wordWrap": false,
+    "notebook.output.scrolling": false,
+    "notebook.output.textLineLimit": 40,
+    "notebook.output.linkifyFilePaths": true,
+    "notebook.output.fontFamily": "Cascadia Code",
+    "remote.SSH.remotePlatform": {
+        "mind-city": "linux"
+    },
+
+
+
+}
