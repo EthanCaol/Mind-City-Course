@@ -152,6 +152,12 @@ cd /home/ethan/code && mkdir -p bin && gcc -o bin/hello hello.c && bin/hello
 
 ++ctrl+s++ 保存后立刻生效，不用重启 VSCode。
 
+## 助教的 VSCode 完整配置文件
+
+```json title="settings.json"
+--8<-- "code/settings.json"
+```
+
 ---
 
 !!! todo "文档完成登记：完成本文全部流程后告知助教"
