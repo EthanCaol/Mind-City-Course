@@ -429,4 +429,5 @@ $\leq\frac{a_1+a_2+\cdots+a_n}{n}$
    得 $\sqrt[n]{\frac{1}{a_1}\cdots\frac{1}{a_n}}\leq\frac{\frac{1}{a_1}+\cdots+\frac{1}{a_n}}{n}$
    取倒数即得
 
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<script>MathJax = { chtml: { fontURL: "/assets/fonts/mathjax" } };</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>

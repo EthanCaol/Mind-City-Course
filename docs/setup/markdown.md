@@ -217,7 +217,28 @@ $$
 \end{aligned}
 $$
 
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<script>MathJax = { chtml: { fontURL: "/assets/fonts/mathjax" } };</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+---
+
+### 5.3 图片尺寸
+
+VSCode 内置的 Markdown 预览按图片的原始尺寸显示，源码里没法指定宽高。装扩展 Markdown Image Size（发布者 Matt Bierner）之后，可以在图片地址后面直接写尺寸：
+
+![扩展面板里的 Markdown Image Size，发布者 Matt Bierner](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20261011195120034.png)
+
+写法是 `=` 加尺寸，三种：
+
+| 写法                        | 效果               |
+| --------------------------- | ------------------ |
+| `![](./img/a.png =250x)`    | 宽 250，高度按比例 |
+| `![](./img/a.png =x150)`    | 高 150，宽度按比例 |
+| `![](./img/a.png =250x150)` | 宽 250，高 150     |
+
+只写一边时，另一边按原图比例算，图片不会变形。`=` 前面要有一个空格，`=` 后面紧接数字或 `x`，中间不能有空格。
+
+这个写法是扩展提供的，GitHub 不认：在 GitHub 仓库页上看笔记时，`=250x` 被当成图片地址的一部分，图片显示不出来。宽高只在装了扩展的 VSCode 预览里生效。
 
 ## 6. 给笔记仓库加指令和技能
 
@@ -233,73 +254,7 @@ $$
 约定写在仓库根目录的 `CLAUDE.md` 里。把希望 Claude 遵守的约定说清楚，它会建好这个文件。下面是助教用的那份：
 
 ````markdown
-# Skill
-
-本仓库的 skill 放在 `.claude/skills/` 下
-新增 skill 时, frontmatter 默认写 `user-invocable: false`
-
-# 文风
-
-## 用词
-
-适用于写入本仓库的文件, 也适用于对话回复
-- 用平实的说明文, 接近产品说明书的写法
-- 陈述事实与操作, 以可读性和准确性为准
-- 不用夸张、煽动、摆谱的措辞
-- 不用口语化说法
-- 不拟人, 不调侃, 不评价读者, 不表演共情
-- 补充解释之前不写俏皮话
-- 动词选最普通的: 由...组成, 演示, 决定, 换成, 生成
-
-## 标点与断句
-
-只适用于写入本仓库的文件, 对话回复不受此约束
-- 不用全角标点: `。` `，` `、` `：` `；` `（）` `「」`
-- 不用 ①②③, ⑴⑵⑶, ⒈⒉⒊, ㈠㈡㈢ 这类带圈或带括号的序号字符, 序号一律写成 `1.` `2.` 或 `(1)` `(2)`
-- 逗号写成半角 `, `, 后面跟一个空格
-- 冒号与括号用半角 `:` `(` `)`
-- 句末不加终止符, 靠换行断开
-- 一行一个短句
-- 并列项, 条件, 结论各自成行
-- 该停顿的地方换行, 不堆长句
-
-## 结构
-
-- 文档开头空三行
-- 块与块之间用 `------` 分隔
-- 分割线前后各留一个空行
-- 一级与二级标题渲染后自带分割线, 标题前不写 `------`
-- 一级与二级标题前空两行
-- 三级及以下的标题不带分割线, 标题前照常写 `------`
-- 术语写成 `术语: 解释`
-- 例题与推导写成 `> 例1-1: ...` 引用块
-- 附注, 特例用 `[方括号]` 标出
-
-## 公式渲染
-
-只适用于写入本仓库的文件
-如果用户觉得行内公式含分数 `\frac{}{}` 的渲染样式偏小
-可以用 `$\begin{aligned}...\end{aligned}$` 包住可以放大渲染样式
-
-公式由 MPE 预览渲染
-数学模式内可以放中文, 不需要为此改写公式
-不要为了验证渲染去装 KaTeX 等命令行工具, 命令行版与预览内嵌的解析器不是同一套
-子 agent 看不到预览, 遇到不确定的写法照原样写, 并在报告里列出待确认项
-
-# 系统编码
-
-本机代码页为 936 (GBK), Python 的 stdout 默认编码是 gbk, 命令行输出中文会乱码
-改为 UTF-8 需写以下三个注册表值
-
-[需要管理员权限, 且必须重启后生效]
-
-```
-Set-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\Nls\CodePage' -Name ACP   -Value 65001
-Set-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\Nls\CodePage' -Name OEMCP -Value 65001
-Set-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\Nls\CodePage' -Name MACCP -Value 65001
-```
-
-重启后用 `python -I -c "import sys; print(sys.stdout.encoding)"` 验证, 输出 utf-8 即生效
+--8<-- "code/markdown-claude.md"
 ````
 
 ---

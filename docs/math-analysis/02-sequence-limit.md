@@ -1190,4 +1190,5 @@ $n=1,2,3,\cdots$
 确界存在定理得证
 [以上五个定理是等价的, 其中任何一个出发都可推出其他的定理, 每一个都可称为实数系的基本定理]
 
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<script>MathJax = { chtml: { fontURL: "/assets/fonts/mathjax" } };</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
