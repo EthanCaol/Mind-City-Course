@@ -18,11 +18,13 @@ document.addEventListener('copy', (event) => {
   const selection = window.getSelection();
   if (!selection || selection.isCollapsed || selection.rangeCount === 0) return;
 
+  // document.math 是 MathList（MathJax 自己实现的链表），不是数组：没有 map/length，
+  // 只能按迭代器取。
   const math = window.MathJax?.startup?.document?.math;
   if (!math) return;
 
   const range = selection.getRangeAt(0);
-  const tex = new Map(math.map((item) => [item.typesetRoot, item]));
+  const tex = new Map([...math].map((item) => [item.typesetRoot, item]));
 
   const marked = [];
   for (const node of document.querySelectorAll('mjx-container')) {
