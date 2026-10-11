@@ -72,6 +72,16 @@ nav:
       - 11-动态内存管理: question/11-dynamic-memory.md
       - 12-文件操作: question/12-file-io.md
       - 13-算法编程题: question/13-algorithms.md
+  - 数学分析-陈纪修-上册:
+      - 教材 PDF: math-analysis/material.md
+      - (1) 集合与映射: math-analysis/01-sets.md
+      - (2) 数列极限: math-analysis/02-sequence-limit.md
+      - (3) 函数极限: math-analysis/03-function-limit.md
+      - (4) 微分: math-analysis/04-differential.md
+      - (5) 微分中值定理: math-analysis/05-mean-value-theorem.md
+      - (6) 不定积分: math-analysis/06-indefinite-integral.md
+      - (7) 定积分: math-analysis/07-definite-integral.md
+      - (8) 反常积分: math-analysis/08-improper-integral.md
 
 markdown_extensions:
   - admonition
@@ -129,9 +139,11 @@ plugins:
   # 学生无需访问 fonts.googleapis.com（内地不可达）。必须放在最后。
   - privacy
 
-# 把「最后更新」提示从页底移到标题下方。见文件内的说明。
+# 页面级处理，都在文件内说明了用途。
 hooks:
-  - hooks/revision_notice.py
+  - hooks/revision_notice.py   # 把「最后更新」从页底移到标题下方
+  - hooks/image_size.py        # 支持 ![](图片.png =250x) 的图片尺寸写法
+  - hooks/copy_source.py       # 数学分析笔记顶部加「复制本篇源码」折叠块（必须在 image_size 之后）
 
 extra_css:
   - assets/stylesheets/fonts.css
