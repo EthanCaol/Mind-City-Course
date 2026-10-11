@@ -70,6 +70,7 @@
     "editor.fontLigatures": false,
     "editor.fontFamily": "Cascadia Code",
     "editor.lightbulb.enabled": "off",
+    "editor.unicodeHighlight.ambiguousCharacters": false,
 
 
 
