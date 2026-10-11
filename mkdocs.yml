@@ -84,6 +84,10 @@ nav:
       - (8) 反常积分: math-analysis/08-improper-integral.md
 
 markdown_extensions:
+  # 段落内的单个换行渲染成 <br>。本站文档按「一行一个短句」写，VSCode 预览也开着
+  # markdown.preview.breaks，两边一致。副作用是 admonition 里的裸 HTML 也会被插
+  # <br>，「阅读登记」控件由 hooks/read_widget.py 处理。
+  - nl2br
   - admonition
   - attr_list
   - md_in_html
@@ -144,6 +148,7 @@ hooks:
   - hooks/revision_notice.py   # 把「最后更新」从页底移到标题下方
   - hooks/image_size.py        # 支持 ![](图片.png =250x) 的图片尺寸写法
   - hooks/copy_source.py       # 数学分析笔记顶部加「复制本篇源码」折叠块（必须在 image_size 之后）
+  - hooks/read_widget.py       # 清掉 nl2br 在阅读登记控件里插的 <br>
 
 extra_css:
   - assets/stylesheets/fonts.css

@@ -19,10 +19,14 @@ PREFIX = "math-analysis/"
 SKIP = {PREFIX + "material.md"}
 
 # 折叠块里的第一句。放在块内是为了紧挨着要复制的源码 —— 读者展开这个块，就是要拿去用。
+# 后面的 `{: .copy-hint }` 是 attr_list 的块级写法，给它挂上 extra.css 里的首行缩进。
+# 这一行必须紧贴提示语、中间不留空行，否则 attr_list 认不到。
 REMINDER = (
-    "复制到自己的笔记仓库之前，先按「Markdown 笔记仓库」那篇把 VSCode 配好。"
-    "图片的 `=600x` 尺寸写法只有 Markdown Image Size 扩展认，不装就按原始尺寸显示；"
-    "表格对齐和列表续行要 Markdown All in One。公式用 VSCode 内置的预览就能渲染，不用另装扩展。"
+    "复制到自己的笔记仓库之前，先按「Markdown 笔记仓库」那篇把 VSCode 配置好。"
+    "`=600x` 这种图片尺寸写法由 Markdown Image Size 扩展提供，"
+    "未安装时图片按原始尺寸显示；"
+    "表格对齐和列表续行由 Markdown All in One 提供。"
+    "公式由 VSCode 内置的预览渲染，不需要另装扩展。"
 )
 
 
@@ -46,6 +50,7 @@ def on_page_markdown(markdown, page, config, files):
         '??? quote "点击展开，复制本篇源码"\n'
         "\n"
         f"{indent}{REMINDER}\n"
+        f"{indent}{{: .copy-hint }}\n"
         "\n"
         f"{indent}{fence}markdown\n"
         f"{body}\n"
