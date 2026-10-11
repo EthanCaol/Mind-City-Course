@@ -154,11 +154,13 @@ extra_css:
   - assets/stylesheets/fonts.css
   - assets/stylesheets/extra.css
 
-# 全站加载，但脚本开头会先找页面上的 #judge 元素，没有就直接退出 ——
-# 只有「在线评测」那一页会真正干活。这样比在 markdown 里写内联 <script> 干净，
+# 两个都全站加载，各自在开头判断这一页用不用得上，用不上就直接退出：
+# judge.js 找不到 #judge 元素就退出，只有「在线评测」那几页真正干活；
+# copy_math.js 在 MathJax 没接管时退出。这样比在 markdown 里写内联 <script> 干净，
 # 也避免 md_in_html 对脚本内容做意外处理。
 extra_javascript:
   - assets/javascripts/judge.js
+  - assets/javascripts/copy_math.js
 
 # 把锚点校验从默认的 info 提到 warn —— 否则写错 #锚点 只会打一行 INFO，
 # --strict 不拦，站内交叉引用坏了也没人发现。
