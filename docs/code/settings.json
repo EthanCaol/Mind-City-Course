@@ -106,8 +106,8 @@
 
 
 
-    "markdown.preview.breaks": true,
     "markdown.preview.fontSize": 15,
+    "markdown.preview.breaks": true,
     "markdown.preview.linkify": true,
     "markdown.preview.lineHeight": 1.6,
     "markdown.preview.markEditorSelection": false,
