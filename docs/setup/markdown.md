@@ -217,8 +217,9 @@ $$
 \end{aligned}
 $$
 
-<script>MathJax = { chtml: { fontURL: "/assets/fonts/mathjax" } };</script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script src="/assets/katex/katex.min.js"></script>
+<script src="/assets/katex/auto-render.min.js"></script>
+<script>renderMathInElement(document.querySelector('.md-content'));</script>
 
 ---
 

@@ -666,5 +666,6 @@ $\int R\left(\frac{2t}{1+t^2},\frac{1-t^2}{1+t^2}\right)\frac{2}{1+t^2}dt$
 但利用三角函数的性质或其他方法在很多情况下更简便
 求三角函数有理式的不定积分时不要滥用万能公式]
 
-<script>MathJax = { chtml: { fontURL: "/assets/fonts/mathjax" } };</script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script src="/assets/katex/katex.min.js"></script>
+<script src="/assets/katex/auto-render.min.js"></script>
+<script>renderMathInElement(document.querySelector('.md-content'));</script>

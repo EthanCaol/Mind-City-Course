@@ -1109,5 +1109,6 @@ $y$ 的 $n$ 阶微分等于它的 $n$ 阶导数乘上自变量的 $n$ 次方
 关于自变量的微分形式不变性只对一阶微分成立
 求高阶微分时要仔细分清自变量和中间变量, 分别对待
 
-<script>MathJax = { chtml: { fontURL: "/assets/fonts/mathjax" } };</script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script src="/assets/katex/katex.min.js"></script>
+<script src="/assets/katex/auto-render.min.js"></script>
+<script>renderMathInElement(document.querySelector('.md-content'));</script>

@@ -106,9 +106,9 @@ markdown_extensions:
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.inlinehilite
-  # 把 $...$ 转成 \(...\)、$$...$$ 转成 \[...\]，交给 MathJax 渲染。
-  # MathJax 脚本没有放进 extra_javascript —— 只有需要公式的页面自己引一次，
-  # 其他页面不为此多加载 2 MB（tex-svg 输出，不含字体，压缩后约 680 KB）。
+  # 把 $...$ 转成 \(...\)、$$...$$ 转成 \[...\]，交给 KaTeX 渲染。
+  # KaTeX 的脚本没有放进 extra_javascript —— 只有需要公式的页面自己引一次，
+  # 其他页面不为此多加载 80 KB（gzip 后）。样式表挂在 extra_css 里，全站都有。
   # 见 setup/markdown.md 正文。
   - pymdownx.arithmatex:
       generic: true
@@ -153,14 +153,15 @@ hooks:
 extra_css:
   - assets/stylesheets/fonts.css
   - assets/stylesheets/extra.css
+  # 公式：KaTeX 样式表。字体是相对它自己的目录引的（assets/katex/fonts/），
+  # 全部自托管，学生不访问境外域名。脚本由公式页自己引，见 markdown_extensions 里的注释。
+  - assets/katex/katex.min.css
 
-# 两个都全站加载，各自在开头判断这一页用不用得上，用不上就直接退出：
-# judge.js 找不到 #judge 元素就退出，只有「在线评测」那几页真正干活；
-# copy_math.js 在 MathJax 没接管时退出。这样比在 markdown 里写内联 <script> 干净，
+# 全站加载，但脚本开头会先找页面上的 #judge 元素，没有就直接退出 ——
+# 只有「在线评测」那一页会真正干活。这样比在 markdown 里写内联 <script> 干净，
 # 也避免 md_in_html 对脚本内容做意外处理。
 extra_javascript:
   - assets/javascripts/judge.js
-  - assets/javascripts/copy_math.js
 
 # 把锚点校验从默认的 info 提到 warn —— 否则写错 #锚点 只会打一行 INFO，
 # --strict 不拦，站内交叉引用坏了也没人发现。

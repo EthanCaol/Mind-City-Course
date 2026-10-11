@@ -1666,5 +1666,6 @@ $f(+\infty)$ 都不存在]
    理论上可以采用从实数系的连续性到实数系的完备性中的任何一个定理,
    来证明上述闭区间上连续函数的任何一个性质, 只是证明的难度稍有差别
 
-<script>MathJax = { chtml: { fontURL: "/assets/fonts/mathjax" } };</script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script src="/assets/katex/katex.min.js"></script>
+<script src="/assets/katex/auto-render.min.js"></script>
+<script>renderMathInElement(document.querySelector('.md-content'));</script>

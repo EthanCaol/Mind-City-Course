@@ -2314,5 +2314,6 @@ $f'(x_k)$, 这时的迭代公式成为
 
 ![](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20261011194206308.png =400x)
 
-<script>MathJax = { chtml: { fontURL: "/assets/fonts/mathjax" } };</script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script src="/assets/katex/katex.min.js"></script>
+<script src="/assets/katex/auto-render.min.js"></script>
+<script>renderMathInElement(document.querySelector('.md-content'));</script>

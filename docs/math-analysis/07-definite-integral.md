@@ -2210,5 +2210,6 @@ $=\int_{-1}^1\frac{p_{n+1}(x)}{(x-x_i)p'_{n+1}(x_i)}dx\ (i=0,1,2,\cdots,n-1,n)$
 除了 Gauss-Legendre 求积公式之外, 还可以构造其他类型 Gauss 型求积公式,
 它们的基础都是定义在某个区间上的某一类特定的正交多项式
 
-<script>MathJax = { chtml: { fontURL: "/assets/fonts/mathjax" } };</script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script src="/assets/katex/katex.min.js"></script>
+<script src="/assets/katex/auto-render.min.js"></script>
+<script>renderMathInElement(document.querySelector('.md-content'));</script>

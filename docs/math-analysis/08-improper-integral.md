@@ -793,5 +793,6 @@ $[a,+\infty)$ 上 $n$ 次可微, 也不能导出 $f(x)$ 在 $[a,+\infty)$
 > 由 Cauchy 收敛原理, $\int_a^{+\infty}f(x)dx$ 不收敛, 与假设条件矛盾,
 > 于是 $\lim\limits_{x\to+\infty}f(x)=0$
 
-<script>MathJax = { chtml: { fontURL: "/assets/fonts/mathjax" } };</script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script src="/assets/katex/katex.min.js"></script>
+<script src="/assets/katex/auto-render.min.js"></script>
+<script>renderMathInElement(document.querySelector('.md-content'));</script>
