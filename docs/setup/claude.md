@@ -423,8 +423,59 @@ cc
 
 能正常对话就说明配好了。`cc` 是上面定义的快捷方式，等价于 `claude --permission-mode auto`，省去每次输入完整命令。
 
+### 9.4 推荐设置
 
-### 9.4 权限模式
+验证之后，还有几项设置可以顺手调一下，都在会话里输入斜杠命令完成，不需要手动打开配置文件。
+
+先换一个渲染器。在会话里输入：
+
+```text title="Claude Code 会话"
+/tui fullscreen
+```
+
+默认渲染器把输出依次追加到终端里，和普通命令行程序一样，滚动时容易闪烁。全屏渲染器改成占用整个终端屏幕、退出时再还原，和 `vim`、`htop` 是同一类。
+
+切换时当前会话会带着上下文重启，对话内容、权限模式、模型选择都保留。这个选择写进 `settings.json` 的 `tui` 键，之后新开的会话沿用；想换回默认渲染器，输入 `/tui default`。
+
+------
+
+再改几项设置。在会话里输入下面这一句，它会改写 `~/.claude/settings.json`：
+
+```text title="Claude Code 会话"
+/update-config 把 env 里的 CLAUDE_CODE_AUTO_MODE_SERVER 设为 0，CLAUDE_CODE_SCROLL_SPEED 设为 4，wheelScrollAccelerationEnabled 设为 false，skipWebFetchPreflight 设为 true
+```
+
+改完之后，配置文件里对应的部分是这样：
+
+```json title="~/.claude/settings.json"
+{
+  "env": {
+    "CLAUDE_CODE_AUTO_MODE_SERVER": "0",
+    "CLAUDE_CODE_SCROLL_SPEED": "4"
+  },
+  "wheelScrollAccelerationEnabled": false,
+  "skipWebFetchPreflight": true
+}
+```
+
+文件里可能已经有别的键，把这四项加进去即可，不要整份替换。也可以直接打开 `~/.claude/settings.json`，手动加上这四项。
+
+四项各自的作用：
+
+| 设置项 | 写在 | 作用 |
+| --- | --- | --- |
+| `CLAUDE_CODE_SCROLL_SPEED` | `env` 里 | 滚轮的基础滚动倍率，越大滚得越远，上限 20。不设置时由 Claude Code 按终端判断 |
+| `wheelScrollAccelerationEnabled` | 顶层 | 默认开启。快速转动滚轮时按转动速度额外放大滚动距离；设为 `false` 后每一格的距离固定 |
+| `CLAUDE_CODE_AUTO_MODE_SERVER` | `env` 里 | 自动权限模式的服务端分类器开关，见下 |
+| `skipWebFetchPreflight` | 顶层 | 跳过 WebFetch 抓取前的域名检查，见下 |
+
+前两项只影响全屏渲染下的鼠标滚轮，互不替代：`CLAUDE_CODE_SCROLL_SPEED` 决定一格滚多远，`wheelScrollAccelerationEnabled` 决定快滚时要不要再放大。
+
+`CLAUDE_CODE_AUTO_MODE_SERVER` 管的是自动权限模式（下面 9.5 节）背后那次分类器审查由谁执行。只要 `ANTHROPIC_BASE_URL` 指向的不是 Anthropic 自己的地址，Claude Code 默认会把审查请求交给服务端；这套配置指向的是 DeepSeek 的接口，服务端不提供这项检查时它会退回本地分类器，并提示分类器请求开始计费。设为 `0` 就不再去试服务端，审查固定由 Claude Code 自己发起 —— 审查照常进行，只是换了执行的一方。官方标注这是临时设置，后续版本可能移除。
+
+`skipWebFetchPreflight` 和滚动无关。WebFetch 在抓取网页之前，会先把域名发给 `api.anthropic.com`，比对一份由 Anthropic 维护的黑名单 —— 只发域名，不发完整地址和页面内容。这套配置连的是 DeepSeek 的接口，网络到不了 `api.anthropic.com` 时这一步会失败，表现为 WebFetch 直接报错，设为 `true` 就跳过这次查询。代价是不再比对黑名单，WebFetch 会尝试任何域名。
+
+### 9.5 权限模式
 
 上面定义的 `cc` 带了一个参数 `--permission-mode auto`。**权限模式**决定 Claude Code 做哪些事情之前要先问你。
 
@@ -491,7 +542,7 @@ cc
 图中选中的是 `printf("Hello, Fudan!\n");` 这一行，问的是「可以帮我解释一下吗」——这样不必在聊天框里手工复制粘贴。
 
 !!! tip "权限模式和终端版是同一套"
-    面板底部那行 `auto mode on`，就是 [9.4 节](#94-权限模式)讲的权限模式，++shift+tab++ 一样可以循环切换。
+    面板底部那行 `auto mode on`，就是 [9.5 节](#95-权限模式)讲的权限模式，++shift+tab++ 一样可以循环切换。
 
 ### 10.4 和终端版怎么分工
 
