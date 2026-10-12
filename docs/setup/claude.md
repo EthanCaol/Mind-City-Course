@@ -25,16 +25,17 @@
     1. 了解为什么用这套方案（可跳过）
     2. 在 DeepSeek 开放平台申请 API Key
     3. 安装 Claude 桌面版，并启动一次
-    4. 安装 CC Switch
-    5. 回 CC Switch 里配置 DeepSeek
-    6. 打开路由开关
-    7. 完全退出桌面版，再重新打开
-    8. 安装并配置 Claude Code
-    9. 在 VSCode 里用 Claude Code 扩展（可选）
+    4. 下载并运行 Magpie
+    5. 在 Magpie 里添加 DeepSeek 供应商
+    6. 在 Agent 页给 Claude Desktop 选模型，打开开关
+    7. 打开 Magpie 的开机自启
+    8. 完全退出桌面版，再重新打开
+    9. 安装并配置 Claude Code
+    10. 在 VSCode 里用 Claude Code 扩展（可选）
 
     全程只需要下载、点击和粘贴，**不需要任何前置知识**（代理除外，见文首警告）。
 
-    **第 3 步和第 5 步的顺序不能反**：CC Switch 是往桌面版自己的配置目录里写配置的，桌面版没装、没启动过，这份配置就没有地方可写。
+    **第 3 步和第 4 步的顺序不能反**：Magpie 是往桌面版自己的配置目录里写配置的，桌面版没装、没启动过，这份配置就没有地方可写。
 
 ## 1. 为什么是这套方案
 
@@ -165,7 +166,7 @@ DeepSeek 目前提供两个模型，**它们的模型名要一字不差地填进
 
 ## 3. 安装 Claude 桌面版
 
-**这一步要排在配置 CC Switch 之前**，原因见下面的提示框。
+**这一步要排在下载 Magpie 之前**，原因见下面的提示框。
 
 从官网下载并安装 Claude 官方客户端（**需要科学上网**）：
 
@@ -173,99 +174,99 @@ DeepSeek 目前提供两个模型，**它们的模型名要一字不差地填进
 
 装好之后**先打开一次**（现在还连不通模型，能启动到界面就算成功），然后关掉。
 
-!!! warning "为什么顺序是「先装桌面版，再配 CC Switch」"
+!!! warning "为什么顺序是「先装桌面版，再运行 Magpie」"
 
-    CC Switch 接管桌面版的办法，是**往桌面版自己的配置目录里写配置文件**。这带来两个绕不开的先后关系：
+    Magpie 接管桌面版的办法，是**往桌面版自己的配置目录里写配置文件**。桌面版还没装的时候，这个目录不存在，Magpie 的 Agent 列表里也就不会出现 Claude Desktop 这一项。
 
-    - 桌面版还没装，CC Switch 要写的那个目录**根本不存在**，配置无处可写；
-    - 桌面版**第一次启动时会做一次配置迁移**，把配置搬进自己的容器路径。要是先配了 CC Switch 再装桌面版，这份配置会被这次迁移挤掉，桌面版读到的仍然是内置的官方模型。
+    所以正确的顺序是：**装好桌面版 → 让它至少完整启动过一次 → 再运行 Magpie 并给它选模型**
 
-    所以正确的顺序是：**装好桌面版 → 让它至少完整启动过一次 → 再回 CC Switch 写配置**
+## 4. 获取 Magpie
 
-!!! tip "顺序弄反了的话，会看到这个报错"
+**Magpie 是一个跑在本机的模型路由程序。** Claude 桌面版默认只连自家的模型服务，Magpie 在中间做转发，把桌面版发出去的请求换成 DeepSeek 的模型。
 
-    顺序反了、配置被桌面版首次启动时的迁移挤掉之后，桌面版发消息会报 `Host Claude Code binary not available. Check that the download completed.`：
+从官网下载：
 
-    ![桌面版提示 Host Claude Code binary not available](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260916132341531.png)
+<https://usemagpie.ai/zh/>
 
-    **不用重装**。回 CC Switch 的 Claude Desktop 面板，**重新加一个 DeepSeek 供应商配置**（把 [5.2 添加供应商](#52-添加供应商) 再做一遍），用它覆盖掉出错的那份，再按第 7 步退出重启桌面版即可。
+**它没有安装包，下载到的就是一个可以直接运行的单文件程序**，文件名形如 `magpie-windows-amd64.exe`，约 50 MB。
 
-## 4. 安装 CC Switch
+如图所示，**建议下载后把它挪到「文档」文件夹里**，避免清理下载文件时误删。
 
-从官方仓库下载安装包（**需要科学上网**）：
+![把 magpie-windows-amd64.exe 放进文档文件夹](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20261012160034619.png)
 
-<https://github.com/farion1231/cc-switch/releases>
+双击这个文件就能运行。运行之后它会常驻在**系统托盘**里 —— 右下角时钟旁边点 `^` 展开，就能看到 magpie 的图标：
 
-打开最新的一版 Release，在下面的 **Assets** 里找到 Windows 的 `.msi`（文件名形如 `CC-Switch-v3.20.3-Windows.msi`），下载后运行安装。
+![在系统托盘里找到 magpie 图标](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20261012160328540.png)
 
-## 5. 在 CC Switch 里配置 DeepSeek
+点这个图标默认打开 Magpie 的**主窗口** —— 这一项在设置的「常规」里（截图里的「托盘图标」），也可以改成「快捷面板」：
 
-**CC Switch 是一个跑在本机的模型路由工具**，作用是让 AI 客户端连到你指定的模型服务上。
+![设置里「托盘图标」默认为主窗口](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20261012155835259.png)
 
-例如 Claude Desktop 默认只支持自家的模型服务，CC Switch 作为中间层，把实际请求转发到 DeepSeek。这样既能使用 Claude 的完整配套工具链，又能使用 DeepSeek 的模型。
+## 5. 在 Magpie 里添加 DeepSeek
 
-### 5.1 选中 Claude Desktop
+打开 Magpie，顶部那一排是各个功能的标签，**先切到「供应商」**：
 
-工具栏上那一排图标，对应的是不同的 AI 客户端。
+![Magpie 的供应商页面](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20261012153143124.png)
 
-**先点一下 Claude Desktop 那个图标**，切换到它的配置界面：
+点左下角的 **「+ 添加供应商」**，弹出的列表里是各家模型厂商的预设。找到 **DeepSeek** 点进去：
 
-![在工具栏中选中 Claude Desktop](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260914230823562.png)
+![在预设列表里选择 DeepSeek](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20261012153222113.png)
 
-### 5.2 添加供应商
+弹出的是 DeepSeek 的配置面板。把第 2 步存下来的 Key 粘到 **「API 密钥」** 框里，点右下角的 **「保存」**：
 
-点右上角的 **「+」**，会弹出「添加新供应商」窗口。
+![粘贴 DeepSeek 的 API 密钥并保存](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20261012153301858.png)
 
-在上方的「预设供应商」里找到 **DeepSeek** 并选中：
+## 6. 在 Agent 页给 Claude Desktop 选模型
 
-![在预设供应商中选择 DeepSeek](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260914220955308.png)
+供应商加好了，还要将 Claude 桌面版切换到刚刚配置的 DeepSeek 模型。
 
-选中之后，窗口下方会出现 API Key 等字段，把第 2 步存下来的那个 Key 粘进去。
+顶部切到 **「Agent」**，每一行是一个客户端，右半边是它当前用的模型和一个开关。找到 **Claude Desktop** 这一行，模型下拉框选 **DeepSeek V4.1 Flash**，再把最右边的开关打开：
 
-### 5.3 配置模型映射
+![在 Agent 页给 Claude Desktop 选模型并启用](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20261012153359088.png)
 
-同一个窗口往下滚，是「模型配置」这一栏。
+**只有打开了最右边这个开关，这一行才算生效。**
 
-Claude 桌面版只会按 `sonnet`、`opus`、`fable`、`haiku` 这几个固定的模型名去请求，所以要把这四档一一映射到 DeepSeek 实际提供的模型上 —— 每一行的「菜单显示名」和「实际请求模型」都填上 `deepseek-flash`。
+!!! note "其他几行不用动"
+    截图里还有 Claude Code 那两行，是因为助教这台电脑还另外装了终端版。终端版的配置见第 9 节。
 
-图中的「声明支持 1M」**要勾上** —— `deepseek-flash` 本身就是 1M 上下文，勾了才对得上。填完点右下角的 **「保存」**。
+## 7. 打开开机自启
 
-![配置模型映射，把各档模型指向 DeepSeek](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260915004736226.png)
+桌面版发出去的请求不是直接去 DeepSeek，而是**先发给 Magpie 在本机开的网关**（`http://127.0.0.1:3425`），由它换成实际模型再转发出去。所以 Magpie 必须一直在运行，**它没开的时候桌面版就连不上**。
 
-## 6. 打开路由开关
+点右上角的**齿轮图标**进设置，往下找到 **「开机自启」**，点 **「开启」**：
 
-配置完成后回到主界面，**把左上角的开关打开**（绿色表示已经打开）。
+![在设置里打开开机自启](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20261012153050063.png)
 
-![打开 CC Switch 的路由开关](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260914230901561.png)
+打开之后，登录 Windows 时 Magpie 会自动在托盘启动，不用每次手动开。
 
-!!! warning "这个开关要一直开着，不是在配置时打开一下就行"
+!!! tip "桌面版连不上时，先看 Magpie 在不在运行"
+    托盘里找不到 Magpie 的图标，就是它没在跑，重新打开即可。这是最常见的原因。
 
-    桌面版发出去的请求并不是直接去 DeepSeek，而是**先发给 CC Switch 在本机开的代理**（`http://127.0.0.1:15721`），由它把模型名换好、再转发出去。所以只要 CC Switch 未运行，或者这个开关被关掉，**桌面版就无法连接**。
-
-    CC Switch 退出、电脑重启之后，这个开关会自行关闭。
-    
-    **Claude 连不上时，首先检查这个开关是否被关闭** —— 这是最常见的问题。
-
-## 7. 完全退出桌面版，再重新打开
+## 8. 完全退出桌面版，再重新打开
 
 配置已经写好了，但**桌面版不会自动读取**，只在**启动时**读取一次。
 
 所以现在要把桌面版**彻底退干净，再重新打开**：
 
 1. 关掉桌面版的窗口
-2. 在**系统托盘**里找到 Claude 图标（右下角时钟旁边，点 `^` 展开），右键 → **退出**（英文菜单里是 **Exit**）
+2. 在**系统托盘**里找到 Claude 图标，右键 → **退出**
 
 ![在系统托盘右键 Claude 图标，选 Exit](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20260916130629134.png)
 
 !!! warning "只关窗口是不够的"
-    关掉聊天窗口只是把界面收起来了，**进程仍在后台运行**，使用的仍是启动时读取的旧配置。需要完全退出进程，重新打开后才会再次读取。
+    关掉聊天窗口只是把界面收起来了，**进程仍在后台运行**，使用的仍是启动时读取的旧配置。需要完全退出 Claude Desktop 后台进程，重新打开后才会再次读取。
 
 重新打开桌面版，随便问一个问题。能正常回答，说明整条链路已经通了。
 
 
-## 8. 安装并配置 Claude Code
+## 9. 安装并配置 Claude Code
 
 桌面版日常聊天已经够用，但如果需要在终端里直接让 AI 读代码、改代码，还需要再装一个 **Claude Code**。
+
+!!! tip "已经装过 Magpie 的读者"
+    第 4 步下载的 Magpie 也会把 Claude Code 列进它的 Agent 页 —— 装好 `claude` 命令之后，那里会多出一行 Claude Code，点一下开关就能让它用 Magpie 里的 DeepSeek 模型。
+
+    不过下面这节的**环境变量和 `cc` 别名仍然要配**。它们和 Magpie 那边并存，不冲突。
 
 !!! warning "安装前先确认代理是通的"
 
@@ -281,7 +282,7 @@ Claude 桌面版只会按 `sonnet`、`opus`、`fable`、`haiku` 这几个固定�
 
     想学习 vim，可以看这期视频：[《保姆级入门：Vim 编辑器》](https://www.bilibili.com/video/BV13t4y1t7Wg)
 
-### 8.1 在 Windows 终端里安装 Claude Code
+### 9.1 在 Windows 终端里安装 Claude Code
 
 !!! warning "这几行要在 PowerShell 里跑，不能粘到 cmd 里"
     下面用到的 `irm` 和 `iex` 都是 PowerShell 的命令（`Invoke-RestMethod` / `Invoke-Expression` 的缩写），**命令提示符（cmd）里没有这两个东西**，粘进去只会报 `'irm' 不是内部或外部命令`。这一节后面的 `Set-ExecutionPolicy`、`$PROFILE` 也是 PowerShell 的语法，同样不能在 cmd 里跑。
@@ -345,7 +346,7 @@ $env:ANTHROPIC_DEFAULT_HAIKU_MODEL = "deepseek-flash[1m]"
 $env:CLAUDE_CODE_SUBAGENT_MODEL = "deepseek-flash[1m]"
 ```
 
-### 8.2 在 Ubuntu 中安装 Claude Code
+### 9.2 在 Ubuntu 中安装 Claude Code
 
 安装（**需要科学上网**）：
 
@@ -389,7 +390,7 @@ export CLAUDE_CODE_SUBAGENT_MODEL="deepseek-flash[1m]"
 !!! warning "这个文件里存着你的 API Key"
     `~/.bashrc` 和 `$PROFILE` 现在是明文保存 Key 的。**不要把这个文件发给别人，也不要提交到 GitHub**。
 
-### 8.3 验证
+### 9.3 验证
 
 关掉终端重新开一个（让新配置生效），然后输入：
 
@@ -400,7 +401,7 @@ cc
 能正常对话就说明配好了。`cc` 是上面定义的快捷方式，等价于 `claude --permission-mode auto`，省去每次输入完整命令。
 
 
-### 8.4 权限模式
+### 9.4 权限模式
 
 上面定义的 `cc` 带了一个参数 `--permission-mode auto`。**权限模式**决定 Claude Code 做哪些事情之前要先问你。
 
@@ -420,17 +421,17 @@ cc
 - 本教程的 `cc` 用的是**自动（`auto`）**：大部分操作直接放行，另有独立的分类器模型在后台审查，拦下越界或来路不明的动作。
 - **计划（`plan`）模式不修改代码**：只读取、只查看、只给出方案，得到确认后才开始修改。不确定怎么做时可以先用它。
 
-## 9. 在 VSCode 里用：Claude Code 扩展
+## 10. 在 VSCode 里用：Claude Code 扩展
 
-前面第 8 步装的是**终端里**的 Claude Code。它还有一个 **VSCode 扩展**，装完之后不用切窗口 —— Claude Code 就在编辑器里，**选中的代码会自动进入上下文**，改动也直接在编辑器里显示。
+前面第 9 步装的是**终端里**的 Claude Code。它还有一个 **VSCode 扩展**，装完之后不用切窗口 —— Claude Code 就在编辑器里，**选中的代码会自动进入上下文**，改动也直接在编辑器里显示。
 
 !!! warning "顺序不能反：先装 Claude Code，再装扩展"
 
-    扩展**不自带** Claude Code。它只是在编辑器里提供一层界面，实际执行的仍然是第 8 步安装的 `claude` 命令。
+    扩展**不自带** Claude Code。它只是在编辑器里提供一层界面，实际执行的仍然是第 9 步安装的 `claude` 命令。
 
-    所以**先把第 8 步做完，再来装扩展**；没装 CLI 就装扩展的话，面板是空的。
+    所以**先把第 9 步做完，再来装扩展**；没装 CLI 就装扩展的话，面板是空的。
 
-### 9.1 安装扩展
+### 10.1 安装扩展
 
 在 VSCode 里点左侧边栏的「扩展」图标，搜索 `Claude Code`，**认准发布者是 Anthropic**（标识符 `anthropic.claude-code`），点安装：
 
@@ -442,23 +443,23 @@ cc
 
     WSL 用户的情况相同：**Windows 那一侧和 WSL 那一侧各装一份**。在扩展面板里点 **「Install in WSL: Ubuntu」** 那个按钮就行 —— 和 WSL 环境搭建那篇里装 C/C++ 扩展时是同一个按钮。
 
-### 9.2 从内置终端里启动
+### 10.2 从内置终端里启动
 
 **面板不会自动出现**，需要从 VSCode **自带的内置终端**里启动 Claude Code：
 
 1. 用 VSCode 打开你写代码的那个文件夹
 2. 点顶部菜单的 **「终端」→「新建终端」**（英文界面是 Terminal → New Terminal）
-3. 在这个终端里敲 `cc` 回车（就是 8.3 节里那个快捷方式）
+3. 在这个终端里敲 `cc` 回车（就是 9.3 节里那个快捷方式）
 
 启动之后，编辑器里会出现 Claude Code 的面板，和「终端」并排（下一节的截图里能看到）。
 
 !!! tip "面板上的模型和服务地址是哪来的"
 
-    它**直接继承启动它的那个 shell 的环境变量**，也就是 8.1 / 8.2 里写进 `$PROFILE` / `~/.bashrc` 的 `ANTHROPIC_BASE_URL`、`ANTHROPIC_MODEL` 那一批。
+    它**直接继承启动它的那个 shell 的环境变量**，也就是 9.1 / 9.2 里写进 `$PROFILE` / `~/.bashrc` 的 `ANTHROPIC_BASE_URL`、`ANTHROPIC_MODEL` 那一批。
 
     所以面板上显示的模型就是 `deepseek-flash[1m]`，计费走的也是 DeepSeek 那边的按量计费（`API Usage Billing`）—— **不用在扩展里再配一遍**。
 
-### 9.3 选中代码直接问
+### 10.3 选中代码直接问
 
 在编辑器里**选中**要问的代码，选中内容会自动带进输入框（底部会出现 `1 line selected` 这样的提示），再输入问题即可：
 
@@ -467,15 +468,62 @@ cc
 图中选中的是 `printf("Hello, Fudan!\n");` 这一行，问的是「可以帮我解释一下吗」——这样不必在聊天框里手工复制粘贴。
 
 !!! tip "权限模式和终端版是同一套"
-    面板底部那行 `auto mode on`，就是 [8.4 节](#84-权限模式)讲的权限模式，++shift+tab++ 一样可以循环切换。
+    面板底部那行 `auto mode on`，就是 [9.4 节](#94-权限模式)讲的权限模式，++shift+tab++ 一样可以循环切换。
 
-### 9.4 和终端版怎么分工
+### 10.4 和终端版怎么分工
 
 两边是同一个 Claude Code，只是界面不同：
 
 - **改动的呈现方式**：扩展会识别当前打开的文件和选中的段落，改动直接显示在编辑器窗口里；终端版则在对话中输出 diff
 - **长任务、批量处理**：终端更方便
 - 子代理、自定义 slash command、MCP 这些功能在扩展里也能用，但**有些只能通过命令行配置**
+
+## 11. 其他配置
+
+下面三项不是必须的，前面的流程跑通之后按需再看。
+
+### 11.1 多台电脑之间同步配置
+
+Magpie 可以把配置同步到 WebDAV 或 S3，换一台电脑就能直接使用备份到云端的 Key、模型和提示词。
+
+点右上角**齿轮图标**进设置，切到 **「同步与备份」**：
+
+![WebDAV 同步的设置项](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20261012153814861.png)
+
+在「同步到」里选 **WebDAV**，再填四项：
+
+- **地址**：WebDAV 服务的地址。截图里用的是免费的坚果云（`https://dav.jianguoyun.com/dav/`），Magpie 会在其中建一个名为 `magpie` 的文件夹
+- **用户**、**密码**：该 WebDAV 账号的登录信息
+- **口令**：给同步文件加密用。**文件在本机用它加密，服务器只能看到加密后的内容**
+
+下面的「同时同步」勾选要带过去的内容：供应商的 API Key、各 agent 选的模型、资源库（指令、MCP 服务器和技能）、用量。
+
+最后在「自动同步」里选一个间隔（截图里是 15 分钟），点「保存」。
+
+!!! warning "口令要自己记住"
+    服务器上那份文件没有口令就打不开，推荐口令直接使用 `magpie`，方便记忆。
+
+### 11.2 一份提示词给多个 Agent
+
+顶部切到 **「资源库」**，第一个标签「指令」下面是 **「共享指令」**。
+
+它的作用是**写一次、多处生效**：下方开启的 Agent 会在每次对话前从各自的指令文件中读取。
+
+![在资源库里写共享指令](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20261012153923236.png)
+
+选中要写给的 Agent（截图里是 Claude Code），在编辑框里写内容，`Ctrl+S` 保存。
+
+### 11.3 备用搜索
+
+DeepSeek 的联网搜索偶尔会掉线，这时可以让别的服务代它搜。
+
+设置 → **「模型」** → 往下滚到 **「联网搜索」**：
+
+![联网搜索的代搜设置](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20261012154118438.png)
+
+- **代搜供应商**：模型要联网但连不上时，由这里选的供应商代搜
+- **搜索 API**：第三方搜索服务的列表，按从上到下的顺序使用。点「获取密钥」去对应网站注册，把密钥填进来再点「添加」；截图里这一项加的是免费的 Tavily
+- **优先使用**：默认使用「模型代搜」，也就是等模型联网失败后，再自动切换到第三方搜索工具
 
 ---
 
