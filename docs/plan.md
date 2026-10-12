@@ -11,7 +11,7 @@ icon: material/clipboard-list
 | reading         | ✅ 已完成 | 每篇文档末尾登记学号，汇总成全班的阅读进度表                                             |
 | useful          | ✅ 已完成 | PixPin 截图取字、PicGo 图床、Ente Auth 两步验证                                          |
 | win11           | ✅ 已完成 | Windows 11 基础操作与浏览器基础，各配一个 B 站合集                                       |
-| claude          | ✅ 已完成 | Claude 桌面版经 CC Switch 接 DeepSeek，含终端版 Claude Code 与 VSCode 扩展，需要科学上网 |
+| claude          | ✅ 已完成 | Claude 桌面版经 Magpie 接 DeepSeek，含终端版 Claude Code 与 VSCode 扩展，需要科学上网 |
 | dsh             | ✅ 已完成 | 官方 DeepSeek Harness 桌面端与官方 dsh 命令行的配置，全程不需要科学上网                  |
 | dev-cpp         | ✅ 已完成 | Dev-C++ 的安装、中文界面与编译运行，不想装 WSL 时的过渡选择                              |
 | wsl             | ✅ 已完成 | WSL 与 Ubuntu 的安装、GCC/GDB 配置、VSCode 连 WSL，含备份与迁移到 D 盘                   |

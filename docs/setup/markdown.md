@@ -170,12 +170,14 @@ VSCode 内置的 Markdown 预览自带公式渲染，语法是 LaTeX，不需要
 行内公式：前后各加一个 `$`。
 
 ```markdown
-$\lim a_n=a\land\lim a_n=a'\implies a=a'$
 $f'(x)=\lim_{t\to x}\frac{f(t)-f(x)}{t-x}$
+$\lim a_n=a\land\lim a_n=a'\implies a=a'$
+$\ce{C(石墨) + O2(g) -> CO2(g)}\quad\Delta_rH_\text{m}=-393.5\ \mathrm{kJ\cdot mol^{-1}}$
 ```
 
+$f'(x)=\lim_{t\to x}\frac{f(t)-f(x)}{t-x}$
 $\lim a_n=a\land\lim a_n=a'\implies a=a'$
-$f'(x)=\lim_{t\to x}\frac{f(t)-f(x)}{t-x}$。
+$\ce{C(石墨) + O2(g) -> CO2(g)}\quad\Delta_rH_\text{m}=-393.5\ \mathrm{kJ\cdot mol^{-1}}$
 
 ---
 
@@ -183,9 +185,11 @@ $f'(x)=\lim_{t\to x}\frac{f(t)-f(x)}{t-x}$。
 
 ```markdown
 $\begin{aligned}f'(x)=\lim_{t\to x}\frac{f(t)-f(x)}{t-x}\end{aligned}$
+$\begin{aligned}\frac{\partial^2\psi}{\partial x^2}+\frac{\partial^2\psi}{\partial y^2}+\frac{\partial^2\psi}{\partial z^2}+\frac{8\pi^2m}{h^2}(E-V)\psi=0\end{aligned}$
 ```
 
-$\begin{aligned}f'(x)=\lim_{t\to x}\frac{f(t)-f(x)}{t-x}\end{aligned}$。
+$\begin{aligned}f'(x)=\lim_{t\to x}\frac{f(t)-f(x)}{t-x}\end{aligned}$
+$\begin{aligned}\frac{\partial^2\psi}{\partial x^2}+\frac{\partial^2\psi}{\partial y^2}+\frac{\partial^2\psi}{\partial z^2}+\frac{8\pi^2m}{h^2}(E-V)\psi=0\end{aligned}$
 
 ---
 
