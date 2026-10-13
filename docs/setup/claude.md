@@ -162,7 +162,35 @@ DeepSeek 目前提供两个模型，**它们的模型名要一字不差地填进
     所以同样的任务，**放在晚上或者周末运行，费用为一半**。批量任务应尽量避开高峰时段。
 
 
+### 2.5 用量较大时改订阅 OpenCode Go
 
+2.2 节走的是 DeepSeek 官方接口，按量计费，用多少扣多少。还有一种是按月订阅 OpenCode Go，订阅之后调用的是同一个 DeepSeek V4.1 Flash。
+
+<https://opencode.ai/zh/go>
+它的档位是 Go 每月 $10、Go Plus 每月 $40，额度按模型分别计算：
+
+![OpenCode Go 的定价页](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20261013170809275.png =400x)
+
+订阅在 OpenCode 的控制台完成，付款方式选支付宝。
+
+助教 2026-10-12 的实际扣款是 67.29 元人民币，汇率对应的是 $10：
+
+![支付宝里的订阅扣款账单](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20261013170748477.jpg =300x)
+
+用量大的同学，订阅比按量计费划算；几个人合用一个账号，分摊下来更低，但是要注意密钥泄露问题。
+
+------
+
+控制台页面：<https://opencode.ai/console>
+订阅完之后还需要获取 API Key。进控制台点右上角的「Settings」，左侧选「Service accounts」，再点列表里账号那一行：
+
+![控制台 Settings 里的 Service accounts](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20261013171508369.png)
+
+------
+
+进去之后找到「API Keys」一节，点击右边的「+ Add API Key」创建：
+
+![Service account 详情页里的 Add API Key 按钮](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20261013171539205.png)
 
 ## 3. 安装 Claude 桌面版
 
