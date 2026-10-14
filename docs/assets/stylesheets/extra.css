@@ -281,10 +281,9 @@
   height: 1.2em;
 }
 
-/* 侧边栏里已完成的作业：由 judge.js 加 .nav-done，计数那一行插在作业列表开头 */
+/* 侧边栏里已完成的作业：由 judge.js 加 .nav-done，只把字调淡，计数那一行插在作业列表开头 */
 .nav-done {
-  opacity: 0.75;
-  text-decoration: line-through;
+  opacity: 0.55;
 }
 
 .nav-done-count {

@@ -754,7 +754,7 @@
     return { tracked: true, ok: !!map[slug] };
   }
 
-  /** 已完成的条目标浅色加删除线，每组在列表开头写一行「已做 n / N」。
+  /** 已完成的条目标成浅色，每组在列表开头写一行「已做 n / N」。
       计数行先删掉再插，重画时不会叠加。 */
   function paintNav(cache) {
     var items = navLinks();
