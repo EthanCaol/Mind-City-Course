@@ -172,10 +172,11 @@ class App:
         )
 
     def done(self, student_id: str) -> tuple[int, dict]:
-        """某个学号通过过哪些作业。
+        """某个学号做过哪些作业、登记过哪些文档。
 
-        侧边栏用它把已完成的作业标成浅色加删除线。只回布尔，不回姓名，
-        也不回提交明细 —— 这些「作业完成情况」页本来就公开，但没必要在这里多给。
+        侧边栏用它把已完成的条目标成浅色加删除线。只回布尔，不回姓名，
+        也不回提交明细 —— 这些「作业完成情况」和「阅读进度」页本来就公开，
+        但没必要在这里多给。
 
         学号不在名单里返回 403，让前端据此不标也不缓存；学号在不在名单里，
         `POST /api/read` 已经能试出来，这里不多暴露什么。
@@ -188,9 +189,13 @@ class App:
 
         with self.lock:
             passed = db.passed_homeworks(self.conn, student_id)
+            read = db.read_pages(self.conn, student_id)
             problems = list_problems()
 
-        return 200, {"done": {p.slug: p.slug in passed for p in problems}}
+        return 200, {
+            "done": {p.slug: p.slug in passed for p in problems},
+            "read": {page: page in read for page, _ in config.ALL_READ_PAGES},
+        }
 
     # ------------------------------------------------------------ 阅读登记
 

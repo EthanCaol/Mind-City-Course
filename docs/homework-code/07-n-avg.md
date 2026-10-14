@@ -8,21 +8,31 @@ icon: material/pencil-outline
 
 ### 示例 1
 
-```text
 输入：
+
+```text
 3
 80 90 95
+```
+
 输出：
+
+```text
 88.33
 ```
 
 ### 示例 2
 
-```text
 输入：
+
+```text
 4
 1 1 2 2
+```
+
 输出：
+
+```text
 1.50
 ```
 

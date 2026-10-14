@@ -399,6 +399,14 @@ def passed_homeworks(conn: sqlite3.Connection, student_id: str) -> set[str]:
     }
 
 
+def read_pages(conn: sqlite3.Connection, student_id: str) -> set[str]:
+    """该学号登记过阅读的页面。用于侧边栏标记已读完的文档。"""
+    return {
+        r["page"]
+        for r in conn.execute("SELECT page FROM reads WHERE student_id=?", (student_id,))
+    }
+
+
 def read_at(conn: sqlite3.Connection, page: str, student_id: str) -> str | None:
     """某人在某页登记的时间，没登记过返回 None。"""
     row = conn.execute(

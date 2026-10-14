@@ -155,6 +155,23 @@ def test_done() -> None:
         conn.close()
 
 
+def test_read_pages() -> None:
+    """侧边栏标记已读文档用的 read_pages：从「学号 → 登记过的页面」这个方向查。"""
+    with tempfile.TemporaryDirectory() as tmp:
+        conn = db.connect(Path(tmp) / "t.sqlite3")
+        db.init_db(conn)
+
+        check("已读 · 没登记过", db.read_pages(conn, SID), set())
+
+        db.mark_read(conn, page="linux-cli", student_id=SID)
+        db.mark_read(conn, page="chapter-3", student_id=SID)
+        db.mark_read(conn, page="linux-cli", student_id="26803070225")
+
+        check("已读 · 登记过的页面", db.read_pages(conn, SID), {"linux-cli", "chapter-3"})
+        check("已读 · 别人不受影响", db.read_pages(conn, "26803070225"), {"linux-cli"})
+        conn.close()
+
+
 # ---------------------------------------------------------------- 题目
 
 def test_problem() -> None:
@@ -176,7 +193,7 @@ def test_problem() -> None:
 # ---------------------------------------------------------------- main
 
 def main() -> int:
-    for fn in (test_compare, test_roster, test_reads, test_done, test_problem):
+    for fn in (test_compare, test_roster, test_reads, test_read_pages, test_done, test_problem):
         fn()
 
     print(f"通过 {_passed} 项")

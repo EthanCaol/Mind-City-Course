@@ -8,13 +8,18 @@ icon: material/pencil-outline
 
 ### 示例 1
 
-```text
 输入：
+
+```text
 3
 7.5 + 2.5
 10 / 3
 -3.5 * -2
+```
+
 输出：
+
+```text
 10.00
 3.33
 7.00
@@ -22,11 +27,16 @@ icon: material/pencil-outline
 
 ### 示例 2
 
-```text
 输入：
+
+```text
 1
 1.25 - 0.75
+```
+
 输出：
+
+```text
 0.50
 ```
 

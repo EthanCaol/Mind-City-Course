@@ -385,10 +385,21 @@ gh api repos/EthanCaol/Mind-City-Course/hooks/678947351/deliveries \
 
 | 组件 | 位置 |
 |---|---|
-| 前端 | 作业页里的 `<div id="judge" data-homework="...">` + `docs/assets/javascripts/judge.js`（全站加载，找不到挂载点就退出） |
+| 前端 | 作业页里的 `<div id="judge" data-homework="...">` + `docs/assets/javascripts/judge.js`（全站加载：编辑器、完成情况表格、侧边栏标记、顶栏学号控件都在这一个文件里，各自找自己的挂载点，找不到就跳过） |
 | 判题后端 | `judge/` 目录（公开仓库），systemd 用户服务 `mind-city-judge`，监听 `127.0.0.1:9100` |
 | 沙箱 | `isolate` 2.7，源码编译装在 `/usr/local`；**system 级 `isolate.service` 必须常驻** |
 | 数据 | `judge/data/`（本机目录，被外层仓库 gitignore）；花名册的权威副本在 COS 上 |
+
+### 学号、侧边栏标记与顶栏控件
+
+学生填过一次学号，就存在他浏览器里（`localStorage`：`mind-city.student-id`、`-name`、`-done`），判题提交和阅读登记共用同一个键。
+
+- **顶栏控件**：`judge.js` 往 `.md-header__inner` 里注入，位置在搜索框左边。未登录是「输入框 + 登录」，窄屏收成一个「学号」按钮点开才露出输入框；登录后显示学号，点开是「退出登录」。**这不是身份认证**，只是把填学号这件事提到顶栏 —— 校验直接借用 `GET /api/done?sid=`（400 格式不对、403 名单里没有），通过就顺手把完成情况写进缓存。
+- **侧边栏标记**：已完成的条目标成浅色加删除线，每组开头写一行计数。三组各有判据：编程作业看有没有通过的提交，实验课文档和教材习题看有没有登记过阅读。数据来自 `GET /api/done?sid=`，返回 `{"done": {...}, "read": {...}}`，两份映射同时当白名单用 —— 导航里没有登记栏的页面（「文档阅读进度」「实用工具推荐」）不进统计。
+- **加新页面不用改 JS**：作业靠文件名开头的编号对题目 slug，文档和习题靠路径末段对 `data-page`。要加一组或改措辞，动 `judge.js` 里的 `NAV_GROUPS`；样式是 `extra.css` 的 `.nav-done` / `.nav-done-count`。
+- 结果缓存在本地 10 分钟：打开页面先用缓存画（不闪），过期后台刷新；**提交通过、登记成功的那一刻直接写缓存**。接口不可用时静默跳过，不影响提交和登记。
+
+改这个功能连带的接口是 `db.passed_homeworks` / `db.read_pages` 加 `App.done`，上线顺序照「接口改动要两边一起换」：先 push 前端、确认线上文件已更新，再重启判题服务。
 
 ### 安装 isolate（一次性）
 

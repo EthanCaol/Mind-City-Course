@@ -667,18 +667,43 @@
     }
   }
 
-  // ------------------------------------------------ 侧边栏：已完成的作业
+  // ------------------------------------------------ 侧边栏：已完成的条目
   //
-  // 服务端按学号回一份「哪些作业通过了」的布尔表。缓存到本地，打开任意页面时
-  // 先用缓存把侧边栏画出来（不闪），缓存过期再后台更新一次。提交通过的那一刻
-  // 直接写缓存，不必等下次刷新。
+  // 服务端按学号回两份布尔表：哪些作业通过了（done）、哪些文档登记过阅读（read）。
+  // 缓存到本地，打开任意页面时先用缓存把侧边栏画出来（不闪），缓存过期再后台更新
+  // 一次。作业和登记在当下那一刻都会直接写缓存，不必等下次刷新。
 
   var DONE_KEY = "mind-city.done";
   var DONE_TTL_MS = 10 * 60 * 1000;
 
-  /** 作业页在侧边栏里的路径形如 /homework-code/05-sort/，开头的编号与题目
-      slug（judge/problems/作业5）对应，以后加作业不用改这里。 */
-  var HOMEWORK_HREF_RE = /\/homework-code\/(\d+)-/;
+  /** 侧边栏里会被标记的三组：作业页的路径开头编号与题目 slug（judge/problems/作业5）
+      对应，文档和习题页的路径末段就是登记用的 page slug，以后加页面不用改这里。 */
+  var NAV_GROUPS = [
+    {
+      flag: "done",
+      label: "已完成",
+      re: /^\/homework-code\/(\d+)-/,
+      slug: function (m) {
+        return "作业" + parseInt(m[1], 10);
+      }
+    },
+    {
+      flag: "read",
+      label: "已读",
+      re: /^\/setup\/([a-z0-9-]+)\//,
+      slug: function (m) {
+        return m[1];
+      }
+    },
+    {
+      flag: "read",
+      label: "已做完",
+      re: /^\/homework-book\/([a-z0-9-]+)\//,
+      slug: function (m) {
+        return m[1];
+      }
+    }
+  ];
 
   function readDoneCache() {
     try {
@@ -688,54 +713,89 @@
     }
   }
 
-  function writeDoneCache(sid, done) {
+  function writeDoneCache(sid, data) {
     try {
       localStorage.setItem(
         DONE_KEY,
-        JSON.stringify({ sid: sid, at: Date.now(), done: done })
+        JSON.stringify({
+          sid: sid,
+          at: Date.now(),
+          done: data.done || {},
+          read: data.read || {}
+        })
       );
     } catch (e) {
       /* 记不住就算了 */
     }
   }
 
-  /** 侧边栏里指向作业页的链接，附带它们对应的题目 slug。
-      主侧边栏里还嵌着本页目录，那些 #锚点解析出来也是当前页的路径，要排掉。 */
-  function homeworkLinks() {
+  /** 侧边栏里归属这三组的链接。主侧边栏里还嵌着本页目录，那些 #锚点解析出来
+      也是当前页的路径，要排掉。 */
+  function navLinks() {
     var out = [];
     document
       .querySelectorAll(".md-sidebar--primary a.md-nav__link")
       .forEach(function (link) {
         if ((link.getAttribute("href") || "").charAt(0) === "#") return;
-        var m = new URL(link.href).pathname.match(HOMEWORK_HREF_RE);
-        if (m) out.push({ link: link, slug: "作业" + parseInt(m[1], 10) });
+        var path = new URL(link.href).pathname;
+        NAV_GROUPS.forEach(function (group) {
+          var m = path.match(group.re);
+          if (m) out.push({ link: link, group: group, slug: group.slug(m) });
+        });
       });
     return out;
   }
 
-  /** 已完成的作业标浅色加删除线，并在作业列表开头写一行「已完成 n / N」。
-      后者先删掉再插，重画时不会叠加。 */
-  function paintNav(done) {
-    var links = homeworkLinks();
-    if (!links.length) return;
+  /** 这一条做完没有。服务端只给认得出来的页面回答，所以顺带用它过滤：
+      同一组里没登记栏的页面（「文档阅读进度」之类）不会进统计。 */
+  function isTracked(cache, group, slug) {
+    var map = cache[group.flag];
+    if (!map || !(slug in map)) return false;
+    return { tracked: true, ok: !!map[slug] };
+  }
 
-    var n = 0;
-    links.forEach(function (item) {
-      var ok = !!done[item.slug];
-      item.link.classList.toggle("nav-done", ok);
-      if (ok) n++;
-    });
+  /** 已完成的条目标浅色加删除线，每组在列表开头写一行「已做 n / N」。
+      计数行先删掉再插，重画时不会叠加。 */
+  function paintNav(cache) {
+    var items = navLinks();
+    if (!items.length) return;
 
     document.querySelectorAll(".nav-done-count").forEach(function (el) {
       el.remove();
     });
 
-    var ul = links[0].link.closest("ul.md-nav__list");
-    if (!ul) return;
-    var li = document.createElement("li");
-    li.className = "md-nav__item nav-done-count";
-    setText(li, "已完成 " + n + " / " + links.length);
-    ul.insertBefore(li, ul.firstChild);
+    var groups = [];
+    items.forEach(function (item) {
+      var state = isTracked(cache, item.group, item.slug);
+      if (!state.tracked) return;
+
+      var entry = groups.filter(function (g) {
+        return g.group === item.group;
+      })[0];
+      if (!entry) {
+        entry = {
+          group: item.group,
+          host: item.link.closest("ul.md-nav__list"),
+          items: []
+        };
+        groups.push(entry);
+      }
+      entry.items.push({ link: item.link, ok: state.ok });
+    });
+
+    groups.forEach(function (entry) {
+      var n = 0;
+      entry.items.forEach(function (item) {
+        item.link.classList.toggle("nav-done", item.ok);
+        if (item.ok) n++;
+      });
+
+      if (!entry.host) return;
+      var li = document.createElement("li");
+      li.className = "md-nav__item nav-done-count";
+      setText(li, entry.group.label + " " + n + " / " + entry.items.length);
+      entry.host.insertBefore(li, entry.host.firstChild);
+    });
   }
 
   /** 退出后把三个本地键一起清掉：学号、姓名、完成情况缓存。 */
@@ -777,14 +837,14 @@
       return;
     }
     var cache = readDoneCache();
-    var cached = cache && cache.sid === sid ? cache.done : null;
+    var cached = cache && cache.sid === sid ? cache : null;
     if (cached) paintNav(cached);
-    if (cached && Date.now() - (cache.at || 0) < DONE_TTL_MS) return;
+    if (cached && Date.now() - (cached.at || 0) < DONE_TTL_MS) return;
 
     request("GET", API + "/done?sid=" + encodeURIComponent(sid))
       .then(function (data) {
-        writeDoneCache(sid, data.done);
-        paintNav(data.done);
+        writeDoneCache(sid, data);
+        paintNav(data);
       })
       .catch(function () {
         /* 接口没起、没联网都无所谓：页面照常用，只是不标记 */
@@ -795,10 +855,21 @@
   function markDone(slug) {
     var sid = rememberedSid();
     var cache = readDoneCache();
-    if (!sid || !cache || cache.sid !== sid) return;
+    if (!sid || !cache || cache.sid !== sid || !cache.done) return;
     cache.done[slug] = true;
-    writeDoneCache(sid, cache.done);
-    paintNav(cache.done);
+    writeDoneCache(sid, cache);
+    paintNav(cache);
+  }
+
+  /** 登记完阅读之后同理，文档和习题那一行当场就变。 */
+  function markRead(page) {
+    var sid = rememberedSid();
+    var cache = readDoneCache();
+    if (!sid || !cache || cache.sid !== sid) return;
+    if (!cache.read || !(page in cache.read)) return;
+    cache.read[page] = true;
+    writeDoneCache(sid, cache);
+    paintNav(cache);
   }
 
   // ------------------------------------------------------- 顶栏：填学号
@@ -869,8 +940,8 @@
       request("GET", API + "/done?sid=" + encodeURIComponent(sid))
         .then(function (data) {
           rememberSid(sid);
-          writeDoneCache(sid, data.done);
-          paintNav(data.done);
+          writeDoneCache(sid, data);
+          paintNav(data);
           syncForms(sid);
           paint();
         })
@@ -954,6 +1025,7 @@
         rememberSid(sid);
         rememberName(data.name);
         syncForms(sid); // 顶栏跟着切到「已登录」
+        markRead(page); // 侧边栏把这一篇标成已读
         markRegistered(data.name);
       })
       .catch(function (err) {
