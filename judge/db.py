@@ -388,6 +388,17 @@ def passed_ids(conn: sqlite3.Connection, homework: str) -> set[str]:
     }
 
 
+def passed_homeworks(conn: sqlite3.Connection, student_id: str) -> set[str]:
+    """该学号通过过的作业。用于侧边栏把已完成的作业标出来。"""
+    return {
+        r["homework"]
+        for r in conn.execute(
+            "SELECT DISTINCT homework FROM submissions WHERE student_id=? AND verdict='AC'",
+            (student_id,),
+        )
+    }
+
+
 def read_at(conn: sqlite3.Connection, page: str, student_id: str) -> str | None:
     """某人在某页登记的时间，没登记过返回 None。"""
     row = conn.execute(

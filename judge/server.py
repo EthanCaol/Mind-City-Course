@@ -171,6 +171,27 @@ class App:
             [(p.slug, p.title) for p in problems], passed
         )
 
+    def done(self, student_id: str) -> tuple[int, dict]:
+        """某个学号通过过哪些作业。
+
+        侧边栏用它把已完成的作业标成浅色加删除线。只回布尔，不回姓名，
+        也不回提交明细 —— 这些「作业完成情况」页本来就公开，但没必要在这里多给。
+
+        学号不在名单里返回 403，让前端据此不标也不缓存；学号在不在名单里，
+        `POST /api/read` 已经能试出来，这里不多暴露什么。
+        """
+        if not isinstance(student_id, str) or not STUDENT_ID_RE.fullmatch(student_id):
+            return 400, {"error": "同学记得填 11位学号。"}
+
+        if self.roster.lookup(student_id) is None:
+            return 403, {"error": f"同学记得核对一下，名单里没有 {student_id}。"}
+
+        with self.lock:
+            passed = db.passed_homeworks(self.conn, student_id)
+            problems = list_problems()
+
+        return 200, {"done": {p.slug: p.slug in passed for p in problems}}
+
     # ------------------------------------------------------------ 阅读登记
 
     def mark_read(self, page: str, student_id: str) -> tuple[int, dict]:
@@ -421,6 +442,9 @@ def create_handler(app: App):
 
             if route in ("/api/grades", "/api/grades/"):
                 return app.grades()
+
+            if route in ("/api/done", "/api/done/"):
+                return app.done(query.get("sid", ""))
 
             if route in ("/api/reads", "/api/reads/"):
                 return app.reads(query.get("group", ""))

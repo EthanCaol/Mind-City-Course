@@ -1,5 +1,5 @@
 {
-  "title": "作业 8：四则运算",
+  "title": "作业 8：多个的四则运算",
   "compile_flags": ["-O2", "-std=gnu23", "-Wall", "-DONLINE_JUDGE"],
   "run_limits": {
     "time_s": 1,

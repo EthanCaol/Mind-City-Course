@@ -120,6 +120,41 @@ def test_reads() -> None:
         conn.close()
 
 
+# ------------------------------------------------------------ 按学号查完成情况
+
+def test_done() -> None:
+    """侧边栏标记用的 passed_homeworks：从「学号 → 通过过的作业」这个方向查。"""
+    with tempfile.TemporaryDirectory() as tmp:
+        conn = db.connect(Path(tmp) / "t.sqlite3")
+        db.init_db(conn)
+
+        def submit(homework: str, sid: str, verdict: str) -> None:
+            sub = db.create_submission(
+                conn,
+                homework=homework,
+                student_id=sid,
+                name="张三",
+                source="int main(void){return 0;}",
+                client_ip=None,
+            )
+            db.finish(conn, sub, verdict=verdict, passed=1, total=1)
+
+        submit("作业1", SID, "AC")
+        submit("作业2", SID, "WA")
+        submit("作业3", SID, "AC")
+        submit("作业1", "26803070225", "AC")
+
+        check("完成 · 通过过的作业", db.passed_homeworks(conn, SID), {"作业1", "作业3"})
+        check("完成 · 只算 AC", db.passed_homeworks(conn, SID) == {"作业2"}, False)
+        check("完成 · 别人不受影响", db.passed_homeworks(conn, "26803070225"), {"作业1"})
+        check("完成 · 没交过的人", db.passed_homeworks(conn, "26803070226"), set())
+
+        # 同一题通过两次只算一次
+        submit("作业1", SID, "AC")
+        check("完成 · 去重", db.passed_homeworks(conn, SID), {"作业1", "作业3"})
+        conn.close()
+
+
 # ---------------------------------------------------------------- 题目
 
 def test_problem() -> None:
@@ -141,7 +176,7 @@ def test_problem() -> None:
 # ---------------------------------------------------------------- main
 
 def main() -> int:
-    for fn in (test_compare, test_roster, test_reads, test_problem):
+    for fn in (test_compare, test_roster, test_reads, test_done, test_problem):
         fn()
 
     print(f"通过 {_passed} 项")

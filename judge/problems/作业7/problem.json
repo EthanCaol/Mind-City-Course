@@ -1,5 +1,5 @@
 {
-  "title": "作业 7：计算平均分",
+  "title": "作业 7：多个数的平均分",
   "compile_flags": ["-O2", "-std=gnu23", "-Wall", "-DONLINE_JUDGE"],
   "run_limits": {
     "time_s": 1,

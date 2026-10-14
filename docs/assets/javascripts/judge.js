@@ -1,7 +1,8 @@
 /* 在线测评页面的交互。
  *
- * 这个文件全站加载（mkdocs.yml 的 extra_javascript），所以第一件事是看页面上
- * 有没有 #judge 元素 —— 没有就直接退出，别的页面不该受影响。
+ * 这个文件全站加载（mkdocs.yml 的 extra_javascript）。每块功能各自找自己的挂载点，
+ * 找不到就跳过：侧边栏标记和完成情况表格在所有页面生效，作业页才有的编辑器靠
+ * #judge 判断。
  *
  * 接口在 /judge/api/*，由 Caddy 反代到本机的判题服务（127.0.0.1:9100）。
  */
@@ -305,6 +306,7 @@
       summary.className = "judge-summary judge-summary--ac";
       setText(summary, "全部通过（" + payload.total + "/" + payload.total + "）");
       show(summary, true);
+      markDone(boundHomework());
     } else if (payload.verdict) {
       summary.className = "judge-summary judge-summary--bad";
       setText(
@@ -460,6 +462,7 @@
     })
       .then(function (payload) {
         rememberSid(sid); // 学号通过了花名册，下次打开自动填上
+        syncForms(sid); // 顶栏跟着切到「已登录」
         if (payload.status === "PENDING" || payload.status === "JUDGING") {
           poll(payload.id, payload.token);
         } else {
@@ -664,6 +667,258 @@
     }
   }
 
+  // ------------------------------------------------ 侧边栏：已完成的作业
+  //
+  // 服务端按学号回一份「哪些作业通过了」的布尔表。缓存到本地，打开任意页面时
+  // 先用缓存把侧边栏画出来（不闪），缓存过期再后台更新一次。提交通过的那一刻
+  // 直接写缓存，不必等下次刷新。
+
+  var DONE_KEY = "mind-city.done";
+  var DONE_TTL_MS = 10 * 60 * 1000;
+
+  /** 作业页在侧边栏里的路径形如 /homework-code/05-sort/，开头的编号与题目
+      slug（judge/problems/作业5）对应，以后加作业不用改这里。 */
+  var HOMEWORK_HREF_RE = /\/homework-code\/(\d+)-/;
+
+  function readDoneCache() {
+    try {
+      return JSON.parse(localStorage.getItem(DONE_KEY) || "null");
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function writeDoneCache(sid, done) {
+    try {
+      localStorage.setItem(
+        DONE_KEY,
+        JSON.stringify({ sid: sid, at: Date.now(), done: done })
+      );
+    } catch (e) {
+      /* 记不住就算了 */
+    }
+  }
+
+  /** 侧边栏里指向作业页的链接，附带它们对应的题目 slug。
+      主侧边栏里还嵌着本页目录，那些 #锚点解析出来也是当前页的路径，要排掉。 */
+  function homeworkLinks() {
+    var out = [];
+    document
+      .querySelectorAll(".md-sidebar--primary a.md-nav__link")
+      .forEach(function (link) {
+        if ((link.getAttribute("href") || "").charAt(0) === "#") return;
+        var m = new URL(link.href).pathname.match(HOMEWORK_HREF_RE);
+        if (m) out.push({ link: link, slug: "作业" + parseInt(m[1], 10) });
+      });
+    return out;
+  }
+
+  /** 已完成的作业标浅色加删除线，并在作业列表开头写一行「已完成 n / N」。
+      后者先删掉再插，重画时不会叠加。 */
+  function paintNav(done) {
+    var links = homeworkLinks();
+    if (!links.length) return;
+
+    var n = 0;
+    links.forEach(function (item) {
+      var ok = !!done[item.slug];
+      item.link.classList.toggle("nav-done", ok);
+      if (ok) n++;
+    });
+
+    document.querySelectorAll(".nav-done-count").forEach(function (el) {
+      el.remove();
+    });
+
+    var ul = links[0].link.closest("ul.md-nav__list");
+    if (!ul) return;
+    var li = document.createElement("li");
+    li.className = "md-nav__item nav-done-count";
+    setText(li, "已完成 " + n + " / " + links.length);
+    ul.insertBefore(li, ul.firstChild);
+  }
+
+  /** 退出后把三个本地键一起清掉：学号、姓名、完成情况缓存。 */
+  function forgetSid() {
+    try {
+      localStorage.removeItem(SID_KEY);
+      localStorage.removeItem(NAME_KEY);
+      localStorage.removeItem(DONE_KEY);
+    } catch (e) {
+      /* 删不掉就算了 */
+    }
+  }
+
+  /** 顶栏填的学号要和页面里已有的两个输入框同步：作业页的提交框、文档末尾的登记栏。
+      反过来，在那些表单里填过学号之后也走这里，让顶栏跟着变。 */
+  function syncForms(sid) {
+    ["judge-id", "read-id"].forEach(function (id) {
+      var input = $(id);
+      if (input) input.value = sid;
+    });
+    if (paintSidBox) paintSidBox();
+  }
+
+  /** 没登录（或刚退出）时把侧边栏恢复原样。 */
+  function clearNav() {
+    document.querySelectorAll(".nav-done").forEach(function (el) {
+      el.classList.remove("nav-done");
+    });
+    document.querySelectorAll(".nav-done-count").forEach(function (el) {
+      el.remove();
+    });
+  }
+
+  /** 先拿缓存画一遍，再按需后台更新。没填过学号就什么都不做。 */
+  function syncDone() {
+    var sid = rememberedSid();
+    if (!sid) {
+      clearNav();
+      return;
+    }
+    var cache = readDoneCache();
+    var cached = cache && cache.sid === sid ? cache.done : null;
+    if (cached) paintNav(cached);
+    if (cached && Date.now() - (cache.at || 0) < DONE_TTL_MS) return;
+
+    request("GET", API + "/done?sid=" + encodeURIComponent(sid))
+      .then(function (data) {
+        writeDoneCache(sid, data.done);
+        paintNav(data.done);
+      })
+      .catch(function () {
+        /* 接口没起、没联网都无所谓：页面照常用，只是不标记 */
+      });
+  }
+
+  /** 提交拿到 AC 之后把这一题写进缓存，侧边栏当场就变。 */
+  function markDone(slug) {
+    var sid = rememberedSid();
+    var cache = readDoneCache();
+    if (!sid || !cache || cache.sid !== sid) return;
+    cache.done[slug] = true;
+    writeDoneCache(sid, cache.done);
+    paintNav(cache.done);
+  }
+
+  // ------------------------------------------------------- 顶栏：填学号
+  //
+  // 把「填学号」这件事从每个表单提到顶栏：填过一次之后，作业页的提交框和文档末尾
+  // 的登记栏都会自动带上。身份就是学号本身（提交和登记都是弱校验），这里没有密码，
+  // 也不解锁任何额外权限。宽屏直接摆出输入框，窄屏收成一个按钮，点开才有输入框。
+
+  /** 顶栏装好之后填上它自己的重画函数，别处改了学号可以叫它跟上。 */
+  var paintSidBox = null;
+
+  function initSid() {
+    var inner = document.querySelector(".md-header__inner");
+    if (!inner || $("sid-box")) return;
+    var box = document.createElement("div");
+    box.className = "sid-box sid-box--out";
+    box.id = "sid-box";
+    box.innerHTML =
+      '<button class="sid-box__trigger" id="sid-trigger" type="button">学号</button>' +
+      '<div class="sid-box__panel" id="sid-panel">' +
+      '<input class="sid-box__input" id="sid-input" type="text" inputmode="numeric" ' +
+      'autocomplete="off" maxlength="11" placeholder="11位学号">' +
+      '<button class="sid-box__btn" id="sid-login" type="button">登录</button>' +
+      "</div>" +
+      '<p class="sid-box__note" id="sid-note" hidden></p>' +
+      '<div class="sid-box__menu" id="sid-menu" hidden>' +
+      '<button class="sid-box__item" id="sid-logout" type="button">退出登录</button>' +
+      "</div>";
+
+    inner.insertBefore(box, inner.querySelector(".md-search"));
+
+    var trigger = $("sid-trigger");
+    var input = $("sid-input");
+    var login = $("sid-login");
+    var menu = $("sid-menu");
+    var note = $("sid-note");
+
+    function loggedIn() {
+      return box.classList.contains("sid-box--in");
+    }
+
+    function close() {
+      box.classList.remove("sid-box--open");
+      menu.hidden = true;
+    }
+
+    /** 按当前学号把顶栏摆成「已登录」或「未登录」。 */
+    function paint() {
+      var sid = rememberedSid();
+      box.classList.toggle("sid-box--in", !!sid);
+      box.classList.toggle("sid-box--out", !sid);
+      trigger.textContent = sid || "学号";
+      input.value = sid;
+      note.hidden = true;
+      close();
+    }
+
+    function fail(message) {
+      note.hidden = false;
+      setText(note, message);
+    }
+
+    function doLogin() {
+      var sid = input.value.trim();
+      login.disabled = true;
+      /* 借用按学号查完成情况的接口做校验：格式不对返回 400，不在名单里返回 403，
+         通过则顺手把完成情况填进缓存，侧边栏当场就能标出来。 */
+      request("GET", API + "/done?sid=" + encodeURIComponent(sid))
+        .then(function (data) {
+          rememberSid(sid);
+          writeDoneCache(sid, data.done);
+          paintNav(data.done);
+          syncForms(sid);
+          paint();
+        })
+        .catch(function (err) {
+          fail(err.message);
+        })
+        .then(function () {
+          login.disabled = false;
+        });
+    }
+
+    trigger.addEventListener("click", function () {
+      if (box.classList.contains("sid-box--open")) {
+        close();
+        return;
+      }
+      box.classList.add("sid-box--open");
+      menu.hidden = !loggedIn();
+      if (!loggedIn()) input.focus();
+    });
+
+    login.addEventListener("click", doLogin);
+
+    input.addEventListener("keydown", function (e) {
+      if (e.key !== "Enter") return;
+      e.preventDefault();
+      doLogin();
+    });
+
+    $("sid-logout").addEventListener("click", function () {
+      forgetSid();
+      clearNav();
+      syncForms("");
+      paint();
+    });
+
+    /* 点别处、按 Esc 都收起下拉 */
+    document.addEventListener("click", function (e) {
+      if (!box.contains(e.target)) close();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") close();
+    });
+
+    paintSidBox = paint;
+    paint();
+  }
+
   /** 状态行：登记成功的恭喜、出错的红字，共用这一个元素。
       kind 传 "done" 或 "bad"；不传就是普通提示。 */
   function renderReadNote(text, kind) {
@@ -698,6 +953,7 @@
       .then(function (data) {
         rememberSid(sid);
         rememberName(data.name);
+        syncForms(sid); // 顶栏跟着切到「已登录」
         markRegistered(data.name);
       })
       .catch(function (err) {
@@ -754,6 +1010,10 @@
     }
 
     initRead(); // 页面末尾的登记栏
+
+    syncDone(); // 侧边栏：把已完成的作业标出来（每个页面都跑）
+
+    initSid(); // 顶栏的学号控件（每个页面都跑）
 
     if (!$("judge")) return; // 剩下的是作业页才需要的东西
 

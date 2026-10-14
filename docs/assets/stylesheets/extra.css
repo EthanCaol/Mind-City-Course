@@ -281,6 +281,154 @@
   height: 1.2em;
 }
 
+/* 侧边栏里已完成的作业：由 judge.js 加 .nav-done，计数那一行插在作业列表开头 */
+.nav-done {
+  opacity: 0.55;
+  text-decoration: line-through;
+}
+
+.nav-done-count {
+  padding: 0.3rem 0.6rem;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.6rem;
+}
+
+/* 顶栏右侧的学号控件（judge.js 注入）。这里的「登录」只是浏览器记住了学号，
+   不是身份认证 —— 提交和登记本来就只认学号。宽屏直接摆出输入框，窄屏收成
+   一个按钮，点开才露出输入框。 */
+.sid-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.sid-box__trigger,
+.sid-box__btn {
+  padding: 0.25rem 0.6rem;
+  border: 0;
+  border-radius: 0.2rem;
+  color: var(--md-primary-bg-color);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.7rem;
+}
+
+.sid-box__trigger {
+  display: none;
+  padding-right: 0.4rem;
+  padding-left: 0.4rem;
+  background: none;
+  opacity: 0.75;
+}
+
+.sid-box__trigger:hover {
+  opacity: 1;
+}
+
+.sid-box__btn {
+  background: rgb(255 255 255 / 18%);
+  white-space: nowrap;
+}
+
+.sid-box__btn:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.sid-box__input {
+  width: 7.5rem;
+  padding: 0.22rem 0.4rem;
+  border: 1px solid rgb(255 255 255 / 20%);
+  border-radius: 0.2rem;
+  background: rgb(255 255 255 / 12%);
+  color: var(--md-primary-bg-color);
+  font-family: inherit;
+  font-size: 0.7rem;
+}
+
+.sid-box__panel {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* 已登录：显示学号，点开是退出登录 */
+.sid-box--in .sid-box__trigger {
+  display: inline-flex;
+}
+
+.sid-box--in .sid-box__panel {
+  display: none;
+}
+
+.sid-box__menu {
+  position: absolute;
+  z-index: 3;
+  top: 100%;
+  right: 0;
+  min-width: 6rem;
+  margin-top: 0.2rem;
+  border-radius: 0.2rem;
+  background: var(--md-default-bg-color);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 30%);
+}
+
+.sid-box__item {
+  display: block;
+  width: 100%;
+  padding: 0.4rem 0.6rem;
+  border: 0;
+  background: none;
+  color: var(--md-default-fg-color);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.7rem;
+  text-align: left;
+}
+
+.sid-box__item:hover {
+  background: var(--md-default-fg-color--lightest);
+}
+
+.sid-box__note {
+  position: absolute;
+  z-index: 3;
+  top: 100%;
+  right: 0;
+  margin: 0.2rem 0 0;
+  padding: 0.3rem 0.5rem;
+  border-radius: 0.2rem;
+  background: var(--md-default-bg-color);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 30%);
+  color: var(--md-default-fg-color);
+  font-size: 0.65rem;
+  white-space: nowrap;
+}
+
+/* 窄屏：未登录时只留一个「学号」按钮，点开才是输入框 */
+@media screen and (max-width: 59.9375em) {
+  .sid-box--out .sid-box__trigger {
+    display: inline-flex;
+  }
+
+  .sid-box--out .sid-box__panel {
+    display: none;
+  }
+
+  .sid-box--open .sid-box__panel {
+    position: absolute;
+    z-index: 3;
+    top: 100%;
+    right: 0;
+    display: flex;
+    margin-top: 0.2rem;
+    padding: 0.35rem;
+    border-radius: 0.2rem;
+    background: var(--md-default-bg-color);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 30%);
+  }
+}
+
 /* ---------------------------------------------------------------------------
    自定义提示块类型：todo
 
