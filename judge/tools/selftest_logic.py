@@ -131,7 +131,11 @@ def test_problem() -> None:
     check("题目 · 都还没隐藏", all(not c.hidden for c in prob.cases), True)
     check("题目 · 编译参数", "-std=gnu23" in prob.compile_flags, True)
     check("题目 · 运行内存倍于 cg-mem", prob.run_limits.mem_kb, 2 * prob.run_limits.cg_mem_kb)
-    check("题目 · 题目列表", [p.slug for p in list_problems()], ["作业1", "作业2", "作业3", "作业4"])
+    check(
+        "题目 · 题目列表",
+        [p.slug for p in list_problems()],
+        ["作业1", "作业2", "作业3", "作业4", "作业5", "作业6", "作业7", "作业8"],
+    )
 
 
 # ---------------------------------------------------------------- main
