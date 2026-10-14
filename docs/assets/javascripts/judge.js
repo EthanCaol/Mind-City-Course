@@ -750,7 +750,7 @@
       同一组里没登记栏的页面（「文档阅读进度」之类）不会进统计。 */
   function isTracked(cache, group, slug) {
     var map = cache[group.flag];
-    if (!map || !(slug in map)) return false;
+    if (!map || !(slug in map)) return { tracked: false };
     return { tracked: true, ok: !!map[slug] };
   }
 
@@ -837,9 +837,11 @@
       return;
     }
     var cache = readDoneCache();
-    var cached = cache && cache.sid === sid ? cache : null;
-    if (cached) paintNav(cached);
-    if (cached && Date.now() - (cached.at || 0) < DONE_TTL_MS) return;
+    var mine = cache && cache.sid === sid ? cache : null;
+    if (mine) paintNav(mine);
+    /* 缓存里没有 read 表，说明是加「已读」标记之前写的，当作过期逼一次刷新 ——
+       否则要等满 10 分钟才会去问服务端，那段时间文档和习题都不标记。 */
+    if (mine && mine.read && Date.now() - (mine.at || 0) < DONE_TTL_MS) return;
 
     request("GET", API + "/done?sid=" + encodeURIComponent(sid))
       .then(function (data) {
