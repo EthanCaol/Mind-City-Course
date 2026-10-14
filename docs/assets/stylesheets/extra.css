@@ -419,7 +419,9 @@
     display: none;
   }
 
-  .sid-box--open .sid-box__panel {
+  /* 两个状态都写进选择器：只写 .sid-box--open 的话，已登录时点开会把输入框一起放出来
+     （它和上面那条特异性相同、又排在后面，会盖掉全局的 .sid-box--in .sid-box__panel） */
+  .sid-box--out.sid-box--open .sid-box__panel {
     position: absolute;
     z-index: 3;
     top: 100%;
