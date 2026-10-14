@@ -36,8 +36,8 @@ nav:
       - 作业4：计算平均分: homework-code/04-avg.md
       - 作业5：三数排序: homework-code/05-sort.md
       - 作业6：绩点换算: homework-code/06-gpa.md
-      - 作业7：求 n 个数的平均分: homework-code/07-n-avg.md
-      - 作业8：四则运算: homework-code/08-n-arith.md
+      - 作业7：多个数的平均分: homework-code/07-n-avg.md
+      - 作业8：多个的四则运算: homework-code/08-n-arith.md
   - 实验课文档:
       - 文档阅读进度: setup/reading.md
       - 实用工具推荐: setup/useful.md
