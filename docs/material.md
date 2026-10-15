@@ -13,6 +13,8 @@ icon: material/bookshelf
 | 9月17日  | [第2讲 基本数据及其运算 1](https://mind-city.com/downloads/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC2%E8%AE%B2-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%8F%8A%E5%85%B6%E8%BF%90%E7%AE%97-1.pdf)      |
 | 9月24日  | [第3讲 基本数据及其运算 2](https://mind-city.com/downloads/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC3%E8%AE%B2-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%8F%8A%E5%85%B6%E8%BF%90%E7%AE%97-2.pdf)      |
 | 10月8日  | [第4讲 结构化程序设计 1](https://mind-city.com/downloads/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC4%E8%AE%B2-%E7%BB%93%E6%9E%84%E5%8C%96%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1-1.pdf)          |
+| 10月15日 | [第5讲 结构化程序设计 2](https://mind-city.com/downloads/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC5%E8%AE%B2-%E7%BB%93%E6%9E%84%E5%8C%96%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1-2.pdf)         |
+| 10月22日 | [第6讲 数组 1](https://mind-city.com/downloads/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC6%E8%AE%B2-%E6%95%B0%E7%BB%84-1.pdf)                                    |
 
 !!! tip "课件会陆续补齐"
     后面的讲次上传之后，会在这里和下面的课程安排里一起更新。
