@@ -394,7 +394,7 @@ user-invocable: true
 - `CLAUDE.md` 是仓库级提示词，写长期约定：仓库结构、技能的放置、文风、标点与断句、文档结构、公式渲染。
 - `README.md` 是一张对应表：左边是笔记目录，右边是对应的电子书路径
 
-```markdown title="CLAUDE.md"
+````markdown title="CLAUDE.md"
 # 仓库结构
 
 笔记按学科组织在 `Coursera/` 下
@@ -502,9 +502,9 @@ Set-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\Nls\CodePage' -Name MAC
 ```
 
 重启后用 `python -I -c "import sys; print(sys.stdout.encoding)"` 验证, 输出 utf-8 即生效
-```
+````
 
-```markdown title="README.md"
+````markdown title="README.md"
 # Mind-City
 
 个人笔记仓库。笔记按学科组织在 `Coursera/` 下
@@ -568,7 +568,7 @@ Set-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\Nls\CodePage' -Name MAC
 | `(2)细胞生物学.md` | `[5]生物/细胞生物学.pdf`                                                                                                               |
 | `(3)分子生物学.md` | `[5]生物/分子生物学.pdf`                                                                                                               |
 | `(4)生物信息学`    | `[5]生物/生物信息学.pdf`                                                                                                               |
-```
+````
 
 
 ## 助教的 VSCode 完整配置文件
