@@ -6,26 +6,28 @@ icon: material/clipboard-list
 
 ## 近期项目
 
-| 项目            | 当前进展 | 内容描述                                                                                 |
-| --------------- | -------- | ---------------------------------------------------------------------------------------- |
-| reading         | ✅ 已完成 | 每篇文档末尾登记学号，汇总成全班的阅读进度表                                             |
-| useful          | ✅ 已完成 | PixPin 截图取字、PicGo 图床、Ente Auth 两步验证                                          |
-| win11           | ✅ 已完成 | Windows 11 基础操作与浏览器基础，各配一个 B 站合集                                       |
-| claude          | ✅ 已完成 | Claude 桌面版经 Magpie 接 DeepSeek，含终端版 Claude Code 与 VSCode 扩展，需要科学上网 |
-| dsh             | ✅ 已完成 | 官方 DeepSeek Harness 桌面端与官方 dsh 命令行的配置，全程不需要科学上网                  |
-| dev-cpp         | ✅ 已完成 | Dev-C++ 的安装、中文界面与编译运行，不想装 WSL 时的过渡选择                              |
-| wsl             | ✅ 已完成 | WSL 与 Ubuntu 的安装、GCC/GDB 配置、VSCode 连 WSL，含备份与迁移到 D 盘                   |
-| vscode          | ✅ 已完成 | 新建配置文件（Profile）、Code Runner 编译运行命令的逐段拆解                              |
-| linux-cli       | ✅ 已完成 | 转载《只学够用的 Linux》最小入门教程，配作者录的一期视频                                 |
-| git-github      | ✅ 已完成 | GitHub 访问、注册、核心概念与 SSH 连接，四期视频                                         |
-| vscode-debug    | ⬜ 施工中 | VSCode 的调试与任务配置：`tasks.json` 与 `launch.json`                                   |
-| gcc-gdb         | ⬜ 施工中 | GCC 与 GDB 入门                                                                          |
-| make            | ⬜ 施工中 | Make 构建工具                                                                            |
-| cmake           | ⬜ 施工中 | CMake 构建工具                                                                           |
-| vscode-markdown | ⬜ 施工中 | VSCode 的 Markdown 编辑与预览                                                            |
-| python-env      | ⬜ 施工中 | Python 环境配置：Miniconda                                                               |
-| python-syntax   | ⬜ 施工中 | Python 语法入门                                                                          |
-| python-jupyter  | ⬜ 施工中 | Jupyter Notebook 的使用                                                                  |
+| 项目            | 当前进展 | 内容描述                                                                                         |
+| --------------- | -------- | ------------------------------------------------------------------------------------------------ |
+| reading         | ✅ 已完成 | 每篇文档末尾登记学号，汇总成全班的阅读进度表                                                     |
+| useful          | ✅ 已完成 | PixPin 截图取字、PicGo 图床、Ente Auth 两步验证                                                  |
+| turing-complete | ✅ 已完成 | 图灵完备游戏：从逻辑门搭到 CPU 的闯关游戏，附攻略视频与试玩下载                                  |
+| win11           | ✅ 已完成 | Windows 11 基础操作与浏览器基础，各配一个 B 站合集                                               |
+| claude          | ✅ 已完成 | Claude 桌面版经 Magpie 接 DeepSeek，含终端版 Claude Code 与 VSCode 扩展，需要科学上网         |
+| dsh             | ✅ 已完成 | 官方 DeepSeek Harness 桌面端与官方 dsh 命令行的配置，全程不需要科学上网                          |
+| dev-cpp         | ✅ 已完成 | Dev-C++ 的安装、中文界面与编译运行，不想装 WSL 时的过渡选择                                      |
+| wsl             | ✅ 已完成 | WSL 与 Ubuntu 的安装、GCC/GDB 配置、VSCode 连 WSL，含备份与迁移到 D 盘                           |
+| vscode          | ✅ 已完成 | 新建配置文件（Profile）、Code Runner 编译运行命令的逐段拆解                                      |
+| vscode-debug    | ✅ 已完成 | VSCode 的调试与任务配置：`tasks.json` 与 `launch.json`，单文件与多文件调试、换成 GCC 与 GDB       |
+| linux-cli       | ✅ 已完成 | 转载《只学够用的 Linux》最小入门教程，配作者录的一期视频                                         |
+| git-github      | ✅ 已完成 | GitHub 访问、注册、核心概念与 SSH 连接，四期视频                                                 |
+| markdown        | ✅ 已完成 | 在 VSCode 里把笔记文件夹发布成 GitHub 仓库，笔记的版本记录与云端同步                             |
+| gcc-gdb         | ⬜ 施工中 | GCC 与 GDB 入门                                                                                  |
+| make            | ⬜ 施工中 | Make 构建工具                                                                                    |
+| cmake           | ⬜ 施工中 | CMake 构建工具                                                                                   |
+| vscode-markdown | ⬜ 施工中 | VSCode 的 Markdown 编辑与预览                                                                    |
+| python-env      | ⬜ 施工中 | Python 环境配置：Miniconda                                                                       |
+| python-syntax   | ⬜ 施工中 | Python 语法入门                                                                                  |
+| python-jupyter  | ⬜ 施工中 | Jupyter Notebook 的使用                                                                          |
 
 ## 未来项目
 
