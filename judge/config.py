@@ -39,7 +39,7 @@ TUTORS = ("26113050003", "26113050344")
 # 都不属于「按顺序读下来」的进度。
 READ_PAGES: tuple[tuple[str, str], ...] = (
     ("win11", "Win11 基础教程"),
-    ("claude-deepseek", "Claude 工具链配置"),
+    ("claude-tool", "Claude 工具链配置"),
     ("dsh", "DSH 工具链配置"),
     ("dev-cpp", "Dev-C++ 环境搭建"),
     ("wsl", "WSL 环境搭建"),
