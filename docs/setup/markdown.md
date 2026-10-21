@@ -504,6 +504,8 @@ Set-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\Nls\CodePage' -Name MAC
 重启后用 `python -I -c "import sys; print(sys.stdout.encoding)"` 验证, 输出 utf-8 即生效
 ````
 
+<br><br><br>
+
 ````markdown title="README.md"
 # Mind-City
 
