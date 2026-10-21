@@ -634,7 +634,7 @@ DeepSeek 的联网搜索偶尔会掉线，这时可以让别的服务代它搜�
 
 !!! todo "文档完成登记：完成本文全部流程后告知助教"
 
-    <div class="read" id="read" data-page="claude">
+    <div class="read" id="read" data-page="claude-deepseek">
       <div class="read__bar">
         <input id="read-id" class="read__input" type="text" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="在这里输入你的学号">
         <button id="read-submit" type="button">我已读完</button>
