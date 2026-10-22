@@ -63,20 +63,17 @@ nav:
       - 第七章：结构和链表: homework-book/chapter-7.md
       - 第八章：数据文件处理技术: homework-book/chapter-8.md
       - 第九章：算法设计技术基础: homework-book/chapter-9.md
-  - 题库:
-      - 01-标识符常量与数据类型: question/01-identifiers-types.md
-      - 02-格式化输入输出: question/02-format-io.md
-      - 03-运算符表达式与求值顺序: question/03-operators.md
-      - 04-控制结构: question/04-control-flow.md
-      - 05-数组: question/05-arrays.md
-      - 06-字符串与字符数组: question/06-strings.md
-      - 07-函数递归与存储类别: question/07-functions-recursion.md
-      - 08-预处理与宏: question/08-preprocessor-macros.md
-      - 09-指针: question/09-pointers.md
-      - 10-结构体与链表: question/10-structs-linked-list.md
-      - 11-动态内存管理: question/11-dynamic-memory.md
-      - 12-文件操作: question/12-file-io.md
-      - 13-算法编程题: question/13-algorithms.md
+  - 备考题库:
+      - 题库索引: question/index.md
+      - 备考-第1章 程序设计基础: question/01-basics.md
+      - 备考-第2章 基本数据类型及其运算: question/02-data-and-expressions.md
+      - 备考-第3章 结构化程序设计: question/03-control-flow.md
+      - 备考-第4章 数组: question/04-arrays.md
+      - 备考-第5章 函数: question/05-functions.md
+      - 备考-第6章 指针和引用: question/06-pointers.md
+      - 备考-第7章 结构和链表: question/07-structs-linked-list.md
+      - 备考-第8章 数据文件处理技术: question/08-file-io.md
+      - 备考-第9章 算法设计技术基础: question/09-algorithms.md
   - 数学分析-陈纪修-上册:
       - 教材 PDF: math-analysis/material.md
       - (1) 集合与映射: math-analysis/01-sets.md
