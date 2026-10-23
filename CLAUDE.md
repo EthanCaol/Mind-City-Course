@@ -48,7 +48,7 @@
 │   ├── plan.md        # 站点计划
 │   ├── question/      # C 语言题库：索引 + 按教材章节编号的 9 个文件
 │   ├── setup/         # 实验课文档：环境搭建与工具链，共 9 篇
-│   ├── code/          # 正文用 snippet 引入的示例代码（hello.c、sum.c）
+│   ├── quote/         # 正文用 snippet 引入的示例代码（hello.c、sum.c）
 │   └── assets/
 │       ├── fonts/         # Cascadia Code（代码字体，自托管，只含 latin 子集）
 │       └── stylesheets/   # extra.css、fonts.css

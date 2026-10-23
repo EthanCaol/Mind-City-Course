@@ -17,7 +17,7 @@
 │   ├── plan.md        # 站点计划
 │   ├── question/      # C 语言题库，按讲课顺序编号的 13 个知识点文件
 │   ├── setup/         # 实验课文档：环境搭建与工具链，共 9 篇
-│   ├── code/          # 正文用 snippet 引入的示例代码
+│   ├── quote/         # 正文用 snippet 引入的示例代码
 │   └── assets/        # 字体、样式表、图片
 ├── judge/             # 在线评测后端
 └── README.md
