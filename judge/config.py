@@ -48,6 +48,7 @@ READ_PAGES: tuple[tuple[str, str], ...] = (
     ("linux-cli", "Linux 命令行基础"),
     ("git-github", "Git-GitHub 基础操作"),
     ("markdown", "Markdown 笔记仓库"),
+    ("markdown-repo", "助教的笔记仓库"),
 )
 
 # 教材习题的「自测登记」栏。和上面的 READ_PAGES 同构、共用一张表，只是分成两组：

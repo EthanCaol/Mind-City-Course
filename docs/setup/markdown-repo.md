@@ -141,72 +141,15 @@
 
 扫描版教材没有文字层，章节范围依赖 `pdf-bookmark` 单独做一遍书签目录。做完之后按书签定位章节，不必逐页翻找。
 
-------
 
-### 8.2 SKILL.md 与脚本原文
+---
 
-下面依次是各技能目录下 `SKILL.md` 与随附脚本的内容。
+!!! todo "文档完成登记：完成本文全部流程后告知助教"
 
-下载链接（`CLAUDE.md`+`STYLES.md`+`README.md`+`skills/`）：<https://mind-city.com/downloads/markdown-repo.zip>
-
-````markdown title="textbook-to-notes/SKILL.md"
---8<-- "quote/markdown-repo/skills/textbook-to-notes/SKILL.md"
-````
-
-<br><br><br>
-
-````markdown title="pdf-page-image/SKILL.md"
---8<-- "quote/markdown-repo/skills/pdf-page-image/SKILL.md"
-````
-
-````python title="pdf-page-image/scripts/render.py"
---8<-- "quote/markdown-repo/skills/pdf-page-image/scripts/render.py"
-````
-
-<br><br><br>
-
-````markdown title="pdf-bookmark/SKILL.md"
---8<-- "quote/markdown-repo/skills/pdf-bookmark/SKILL.md"
-````
-
-````python title="pdf-bookmark/scripts/bookmark.py"
---8<-- "quote/markdown-repo/skills/pdf-bookmark/scripts/bookmark.py"
-````
-
-<br><br><br>
-
-````markdown title="pdf-figure-crop/SKILL.md"
---8<-- "quote/markdown-repo/skills/pdf-figure-crop/SKILL.md"
-````
-
-````python title="pdf-figure-crop/scripts/crop.py"
---8<-- "quote/markdown-repo/skills/pdf-figure-crop/scripts/crop.py"
-````
-
-<br><br><br>
-
-````markdown title="coscmd/SKILL.md"
---8<-- "quote/markdown-repo/skills/coscmd/SKILL.md"
-````
-
-<br><br><br>
-
-````markdown title="super-resolution/SKILL.md"
---8<-- "quote/markdown-repo/skills/super-resolution/SKILL.md"
-````
-
-````python title="super-resolution/scripts/sr.py"
---8<-- "quote/markdown-repo/skills/super-resolution/scripts/sr.py"
-````
-
-<br><br><br>
-
-````markdown title="push/SKILL.md"
---8<-- "quote/markdown-repo/skills/push/SKILL.md"
-````
-
-<br><br><br>
-
-````markdown title="debug-skill/SKILL.md"
---8<-- "quote/markdown-repo/skills/debug-skill/SKILL.md"
-````
+    <div class="read" id="read" data-page="markdown-repo">
+      <div class="read__bar">
+        <input id="read-id" class="read__input" type="text" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="在这里输入你的学号">
+        <button id="read-submit" type="button">我已读完</button>
+      </div>
+      <p class="read__note" id="read-note" hidden></p>
+    </div>
