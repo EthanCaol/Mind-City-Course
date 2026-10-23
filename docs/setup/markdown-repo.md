@@ -86,6 +86,8 @@
 
 ![仓库根目录的 CLAUDE.md STYLES.md 与 README.md](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20261023102859507.png)
 
+下载链接（`CLAUDE.md`+`STYLES.md`+`README.md`+`skills/`）：<https://mind-city.com/downloads/markdown-repo.zip>
+
 三个文件分工不同：
 
 - `CLAUDE.md` 是仓库级提示词，写长期约定：仓库结构、技能的放置、文风、标点与断句、文档结构、公式渲染。
@@ -110,9 +112,9 @@
 
 ## 8. 笔记配套的 Skill 工具链
 
-技能目录里与写笔记相关的是下面 8 个，按用途分三组：一条把教材 PDF 变成笔记的链路，两个维护仓库的技能，一个调试技能的工具。
+下载链接（`CLAUDE.md`+`STYLES.md`+`README.md`+`skills/`）：<https://mind-city.com/downloads/markdown-repo.zip>
 
-这 8 个技能的 `SKILL.md` 与随附脚本打包在 <https://mind-city.com/downloads/markdown-repo-skills.zip>，解压得到 `markdown-repo-skills/` 目录，放进 `.claude/skills/` 即可使用。
+技能目录里与写笔记相关的是下面 8 个，按用途分三组：一条把教材 PDF 变成笔记的链路，两个维护仓库的技能，一个调试技能的工具。
 
 | 技能                | 作用                                                                                  |
 | ------------------- | ------------------------------------------------------------------------------------- |
@@ -144,6 +146,8 @@
 ### 8.2 SKILL.md 与脚本原文
 
 下面依次是各技能目录下 `SKILL.md` 与随附脚本的内容。
+
+下载链接（`CLAUDE.md`+`STYLES.md`+`README.md`+`skills/`）：<https://mind-city.com/downloads/markdown-repo.zip>
 
 ````markdown title="textbook-to-notes/SKILL.md"
 --8<-- "quote/markdown-repo/skills/textbook-to-notes/SKILL.md"
