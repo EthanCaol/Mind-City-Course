@@ -473,7 +473,7 @@ notepad.exe hello.c
 把下面的代码粘进记事本，**++ctrl+s++ 保存**，然后关掉它：
 
 ```c title="hello.c"
---8<-- "code/hello.c"
+--8<-- "quote/hello.c"
 ```
 
 !!! warning "要注意中文输入法的标点，不然代码很容易编译不过"

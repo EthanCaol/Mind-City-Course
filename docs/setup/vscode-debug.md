@@ -46,7 +46,7 @@
 ## 助教的 VSCode 完整配置文件
 
 ```json title="settings.json"
---8<-- "code/settings.json"
+--8<-- "quote/settings.json"
 ```
 
 ---
