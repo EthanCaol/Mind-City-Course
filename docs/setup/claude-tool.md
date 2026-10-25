@@ -162,39 +162,6 @@ DeepSeek 目前提供两个模型，**它们的模型名要一字不差地填进
     所以同样的任务，**放在晚上或者周末运行，费用为一半**。批量任务应尽量避开高峰时段。
 
 
-### 2.5 用量较大时改用第三方订阅（可选）
-
-还有一种做法是订阅 OpenCode 的 Go 套餐。OpenCode 也是一个 Agent 编程工具，可以读代码、改代码、执行命令；Go 套餐把一批模型打包成月付额度，其中包含 DeepSeek V4.1 Flash。两条路线能用到的模型差不多，区别在计费方式：官方平台从账户余额里按 token 扣，用多少算多少；Go 套餐每月交一笔固定的钱，额度用完还可以再充值。
-
-订阅之后拿到的是 OpenCode 签发的 Key，不限定用在 OpenCode 自己的客户端里，配置后用于别的工具也可以。
-
-订阅页面：<https://opencode.ai/zh/go>
-
-![OpenCode Go 的定价页](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20261013170809275.png =400x)
-
-订阅在 OpenCode 的控制台完成，付款方式选支付宝。
-
-!!! note "助教 2026-10-12 的实际扣款"
-
-    67.29 元人民币，汇率对应的是 $10：
-
-    ![支付宝里的订阅扣款账单](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20261013170748477.jpg =300x)
-
-用量大的同学，使用第三方订阅会比官方的按量计费划算很多；也可以几个人合用一个账号，分摊下来更低，但是要注意密钥泄露问题。
-
-------
-
-控制台页面：<https://opencode.ai/console>
-订阅完之后还需要获取 API Key。进控制台点右上角的「Settings」，左侧选「Service accounts」，再点列表里账号那一行：
-
-![控制台 Settings 里的 Service accounts](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20261013171508369.png)
-
-------
-
-进去之后找到「API Keys」一节，点击右边的「+ Add API Key」创建：
-
-![Service account 详情页里的 Add API Key 按钮](https://image-1379176255.cos.ap-shanghai.myqcloud.com/20261013171539205.png)
-
 ## 3. 安装 Claude 桌面版
 
 **这一步要排在下载 Magpie 之前**，原因见下面的提示框。
