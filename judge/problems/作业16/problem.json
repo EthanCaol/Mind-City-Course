@@ -1,5 +1,5 @@
 {
-  "title": "作业 16：插入排序",
+  "title": "作业 16：选择排序",
   "compile_flags": ["-O2", "-std=gnu23", "-Wall", "-DONLINE_JUDGE"],
   "run_limits": {
     "time_s": 1,
