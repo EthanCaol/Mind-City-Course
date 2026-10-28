@@ -6,6 +6,8 @@ icon: material/pencil-outline
 
 从键盘读入 n 个整数，用插入排序把它们按从小到大的顺序排列后输出。
 
+讲解视频：[插入排序｜动画演示 + 逐轮拆解](https://www.bilibili.com/video/BV1wznZ6sEzq)
+
 以下为 Python 版本的插入排序示例，算法的可行性与复杂性证明见页面底部。
 
 ```py
@@ -14,7 +16,7 @@ def INSERTION_SORT(A):
     for i in range(1, n):
         key, k = A[i], i - 1
 
-        # 将第i张牌 往前插入到(i-1)有序牌堆中
+        # 将第i张牌 往前插入到 (i-1)的有序牌堆中
         while k >= 0 and A[k] > key:
             A[k + 1] = A[k]
             k = k - 1
@@ -93,7 +95,7 @@ def INSERTION_SORT(A):
   <div id="judge-cases" hidden></div>
 </div>
 
-## 算法可行性与复杂性证明
+## 插入排序的可行性与复杂性证明
 
 ```py
 def INSERTION_SORT(A):
@@ -101,12 +103,46 @@ def INSERTION_SORT(A):
     for i in range(1, n):
         key, k = A[i], i - 1
 
-        # 将第i张牌 往前插入到(i-1)有序牌堆中
+        # 将第i张牌 往前插入到 (i-1)的有序牌堆中
         while k >= 0 and A[k] > key:
             A[k + 1] = A[k]
             k = k - 1
         A[k + 1] = key
 ```
+
+### 可行性证明
+
+循环不变量：在每次循环开始时，子数组$\{0,\cdots,i-1\}$是有序的
+1. 起始：第0张牌是自有序的
+2. 递推：已知第$\{0,\cdots,i-1\}$牌有序，由算法过程可知，插入第j张牌后仍保持有序
+3. 结束：当j=n时，满足第$\{0,\cdots,n-1\}$牌有序，即整个牌堆有序
+
+### 最好情况复杂度
+
+最好情况：如果输入数组已有序
+那么对于第i张牌，while循环只需比较1次
+因此时间复杂度 $\sum_1^{n-1} 1=\Theta(n)$
+
+### 最坏情况复杂度
+
+最坏情况：如果输入数组已反向排序
+那么对于第i张牌，while循环需要比较i次
+因此时间复杂度 $\sum_1^{n-1} i=\frac{n(n-1)}{2}=\Theta(n^2)$
+
+### 平均复杂度
+
+随机变量 $X_i=\{第i张牌需要比较的次数\}$
+是前i张牌中最大的概率为1/i，第2大的概率1/i，$\cdots$第i大的概率 $1/i$
+
+$E[X_i]=1\cdot1/i+2\cdot1/i+\cdots+i\cdot1/i=\sum_{k=1}^ik\cdot1/i=\frac{(1+i)i}{2}\cdot\frac{1}{i}=\frac{1+i}{2}$
+$E[X]=\sum_2^nE[X_i]=\sum_2^n\frac{1+i}{2}=\frac{3+\cdots+(1+n)}{2}=\frac{(4+n)(n-1)}{2\cdot2}=\Theta(n^2)$
+
+### 插入排序是稳定排序
+
+插入排序稳定：while循环的条件为$A[k] > key$，相等时不后移
+相等的两个元素不会跨过对方，相对次序保持不变
+例如 $[2_a,2_b,1]$ 插入$2_b$时不移动，插入1后得到 $[1,2_a,2_b]$
+
 
 
 !!! note "判题环境"
