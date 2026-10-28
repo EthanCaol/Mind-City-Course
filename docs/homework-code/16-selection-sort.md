@@ -6,6 +6,24 @@ icon: material/pencil-outline
 
 从键盘读入 n 个整数，用选择排序把它们按从小到大的顺序排列后输出。
 
+以下为 Python 版本的选择排序示例，算法的可行性与复杂性证明见页面底部。
+
+```py
+def SELECTION_SORT(A):
+    n = len(A)
+    for i in range(n - 1):
+        minI = i
+
+        # 在未排序部分中找最小值
+        for j in range(i + 1, n):
+            if A[j] < A[minI]:
+                minI = j
+
+        # 把最小值交换到未排序部分的首位
+        if minI != i:
+            A[i], A[minI] = A[minI], A[i]
+```
+
 ### 示例 1
 
 输入：
@@ -41,10 +59,6 @@ icon: material/pencil-outline
 - 第一行一个整数 n，范围是 1 到 1000
 - 第二行 n 个整数，用空格分隔
 - 输出一行 n 个整数，从小到大排列，用空格分隔，行末换行
-- 选择排序一共做 n-1 趟。第 i 趟从第 i 个元素起，在没排好的那一段里找最小的元素
-- 找到最小元素的下标后，把它和第 i 个元素交换，这一趟就定下了第 i 小的数
-- 找最小值要单独用一个变量记下标，先假定起点就是最小的，再逐个往后比较
-- 如果最小元素本来就在第 i 个位置，交换两个相同的下标也不影响结果
 - 判题只看输出的序列，用别的方法排出同样的结果也算通过
 - 除结果外不用输出其他内容
 
@@ -81,6 +95,24 @@ icon: material/pencil-outline
 
   <div id="judge-cases" hidden></div>
 </div>
+
+## 算法可行性与复杂性证明
+
+```py
+def SELECTION_SORT(A):
+    n = len(A)
+    for i in range(n - 1):
+        minI = i
+
+        # 在未排序部分中找最小值
+        for j in range(i + 1, n):
+            if A[j] < A[minI]:
+                minI = j
+
+        # 把最小值交换到未排序部分的首位
+        if minI != i:
+            A[i], A[minI] = A[minI], A[i]
+```
 
 
 !!! note "判题环境"

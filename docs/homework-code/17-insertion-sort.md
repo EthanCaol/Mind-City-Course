@@ -6,6 +6,21 @@ icon: material/pencil-outline
 
 从键盘读入 n 个整数，用插入排序把它们按从小到大的顺序排列后输出。
 
+以下为 Python 版本的插入排序示例，算法的可行性与复杂性证明见页面底部。
+
+```py
+def INSERTION_SORT(A):
+    n = len(A)
+    for i in range(1, n):
+        key, k = A[i], i - 1
+
+        # 将第i张牌 往前插入到(i-1)有序牌堆中
+        while k >= 0 and A[k] > key:
+            A[k + 1] = A[k]
+            k = k - 1
+        A[k + 1] = key
+```
+
 ### 示例 1
 
 输入：
@@ -41,9 +56,6 @@ icon: material/pencil-outline
 - 第一行一个整数 n，范围是 1 到 1000
 - 第二行 n 个整数，用空格分隔
 - 输出一行 n 个整数，从小到大排列，用空格分隔，行末换行
-- 从第 2 个元素开始，逐个把当前元素插到前面已经排好的那一段里的正确位置
-- 插入时先把当前元素存进一个临时变量，再把比它大的元素从后往前依次挪一格，最后写回空出来的位置
-- 挪动的循环有两个停下条件：下标减到 0 以下，或者遇到的元素不比它大
 - 判题只看输出的序列，用别的方法排出同样的结果也算通过
 - 除结果外不用输出其他内容
 
@@ -80,6 +92,21 @@ icon: material/pencil-outline
 
   <div id="judge-cases" hidden></div>
 </div>
+
+## 算法可行性与复杂性证明
+
+```py
+def INSERTION_SORT(A):
+    n = len(A)
+    for i in range(1, n):
+        key, k = A[i], i - 1
+
+        # 将第i张牌 往前插入到(i-1)有序牌堆中
+        while k >= 0 and A[k] > key:
+            A[k + 1] = A[k]
+            k = k - 1
+        A[k + 1] = key
+```
 
 
 !!! note "判题环境"

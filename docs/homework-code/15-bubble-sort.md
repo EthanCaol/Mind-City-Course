@@ -4,7 +4,26 @@ icon: material/pencil-outline
 
 # 作业 15：冒泡排序
 
-从键盘读入 n 个整数，按从小到大的顺序输出。
+从键盘读入 n 个整数，用冒泡排序把它们按从小到大的顺序排列后输出。
+
+以下为 Python 版本的冒泡排序示例，算法的可行性与复杂性证明见页面底部。
+
+```py
+def BUBBLE_SORT(A):
+    n = len(A)
+    for i in range(n - 1):
+        swapped = False
+
+        # 每轮把未排序部分的最大值冒泡到末尾
+        for j in range(n - 1 - i):
+            if A[j] > A[j + 1]:
+                A[j], A[j + 1] = A[j + 1], A[j]
+                swapped = True
+
+        # 本轮没有发生交换, 说明已经有序
+        if not swapped:
+            break
+```
 
 ### 示例 1
 
@@ -41,8 +60,6 @@ icon: material/pencil-outline
 - 第一行一个整数 n，范围是 1 到 1000
 - 第二行 n 个整数，用空格分隔
 - 输出一行 n 个整数，从小到大排列，用空格分隔，行末换行
-- 冒泡排序一共做 n-1 趟，第 i 趟比较 n-1-i 次，每趟把这一段里最大的数送到末尾
-- 相邻两个元素前大后小就交换，交换要借一个临时变量
 - 判题只看输出的序列，用别的方法排出同样的结果也算通过
 - 除结果外不用输出其他内容
 
@@ -79,6 +96,25 @@ icon: material/pencil-outline
 
   <div id="judge-cases" hidden></div>
 </div>
+
+## 算法可行性与复杂性证明
+
+```py
+def BUBBLE_SORT(A):
+    n = len(A)
+    for i in range(n - 1):
+        swapped = False
+
+        # 每轮把未排序部分的最大值冒泡到末尾
+        for j in range(n - 1 - i):
+            if A[j] > A[j + 1]:
+                A[j], A[j + 1] = A[j + 1], A[j]
+                swapped = True
+
+        # 本轮没有发生交换, 说明已经有序
+        if not swapped:
+            break
+```
 
 
 !!! note "判题环境"
