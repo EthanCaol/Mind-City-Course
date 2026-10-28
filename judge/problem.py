@@ -17,6 +17,7 @@ from __future__ import annotations
 import dataclasses
 import json
 import logging
+import re
 from pathlib import Path
 
 from . import config
@@ -140,11 +141,16 @@ def load_problem(slug: str) -> Problem:
     )
 
 
+def _name_key(name: str) -> list:
+    """目录名里的数字按数值比，否则「作业10」会排在「作业2」前面。"""
+    return [int(part) if part.isdigit() else part for part in re.split(r"(\d+)", name)]
+
+
 def list_problems() -> list[ProblemSummary]:
     out: list[ProblemSummary] = []
     if not config.PROBLEMS_DIR.is_dir():
         return out
-    for entry in sorted(config.PROBLEMS_DIR.iterdir()):
+    for entry in sorted(config.PROBLEMS_DIR.iterdir(), key=lambda e: _name_key(e.name)):
         if not (entry / "problem.json").is_file():
             continue
         try:

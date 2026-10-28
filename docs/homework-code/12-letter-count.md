@@ -1,0 +1,92 @@
+---
+icon: material/pencil-outline
+---
+
+# 作业 12：字母计数
+
+从键盘读入一行小写英文字母，统计每个字母出现的次数，按字母顺序输出出现过的字母和它们的次数。
+
+### 示例 1
+
+输入：
+
+```text
+banana
+```
+
+输出：
+
+```text
+a 3
+b 1
+n 2
+```
+
+### 示例 2
+
+输入：
+
+```text
+aaaa
+```
+
+输出：
+
+```text
+a 4
+```
+
+### 提示
+
+- 输入一行，只含小写英文字母，长度是 1 到 1000
+- 开一个 26 个元素的整型数组，下标 0 到 25 依次对应 a 到 z，定义时全部置 0
+- `c - 'a'` 把字母 c 换算成它在数组里的下标
+- 输入用 `getchar` 逐个取字符，读到换行就结束；`scanf("%s")` 只能读到第一个空白之前
+- 读完一行后，按 a 到 z 的顺序遍历这个数组，计数不为 0 的才输出
+- 每行一个字母、一个空格、这个字母的次数，行末换行
+- 除结果外不用输出其他内容
+
+
+## 提交和评测
+
+!!! note "先自测，再提交"
+    - 使用 IDE 写好代码，先在本机运行一遍样例
+    - 所有样例通过后，再把代码粘贴到这里进行提交
+    - 助教服务器的性能有限，建议先自测再提交
+    - 2 分钟最多交 5 次，如果提交太频繁会被拒绝，稍后再提交即可
+
+<div class="judge" id="judge" data-homework="作业12">
+  <div class="judge__bar">
+    <label class="judge__label" for="judge-id">你的学号：</label>
+    <input id="judge-id" class="judge__id" type="text" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="11位学号">
+    <button id="judge-submit" type="button">提交</button>
+  </div>
+
+  <div class="judge__editor">
+    <pre class="judge__gutter" id="judge-gutter" aria-hidden="true"></pre>
+    <pre class="judge__highlight" id="judge-highlight" aria-hidden="true"></pre>
+    <textarea id="judge-code" class="judge__code" spellcheck="false" placeholder="// 在这里粘贴你的代码"></textarea>
+  </div>
+
+  <p class="judge__progress" id="judge-progress" hidden></p>
+  <p class="judge__error" id="judge-error" hidden></p>
+  <p class="judge-summary" id="judge-summary" hidden></p>
+
+  <div class="judge__compile" id="judge-compile-error" hidden>
+    <p>编译未通过，报错信息如下：</p>
+    <pre></pre>
+  </div>
+
+  <div id="judge-cases" hidden></div>
+</div>
+
+
+!!! note "判题环境"
+
+    判题用的是服务器的 `isolate` 沙箱：
+
+    - 操作系统：Ubuntu-26.04
+    - 编译器：GCC 15.2.0
+    - 编译参数：`-O2 -std=gnu23`
+    - 每个测试点限时 1 秒
+    - 每个测试点限制内存 256 MB

@@ -39,6 +39,13 @@ nav:
       - 作业7：多个数的平均分: homework-code/07-n-avg.md
       - 作业8：多个的四则运算: homework-code/08-n-arith.md
       - 作业9：很多个数的平均分: homework-code/09-avg-filter.md
+      - 作业10：逆序输出: homework-code/10-reverse.md
+      - 作业11：回文判断: homework-code/11-palindrome.md
+      - 作业12：字母计数: homework-code/12-letter-count.md
+      - 作业13：矩阵转置: homework-code/13-transpose.md
+      - 作业14：矩阵乘法: homework-code/14-matmul.md
+      - 作业15：冒泡排序: homework-code/15-bubble-sort.md
+      - 作业16：插入排序: homework-code/16-insertion-sort.md
   - 实验课文档:
       - 文档阅读进度: setup/reading.md
       - 实用工具推荐: setup/useful.md
