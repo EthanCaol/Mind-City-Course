@@ -185,3 +185,7 @@ $$
     - 编译参数：`-O2 -std=gnu23`
     - 每个测试点限时 1 秒
     - 每个测试点限制内存 256 MB
+
+<script src="/assets/katex/katex.min.js"></script>
+<script src="/assets/katex/auto-render.min.js"></script>
+<script>renderMathInElement(document.querySelector('.md-content'));</script>
