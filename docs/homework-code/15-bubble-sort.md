@@ -99,6 +99,16 @@ def BUBBLE_SORT(A):
   <div id="judge-cases" hidden></div>
 </div>
 
+!!! note "判题环境"
+
+    判题用的是服务器的 `isolate` 沙箱：
+
+    - 操作系统：Ubuntu-26.04
+    - 编译器：GCC 15.2.0
+    - 编译参数：`-O2 -std=gnu23`
+    - 每个测试点限时 1 秒
+    - 每个测试点限制内存 256 MB
+
 ## 冒泡排序-可行性与复杂性证明
 
 ```py
@@ -171,18 +181,6 @@ E[X] &= E[\ \sum_{i=0}^{n-2}\sum_{j=i+1}^{n-1} X_{ij}\ ] \\
 
 冒泡排序稳定：相邻比较用严格大于，相等时不交换
 相等的两个元素不会跨过对方，相对次序保持不变
-
-
-
-!!! note "判题环境"
-
-    判题用的是服务器的 `isolate` 沙箱：
-
-    - 操作系统：Ubuntu-26.04
-    - 编译器：GCC 15.2.0
-    - 编译参数：`-O2 -std=gnu23`
-    - 每个测试点限时 1 秒
-    - 每个测试点限制内存 256 MB
 
 <script src="/assets/katex/katex.min.js"></script>
 <script src="/assets/katex/auto-render.min.js"></script>

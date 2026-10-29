@@ -241,6 +241,37 @@ gh api repos/EthanCaol/Mind-City-Course/hooks \
 
 脚本是幂等的，重复执行安全。它自行处理 `flock` 锁，并发调用时后到的会直接跳过。
 
+### 缓存头
+
+Caddy 的 `file_server` 默认不发 `Cache-Control`，浏览器于是按启发式规则自己算一个新鲜期（Chrome 取文档年龄的 10%），这段时间里改了页面，已经打开过的访客看不到。
+
+静态块里的规则（`/etc/caddy/Caddyfile`）：
+
+| 路径 | `Cache-Control` |
+|---|---|
+| 页面正文 | `no-cache` |
+| `/assets/external/*` | `public, max-age=86400` |
+| `/assets/fonts/*` | `public, max-age=604800` |
+| `/assets/stylesheets/*`、`/assets/javascripts/*` | `no-cache` |
+
+`no-cache` 不是不缓存，而是每次都用 ETag 校验：没改动返回 `304`，只多一个往返，不重传正文。
+
+**页面正文那条必须写成互补匹配器**：
+
+```caddy
+@page not path /assets/*
+header @page Cache-Control "no-cache"
+```
+
+不带匹配器的 `header Cache-Control "no-cache"` 会覆盖前面所有 `/*` 的长缓存规则，实测两种书写顺序结果都一样（`/assets/` 下的请求也变成 `no-cache`）。只有 `not path /assets/*` 能和那些规则并存，各管各的。改完执行：
+
+```bash
+sudo caddy validate --config /etc/caddy/Caddyfile
+sudo systemctl reload caddy
+```
+
+已经缓存在访客浏览器里的旧副本不受影响，要等他本地新鲜期到点或手动强刷。
+
 ### 下载文件（安装包与电子书）
 
 安装包和电子书不走仓库，放在 `/var/www/mind-city/downloads/`，由现有 `root + file_server` 直接服务，地址 `https://mind-city.com/downloads/<文件名>`，**不需要单独的 Caddy handle 块**。

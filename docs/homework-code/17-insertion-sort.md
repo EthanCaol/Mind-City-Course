@@ -95,6 +95,16 @@ def INSERTION_SORT(A):
   <div id="judge-cases" hidden></div>
 </div>
 
+!!! note "判题环境"
+
+    判题用的是服务器的 `isolate` 沙箱：
+
+    - 操作系统：Ubuntu-26.04
+    - 编译器：GCC 15.2.0
+    - 编译参数：`-O2 -std=gnu23`
+    - 每个测试点限时 1 秒
+    - 每个测试点限制内存 256 MB
+
 ## 插入排序-可行性与复杂性证明
 
 更详细的证明讲解，见《算法导论（原书第3版）》的第2.1节部分
@@ -170,18 +180,6 @@ E[X] &= \sum_{i=2}^{n} E[X_i] \\
 
 插入排序稳定：while循环的条件为$A[k] > key$，相等时就不再移动
 相等的两个元素不会跨过对方，相对次序保持不变
-
-
-
-!!! note "判题环境"
-
-    判题用的是服务器的 `isolate` 沙箱：
-
-    - 操作系统：Ubuntu-26.04
-    - 编译器：GCC 15.2.0
-    - 编译参数：`-O2 -std=gnu23`
-    - 每个测试点限时 1 秒
-    - 每个测试点限制内存 256 MB
 
 <script src="/assets/katex/katex.min.js"></script>
 <script src="/assets/katex/auto-render.min.js"></script>

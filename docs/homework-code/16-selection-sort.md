@@ -98,6 +98,16 @@ def SELECTION_SORT(A):
   <div id="judge-cases" hidden></div>
 </div>
 
+!!! note "判题环境"
+
+    判题用的是服务器的 `isolate` 沙箱：
+
+    - 操作系统：Ubuntu-26.04
+    - 编译器：GCC 15.2.0
+    - 编译参数：`-O2 -std=gnu23`
+    - 每个测试点限时 1 秒
+    - 每个测试点限制内存 256 MB
+
 ## 选择排序-可行性与复杂性证明
 
 ```py
@@ -174,18 +184,6 @@ $$
 
 选择排序不稳定：交换会把后面的相等元素跨到前面
 例如：$[2_a,2_b,1]$ 在第一轮交换首尾，得到 $[1,2_b,2_a]$，两个$2$的次序颠倒
-
-
-
-!!! note "判题环境"
-
-    判题用的是服务器的 `isolate` 沙箱：
-
-    - 操作系统：Ubuntu-26.04
-    - 编译器：GCC 15.2.0
-    - 编译参数：`-O2 -std=gnu23`
-    - 每个测试点限时 1 秒
-    - 每个测试点限制内存 256 MB
 
 <script src="/assets/katex/katex.min.js"></script>
 <script src="/assets/katex/auto-render.min.js"></script>
