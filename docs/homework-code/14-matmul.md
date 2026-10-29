@@ -11,48 +11,40 @@ icon: material/pencil-outline
 输入：
 
 ```text
-2 3 2
-1 2 3
-4 5 6
-7 8
-9 10
-11 12
+2 4 2
+14 27 6 35
+9 21 12 8
+12 8
+5 31
+24 17
+3 19
 ```
 
 输出：
 
 ```text
-58 64
-139 154
+552 1716
+525 1079
 ```
 
-### 示例 2
+解析：
 
-输入：
+$$
+\begin{bmatrix}14&27&6&35\\9&21&12&8\end{bmatrix}_{2\times 4}
+\times
+\begin{bmatrix}12&8\\5&31\\24&17\\3&19\end{bmatrix}_{4\times 2}
+=\begin{bmatrix}552&1716\\525&1079\end{bmatrix}_{2\times 2}
+$$
 
-```text
-1 1 1
-3
-4
-```
 
-输出：
-
-```text
-12
-```
-
-解析：A 是 1 行 1 列，B 是 1 行 1 列，结果就是 3×4。
 
 ### 提示
 
 - 第一行三个整数 m、n、p，范围都是 1 到 100
-- 接着 m 行是矩阵 A，每行 n 个整数
-- 再接着 n 行是矩阵 B，每行 p 个整数
-- 结果矩阵 C 有 m 行 p 列，C 的第 i 行第 j 列等于 A 的第 i 行与 B 的第 j 列对应元素相乘再相加
-- 求 C 的一个元素要用一个从 0 开始的累加变量；走完 A 的 n 个元素（也就是 B 的这一列的 n 个元素）才有结果
-- 三个矩阵都可以直接开 `[100][100]`，实际只用前 m 行、n 行、p 列
-- 元素绝对值不超过 100，n 不超过 100，结果落在 `int` 能表示的范围内
+- 接着 m 行是矩阵 $A_{m\times p}$
+- 再接着 n 行是矩阵 $B_{n\times p}$
+- 三个矩阵都可以直接开 `[100][100]`
+- 元素绝对值不超过 100，结果落在 `int` 能表示的范围内
 - 输出 m 行，每行 p 个整数，用空格分隔，行末换行
 - 除结果外不用输出其他内容
 
@@ -100,3 +92,7 @@ icon: material/pencil-outline
     - 编译参数：`-O2 -std=gnu23`
     - 每个测试点限时 1 秒
     - 每个测试点限制内存 256 MB
+
+<script src="/assets/katex/katex.min.js"></script>
+<script src="/assets/katex/auto-render.min.js"></script>
+<script>renderMathInElement(document.querySelector('.md-content'));</script>
