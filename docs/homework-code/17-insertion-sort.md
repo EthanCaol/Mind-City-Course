@@ -16,10 +16,12 @@ def INSERTION_SORT(A):
     for i in range(1, n):
         key, k = A[i], i - 1
 
-        # 将第i张牌 往前插入到 (i-1)的有序牌堆中
+        # 比第i张牌更大的 都往后移一位
         while k >= 0 and A[k] > key:
             A[k + 1] = A[k]
             k = k - 1
+
+        # 把第i张牌插入到 移出来的空位上
         A[k + 1] = key
 ```
 
@@ -115,10 +117,12 @@ def INSERTION_SORT(A):
     for i in range(1, n):
         key, k = A[i], i - 1
 
-        # 将第i张牌 往前插入到 (i-1)的有序牌堆中
+        # 比第i张牌更大的 都往后移一位
         while k >= 0 and A[k] > key:
             A[k + 1] = A[k]
             k = k - 1
+
+        # 把第i张牌插入到 移出来的空位上
         A[k + 1] = key
 ```
 
