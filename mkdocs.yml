@@ -62,6 +62,7 @@ nav:
       - (6) Git-GitHub 基础操作: setup/git-github.md
       - (7) Markdown 笔记仓库: setup/markdown.md
       - (8) 助教的笔记仓库(参考): setup/markdown-repo.md
+      - Python 环境配置 (可选): setup/python-env.md
   - 教材习题:
       - 习题自测进度: homework-book/reading.md
       - 第二章：基本数据类型: homework-book/chapter-2.md

@@ -21,7 +21,7 @@ icon: material/clipboard-list
 | linux-cli       | ✅ 已完成 | 转载《只学够用的 Linux》最小入门教程，配作者录的一期视频                                    |
 | git-github      | ✅ 已完成 | GitHub 访问、注册、核心概念与 SSH 连接，四期视频                                            |
 | markdown        | ✅ 已完成 | 在 VSCode 里把笔记文件夹发布成 GitHub 仓库，笔记的版本记录与云端同步                        |
-| python-env      | ⬜ 施工中 | Python 环境配置：Miniconda                                                                  |
+| python-env      | ⬜ 施工中 | Python 环境配置：miniconda 和 uv                                                            |
 | python-syntax   | ⬜ 施工中 | Python 语法入门                                                                             |
 | python-jupyter  | ⬜ 施工中 | Jupyter Notebook 的使用                                                                     |
 
