@@ -10,88 +10,124 @@ icon: material/format-list-checks
 
 ### 第1题
 
-结构化程序设计所规定的三种基本结构是 (C)
+结构化程序设计所规定的三种基本结构是
 
 - A. 主程序、子程序、函数
 - B. 树形、网形、环形
 - C. 顺序、选择、循环
 - D. 输入、处理、输出
 
+??? note "答案"
+
+    C
+
 ### 第2题
 
-下列关于 C 语言的叙述错误的是 (A)
+下列关于 C 语言的叙述错误的是
 
 - A. 对大小写不敏感
 - B. 不同类型的变量可以在一个表达式中
 - C. main 函数可以写在程序文件的任何位置
 - D. 同一个运算符号在不同的场合可以有不同的含义
 
+??? note "答案"
+
+    A
+
 ### 第3题
 
-以下合法的实型常数是 (C)
+以下合法的实型常数是
 
 - A. .E4
 - B. 2.5E
 - C. 3.
 - D. E7
 
+??? note "答案"
+
+    C
+
 ### 第4题
 
-表示关系 x>y≥z，则正确的 C 语言表达式为 (C)
+表示关系 x>y≥z，则正确的 C 语言表达式为
 
 - A. x>y>=z
 - B. (x>y)&(y>=z)
 - C. (y<x)&&(y>=z)
 - D. (x>y)and(y>=z)
 
+??? note "答案"
+
+    C
+
 ### 第5题
 
-有语句 `scanf("%d,%d", &a, &b)`，要使变量 a、b 分别得 23、45，则正确的输入形式为 (B)
+有语句 `scanf("%d,%d", &a, &b)`，要使变量 a、b 分别得 23、45，则正确的输入形式为
 
 - A. 23 45
 - B. 23,45
 - C. 23;45
 - D. 2345
 
+??? note "答案"
+
+    B
+
 ### 第6题
 
-已知 `int i=10;` 表达式 `20-0<=i<=9` 的值是 (B)
+已知 `int i=10;` 表达式 `20-0<=i<=9` 的值是
 
 - A. 0
 - B. 1
 - C. 19
 - D. 20
 
+??? note "答案"
+
+    B
+
 ### 第7题
 
-已知 `int a=15`，执行语句 `a=a<<2` 以后，变量 a 的值是 (C)
+已知 `int a=15`，执行语句 `a=a<<2` 以后，变量 a 的值是
 
 - A. 20
 - B. 40
 - C. 60
 - D. 80
 
+??? note "答案"
+
+    C
+
 ### 第8题
 
-对二维数组的正确说明是 (C)
+对二维数组的正确说明是
 
 - A. `int a[][]={1,2,3,4,5,6}`
 - B. `int a[2][]={1,2,3,4,5,6}`
 - C. `int a[][3]={1,2,3,4,5,6}`
 - D. `int a[2,3]={1,2,3,4,5,6}`
 
+??? note "答案"
+
+    C
+
 ### 第9题
 
-若以下选项中的变量已正确定义，则正确的赋值语句是 (C)
+若以下选项中的变量已正确定义，则正确的赋值语句是
 
 - A. `x1=26.8%3`
 - B. `1+2=x2`
 - C. `x3=0x12`
 - D. `x4=1+2=3`
 
+??? note "答案"
+
+    C
+
 ### 第10题
 
-设有以下定义：
+(多选)设有以下定义：
 
 ```c
 #define d 2
@@ -100,25 +136,33 @@ double b = 1.25;
 char c = 'A';
 ```
 
-则下面语句中错误的是 (B，D)
+则下面语句中错误的是
 
 - A. `a++;`
 - B. `b++`
 - C. `c++;`
 - D. `d++;`
 
+??? note "答案"
+
+    B，D
+
 ### 第11题
 
-表达式 `5 % 3 + 5 / 3` 的值为 (A)
+表达式 `5 % 3 + 5 / 3` 的值为
 
 - A. 3
 - B. 4
 - C. .666667
 - D. 4.666667
 
+??? note "答案"
+
+    A
+
 ### 第12题
 
-下面 C 程序的输出是 (C)
+下面 C 程序的输出是
 
 ```c
 int main()
@@ -136,6 +180,10 @@ int main()
 - C. 6
 - D. 7
 
+??? note "答案"
+
+    C
+
 ### 第13题
 
 有以下程序：
@@ -149,21 +197,29 @@ int main()
 }
 ```
 
-若运行时从键盘上输入 `6,5,65,66<回车>`，则输出结果是 (A)
+若运行时从键盘上输入 `6,5,65,66<回车>`，则输出结果是
 
 - A. 6,5,A,B
 - B. 6,5,65,66
 - C. 6,5,6,5
 - D. 6,5,6,6
 
+??? note "答案"
+
+    A
+
 ### 第14题
 
-若变量已正确定义，要求程序段完成求 5! 的计算，不能完成此操作的程序段是 (B)
+若变量已正确定义，要求程序段完成求 5! 的计算，不能完成此操作的程序段是
 
 - A. `for(i=1,p=1;i<=5;i++) p*=i;`
 - B. `for(i=1;i<=5;i++){ p=1; p*=i;}`
 - C. `i=1;p=1;while(i<=5){p*=i; i++;}`
 - D. `i=1;p=1;do{p*=i; i++; }while(i<=5);`
+
+??? note "答案"
+
+    B
 
 ### 第15题
 
@@ -185,43 +241,59 @@ int main()
 }
 ```
 
-程序运行后的输出结果是 (D)
+程序运行后的输出结果是
 
 - A. 10
 - B. 13
 - C. 21
 - D. 程序进入死循环
 
+??? note "答案"
+
+    D
+
 ### 第16题
 
-C 语言中的变量名只能由字母、数字和下划线三种字符组成，且第一个字符 (C)
+C 语言中的变量名只能由字母、数字和下划线三种字符组成，且第一个字符
 
 - A. 必须为字母
 - B. 必须为下划线
 - C. 必须为字母或下划线
 - D. 可以是字母、数字或下划线中的任意一种
 
+??? note "答案"
+
+    C
+
 ### 第17题
 
-以下选项中可作为 C 语言合法常量的是 (D)
+以下选项中可作为 C 语言合法常量的是
 
 - A. 1.0u
 - B. 087
 - C. -8e1.0
 - D. 0X15L
 
+??? note "答案"
+
+    D
+
 ### 第18题
 
-设有整型变量 a 的值为 2，则执行下列语句后，浮点型变量 b 的值不为 0.5 的是 (B)
+设有整型变量 a 的值为 2，则执行下列语句后，浮点型变量 b 的值不为 0.5 的是
 
 - A. `b=1.0/a;`
 - B. `b=(float)(1/a);`
 - C. `b=1/(float)a;`
 - D. `b=1/(a*1.0)`
 
+??? note "答案"
+
+    B
+
 ### 第19题
 
-执行如下循环时，说法正确的是 (B)
+执行如下循环时，说法正确的是
 
 ```c
 int x = -1;
@@ -235,36 +307,60 @@ do {
 - C. 循环体不执行
 - D. 系统将提示有语法错误
 
+??? note "答案"
+
+    B
+
 ### 第20题
 
-以下能正确定义数组的选项是 (C)
+以下能正确定义数组的选项是
 
 - A. `char str[5] = {a, b, c, d, e};`
 - B. `char str[5] = "abcde";`
 - C. `char str[5] = {'a', 'b', 'c', 'd', 'e'};`
 - D. 以上都不可以
 
+??? note "答案"
+
+    C
+
 ## 二、填空题
 
 ### 第1题
 
-设有定义 `int a=-1, b=0, c=3;`，则表达式 `++a || b++ && ++c` 运算后 c 的值为 (3)
+设有定义 `int a=-1, b=0, c=3;`，则表达式 `++a || b++ && ++c` 运算后 c 的值为
+
+??? note "答案"
+
+    3
 
 ### 第2题
 
-写出描述“x 和 y 中有且仅有一个大于 z”的 C 表达式 (x>z!=y>z)
+写出描述“x 和 y 中有且仅有一个大于 z”的 C 表达式
+
+??? note "答案"
+
+    x>z!=y>z
 
 ### 第3题
 
-设有定义 `int x=8, y=4, z=1;`，执行语句 `z+=x>y>z;` 之后变量 z 的值为 (1)
+设有定义 `int x=8, y=4, z=1;`，执行语句 `z+=x>y>z;` 之后变量 z 的值为
+
+??? note "答案"
+
+    1
 
 ### 第4题
 
-设有定义 `char a[] = { '1', '2', '\n', '\0', '5', '6','\0' }; int s=0;`，执行语句 `s=strlen(a);` 之后变量 s 的值为 (3)
+设有定义 `char a[] = { '1', '2', '\n', '\0', '5', '6','\0' }; int s=0;`，执行语句 `s=strlen(a);` 之后变量 s 的值为
+
+??? note "答案"
+
+    3
 
 ### 第5题
 
-以下程序运行所产生的输出是 (3, 6, 6)
+以下程序运行所产生的输出是
 
 ```c
 #include <stdio.h>
@@ -282,6 +378,10 @@ int main()
     return 0;
 }
 ```
+
+??? note "答案"
+
+    3, 6, 6
 
 ## 三、问答题
 
@@ -304,13 +404,15 @@ int main( )
 }
 ```
 
-程序运行时，从键盘输入 `01<回车>`，程序执行后的输出结果是：
+程序运行时，从键盘输入 `01<回车>`，程序执行后的输出结果是
 
-```text
-another
-number
-number
-```
+??? note "答案"
+
+    ```text
+    another
+    number
+    number
+    ```
 
 ### 第2题
 
@@ -326,7 +428,9 @@ int main( )
 }
 ```
 
-材料上：小于等于 10 的偶数之和。
+??? note "答案"
+
+    小于等于 10 的偶数之和
 
 ### 第3题
 
@@ -346,11 +450,13 @@ int main()
 }
 ```
 
-材料上：交换两个整数。
+??? note "答案"
+
+    交换两个整数
 
 ### 第4题
 
-以下程序段的输出结果是：
+以下程序段的输出结果是
 
 ```c
 int a = 10, b = 50, c = 30;
@@ -361,11 +467,13 @@ c = a;
 printf("a=%d b=%d c=%d\n", a, b, c);
 ```
 
-材料上：a=10 b=30 c=10。
+??? note "答案"
+
+    a=10 b=30 c=10
 
 ### 第5题
 
-以下程序运行所产生的输出是什么？
+以下程序运行所产生的输出是
 
 ```c
 #include <stdio.h>
@@ -387,29 +495,31 @@ int main()
 }
 ```
 
-材料上：
+??? note "答案"
 
-```text
-Enter: 4
-Enter: 3
-Enter: 2
-Enter: 1
-Exit: 1
-Exit: 2
-Exit: 3
-Exit: 4
-fac(4)=24
-```
+    ```text
+    Enter: 4
+    Enter: 3
+    Enter: 2
+    Enter: 1
+    Exit: 1
+    Exit: 2
+    Exit: 3
+    Exit: 4
+    fac(4)=24
+    ```
 
 ### 第6题
 
-若 c 已经正确定义，`while(( c = getchar()) != '\n');` 语句的功能是什么？
+若 c 已经正确定义，`while(( c = getchar()) != '\n');` 语句的功能是
 
-材料上：从键盘输入字符，直到输入为回车时停止。
+??? note "答案"
+
+    从键盘输入字符，直到输入为回车时停止
 
 ### 第7题
 
-输入 `3<回车>` 后，下列程序的输出结果是 6 1 2# 7 4 5# 8 3 0#。
+输入 `3<回车>` 后，下列程序的输出结果是
 
 ```c
 #include <stdio.h>
@@ -435,13 +545,15 @@ int main()
 }
 ```
 
+??? note "答案"
+
+    6 1 2# 7 4 5# 8 3 0#
+
 ## 四、改错题
 
 ### 第1题
 
 以下程序将输入的数字字符序列转换成十进制整数，输出转换结果。注意：不得增行或删行，也不得更改程序结构。
-
-原始代码：
 
 ```c
 /* 1 */ #include <stdio.h>
@@ -458,28 +570,26 @@ int main()
 /* 12 */ }
 ```
 
-材料上给出的修改后代码：
+??? note "答案"
 
-```c
-/* 1 */ #include <stdio.h>
-/* 2 */ #define N 10
-/* 3 */ int main()
-/* 4 */ {
-/* 5 */     char s[N], c;
-/* 6 */     int i, n = 0;
-/* 7 */     scanf("%s", s);
-/* 8 */     for (i = 0; s[i] >= '0' && s[i] <= '9'; i++)
-/* 9 */         n = n * 10 + s[i] - '0';
-/* 10 */    printf("%d\n", n);
-/* 11 */    return 0;
-/* 12 */ }
-```
+    ```c
+    /* 1 */ #include <stdio.h>
+    /* 2 */ #define N 10
+    /* 3 */ int main()
+    /* 4 */ {
+    /* 5 */     char s[N], c;
+    /* 6 */     int i, n = 0;
+    /* 7 */     scanf("%s", s);
+    /* 8 */     for (i = 0; s[i] >= '0' && s[i] <= '9'; i++)
+    /* 9 */         n = n * 10 + s[i] - '0';
+    /* 10 */    printf("%d\n", n);
+    /* 11 */    return 0;
+    /* 12 */ }
+    ```
 
 ### 第2题
 
 S=1-1/2+1/3-1/4+1/5-1/6+…，以下程序输入正整数 n，计算并输出 s 前 n 项的和。
-
-原始代码：
 
 ```c
 /* 13 */ #include <stdio.h>
@@ -499,25 +609,25 @@ S=1-1/2+1/3-1/4+1/5-1/6+…，以下程序输入正整数 n，计算并输出 s 
 /* 27 */ }
 ```
 
-材料上给出的修改后代码：
+??? note "答案"
 
-```c
-/* 13 */ #include <stdio.h>
-/* 14 */ int main( )
-/* 15 */ {
-/* 16 */     int i, j, n;
-/* 17 */     double t, s = 0;
-/* 18 */     scanf("%d", &n);
-/* 19 */     for (i = j = 1; i <= n; i++)
-/* 20 */     {
-/* 21 */         t = (double) j/i;
-/* 22 */         s = s + t;
-/* 23 */         j = -j;
-/* 24 */     }
-/* 25 */     printf("sum = %lf\n", s);
-/* 26 */     return 0;
-/* 27 */ }
-```
+    ```c
+    /* 13 */ #include <stdio.h>
+    /* 14 */ int main( )
+    /* 15 */ {
+    /* 16 */     int i, j, n;
+    /* 17 */     double t, s = 0;
+    /* 18 */     scanf("%d", &n);
+    /* 19 */     for (i = j = 1; i <= n; i++)
+    /* 20 */     {
+    /* 21 */         t = (double) j/i;
+    /* 22 */         s = s + t;
+    /* 23 */         j = -j;
+    /* 24 */     }
+    /* 25 */     printf("sum = %lf\n", s);
+    /* 26 */     return 0;
+    /* 27 */ }
+    ```
 
 ## 五、补全题
 
@@ -550,28 +660,28 @@ int maxZeros(int n)
 }
 ```
 
-材料上填入的答案：
+??? note "答案"
 
-```c
-int maxZeros(int n)
-{
-    int m, value, answer = 0, max = 0;
-    for (int k = 2; k <= n; k++) {
-        m = 0;
-        value = n;
-        while (value) {
-            if (value % k == 0)
-                m++;
-            value /= k;
+    ```c
+    int maxZeros(int n)
+    {
+        int m, value, answer = 0, max = 0;
+        for (int k = 2; k <= n; k++) {
+            m = 0;
+            value = n;
+            while (value) {
+                if (value % k == 0)
+                    m++;
+                value /= k;
+            }
+            if (m > max) {
+                max = m;
+                answer = k;
+            }
         }
-        if (m > max) {
-            max = m;
-            answer = k;
-        }
+        return answer;
     }
-    return answer;
-}
-```
+    ```
 
 ### 第2题
 
@@ -598,21 +708,21 @@ while (
 ;
 ```
 
-材料上填入的答案：
+??? note "答案"
 
-```c
-int low = 0, high = N - 1, k;
-while (low <= high) {
-    k = (low + high) / 2;
-    if (a[k] == key)
-        return k;
-    else if (key < a[k])
-        high = k-1;
-    else
-        low = k+1;
-}
-return -1;
-```
+    ```c
+    int low = 0, high = N - 1, k;
+    while (low <= high) {
+        k = (low + high) / 2;
+        if (a[k] == key)
+            return k;
+        else if (key < a[k])
+            high = k-1;
+        else
+            low = k+1;
+    }
+    return -1;
+    ```
 
 ### 第3题
 
@@ -646,29 +756,29 @@ int main()
 }
 ```
 
-材料上填入的答案：
+??? note "答案"
 
-```c
-#include<stdio.h>
-#include<string.h>
-#define N 100
-int main()
-{
-    int i, j, n;
-    char s[N], c;
-    gets(s);
-    n = strlen(s);
-    for (i = 1; i < n; i++)
-        for (j = 0; j < n-i; j++)
-            if (s[j] < s[j+1]) {
-                c = s[j];
-                s[j] = s[j+1];
-                s[j+1] = c;
-            }
-    puts(s);
-    return 0;
-}
-```
+    ```c
+    #include<stdio.h>
+    #include<string.h>
+    #define N 100
+    int main()
+    {
+        int i, j, n;
+        char s[N], c;
+        gets(s);
+        n = strlen(s);
+        for (i = 1; i < n; i++)
+            for (j = 0; j < n-i; j++)
+                if (s[j] < s[j+1]) {
+                    c = s[j];
+                    s[j] = s[j+1];
+                    s[j+1] = c;
+                }
+        puts(s);
+        return 0;
+    }
+    ```
 
 ## 六、编程题
 
@@ -676,26 +786,28 @@ int main()
 
 读取两个字符串，并将它们连接起来而不用到 strcat 函数（假设两个字符串 str1、str2 分别存储在两个长度为 100 的字符数组里，且 str1 的数组足够容纳 str2 的内容）。
 
-```c
-#include <stdio.h>
-void main()
-{
-    int i = 0, j = 0;
-    char str1[100], str2[100];
-    gets(str1);
-    gets(str2);
-    // move to the end character '\0' of str1
-    for (; str1[i] != '\0'; i++)
-        ;
-    // copy characters in str2 to str1 until '\0'
-    while (str2[j] != '\0') {
-        str1[i++] = str2[j++];
+??? note "答案"
+
+    ```c
+    #include <stdio.h>
+    void main()
+    {
+        int i = 0, j = 0;
+        char str1[100], str2[100];
+        gets(str1);
+        gets(str2);
+        // move to the end character '\0' of str1
+        for (; str1[i] != '\0'; i++)
+            ;
+        // copy characters in str2 to str1 until '\0'
+        while (str2[j] != '\0') {
+            str1[i++] = str2[j++];
+        }
+        // end str1 with '\0'
+        str1[i] = '\0';
+        printf("%s\n", str1);
     }
-    // end str1 with '\0'
-    str1[i] = '\0';
-    printf("%s\n", str1);
-}
-```
+    ```
 
 ### 第2题
 
@@ -703,29 +815,31 @@ void main()
 
 算法思想：将序列中的数据一个个插入。当插入第 i（i≥1）个对象时，前面的 V[0]，V[1]，…，V[i-1] 个数据已经排好序，这时，用 V[i] 与 V[i-1]，V[i-2]，…顺序进行比较，找到插入位置即将 V[i] 插入，原来位置上的对象向后顺移。
 
-```c
-void InsertionSort(int a[], int size)
-{
-    for (int i = 1; i < size; i++) {
-        int temp = a[i];
-        int j = i - 1;
-        while (j >= 0 && temp < a[j]) {
-            a[j+1] = a[j];
-            j--;
+??? note "答案"
+
+    ```c
+    void InsertionSort(int a[], int size)
+    {
+        for (int i = 1; i < size; i++) {
+            int temp = a[i];
+            int j = i - 1;
+            while (j >= 0 && temp < a[j]) {
+                a[j+1] = a[j];
+                j--;
+            }
+            a[j+1] = temp;
         }
-        a[j+1] = temp;
     }
-}
-void main()
-{
-    int array[5] = {8, 9, 28, 11, 23};
-    InsertionSort(array, 5);
-    for (int i = 0; i < 5; i++) {
-        printf("%d ", array[i]);
+    void main()
+    {
+        int array[5] = {8, 9, 28, 11, 23};
+        InsertionSort(array, 5);
+        for (int i = 0; i < 5; i++) {
+            printf("%d ", array[i]);
+        }
+        printf("\n");
     }
-    printf("\n");
-}
-```
+    ```
 
 ### 第3题
 
@@ -736,40 +850,42 @@ void main()
 输出：11  12  13  14  15  16  17  18  19  20  30  40  50  60  70  80  90
 ```
 
-```c
-#include <stdio.h>
-#define N 10
-int main()
-{
-    int i, j;
-    int n, m, a[N] = {0}, len;
-    scanf("%d", &n);
-    i = 0;
-    while (n) {     // 把 n 的每位数值取出保存在数组中
-        a[i++] = n % 10;
-        n /= 10;
-    }
-    len = i;
-    // n 的位数
-    for (i = 0; i < len; ++i) {
-        // 修改每个位数, 获得更大的数
-        m = a[i];
-        // 保存当前位数的值
-        for (++a[i]; a[i] < 10; ++a[i]) {
-            // 改变当前位数值
-            n = 0;
-            for (j = len-1; j >= 0; --j)
-                // 生成每个更大的数
-                n = n*10 + a[j];
-            printf("%d\t", n);
+??? note "答案"
+
+    ```c
+    #include <stdio.h>
+    #define N 10
+    int main()
+    {
+        int i, j;
+        int n, m, a[N] = {0}, len;
+        scanf("%d", &n);
+        i = 0;
+        while (n) {     // 把 n 的每位数值取出保存在数组中
+            a[i++] = n % 10;
+            n /= 10;
         }
-        a[i] = m;
-        // 恢复原来的位数值
-        printf("\n");
+        len = i;
+        // n 的位数
+        for (i = 0; i < len; ++i) {
+            // 修改每个位数, 获得更大的数
+            m = a[i];
+            // 保存当前位数的值
+            for (++a[i]; a[i] < 10; ++a[i]) {
+                // 改变当前位数值
+                n = 0;
+                for (j = len-1; j >= 0; --j)
+                    // 生成每个更大的数
+                    n = n*10 + a[j];
+                printf("%d\t", n);
+            }
+            a[i] = m;
+            // 恢复原来的位数值
+            printf("\n");
+        }
+        return 0;
     }
-    return 0;
-}
-```
+    ```
 
 ### 第4题
 
@@ -783,23 +899,25 @@ love
 I C Languag.
 ```
 
-```c
-#include <stdio.h>
-#define N 1024
-int main()
-{
-    char str1[N], str2[N];
-    int i, j, m;
-    gets(str1);
-    gets(str2);
-    for (i = 0; str2[i]; ++i)
-        for (j = 0; str1[j]; )
-            if (str2[i] == str1[j])
-                for (m = j; str1[m]; ++m)
-                    str1[m] = str1[m+1];    // 删除 str1[j]
-            else
-                ++j;
-    puts(str1);
-    return 0;
-}
-```
+??? note "答案"
+
+    ```c
+    #include <stdio.h>
+    #define N 1024
+    int main()
+    {
+        char str1[N], str2[N];
+        int i, j, m;
+        gets(str1);
+        gets(str2);
+        for (i = 0; str2[i]; ++i)
+            for (j = 0; str1[j]; )
+                if (str2[i] == str1[j])
+                    for (m = j; str1[m]; ++m)
+                        str1[m] = str1[m+1];    // 删除 str1[j]
+                else
+                    ++j;
+        puts(str1);
+        return 0;
+    }
+    ```
