@@ -23,7 +23,6 @@ icon: material/clipboard-list
 | markdown        | ✅ 已完成 | 在 VSCode 里把笔记文件夹发布成 GitHub 仓库，笔记的版本记录与云端同步                        |
 | python-env      | ✅ 已完成 | Miniconda 与 uv 同时安装：base 环境装常用库，uv 管新项目，镜像源由 Claude Code 测速配置      |
 | python-syntax   | ✅ 已完成 | 读懂语法即可，代码实现与测试交给 Claude Code；配菜鸟教程与《Python 编程：从入门到实践》     |
-| python-jupyter  | ⬜ 施工中 | Jupyter Notebook 的使用                                                                     |
 
 
 
