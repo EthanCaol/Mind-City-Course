@@ -6,17 +6,17 @@ icon: material/bookshelf
 
 ## 1. 课件
 
-| 日期     | 课件                                                                                                                                                                                                          |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 9月10日  | [第0讲 课程简介](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC0%E8%AE%B2-%E8%AF%BE%E7%A8%8B%E7%AE%80%E4%BB%8B.pdf)                                                 |
-| 9月10日  | [第1讲 程序设计基础](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC1%E8%AE%B2-%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%80.pdf)                           |
-| 9月17日  | [第2讲 基本数据及其运算 1](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC2%E8%AE%B2-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%8F%8A%E5%85%B6%E8%BF%90%E7%AE%97-1.pdf) |
-| 9月24日  | [第3讲 基本数据及其运算 2](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC3%E8%AE%B2-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%8F%8A%E5%85%B6%E8%BF%90%E7%AE%97-2.pdf) |
-| 10月8日  | [第4讲 结构化程序设计 1](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC4%E8%AE%B2-%E7%BB%93%E6%9E%84%E5%8C%96%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1-1.pdf)            |
-| 10月15日 | [第5讲 结构化程序设计 2](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC5%E8%AE%B2-%E7%BB%93%E6%9E%84%E5%8C%96%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1-2.pdf)            |
-| 10月22日 | [第6讲 数组 1](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC6%E8%AE%B2-%E6%95%B0%E7%BB%84-1.pdf)                                                                   |
-| 10月29日 | [第7讲 数组 2](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC7%E8%AE%B2-%E6%95%B0%E7%BB%84-2.pdf)                                                                   |
-| 11月5日  | [第8讲 函数](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC8%E8%AE%B2-%E5%87%BD%E6%95%B0.pdf)                                                                       |
+| 日期     | 课件                                                                                                                                                                                                                                                                        |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 9月10日  | [第0讲 课程简介](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC0%E8%AE%B2-%E8%AF%BE%E7%A8%8B%E7%AE%80%E4%BB%8B.pdf?v=20261106)                                                                                                    |
+| 9月10日  | [第1讲 程序设计基础](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC1%E8%AE%B2-%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%80.pdf?v=20261106)                                                                              |
+| 9月17日  | [第2讲 基本数据及其运算 1](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC2%E8%AE%B2-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%8F%8A%E5%85%B6%E8%BF%90%E7%AE%97-1.pdf?v=20261106)                                                    |
+| 9月24日  | [第3讲 基本数据及其运算 2](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC3%E8%AE%B2-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%8F%8A%E5%85%B6%E8%BF%90%E7%AE%97-2.pdf?v=20261106)                                                    |
+| 10月8日  | [第4讲 结构化程序设计 1](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC4%E8%AE%B2-%E7%BB%93%E6%9E%84%E5%8C%96%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1-1.pdf?v=20261106)                                                               |
+| 10月15日 | [第5讲 结构化程序设计 2](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC5%E8%AE%B2-%E7%BB%93%E6%9E%84%E5%8C%96%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1-2.pdf?v=20261106)                                                               |
+| 10月22日 | [第6讲 数组 1](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC6%E8%AE%B2-%E6%95%B0%E7%BB%84-1.pdf?v=20261106)                                                                                                                      |
+| 10月29日 | [第7讲 数组 2](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC7%E8%AE%B2-%E6%95%B0%E7%BB%84-2.pdf?v=20261106)                                                                                                                      |
+| 11月5日  | [第8讲 函数](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC8%E8%AE%B2-%E5%87%BD%E6%95%B0.pdf?v=20261106)                                                                                                                          |
 | 11月19日 | [第9讲 作用域规则和编译预处理命令](https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/26%E7%A8%8B%E8%AE%BE-%E7%AC%AC9%E8%AE%B2-%E4%BD%9C%E7%94%A8%E5%9F%9F%E8%A7%84%E5%88%99%E5%92%8C%E7%BC%96%E8%AF%91%E9%A2%84%E5%A4%84%E7%90%86%E5%91%BD%E4%BB%A4.pdf?v=20261106) |
 
 !!! tip "课件会陆续补齐"
