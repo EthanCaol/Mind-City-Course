@@ -30,25 +30,25 @@ icon: material/file-document-outline
 - 字符变量可以赋整数值
 
     ```c
-    char c=9; int i=c,j; j=c-0; printf("%d,%d", i,j);
-    char c='9';int i=c, j; j=c-'0'; printf("%d,%d", i,j);
+    char c=9; int i=c, j; j=c-0; printf("%d,%d", i, j);
+    char c='9'; int i=c, j; j=c-'0'; printf("%d,%d", i, j);
     ```
 
 - 字符表示：转义字符
 
     ```c
-    \ddd   /* 8进制表示
-    \xdd   /* 16进制表示
-    char c='\12'
-    char s[]="AB\6CD\\\0EF"; printf("%d,%s",strlen(s), s)
+    \ddd    /* 8进制表示 */
+    \xdd    /* 16进制表示 */
+    char c='\12';
+    char s[]="AB\6CD\\\0EF"; printf("%d,%s", strlen(s), s);
     ```
 
 ## 整数的表示
 
 ```c
-int i1=100, j1=-100, i2=0xaaaa, j2=-0xaaaa
-printf("%x, %x", i1, j1);   /* 输出 64, ffffff9c */
-printf("%x, %x", i2, j2);   /* 输出 aaaa, ffff5556 */
+int i1=100, j1=-100, i2=0xaaaa, j2=-0xaaaa;
+printf("%x, %x", i1, j1);       /* 输出 64, ffffff9c */
+printf("%x, %x", i2, j2);       /* 输出 aaaa, ffff5556 */
 ```
 
 ## 优先级
@@ -79,7 +79,8 @@ printf("%x, %x", i2, j2);   /* 输出 aaaa, ffff5556 */
 - 掌握 `scanf()` 和 `printf()` 基本使用方法
 
 ```c
-char s[10], x[10]; int a[20]
+char s[10], x[10];
+int a[20];
 scanf("%s", &s[0]);
 scanf("%s", x);
 scanf("%c", &x[0]);
@@ -89,13 +90,17 @@ scanf("%d", &a[1]);
 ## 控制条件与循环终止
 
 ```c
-int x; if (x==0)x=1 else x=0; printf("%d",x);
-int x; if (x=0)x=1 else x=2; printf("%d",x);
-int x,y; for(x=0,y=10;x=0;x++,y--)x++;
-int x,y; for(x=0,y=3;x=y;x++,y--)x++;
-for()循环语句中的break与continue
-for(i=0;i<10;i++) if(i==5)break;
-for(i=0;i>=0;i++) if(i!=5)continue;
+int x; if (x==0) x=1; else x=0; printf("%d", x);
+int x; if (x=0) x=1; else x=2; printf("%d", x);
+int x, y; for (x=0, y=10; x=0; x++, y--) x++;
+int x, y; for (x=0, y=3; x=y; x++, y--) x++;
+```
+
+`for()` 循环语句中的 break 与 continue：
+
+```c
+for (i=0; i<10; i++) if (i==5) break;
+for (i=0; i>=0; i++) if (i!=5) continue;
 ```
 
 ## 一维数组初始化
@@ -111,7 +116,7 @@ int c[5] = {0, 1, 2, 3, 4, 5};
 - 按行给二维数组的全部元素赋初值
 
     ```c
-    int a1[2][3]={ {1, 2, 3},{4, 5, 6}};
+    int a1[2][3] = {{1, 2, 3}, {4, 5, 6}};
     ```
 
 - 按元素存储顺序给数组元素赋初值
@@ -123,25 +128,25 @@ int c[5] = {0, 1, 2, 3, 4, 5};
 - 按行给数组的部分元素赋初值
 
     ```c
-    int a3[2][3]={ {1, 2}, {0, 5}}; /*其余均为 0*/
+    int a3[2][3] = {{1, 2}, {0, 5}};    /* 其余均为 0 */
     ```
 
 - 按元素存储顺序给前面部分元素赋初值
 
     ```c
-    int a4[2][3] = {1, 2, 3, 4}; /*其余均为 0*/
+    int a4[2][3] = {1, 2, 3, 4};        /* 其余均为 0 */
     ```
 
 - 按元素存储顺序，给数组部分或全部元素赋初值，并且不指定第一维的元素个数
 
     ```c
-    int a5[][3] = {1, 2, 3, 4, 5};/* 两行 */
+    int a5[][3] = {1, 2, 3, 4, 5};      /* 两行 */
     ```
 
 - 用按行赋初值方法，对各行的部分或全部元素赋初值，并省略第一维的元素个数
 
     ```c
-    int a6[][3] = {{0, 2}, {}};/*  两行 */
+    int a6[][3] = {{0, 2}, {}};         /* 两行 */
     ```
 
 ## 字符数组 (1)
@@ -181,13 +186,13 @@ char str3[20] = "fudan\01university";
 char str4[20] = "fudan\012university";
 char str5[20] = "fudan\0123university";
 char str6[20] = "fudan\x123university";
-int i1, j1,i2,j2,i3,j3,i4,j4,i5,j5,i6,j6;
-i1=sizeof(str1) ; i2=sizeof(str2) ; i3=sizeof(str3) ; i4=sizeof(str4) ;
-i5=sizeof(str5) ; i6=sizeof(str6);
-j1=strlen(str1) ; j2=strlen(str2) ; j3=strlen(str3) ; j4=strlen(str4) ;
-j5=strlen(str5) ; j6=strlen(str6);
-printf("%d,%d , %d,%d , %d,%d , %d,%d , %d,%d , %d,%d", i1,j1 ,
-i2,j2 , i3,j3 , i4,j4 , i5,j5 , i6,j6);
+int i1, j1, i2, j2, i3, j3, i4, j4, i5, j5, i6, j6;
+i1 = sizeof(str1); i2 = sizeof(str2); i3 = sizeof(str3);
+i4 = sizeof(str4); i5 = sizeof(str5); i6 = sizeof(str6);
+j1 = strlen(str1); j2 = strlen(str2); j3 = strlen(str3);
+j4 = strlen(str4); j5 = strlen(str5); j6 = strlen(str6);
+printf("%d,%d , %d,%d , %d,%d , %d,%d , %d,%d , %d,%d",
+       i1, j1, i2, j2, i3, j3, i4, j4, i5, j5, i6, j6);
 ```
 
 ## 函数与函数调用
@@ -198,9 +203,9 @@ i2,j2 , i3,j3 , i4,j4 , i5,j5 , i6,j6);
 - 调用
 
     ```c
-    i=f(3, 4);
-    i=f(2+1, 2*2);
-    i=f((4, 3), (3,4));
+    i = f(3, 4);
+    i = f(2+1, 2*2);
+    i = f((4, 3), (3, 4));
     ```
 
 ## 文本文件与二进制文件
@@ -222,13 +227,13 @@ i2,j2 , i3,j3 , i4,j4 , i5,j5 , i6,j6);
 
 ```c
 int i, j, min, temp;
-for(i=0;i<M-1;i++){
-    for(j=i+1,min=i;j<M;j++)
-        if(x[j]<x[min])min=j;
-    if(i!=min){
-        temp=x[i];
-        x[i]=x[min];
-        x[min]=temp;
+for (i = 0; i < M-1; i++) {
+    for (j = i+1, min = i; j < M; j++)
+        if (x[j] < x[min]) min = j;
+    if (i != min) {
+        temp = x[i];
+        x[i] = x[min];
+        x[min] = temp;
     }
 }
 ```
@@ -238,8 +243,8 @@ for(i=0;i<M-1;i++){
 ```c
 int x, i, j;
 scanf("%d", &x);
-for (j=0;x>0; x/=10){
-    i=x%10;
+for (j = 0; x > 0; x /= 10) {
+    i = x % 10;
     j++;
     printf("%c", '0'+i);
 }
@@ -249,10 +254,12 @@ for (j=0;x>0; x/=10){
 
 ```c
 void show_int(int n)
-{ char c;
-   c = n % 10 + '0';
-   if (n >= 10) show_int(n/10);
-   printf("%c", c);
+{
+    char c;
+    c = n % 10 + '0';
+    if (n >= 10)
+        show_int(n/10);
+    printf("%c", c);
 }
 ```
 

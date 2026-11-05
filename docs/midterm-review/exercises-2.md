@@ -150,15 +150,16 @@ C 语言程序的基本单位是：C。
 ```c
 #include<stdio.h>
 int main( )
-{ int i;
-for(i=1;i<6;i++) {
-if(i%2){
-printf("#");
-continue;
-}
-printf("*");
-}
-printf("\n");
+{
+    int i;
+    for (i = 1; i < 6; i++) {
+        if (i % 2) {
+            printf("#");
+            continue;
+        }
+        printf("*");
+    }
+    printf("\n");
 }
 ```
 
@@ -173,11 +174,11 @@ printf("\n");
 
 ```c
 int main( )
-{  int
-i;
-for(i='A';i<'I';i++，i++)
-printf("%c"，i+32);
-printf(" \n");
+{
+    int i;
+    for (i = 'A'; i < 'I'; i++，i++)
+        printf("%c"，i+32);
+    printf(" \n");
 }
 ```
 
@@ -194,11 +195,12 @@ printf(" \n");
 #include<stdio.h>
 int main( )
 {
-char a[10]={'1', '2', '3', '4', '5', '6', '7', '8', '9', 0}, *p;
-int i;
-i=8;
-p=a+i;
-printf("%s\n", p-3);}
+    char a[10] = {'1', '2', '3', '4', '5', '6', '7', '8', '9', 0}, *p;
+    int i;
+    i = 8;
+    p = a + i;
+    printf("%s\n", p-3);
+}
 ```
 
 - A. 6
@@ -211,20 +213,21 @@ printf("%s\n", p-3);}
 以下程序的输出结果是：B。
 
 ```c
-main(  ) {
-char s[]="12134211";
-int v[4]={0,0,0,0},k,i;
-for(k=0;s[k];k++) {
-switch(s[k]) {
-case '1':i=0;
-case '2':i=1;
-case '3':i=2;
-case '4':i=3;
-}
-v[i]++;
-}
-for(k=0;k<4;k++)
-printf("%d ",v[k]);
+int main(  )
+{
+    char s[] = "12134211";
+    int v[4] = {0, 0, 0, 0}, k, i;
+    for (k = 0; s[k]; k++) {
+        switch (s[k]) {
+        case '1': i = 0;
+        case '2': i = 1;
+        case '3': i = 2;
+        case '4': i = 3;
+        }
+        v[i]++;
+    }
+    for (k = 0; k < 4; k++)
+        printf("%d ", v[k]);
 }
 ```
 
@@ -238,13 +241,13 @@ printf("%d ",v[k]);
 运行以下程序将会出现：D。
 
 ```c
-main(  )
+int main(  )
 {
-int x;
-while(x<100) {
-printf("%d",x);
-x++;
-}
+    int x;
+    while (x < 100) {
+        printf("%d", x);
+        x++;
+    }
 }
 ```
 
@@ -267,11 +270,15 @@ x++;
 
 ```c
 #include <stdio.h>
-main()
-{ char ch[]="abc",x[3][4];int i;
-for(i=0;i<3;i++)strcpy(x[i],ch);
-for(i=0;i<3;i++)printf("%s",&x[i][i]);
-printf("\n");
+int main()
+{
+    char ch[] = "abc", x[3][4];
+    int i;
+    for (i = 0; i < 3; i++)
+        strcpy(x[i], ch);
+    for (i = 0; i < 3; i++)
+        printf("%s", &x[i][i]);
+    printf("\n");
 }
 ```
 
@@ -284,15 +291,18 @@ printf("\n");
 ```c
 #include<stdio.h>
 int main()
-{  int a=1,b;
-for(b=1;b<=10;b++)  {     /* b=1, a=6; b=2, a=3; b=3, a=8; b=4 */
-if(a>=8)break;
-if(a%2==1) {
-a+=5;continue;
-}
-a-=3;
-}
-printf("%d\n",b);
+{
+    int a = 1, b;
+    for (b = 1; b <= 10; b++) {    /* b=1, a=6; b=2, a=3; b=3, a=8; b=4 */
+        if (a >= 8)
+            break;
+        if (a % 2 == 1) {
+            a += 5;
+            continue;
+        }
+        a -= 3;
+    }
+    printf("%d\n", b);
 }
 ```
 
@@ -303,43 +313,45 @@ printf("%d\n",b);
 原始代码：
 
 ```c
-int binsearch(int x, int v[], int n){
-int low, high, mid;
-low=1;
-high=n;
-mid=(high-low)/2;
-while(low<high && x=v[mid]) {
-if (x<v[mid])
-high=mid-1;
-else
-low=mid+1;}
-if (x==v[mid])
-return mid; /* found match */
-else
-return -1;
-/* no match */
+int binsearch(int x, int v[], int n)
+{
+    int low, high, mid;
+    low = 1;
+    high = n;
+    mid = (high - low) / 2;
+    while (low < high && x = v[mid]) {
+        if (x < v[mid])
+            high = mid - 1;
+        else
+            low = mid + 1;
+    }
+    if (x == v[mid])
+        return mid;     /* found match */
+    else
+        return -1;      /* no match */
 }
 ```
 
 材料上给出的修改后代码：
 
 ```c
-int binsearch(int x, int v[], int n) {
-int low, high, mid;
-low=0;
-high=n-1;
-mid=(low+high)/2;
-while(low<=high && x!=v[mid]) {
-if(x<v[mid])
-high=mid-1;
-else
-low=mid+1;
-mid=(low+high)/2;
-}
-if(x==v[mid])
-return mid;
-else
-return -1;
+int binsearch(int x, int v[], int n)
+{
+    int low, high, mid;
+    low = 0;
+    high = n - 1;
+    mid = (low + high) / 2;
+    while (low <= high && x != v[mid]) {
+        if (x < v[mid])
+            high = mid - 1;
+        else
+            low = mid + 1;
+        mid = (low + high) / 2;
+    }
+    if (x == v[mid])
+        return mid;
+    else
+        return -1;
 }
 ```
 

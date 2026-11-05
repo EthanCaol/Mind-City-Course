@@ -95,9 +95,9 @@ icon: material/format-list-checks
 
 ```c
 #define d 2
-int a=0;
-double b=1.25;
-char c='A';
+int a = 0;
+double b = 1.25;
+char c = 'A';
 ```
 
 则下面语句中错误的是 __B，D__。
@@ -122,9 +122,12 @@ char c='A';
 
 ```c
 int main()
-{ int m=5;
-if(++m>5)printf("%d\n",m);
-else printf("%d\n",--m);
+{
+    int m = 5;
+    if (++m > 5)
+        printf("%d\n", m);
+    else
+        printf("%d\n", --m);
 }
 ```
 
@@ -139,9 +142,10 @@ else printf("%d\n",--m);
 
 ```c
 int main()
-{ char a,b,c,d;
-scanf("%c,%c,%d,%d",&a,&b,&c,&d);
-printf("%c,%c,%c,%c\n",a,b,c,d);
+{
+    char a, b, c, d;
+    scanf("%c,%c,%d,%d", &a, &b, &c, &d);
+    printf("%c,%c,%c,%c\n", a, b, c, d);
 }
 ```
 
@@ -168,16 +172,16 @@ printf("%c,%c,%c,%c\n",a,b,c,d);
 ```c
 int main()
 {
-int i=0, x=0, s=0;
-for (;;)
-{
-if(i==3||i==5)
-continue;
-if (i==6) break;
-i++;
-s+=i;
-}
-printf("%d\n",s);
+    int i = 0, x = 0, s = 0;
+    for (;;) {
+        if (i == 3 || i == 5)
+            continue;
+        if (i == 6)
+            break;
+        i++;
+        s += i;
+    }
+    printf("%d\n", s);
 }
 ```
 
@@ -220,8 +224,10 @@ C 语言中的变量名只能由字母、数字和下划线三种字符组成，
 执行如下循环时，说法正确的是 __B____。
 
 ```c
-int x=-1;
-do{x=x*x;}while(x=1);
+int x = -1;
+do {
+    x = x * x;
+} while (x = 1);
 ```
 
 - A. 循环体将执行一次
@@ -263,13 +269,17 @@ do{x=x*x;}while(x=1);
 ```c
 #include <stdio.h>
 int main()
-{ int i = 0, v1 = 0, v2 = 1, v3 = 2;
-for (i = 1; i < 10; i++){
-switch (i % 4)    {   /* 1, 2, 3, 0, 1, 2,3 ,0, 1 */
-case 1: v1++;   case 2: v2++; break;   default: v3++;
-}
-}
-printf("%d,%d,%d\n",v1,v2,v3); return 0;
+{
+    int i = 0, v1 = 0, v2 = 1, v3 = 2;
+    for (i = 1; i < 10; i++) {
+        switch (i % 4) {    /* 1, 2, 3, 0, 1, 2, 3, 0, 1 */
+        case 1: v1++;
+        case 2: v2++; break;
+        default: v3++;
+        }
+    }
+    printf("%d,%d,%d\n", v1, v2, v3);
+    return 0;
 }
 ```
 
@@ -282,17 +292,15 @@ printf("%d,%d,%d\n",v1,v2,v3); return 0;
 ```c
 int main( )
 {
-char k;
-int i;
-for(i=1;i<3;i++)
-{
-scanf("%c",&k);
-switch(k)
-{
-case '0': printf("another\n");
-case '1': printf("number\n");
-}
-}
+    char k;
+    int i;
+    for (i = 1; i < 3; i++) {
+        scanf("%c", &k);
+        switch (k) {
+        case '0': printf("another\n");
+        case '1': printf("number\n");
+        }
+    }
 }
 ```
 
@@ -311,10 +319,10 @@ number
 ```c
 int main( )
 {
-int i,s=0;
-for(i=1;i<10;i+=2)
-s+=i+1;
-printf("%d\n",s);
+    int i, s = 0;
+    for (i = 1; i < 10; i += 2)
+        s += i+1;
+    printf("%d\n", s);
 }
 ```
 
@@ -328,13 +336,13 @@ printf("%d\n",s);
 #include <stdio.h>
 int main()
 {
-int a,b;
-scanf("%d%d",&a,&b);
-printf("a=%d,b=%d\n",a,b);
-a= a + b ;
-b= a - b ;
-a= a - b ;
-printf("a=%d,b=%d\n",a,b);
+    int a, b;
+    scanf("%d%d", &a, &b);
+    printf("a=%d,b=%d\n", a, b);
+    a = a + b;
+    b = a - b;
+    a = a - b;
+    printf("a=%d,b=%d\n", a, b);
 }
 ```
 
@@ -345,12 +353,12 @@ printf("a=%d,b=%d\n",a,b);
 以下程序段的输出结果是：
 
 ```c
-int a=10,b=50,c=30;
-if(a>b)
-a=b;
-b=c;
-c=a;
-printf("a=%d b=%d c=%d\n",a,b,c);
+int a = 10, b = 50, c = 30;
+if (a > b)
+    a = b;
+b = c;
+c = a;
+printf("a=%d b=%d c=%d\n", a, b, c);
 ```
 
 材料上：a=10 b=30 c=10。
@@ -361,21 +369,21 @@ printf("a=%d b=%d c=%d\n",a,b,c);
 
 ```c
 #include <stdio.h>
-int factorial (int n)
+int factorial(int n)
 {
-int ret;
-printf("ENTER: %d\n", n);
-if (n == 0 || n == 1)
-ret = 1;
-else
-ret = n*factorial(n-1);
-printf("EXIT: %d\n", n);
-return ret;
+    int ret;
+    printf("ENTER: %d\n", n);
+    if (n == 0 || n == 1)
+        ret = 1;
+    else
+        ret = n * factorial(n-1);
+    printf("EXIT: %d\n", n);
+    return ret;
 }
 int main()
 {
-printf("fac(%d)=%d\n",4,  factorial(4));
-return 0;
+    printf("fac(%d)=%d\n", 4, factorial(4));
+    return 0;
 }
 ```
 
@@ -407,22 +415,23 @@ fac(4)=24
 #include <stdio.h>
 int main()
 {
-int i, j, n, temp, a[6][6]; scanf("%d", &n);
-for(i = 0; i < n; i++)
-for(j = 0; j < n; j++)
-a[i][j] = j + i * n;
-for (i = 0; i < n; i++)
-for(j = 0; j < n / 2; j++)
-{
-temp = a[n - j - 1][i]; a[n - j - 1][i] = a[i][j]; a[i][j] = temp;
-}
-for(i = 0; i < n; i++)
-{
-for(j = 0; j < n; j++)
-printf("%2d", a[i][j]);
-printf("#");
-}
-return 0;
+    int i, j, n, temp, a[6][6];
+    scanf("%d", &n);
+    for (i = 0; i < n; i++)
+        for (j = 0; j < n; j++)
+            a[i][j] = j + i * n;
+    for (i = 0; i < n; i++)
+        for (j = 0; j < n / 2; j++) {
+            temp = a[n - j - 1][i];
+            a[n - j - 1][i] = a[i][j];
+            a[i][j] = temp;
+        }
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++)
+            printf("%2d", a[i][j]);
+        printf("#");
+    }
+    return 0;
 }
 ```
 
@@ -439,13 +448,13 @@ return 0;
 /* 2 */ #define N 10;
 /* 3 */ int main()
 /* 4 */ {
-/* 5 */ char s[N], c;
-/* 6 */ int i, n;
-/* 7 */ scanf("%s", &s);
-/* 8 */ for(i = 0; s[i] >= 0 && s[i] <= 9; i++)
-/* 9 */ n = n * 10 + s[i];
-/* 10 */ printf("%d\n", n);
-/* 11 */ return 0;
+/* 5 */     char s[N], c;
+/* 6 */     int i, n;
+/* 7 */     scanf("%s", &s);
+/* 8 */     for (i = 0; s[i] >= 0 && s[i] <= 9; i++)
+/* 9 */         n = n * 10 + s[i];
+/* 10 */    printf("%d\n", n);
+/* 11 */    return 0;
 /* 12 */ }
 ```
 
@@ -456,13 +465,13 @@ return 0;
 /* 2 */ #define N 10
 /* 3 */ int main()
 /* 4 */ {
-/* 5 */ char s[N], c;
-/* 6 */ int i, n=0;
-/* 7 */ scanf("%s", s);
-/* 8 */ for(i = 0; s[i] >= '0' && s[i] <= '9'; i++)
-/* 9 */ n = n * 10 + s[i]-'0';
-/* 10 */ printf("%d\n", n);
-/* 11 */ return 0;
+/* 5 */     char s[N], c;
+/* 6 */     int i, n = 0;
+/* 7 */     scanf("%s", s);
+/* 8 */     for (i = 0; s[i] >= '0' && s[i] <= '9'; i++)
+/* 9 */         n = n * 10 + s[i] - '0';
+/* 10 */    printf("%d\n", n);
+/* 11 */    return 0;
 /* 12 */ }
 ```
 
@@ -476,17 +485,17 @@ S=1-1/2+1/3-1/4+1/5-1/6+…，以下程序输入正整数 n，计算并输出 s 
 /* 13 */ #include <stdio.h>
 /* 14 */ int main( )
 /* 15 */ {
-/* 16 */ int i, j, n;
-/* 17 */ double t, s;
-/* 18 */ scanf("%d", &n);
-/* 19 */ for (i = j = 1 ; i <= n; i++)
-/* 20 */ {
-/* 21 */     t = j/i;
-/* 22 */     s = s + t;
-/* 23 */     j = -j;
-/* 24 */ }
-/* 25 */ printf("sum = %lf\n", s);
-/* 26 */ return 0;
+/* 16 */     int i, j, n;
+/* 17 */     double t, s;
+/* 18 */     scanf("%d", &n);
+/* 19 */     for (i = j = 1; i <= n; i++)
+/* 20 */     {
+/* 21 */         t = j/i;
+/* 22 */         s = s + t;
+/* 23 */         j = -j;
+/* 24 */     }
+/* 25 */     printf("sum = %lf\n", s);
+/* 26 */     return 0;
 /* 27 */ }
 ```
 
@@ -496,17 +505,17 @@ S=1-1/2+1/3-1/4+1/5-1/6+…，以下程序输入正整数 n，计算并输出 s 
 /* 13 */ #include <stdio.h>
 /* 14 */ int main( )
 /* 15 */ {
-/* 16 */ int i, j, n;
-/* 17 */ double t, s=0;
-/* 18 */ scanf("%d", &n);
-/* 19 */ for (i = j = 1 ; i <= n; i++)
-/* 20 */ {
-/* 21 */     t =(double) j/i;
-/* 22 */     s = s + t;
-/* 23 */     j = -j;
-/* 24 */ }
-/* 25 */ printf("sum = %lf\n", s);
-/* 26 */ return 0;
+/* 16 */     int i, j, n;
+/* 17 */     double t, s = 0;
+/* 18 */     scanf("%d", &n);
+/* 19 */     for (i = j = 1; i <= n; i++)
+/* 20 */     {
+/* 21 */         t = (double) j/i;
+/* 22 */         s = s + t;
+/* 23 */         j = -j;
+/* 24 */     }
+/* 25 */     printf("sum = %lf\n", s);
+/* 26 */     return 0;
 /* 27 */ }
 ```
 
@@ -519,25 +528,25 @@ S=1-1/2+1/3-1/4+1/5-1/6+…，以下程序输入正整数 n，计算并输出 s 
 ```c
 int maxZeros(int n)
 {
-int m, value, answer = 0, max = 0;
-for(int k = 2; k <= n; k++) {
-m = 0;
-(1)
-;
-while (value) {
-if (value % k == 0)
-m++;
-(2)
-;
-}
-if (
-(3)
-) {
-max =  m ;
-answer = k;
-}
-}
-return answer;
+    int m, value, answer = 0, max = 0;
+    for (int k = 2; k <= n; k++) {
+        m = 0;
+        (1)
+        ;
+        while (value) {
+            if (value % k == 0)
+                m++;
+            (2)
+            ;
+        }
+        if (
+            (3)
+        ) {
+            max = m;
+            answer = k;
+        }
+    }
+    return answer;
 }
 ```
 
@@ -546,25 +555,21 @@ return answer;
 ```c
 int maxZeros(int n)
 {
-int m, value, answer = 0, max = 0;
-for(int k = 2; k <= n; k++) {
-m = 0;
-value = n
-;
-while (value) {
-if (value % k == 0)
-m++;
-value /= k
-;
-}
-if (
-m > max
-) {
-max =  m ;
-answer = k;
-}
-}
-return answer;
+    int m, value, answer = 0, max = 0;
+    for (int k = 2; k <= n; k++) {
+        m = 0;
+        value = n;
+        while (value) {
+            if (value % k == 0)
+                m++;
+            value /= k;
+        }
+        if (m > max) {
+            max = m;
+            answer = k;
+        }
+    }
+    return answer;
 }
 ```
 
@@ -575,15 +580,19 @@ return answer;
 ```c
 int low = 0, high = N - 1, k;
 while (
-(4)  ) {
-k = (low + high) / 2;
-if (
-(5) )  return k;
-else if (
-(6)
-)  high = k-1;
-else
-low = k+1;
+    (4)
+) {
+    k = (low + high) / 2;
+    if (
+        (5)
+    )
+        return k;
+    else if (
+        (6)
+    )
+        high = k-1;
+    else
+        low = k+1;
 }
 (7)
 ;
@@ -593,20 +602,16 @@ low = k+1;
 
 ```c
 int low = 0, high = N - 1, k;
-while (
-low <= high
-) {
-k = (low + high) / 2;
-if (
-a[k] == key
-) return k;
-else if (
-key < a[k] ) high = k-1;
-else
-low = k+1;
+while (low <= high) {
+    k = (low + high) / 2;
+    if (a[k] == key)
+        return k;
+    else if (key < a[k])
+        high = k-1;
+    else
+        low = k+1;
 }
-return -1
-;
+return -1;
 ```
 
 ### 3
@@ -619,26 +624,25 @@ return -1
 #define N 100
 int main()
 {
-int i, j, n;
-char  s[N], c;
-gets(s);
-n = strlen(s);
-for(i = 1;
-(8)
-; i++)
-for(j = 0;
-(9)
-; j++)
-if(
-(10)
-)
-{
-c = s[j];
-s[j] = s[j+1];
-s[j+1] = c;
-}
-puts(s);
-return 0;
+    int i, j, n;
+    char s[N], c;
+    gets(s);
+    n = strlen(s);
+    for (i = 1;
+         (8)
+         ; i++)
+        for (j = 0;
+             (9)
+             ; j++)
+            if (
+                (10)
+            ) {
+                c = s[j];
+                s[j] = s[j+1];
+                s[j+1] = c;
+            }
+    puts(s);
+    return 0;
 }
 ```
 
@@ -650,26 +654,19 @@ return 0;
 #define N 100
 int main()
 {
-int i, j, n;
-char  s[N], c;
-gets(s);
-n = strlen(s);
-for(i = 1;
-i < n
-; i++)
-for(j = 0;
-j < n-i
-; j++)
-if(
-s[j] < s[j+1]
-)
-{
-c = s[j];
-s[j] = s[j+1];
-s[j+1] = c;
-}
-puts(s);
-return 0;
+    int i, j, n;
+    char s[N], c;
+    gets(s);
+    n = strlen(s);
+    for (i = 1; i < n; i++)
+        for (j = 0; j < n-i; j++)
+            if (s[j] < s[j+1]) {
+                c = s[j];
+                s[j] = s[j+1];
+                s[j+1] = c;
+            }
+    puts(s);
+    return 0;
 }
 ```
 
@@ -683,20 +680,20 @@ return 0;
 #include <stdio.h>
 void main()
 {
-int i = 0, j = 0;
-char str1[100], str2[100];
-gets(str1);
-gets(str2);
-//move to the end character '\0' of str1;
-for(; str1[i] != '\0'; i++);
-//copy characters in str2 to str1 until '\0'
-while (str2[j] != '\0')
-{
-str1[i++] = str2[j++];
-}
-//end str1 with '\0'
-str1[i] = '\0';
-printf("%s\n", str1);
+    int i = 0, j = 0;
+    char str1[100], str2[100];
+    gets(str1);
+    gets(str2);
+    // move to the end character '\0' of str1
+    for (; str1[i] != '\0'; i++)
+        ;
+    // copy characters in str2 to str1 until '\0'
+    while (str2[j] != '\0') {
+        str1[i++] = str2[j++];
+    }
+    // end str1 with '\0'
+    str1[i] = '\0';
+    printf("%s\n", str1);
 }
 ```
 
@@ -709,27 +706,24 @@ printf("%s\n", str1);
 ```c
 void InsertionSort(int a[], int size)
 {
-for(int i = 1; i < size; i++)
-{
-int temp = a[i];
-int j = i - 1;
-while(j >= 0 && temp < a[j])
-{
-a[j+1] = a[j];
-j--;
-}
-a[j+1] = temp;
-}
+    for (int i = 1; i < size; i++) {
+        int temp = a[i];
+        int j = i - 1;
+        while (j >= 0 && temp < a[j]) {
+            a[j+1] = a[j];
+            j--;
+        }
+        a[j+1] = temp;
+    }
 }
 void main()
 {
-int array[5]={8, 9, 28, 11, 23};
-InsertionSort(array, 5);
-for(int i = 0; i < 5; i++)
-{
-printf("%d ", array[i]);
-}
-printf("\n");
+    int array[5] = {8, 9, 28, 11, 23};
+    InsertionSort(array, 5);
+    for (int i = 0; i < 5; i++) {
+        printf("%d ", array[i]);
+    }
+    printf("\n");
 }
 ```
 
@@ -747,33 +741,33 @@ printf("\n");
 #define N 10
 int main()
 {
-int i, j;
-int n, m, a[N] = {0}, len;
-scanf("%d", &n);
-i = 0;
-while(n){ //把n的每位数值取出保存在数组中
-a[i++] = n % 10;
-n /= 10;
-}
-len = i;
-//n的位数
-for(i = 0; i < len; ++i) {
-//修改每个位数, 获得更大的数
-m = a[i];
-//保存当前位数的值
-for(++a[i]; a[i] < 10; ++a[i]) {
-//改变当前位数值
-n = 0;
-for(j = len-1; j >= 0; --j)
-//生成每个更大的数
-n = n*10+a[j];
-printf("%d\t", n);
-}
-a[i] = m;
-//恢复原来的位数值
-printf("\n");
-}
-return 0;
+    int i, j;
+    int n, m, a[N] = {0}, len;
+    scanf("%d", &n);
+    i = 0;
+    while (n) {     // 把 n 的每位数值取出保存在数组中
+        a[i++] = n % 10;
+        n /= 10;
+    }
+    len = i;
+    // n 的位数
+    for (i = 0; i < len; ++i) {
+        // 修改每个位数, 获得更大的数
+        m = a[i];
+        // 保存当前位数的值
+        for (++a[i]; a[i] < 10; ++a[i]) {
+            // 改变当前位数值
+            n = 0;
+            for (j = len-1; j >= 0; --j)
+                // 生成每个更大的数
+                n = n*10 + a[j];
+            printf("%d\t", n);
+        }
+        a[i] = m;
+        // 恢复原来的位数值
+        printf("\n");
+    }
+    return 0;
 }
 ```
 
@@ -794,19 +788,18 @@ I C Languag.
 #define N 1024
 int main()
 {
-char str1[N], str2[N];
-int i, j, m;
-gets(str1);
-gets(str2);
-for(i = 0; str2[i]; ++i)
-for(j = 0; str1[j]; )
-if(str2[i] == str1[j])
-for(m = j; str1[m]; ++m)
-//删除str1[j]
-str1[m] = str1[m+1];
-else
-++j;
-puts(str1);
-return 0;
+    char str1[N], str2[N];
+    int i, j, m;
+    gets(str1);
+    gets(str2);
+    for (i = 0; str2[i]; ++i)
+        for (j = 0; str1[j]; )
+            if (str2[i] == str1[j])
+                for (m = j; str1[m]; ++m)
+                    str1[m] = str1[m+1];    // 删除 str1[j]
+            else
+                ++j;
+    puts(str1);
+    return 0;
 }
 ```

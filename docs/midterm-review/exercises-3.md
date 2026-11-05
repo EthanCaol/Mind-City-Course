@@ -59,9 +59,13 @@ icon: material/format-list-checks
 
 ```c
 #include<stdio.h>
-int main(){
-int x; float y;
-scanf("%6d%f",&x,&y); return 0;}
+int main()
+{
+    int x;
+    float y;
+    scanf("%6d%f", &x, &y);
+    return 0;
+}
 ```
 
 - A. 12345
@@ -77,15 +81,18 @@ scanf("%6d%f",&x,&y); return 0;}
 #include<stdio.h>
 int main()
 {
-int x=1,y=0,a=1,b=1;
-switch(x){
-case 1: switch(y){
-case 0:b++; break;
-case 1:a++;}
-case 2: b++;
-case 3: a++;
-}
-printf("a=%d,b=%d",a,b); return 0;
+    int x = 1, y = 0, a = 1, b = 1;
+    switch (x) {
+    case 1:
+        switch (y) {
+        case 0: b++; break;
+        case 1: a++;
+        }
+    case 2: b++;
+    case 3: a++;
+    }
+    printf("a=%d,b=%d", a, b);
+    return 0;
 }
 ```
 
@@ -104,10 +111,11 @@ printf("a=%d,b=%d",a,b); return 0;
 #include<stdio.h>
 int main( )
 {
-int i,sum;
-for (i=1;i<6;i++) sum+=i;
-printf("%d\n",sum);
-return 0;
+    int i, sum;
+    for (i = 1; i < 6; i++)
+        sum += i;
+    printf("%d\n", sum);
+    return 0;
 }
 ```
 
@@ -126,18 +134,18 @@ return 0;
 #include<stdio.h>
 int main( )
 {
-int a,s,n,count;
-a=2;
-s=0;
-n=1;
-count=1;
-while(count<=7){
-n=n*a;
-s=s+n;
-++count;
-}
-printf("s=%d",s);
-return 0;
+    int a, s, n, count;
+    a = 2;
+    s = 0;
+    n = 1;
+    count = 1;
+    while (count <= 7) {
+        n = n * a;
+        s = s + n;
+        ++count;
+    }
+    printf("s=%d", s);
+    return 0;
 }
 ```
 
@@ -149,11 +157,11 @@ return 0;
 #include<stdio.h>
 int main()
 {
-int a=1,b=5,c=4;
-while(c-->0&&++a<6)
-b=b-1;
-printf("%d,%d,%d\n",a,b,c);
-return 0;
+    int a = 1, b = 5, c = 4;
+    while (c-- > 0 && ++a < 6)
+        b = b - 1;
+    printf("%d,%d,%d\n", a, b, c);
+    return 0;
 }
 ```
 
@@ -164,18 +172,19 @@ return 0;
 ```c
 #include <stdio.h>
 int main(void)
-{ int n=10, i, j, t, a[10]={7,3,66,-5,22,90,34,11,58,19};
-for( i = 1; i < n; i++ )
-for (j = 0; j < n-i; j++ )
-if (a[j] < a[j+1])
 {
-t=a[j];
-a[j]=a[j+1];
-a[j+1]=t;
+    int n = 10, i, j, t, a[10] = {7, 3, 66, -5, 22, 90, 34, 11, 58, 19};
+    for (i = 1; i < n; i++)
+        for (j = 0; j < n-i; j++)
+            if (a[j] < a[j+1]) {
+                t = a[j];
+                a[j] = a[j+1];
+                a[j+1] = t;
+            }
+    for (i = 0; i < n; i++)
+        printf("%3d", a[i]);
+    return 0;
 }
-for(i=0; i<n; i++)
-printf("%3d",a[i]);
-return 0;
 ```
 
 材料上：将数组中数据从大到小排序，输出 90 66 58 34 22 19 11 7 3 -5。
@@ -187,18 +196,22 @@ return 0;
 ```c
 #include<stdio.h>
 int main()
-{ int arr[5][5] = { 0 }; int a = 1; int b = 1;
-for (a = 0; a < 5; a++) {
-arr[a][0] = 1;
-for (b = 0; b <=a; b++){
-if(a==b) arr[a][b] = 1;
-if(a>1 && b>=1)
-arr[a][b] = arr[a - 1][b - 1] + arr[a - 1][b];
-printf("%d ", arr[a][b]);
-}
-printf("\n");
-}
-return 0;
+{
+    int arr[5][5] = {0};
+    int a = 1;
+    int b = 1;
+    for (a = 0; a < 5; a++) {
+        arr[a][0] = 1;
+        for (b = 0; b <= a; b++) {
+            if (a == b)
+                arr[a][b] = 1;
+            if (a > 1 && b >= 1)
+                arr[a][b] = arr[a - 1][b - 1] + arr[a - 1][b];
+            printf("%d ", arr[a][b]);
+        }
+        printf("\n");
+    }
+    return 0;
 }
 ```
 

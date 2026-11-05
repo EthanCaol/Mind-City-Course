@@ -59,11 +59,12 @@ icon: material/format-list-checks
 
 ```c
 #include<stdio.h>
-int main() {
-double x;
-scanf("%f", &x);
-printf("%.2f", x);
-return 0;
+int main()
+{
+    double x;
+    scanf("%f", &x);
+    printf("%.2f", x);
+    return 0;
 }
 ```
 
@@ -77,7 +78,7 @@ return 0;
 如果定义了以下变量和数组，那么以下可以通过编译的合法表达式或者语句是（A）。
 
 ```c
-int a[3], b[3], i = 3, j ;
+int a[3], b[3], i = 3, j;
 ```
 
 - A. `j = a == b;`
@@ -107,17 +108,19 @@ j = (++i) + (i++);
 
 ```c
 #include <stdio.h>
-int main(){
-int i = 0, v1 = 0, v2 = 1, v3 = 2;
-for (i = 1; i < 10; i++){
-switch (i % 4){
-case 1: v1++;
-case 2: v2++; break;
-default: v3++;
+int main()
+{
+    int i = 0, v1 = 0, v2 = 1, v3 = 2;
+    for (i = 1; i < 10; i++) {
+        switch (i % 4) {
+        case 1: v1++;
+        case 2: v2++; break;
+        default: v3++;
+        }
+    }
+    printf("%d,%d,%d\n", v1, v2, v3);
+    return 0;
 }
-}
-printf("%d,%d,%d\n",v1,v2,v3);
-return 0;}
 ```
 
 ### 2
@@ -126,16 +129,18 @@ return 0;}
 
 ```c
 #include<stdio.h>
-int main(){
-int y, x=3;
-do{
-y=x--;
-if(!y){
-printf("*"); break;
-}
-printf("#");
-}while(1<=x<=2);
-printf("\nx=%d,y=%d", x, y);
+int main()
+{
+    int y, x = 3;
+    do {
+        y = x--;
+        if (!y) {
+            printf("*");
+            break;
+        }
+        printf("#");
+    } while (1 <= x <= 2);
+    printf("\nx=%d,y=%d", x, y);
 }
 ```
 
@@ -152,16 +157,17 @@ x=-1,y=0
 
 ```c
 #include <stdio.h>
-int main() {
-int a[5] = {2, 4, 6, 8, 10};
-int i, sum = 0;
-for (i = 0; i < 5; i++) {
-if (a[i] % 4 == 0)
-continue;
-sum += a[i];
-}
-printf("sum = %d\n", sum);
-return 0;
+int main()
+{
+    int a[5] = {2, 4, 6, 8, 10};
+    int i, sum = 0;
+    for (i = 0; i < 5; i++) {
+        if (a[i] % 4 == 0)
+            continue;
+        sum += a[i];
+    }
+    printf("sum = %d\n", sum);
+    return 0;
 }
 ```
 
