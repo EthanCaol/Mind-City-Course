@@ -8,7 +8,7 @@ icon: material/format-list-checks
 
 ## 一、单选题
 
-### 1
+### 第1题
 
 请选出可以作为 C 语言用户标识符的一组标识符(B)
 
@@ -17,7 +17,7 @@ icon: material/format-list-checks
 - C. FOR、-abc、Case
 - D. 2a、Do、Sizeof
 
-### 2
+### 第2题
 
 设有说明：`char w; int x; float y; double z;`，则表达式 `w*x+z-y` 值的数据类型为(D)
 
@@ -26,7 +26,7 @@ icon: material/format-list-checks
 - C. int
 - D. double
 
-### 3
+### 第3题
 
 若定义 `a[][2]={1,2,3,4,5,6,7};`，则 a 数组中行的大小是(C)
 
@@ -35,7 +35,7 @@ icon: material/format-list-checks
 - C. 4
 - D. 无确定值
 
-### 4
+### 第4题
 
 如果 a=3，b=2，c=1，则下列表达式的值为 0 的是(C)
 
@@ -44,7 +44,7 @@ icon: material/format-list-checks
 - C. `b+c<a`
 - D. `c=a>b`
 
-### 5
+### 第5题
 
 执行语句 `char str[]="ab\tde\\fg\n";printf("%d",strlen(str));` 后输出(B)
 
@@ -53,7 +53,7 @@ icon: material/format-list-checks
 - C. 14
 - D. 10
 
-### 6
+### 第6题
 
 有如下程序，输入数据 `12345M678<CR>` 后（`<CR>` 表示回车），x 的值是(A)
 
@@ -73,7 +73,7 @@ int main()
 - C. 123456
 - D. 345
 
-### 7
+### 第7题
 
 有如下程序：
 
@@ -103,7 +103,7 @@ int main()
 - C. a=2,b=3
 - D. a=1,b=2
 
-### 8
+### 第8题
 
 以下程序执行后 sum 的值是(D)
 
@@ -126,7 +126,7 @@ int main( )
 
 ## 二、程序阅读题
 
-### 1
+### 第1题
 
 以下程序运行所产生的输出是 (2+4+8+16+32+64+128=256)
 
@@ -149,7 +149,7 @@ int main( )
 }
 ```
 
-### 2
+### 第2题
 
 以下程序运行所产生的输出是 5，1，-1。
 
@@ -165,7 +165,7 @@ int main()
 }
 ```
 
-### 3
+### 第3题
 
 写出下面程序的功能和执行后的显示结果。
 
@@ -189,7 +189,7 @@ int main(void)
 
 材料上：将数组中数据从大到小排序，输出 90 66 58 34 22 19 11 7 3 -5。
 
-### 4
+### 第4题
 
 写出下面程序的功能和执行后的显示结果。
 
