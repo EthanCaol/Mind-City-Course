@@ -168,15 +168,15 @@ printf("%c,%c,%c,%c\n",a,b,c,d);
 ```c
 int main()
 {
-int i=0,x=0;
+int i=0, x=0, s=0;
 for (;;)
 {
-if(i= =3||i= =5)
+if(i==3||i==5)
 continue;
-if (i= =6) break;
+if (i==6) break;
 i++;
 s+=i;
-};
+}
 printf("%d\n",s);
 }
 ```
@@ -723,7 +723,7 @@ a[j+1] = temp;
 }
 void main()
 {
-int array[5]={8, 9, 28, 11, 23, 8};
+int array[5]={8, 9, 28, 11, 23};
 InsertionSort(array, 5);
 for(int i = 0; i < 5; i++)
 {

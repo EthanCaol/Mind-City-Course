@@ -182,8 +182,8 @@ char str4[20] = "fudan\012university";
 char str5[20] = "fudan\0123university";
 char str6[20] = "fudan\x123university";
 int i1, j1,i2,j2,i3,j3,i4,j4,i5,j5,i6,j6;
-i1=sizeof(str1) ; i2=sizeof(str2) ; i3=sizeof(str3) ; i2=sizeof(str4) ;
-i2=sizeof(str5) ; i2=sizeof(str6);
+i1=sizeof(str1) ; i2=sizeof(str2) ; i3=sizeof(str3) ; i4=sizeof(str4) ;
+i5=sizeof(str5) ; i6=sizeof(str6);
 j1=strlen(str1) ; j2=strlen(str2) ; j3=strlen(str3) ; j4=strlen(str4) ;
 j5=strlen(str5) ; j6=strlen(str6);
 printf("%d,%d , %d,%d , %d,%d , %d,%d , %d,%d , %d,%d", i1,j1 ,
@@ -223,32 +223,35 @@ i2,j2 , i3,j3 , i4,j4 , i5,j5 , i6,j6);
 ```c
 int i, j, min, temp;
 for(i=0;i<M-1;i++){
-for(j=i+1,min=i;j<M;j++)
-if(x[j]<x[i])min=j;
-if(i!=min){
-temp=x[i]; x[i]=x[min]; x[min]=x[i];
-}
+    for(j=i+1,min=i;j<M;j++)
+        if(x[j]<x[min])min=j;
+    if(i!=min){
+        temp=x[i];
+        x[i]=x[min];
+        x[min]=temp;
+    }
 }
 ```
 
 ## 倒序输出一个正整数
 
 ```c
-int x, i, j
+int x, i, j;
+scanf("%d", &x);
 for (j=0;x>0; x/=10){
-i=x%10;
-j++;
-printf("%c", '0'+i);
+    i=x%10;
+    j++;
+    printf("%c", '0'+i);
 }
 ```
 
 ## 顺序输出一个正整数
 
 ```c
-void show-int(int n)
+void show_int(int n)
 { char c;
    c = n % 10 + '0';
-   if (n >= 10) show-int(n/10);
+   if (n >= 10) show_int(n/10);
    printf("%c", c);
 }
 ```
