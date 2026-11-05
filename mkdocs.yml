@@ -28,6 +28,13 @@ nav:
   - 站点首页: index.md
   - 课程资料: material.md
   - 站点计划: plan.md
+  - 期中复习专栏:
+      - 复习课件下载: midterm-review/index.md
+      - 期中复习内容: midterm-review/review.md
+      - 期中复习习题-1: midterm-review/exercises-1.md
+      - 期中复习习题-2: midterm-review/exercises-2.md
+      - 期中复习习题-3: midterm-review/exercises-3.md
+      - 期中复习习题-4: midterm-review/exercises-4.md
   - 编程作业:
       - 作业完成情况: homework-code/completion.md
       - 作业1：整数加法: homework-code/01-add.md
