@@ -10,7 +10,7 @@ icon: material/format-list-checks
 
 ### 1
 
-请选出可以作为 C 语言标识符的一组标识符（D）。
+请选出可以作为 C 语言标识符的一组标识符(D)
 
 - A. 2num, f1, total
 - B. main, case, _sum
@@ -19,7 +19,7 @@ icon: material/format-list-checks
 
 ### 2
 
-设有 `int i=3.0/2.0; double d=3/2;`，则 i 和 d 的值分别为（A）。
+设有 `int i=3.0/2.0; double d=3/2;`，则 i 和 d 的值分别为(A)
 
 - A. 1, 1.0
 - B. 2, 1.0
@@ -28,7 +28,7 @@ icon: material/format-list-checks
 
 ### 3
 
-若定义 `char a[][3]={'1','2','3','4'};`，则 sizeof(a) 的返回值为（B）。
+若定义 `char a[][3]={'1','2','3','4'};`，则 sizeof(a) 的返回值为(B)
 
 - A. 4
 - B. 6
@@ -37,7 +37,7 @@ icon: material/format-list-checks
 
 ### 4
 
-设有 `int x, y;`，循环语句 `while (!x && !y)` 中的循环条件表达式等价于（C）。
+设有 `int x, y;`，循环语句 `while (!x && !y)` 中的循环条件表达式等价于(C)
 
 - A. `!(x == 0 && y == 0)`
 - B. `!(x == 0 || y == 0)`
@@ -46,7 +46,7 @@ icon: material/format-list-checks
 
 ### 5
 
-程序语句 `printf("%d", strlen("hello\078world!"));` 的输出结果是（A）。
+程序语句 `printf("%d", strlen("hello\078world!"));` 的输出结果是(A)
 
 - A. 13
 - B. 12
@@ -55,7 +55,7 @@ icon: material/format-list-checks
 
 ### 6
 
-如下程序 scanf 输入 `1<B>.234<CR>`（其中 `<B>` 表示空格，`<CR>` 表示回车），输出（D）。
+如下程序 scanf 输入 `1<B>.234<CR>`（其中 `<B>` 表示空格，`<CR>` 表示回车），输出(D)
 
 ```c
 #include<stdio.h>
@@ -75,7 +75,7 @@ int main()
 
 ### 7
 
-如果定义了以下变量和数组，那么以下可以通过编译的合法表达式或者语句是（A）。
+如果定义了以下变量和数组，那么以下可以通过编译的合法表达式或者语句是(A)
 
 ```c
 int a[3], b[3], i = 3, j;
@@ -88,7 +88,7 @@ int a[3], b[3], i = 3, j;
 
 ### 8
 
-若以下程序执行后，输出为（D）。
+若以下程序执行后，输出为(D)
 
 ```c
 int i = 3, j;
@@ -104,7 +104,7 @@ j = (++i) + (i++);
 
 ### 1
 
-请写出以下程序运行所产生的输出：3,6,6。
+请写出以下程序运行所产生的输出：(3,6,6)
 
 ```c
 #include <stdio.h>

@@ -10,7 +10,7 @@ icon: material/format-list-checks
 
 ### 1
 
-请选出可以作为 C 语言用户标识符的一组标识符（B）。
+请选出可以作为 C 语言用户标识符的一组标识符(B)
 
 - A. void、define、WORD
 - B. A3_B3、_123、abc
@@ -19,7 +19,7 @@ icon: material/format-list-checks
 
 ### 2
 
-设有说明：`char w; int x; float y; double z;`，则表达式 `w*x+z-y` 值的数据类型为（D）。
+设有说明：`char w; int x; float y; double z;`，则表达式 `w*x+z-y` 值的数据类型为(D)
 
 - A. float
 - B. char
@@ -28,7 +28,7 @@ icon: material/format-list-checks
 
 ### 3
 
-若定义 `a[][2]={1,2,3,4,5,6,7};`，则 a 数组中行的大小是（C）。
+若定义 `a[][2]={1,2,3,4,5,6,7};`，则 a 数组中行的大小是(C)
 
 - A. 2
 - B. 3
@@ -37,7 +37,7 @@ icon: material/format-list-checks
 
 ### 4
 
-如果 a=3，b=2，c=1，则下列表达式的值为 0 的是（C）。
+如果 a=3，b=2，c=1，则下列表达式的值为 0 的是(C)
 
 - A. `a>b`
 - B. `(a>b)==c`
@@ -46,7 +46,7 @@ icon: material/format-list-checks
 
 ### 5
 
-执行语句 `char str[]="ab\tde\\fg\n";printf("%d",strlen(str));` 后输出（B）。
+执行语句 `char str[]="ab\tde\\fg\n";printf("%d",strlen(str));` 后输出(B)
 
 - A. 12
 - B. 9
@@ -55,7 +55,7 @@ icon: material/format-list-checks
 
 ### 6
 
-有如下程序，输入数据 `12345M678<CR>` 后（`<CR>` 表示回车），x 的值是（A）。
+有如下程序，输入数据 `12345M678<CR>` 后（`<CR>` 表示回车），x 的值是(A)
 
 ```c
 #include<stdio.h>
@@ -96,7 +96,7 @@ int main()
 }
 ```
 
-该程序的输出结果是（C）。
+该程序的输出结果是(C)
 
 - A. a=3,b=3
 - B. a=1,b=3
@@ -105,7 +105,7 @@ int main()
 
 ### 8
 
-以下程序执行后 sum 的值是（D）。
+以下程序执行后 sum 的值是(D)
 
 ```c
 #include<stdio.h>
@@ -128,7 +128,7 @@ int main( )
 
 ### 1
 
-以下程序运行所产生的输出是 2+4+8+16+32+64+128=256。
+以下程序运行所产生的输出是 (2+4+8+16+32+64+128=256)
 
 ```c
 #include<stdio.h>
