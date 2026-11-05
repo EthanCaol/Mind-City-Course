@@ -443,8 +443,289 @@ int binsearch(int x, int v[], int n)
     }
     ```
 
-## 三、综合题（略）
+## 三、综合题
 
-- 输入一个自然数 N（N>1），输出它的质因子分解式。如 n＝8，程序输出 8＝2*2*2
-- 如果有 n 个棋子，甲、乙两方轮流取棋子，每方至少取一个棋子，最多取 m 个棋子。谁最后取剩下的一个棋子，谁就输，如果甲方先取，请给出甲方必赢的算法。（即：无论乙怎么下，甲都能赢）
-- 设有 N 个白石子和 N 个黑石子，开始时排成一行，中间有一个空位置。如 N＝3，三个白石子和三个黑石子排成如下：WWW BBB。要求按以下的规则将他们移动，变成 N 个黑石子和 N 个白石子排成一行，中间有一个空位置：BBB WWW。规则限定每次只能移动一个石子，并要求向着他的目标方向移动，或者将一个石子移动到相邻的空位置，或者跳过一个不同颜色的石子进入空位置。设计移动的策略，并编写程序，输出每次移动后的状态。
+### 第1题 · 质因子分解
+
+输入一个自然数 N（N>1），输出它的质因子分解式。如 n＝8，程序输出 8＝2*2*2。
+
+??? note "思路"
+
+    从 2 开始试除。n 能被 d 整除，就输出 d，并令 n = n / d；不能整除则 d 加 1。n 变成 1 时结束，因子之间补 `*`。
+
+??? note "答案"
+
+    ```c
+    #include <stdio.h>
+
+    int main(void)
+    {
+        int n, d;
+        scanf("%d", &n);
+        printf("%d=", n);
+        d = 2;
+        while (n > 1) {
+            if (n % d == 0) {
+                printf("%d", d);
+                n /= d;
+                if (n > 1)
+                    printf("*");
+            } else {
+                d++;
+            }
+        }
+        printf("\n");
+        return 0;
+    }
+    ```
+
+    运行示例：
+
+    ```text
+    8     ->  8=2*2*2
+    30    ->  30=2*3*5
+    1024  ->  1024=2*2*2*2*2*2*2*2*2*2
+    97    ->  97=97
+    ```
+
+### 第2题 · 取棋子
+
+有 n 个棋子，甲、乙两方轮流取棋子，每方至少取一个，最多取 m 个。谁最后取剩下的一个棋子谁就输。甲方先取，给出甲方必赢的算法（即无论乙怎么下，甲都能赢）。
+
+??? note "思路"
+
+    只剩 1 个棋子时，轮到谁取谁就输，记这种局面为必败局面。
+
+    每次最多取 m 个时，必败局面是 n ≡ 1（mod m+1）。轮到某人时若剩下这么多棋子，他取 k 个（1 ≤ k ≤ m），对方取 m+1-k 个，又会把局面交还成 1（mod m+1），一路下去最后留 1 个给他。
+
+    所以甲先手时，若 n ≡ 1（mod m+1），甲没有必胜策略；否则甲先取 (n-1) mod (m+1) 个，之后乙取 k 个，甲就取 m+1-k 个。
+
+    以 n = 8、m = 3 为例：甲取 3 个剩 5 个；乙取 1 个剩 4 个，甲取 3 个剩 1 个；乙只能取走最后这一个，乙输。
+
+??? note "答案"
+
+    ```c
+    #include <stdio.h>
+
+    int main(void)
+    {
+        int n, m, stones, take, k;
+
+        scanf("%d%d", &n, &m);
+        if (n % (m + 1) == 1) {
+            printf("甲没有必胜策略：先手面对 %d 个棋子必输\n", n);
+            return 0;
+        }
+        stones = n;
+        take = (stones - 1) % (m + 1);
+        printf("甲取 %d 个，剩 %d 个\n", take, stones - take);
+        stones -= take;
+        while (stones > 1) {
+            k = 1;                      /* 演示中乙每次只取 1 个 */
+            if (k > m)
+                k = m;
+            printf("乙取 %d 个，剩 %d 个\n", k, stones - k);
+            stones -= k;
+            if (stones == 0) {
+                printf("乙取走最后一个，乙输\n");
+                return 0;
+            }
+            take = m + 1 - k;
+            if (take > stones - 1)
+                take = stones - 1;      /* 留 1 个给乙 */
+            printf("甲取 %d 个，剩 %d 个\n", take, stones - take);
+            stones -= take;
+        }
+        printf("乙只能取最后 1 个，乙输\n");
+        return 0;
+    }
+    ```
+
+    输入 `8 3`，输出：
+
+    ```text
+    甲取 3 个，剩 5 个
+    乙取 1 个，剩 4 个
+    甲取 3 个，剩 1 个
+    乙只能取最后 1 个，乙输
+    ```
+
+    输入 `9 3`，9 ≡ 1（mod 4），输出：
+
+    ```text
+    甲没有必胜策略：先手面对 9 个棋子必输
+    ```
+
+### 第3题 · 白黑石子移动
+
+设有 N 个白石子和 N 个黑石子，开始时排成一行，中间有一个空位置。如 N＝3，三个白石子和三个黑石子排成 `WWW.BBB`（W 为白、B 为黑、`.` 是空位）。要求按以下规则移动，变成 N 个黑石子和 N 个白石子排成一行、中间一个空位置：BBB WWW。规则限定每次只能移动一个石子，并要求向着它的目标方向移动，或者将一个石子移动到相邻的空位置，或者跳过一个不同颜色的石子进入空位置。设计移动策略，并编写程序，输出每次移动后的状态。
+
+??? note "思路"
+
+    把局面写成一串字符，W 是白子，B 是黑子，`.` 是空位，初始 `WWW.BBB`，目标 `BBB.WWW`。
+
+    一步合法的移动有两种：白子向右、黑子向左走进相邻的空位；或者按同一方向跳过一颗另一种颜色的石子，进入距它两格的空位。
+
+    于是问题变成在状态图上找一条从初始局面到目标局面的路径。用广度优先搜索逐层扩展，得到的步数最少；用一个哈希表记录已经出现过的局面，避免重复。
+
+??? note "答案"
+
+    ```c
+    #include <stdio.h>
+    #include <string.h>
+
+    #define MAXN   10
+    #define LEN    (2 * MAXN + 1)
+    #define MAXS   600000
+    #define HSIZE  (1 << 20)
+
+    static char state[MAXS][LEN + 1];
+    static int  parent[MAXS];
+    static int  from[MAXS];          /* 这步移动的石子原来所在的格子 */
+    static int  table[HSIZE];
+    static int  head, tail, L;
+
+    static unsigned long long hashStr(const char *s)
+    {
+        unsigned long long h = 1469598103934665603ULL;
+        while (*s) {
+            h ^= (unsigned char)*s++;
+            h *= 1099511628211ULL;
+        }
+        return h;
+    }
+
+    static int lookup(const char *s)
+    {
+        unsigned i = (unsigned)(hashStr(s) % HSIZE);
+        while (table[i]) {
+            if (strcmp(state[table[i] - 1], s) == 0)
+                return table[i] - 1;
+            i = (i + 1) % HSIZE;
+        }
+        return -1;
+    }
+
+    static void put(const char *s, int id)
+    {
+        unsigned i = (unsigned)(hashStr(s) % HSIZE);
+        while (table[i])
+            i = (i + 1) % HSIZE;
+        table[i] = id + 1;
+    }
+
+    static void expand(int id)
+    {
+        char s[LEN + 1], t[LEN + 1];
+        int e = 0, i, d, mid;
+
+        strcpy(s, state[id]);
+        while (s[e] != '.')
+            e++;
+        for (i = 0; i < L; i++) {
+            if (i == e)
+                continue;
+            d = e - i;
+            if (s[i] == 'W' && d < 0)      /* 白子只向右走 */
+                continue;
+            if (s[i] == 'B' && d > 0)      /* 黑子只向左走 */
+                continue;
+            if (d == 1 || d == -1) {
+                /* 邻格为空，直接移动 */
+            } else if (d == 2 || d == -2) {
+                mid = (i + e) / 2;
+                if (s[mid] == '.' || s[mid] == s[i])
+                    continue;              /* 只能跳过另一种颜色的石子 */
+            } else {
+                continue;
+            }
+            strcpy(t, s);
+            t[e] = t[i];
+            t[i] = '.';
+            if (lookup(t) < 0) {
+                strcpy(state[tail], t);
+                parent[tail] = id;
+                from[tail] = i;
+                put(t, tail);
+                tail++;
+            }
+        }
+    }
+
+    int main(void)
+    {
+        int n, i, id, goal = -1, path[MAXS], len = 0;
+        char s[LEN + 1], g[LEN + 1];
+
+        scanf("%d", &n);
+        L = 2 * n + 1;
+        for (i = 0; i < n; i++)
+            s[i] = 'W';
+        s[n] = '.';
+        for (i = n + 1; i < L; i++)
+            s[i] = 'B';
+        s[L] = '\0';
+
+        for (i = 0; i < n; i++)
+            g[i] = 'B';
+        g[n] = '.';
+        for (i = n + 1; i < L; i++)
+            g[i] = 'W';
+        g[L] = '\0';
+
+        strcpy(state[0], s);
+        parent[0] = -1;
+        put(s, 0);
+        tail = 1;
+
+        while (head < tail) {
+            if (strcmp(state[head], g) == 0) {
+                goal = head;
+                break;
+            }
+            expand(head);
+            head++;
+        }
+        if (goal < 0) {
+            printf("无解\n");
+            return 0;
+        }
+        for (id = goal; id != -1; id = parent[id])
+            path[len++] = id;
+        printf("%d 步\n", len - 1);
+        for (i = len - 1; i >= 0; i--) {
+            id = path[i];
+            if (parent[id] < 0)
+                printf("       %s\n", state[id]);
+            else
+                printf("%2d步  %s   移动第 %d 格的 %c\n",
+                       len - 1 - i, state[id], from[id] + 1,
+                       state[parent[id]][from[id]]);
+        }
+        return 0;
+    }
+    ```
+
+    输入 `3`，输出：
+
+    ```text
+    15 步
+           WWW.BBB
+     1步  WW.WBBB   移动第 3 格的 W
+     2步  WWBW.BB   移动第 5 格的 B
+     3步  WWBWB.B   移动第 6 格的 B
+     4步  WWB.BWB   移动第 4 格的 W
+     5步  W.BWBWB   移动第 2 格的 W
+     6步  .WBWBWB   移动第 1 格的 W
+     7步  BW.WBWB   移动第 3 格的 B
+     8步  BWBW.WB   移动第 5 格的 B
+     9步  BWBWBW.   移动第 7 格的 B
+    10步  BWBWB.W   移动第 6 格的 W
+    11步  BWB.BWW   移动第 4 格的 W
+    12步  B.BWBWW   移动第 2 格的 W
+    13步  BB.WBWW   移动第 3 格的 B
+    14步  BBBW.WW   移动第 5 格的 B
+    15步  BBB.WWW   移动第 4 格的 W
+    ```
+
+    实测 N=3 时 15 步、N=4 时 24 步、N=5 时 35 步。
