@@ -240,4 +240,41 @@ int main()
 | 22 | `return 0;` |
 | 23 | `}` |
 
-材料上只给出题目，未标出错误行和改正后的代码。
+??? note "答案"
+
+    出错的五处：
+
+    - 第 6 行 `int scores[5];`：下面用 `%f` 读入，元素类型应为 `float`，改成 `float scores[5];`
+    - 第 9 行 `scanf("%f %f %f %f %f", scores);`：五个 `%f` 需要五个地址，只传了数组首地址，改成 `&scores[0], &scores[1], &scores[2], &scores[3], &scores[4]`
+    - 第 10 行 `for (i = 0; i <= 5; i++)`：i 取到 5 时越界，改成 `i < 5`
+    - 第 15 行 `if (avg = 60.0)`：赋值写成了比较，改成 `if (avg == 60.0)`
+    - 第 16 行 `printf("平均分刚好为60分！\n", avg);`：格式串里没有占位符，`avg` 是多余参数，改成 `printf("平均分刚好为%.2f分！\n", avg);`
+
+    修改后的程序：
+
+    ```c
+    #include <stdio.h>
+    int main() {
+        int n, i;
+        float sum = 0;
+        float scores[5];
+
+        printf("请输入5个学生的成绩（以空格分隔）：");
+        scanf("%f %f %f %f %f", &scores[0], &scores[1], &scores[2], &scores[3], &scores[4]);
+        for (i = 0; i < 5; i++) {
+            sum += scores[i];
+        }
+
+        float avg = sum / 5;
+        if (avg == 60.0)
+            printf("平均分刚好为%.2f分！\n", avg);
+        else if (avg > 60.0)
+            printf("平均分为%.2f，及格！\n", avg);
+        else
+            printf("平均分为%.2f，不及格！\n", avg);
+
+        return 0;
+    }
+    ```
+
+    输入 `60 60 60 60 60` 输出「平均分刚好为60.00分！」，输入 `90 80 70 60 50` 输出「平均分为70.00，及格！」，输入 `10 20 30 40 50` 输出「平均分为30.00，不及格！」。

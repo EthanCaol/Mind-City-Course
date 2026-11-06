@@ -6,6 +6,8 @@ icon: material/format-list-checks
 
 本页是课件《期中复习习题-1.pdf》的文字版。
 
+本页参考程序中有几处使用 `gets()`。`gets()` 已在 C11 从标准中删除，gcc 15 按 `-std=gnu23` 编译会报 `implicit declaration of function 'gets'`，下面的代码保持材料原样。
+
 ## 一、选择题
 
 ### 第1题
@@ -127,7 +129,7 @@ icon: material/format-list-checks
 
 ### 第10题
 
-(多选)设有以下定义：
+设有以下定义：
 
 ```c
 #define d 2
@@ -139,13 +141,13 @@ char c = 'A';
 则下面语句中错误的是
 
 - A. `a++;`
-- B. `b++`
+- B. `b++;`
 - C. `c++;`
 - D. `d++;`
 
 ??? note "答案"
 
-    B，D
+    D
 
 ### 第11题
 
