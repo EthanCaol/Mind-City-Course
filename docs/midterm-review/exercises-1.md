@@ -8,7 +8,7 @@ icon: material/format-list-checks
 
 > 注意：本页参考程序中有几处使用了 `gets()`
 > 
-> `gets()` 早在2011年就已经从 C11 标准当中移除
+> `gets()` 早在1999年就被 C99 标准废弃，2011年又从 C11 标准当中移除
 > 
 > 实际使用时，编译会直接报错 `implicit declaration of function 'gets'`
 
