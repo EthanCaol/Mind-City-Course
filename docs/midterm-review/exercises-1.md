@@ -498,14 +498,14 @@ int main()
 ??? note "答案"
 
     ```text
-    Enter: 4
-    Enter: 3
-    Enter: 2
-    Enter: 1
-    Exit: 1
-    Exit: 2
-    Exit: 3
-    Exit: 4
+    ENTER: 4
+    ENTER: 3
+    ENTER: 2
+    ENTER: 1
+    EXIT: 1
+    EXIT: 2
+    EXIT: 3
+    EXIT: 4
     fac(4)=24
     ```
 

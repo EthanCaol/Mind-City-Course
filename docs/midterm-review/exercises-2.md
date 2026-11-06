@@ -356,6 +356,7 @@ int main(  )
 
 ```c
 #include <stdio.h>
+#include <string.h>
 int main()
 {
     char ch[] = "abc", x[3][4];
