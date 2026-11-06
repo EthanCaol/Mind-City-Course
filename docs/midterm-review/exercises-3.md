@@ -12,10 +12,10 @@ icon: material/format-list-checks
 
 请选出可以作为 C 语言用户标识符的一组标识符
 
-- A. void、define、WORD
-- B. A3_B3、_123、abc
-- C. FOR、-abc、Case
-- D. 2a、Do、Sizeof
+- A. `void、define、WORD`
+- B. `A3_B3、_123、abc`
+- C. `FOR、-abc、Case`
+- D. `2a、Do、Sizeof`
 
 ??? note "答案"
 
@@ -25,10 +25,10 @@ icon: material/format-list-checks
 
 设有说明：`char w; int x; float y; double z;`，则表达式 `w*x+z-y` 值的数据类型为
 
-- A. float
-- B. char
-- C. int
-- D. double
+- A. `float`
+- B. `char`
+- C. `int`
+- D. `double`
 
 ??? note "答案"
 
@@ -89,7 +89,7 @@ int main()
 ```
 
 - A. 12345
-- B. 12345M
+- B. `12345M`
 - C. 123456
 - D. 345
 
@@ -122,10 +122,10 @@ int main()
 
 该程序的输出结果是
 
-- A. a=3,b=3
-- B. a=1,b=3
-- C. a=2,b=3
-- D. a=1,b=2
+- A. `a=3,b=3`
+- B. `a=1,b=3`
+- C. `a=2,b=3`
+- D. `a=1,b=2`
 
 ??? note "答案"
 

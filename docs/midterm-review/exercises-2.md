@@ -12,10 +12,10 @@ icon: material/format-list-checks
 
 下列选项中，合法的 C 语言关键字是
 
-- A. VAR
-- B. integer
-- C. default
-- D. public
+- A. `VAR`
+- B. `integer`
+- C. `default`
+- D. `public`
 
 ??? note "答案"
 
@@ -38,10 +38,10 @@ icon: material/format-list-checks
 
 在 C 语言中，不正确的 short 类型（假设存储单元数为 2 个 bytes）的常数是
 
-- A. 123
-- B. 32768
-- C. 037
-- D. 0xAF
+- A. `123`
+- B. `32768`
+- C. `037`
+- D. `0xAF`
 
 ??? note "答案"
 
@@ -51,10 +51,10 @@ icon: material/format-list-checks
 
 以下选项中合法的实型常数是
 
-- A. .58
-- B. E-3
-- C. .E2
-- D. 1.3E
+- A. `.58`
+- B. `E-3`
+- C. `.E2`
+- D. `1.3E`
 
 ??? note "答案"
 
@@ -277,7 +277,7 @@ int main( )
 
 - A. 6
 - B. 6789
-- C. '6'
+- C. `'6'`
 - D. 789
 
 ??? note "答案"

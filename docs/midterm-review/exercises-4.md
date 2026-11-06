@@ -12,10 +12,10 @@ icon: material/format-list-checks
 
 请选出可以作为 C 语言标识符的一组标识符
 
-- A. 2num, f1, total
-- B. main, case, _sum
-- C. print, int$, number_1
-- D. _data, sum1, Average
+- A. `2num, f1, total`
+- B. `main, case, _sum`
+- C. `print, int$, number_1`
+- D. `_data, sum1, Average`
 
 ??? note "答案"
 
@@ -123,9 +123,9 @@ int i = 3, j;
 j = (++i) + (i++);
 ```
 
-- A. i = 4, j = 8
-- B. i = 5, j = 9
-- C. i = 5, j = 10
+- A. `i = 4, j = 8`
+- B. `i = 5, j = 9`
+- C. `i = 5, j = 10`
 - D. 结果未定义
 
 ??? note "答案"
