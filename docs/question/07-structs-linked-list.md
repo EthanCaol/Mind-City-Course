@@ -110,9 +110,9 @@ struct Node {
 printf("%d\n", n2.next->data);
 ```
 
-- A. 10
-- B. 20
-- C. NULL
+- A. `10`
+- B. `20`
+- C. `NULL`
 - D. 编译出错
 
 ??? note "答案"

@@ -25,10 +25,10 @@ icon: material/format-list-checks
 
 设有 `int i=3.0/2.0; double d=3/2;`，则 i 和 d 的值分别为
 
-- A. 1, 1.0
-- B. 2, 1.0
-- C. 1, 1.5
-- D. 2, 1.5
+- A. `1, 1.0`
+- B. `2, 1.0`
+- C. `1, 1.5`
+- D. `2, 1.5`
 
 ??? note "答案"
 
@@ -38,10 +38,10 @@ icon: material/format-list-checks
 
 若定义 `char a[][3]={'1','2','3','4'};`，则 sizeof(a) 的返回值为
 
-- A. 4
-- B. 6
-- C. 8
-- D. 12
+- A. `4`
+- B. `6`
+- C. `8`
+- D. `12`
 
 ??? note "答案"
 
@@ -64,10 +64,10 @@ icon: material/format-list-checks
 
 程序语句 `printf("%d", strlen("hello\078world!"));` 的输出结果是
 
-- A. 13
-- B. 12
-- C. 6
-- D. 5
+- A. `13`
+- B. `12`
+- C. `6`
+- D. `5`
 
 ??? note "答案"
 
@@ -88,9 +88,9 @@ int main()
 }
 ```
 
-- A. 1.234
-- B. 1.23
-- C. 1.00
+- A. `1.234`
+- B. `1.23`
+- C. `1.00`
 - D. 以上答案均不是
 
 ??? note "答案"

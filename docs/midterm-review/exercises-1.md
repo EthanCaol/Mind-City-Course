@@ -49,7 +49,7 @@ icon: material/format-list-checks
 
 ### 第4题
 
-表示关系 x>y≥z，则正确的 C 语言表达式为
+(多选)能正确表示关系 `x>y≥z` 的 C 语言表达式是
 
 - A. `x>y>=z`
 - B. `(x>y)&(y>=z)`
@@ -58,7 +58,7 @@ icon: material/format-list-checks
 
 ??? note "答案"
 
-    C
+    B，C
 
 ### 第5题
 
@@ -77,10 +77,10 @@ icon: material/format-list-checks
 
 已知 `int i=10;` 表达式 `20-0<=i<=9` 的值是
 
-- A. 0
-- B. 1
-- C. 19
-- D. 20
+- A. `0`
+- B. `1`
+- C. `19`
+- D. `20`
 
 ??? note "答案"
 
@@ -90,10 +90,10 @@ icon: material/format-list-checks
 
 已知 `int a=15`，执行语句 `a=a<<2` 以后，变量 a 的值是
 
-- A. 20
-- B. 40
-- C. 60
-- D. 80
+- A. `20`
+- B. `40`
+- C. `60`
+- D. `80`
 
 ??? note "答案"
 
@@ -175,10 +175,10 @@ int main()
 }
 ```
 
-- A. 4
-- B. 5
-- C. 6
-- D. 7
+- A. `4`
+- B. `5`
+- C. `6`
+- D. `7`
 
 ??? note "答案"
 
@@ -243,9 +243,9 @@ int main()
 
 程序运行后的输出结果是
 
-- A. 10
-- B. 13
-- C. 21
+- A. `10`
+- B. `13`
+- C. `21`
 - D. 程序进入死循环
 
 ??? note "答案"
