@@ -4,9 +4,13 @@ icon: material/format-list-checks
 
 # 期中复习习题 1
 
-本页是课件《期中复习习题-1.pdf》的文字版。
+本页是课件《期中复习习题-1.pdf》的文字版
 
-本页参考程序中有几处使用 `gets()`。`gets()` 已在 C11 从标准中删除，gcc 15 按 `-std=gnu23` 编译会报 `implicit declaration of function 'gets'`，下面的代码保持材料原样。
+> 注意：本页参考程序中有几处使用了 `gets()`
+> 
+> `gets()` 早在2011年就已经从 C11 标准当中移除
+> 
+> 实际使用时，编译会直接报错 `implicit declaration of function 'gets'`
 
 ## 一、选择题
 

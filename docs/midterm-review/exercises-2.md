@@ -4,7 +4,7 @@ icon: material/format-list-checks
 
 # 期中复习习题 2
 
-本页是课件《期中复习习题-2.pdf》的文字版。
+本页是课件《期中复习习题-2.pdf》的文字版
 
 ## 一、选择题
 

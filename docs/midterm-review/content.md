@@ -4,7 +4,7 @@ icon: material/file-document-outline
 
 # 期中复习内容
 
-本页是课件《期中复习.pdf》的文字版。
+本页是课件《期中复习.pdf》的文字版
 
 ## 考试安排
 
