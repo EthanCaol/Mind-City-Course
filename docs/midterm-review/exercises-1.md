@@ -53,7 +53,7 @@ icon: material/format-list-checks
 
 - A. x>y>=z
 - B. (x>y)&(y>=z)
-- C. (y<x)&&(y>=z)
+- C. `(y<x)&&(y>=z)`
 - D. (x>y)and(y>=z)
 
 ??? note "答案"
