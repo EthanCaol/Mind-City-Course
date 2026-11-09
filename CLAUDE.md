@@ -209,21 +209,30 @@ Caddy（system 级）直接托管静态文件：`root /var/www/mind-city` + `fil
 | 网站根目录 | `/var/www/mind-city`（静态文件，属 `ethan`，部署脚本无需 root 即可写；Caddy 以 `caddy` 用户读） |
 | 工具链 | conda **base** 环境，Python 3.14.7，`mkdocs` 位于 `~/miniconda3/bin/` |
 
-### 自动部署链路
+### 部署触发
+
+部署由 push 之后本地执行的脚本触发，不走 GitHub webhook：
 
 ```
 git push (main)
-  → GitHub webhook，HMAC-SHA256 签名
-  → https://mind-city.com/hooks/deploy   (Caddy 反代)
-  → mind-city-webhook.service  监听 127.0.0.1:9000
-  → ~/.local/bin/mind-city-deploy.sh
+  → ~/.local/bin/mind-city-deploy.sh    （push 成功后在同一台机器上后台执行）
       ├─ git pull --ff-only origin main
       ├─ mkdocs build --strict -d ~/.cache/mind-city-staging
       └─ 成功才 rsync → /var/www/mind-city
   → Caddy file_server 立即可见
 ```
 
-Webhook 配置在 GitHub 仓库的 Settings → Webhooks，也可用 `gh` 查看：
+全程约 20 秒。push 后由 `nohup ... &` 丢到后台，输出写入 `/var/tmp/mind-city-deploy.log`，不占着会话等；判断结果看日志末尾的 `==> 部署完成` 还是 `mkdocs` 的报错。构建失败时线上仍是上一版。
+
+GitHub webhook（id `690595605`，`https://mind-city.com/hooks/deploy`）保留但已设为 inactive。停用的原因是它偶发 10 秒超时：GitHub 等响应头超时后记一次失败投递且不重试，而接收器日志里没有任何请求，站点就停在旧版。只在这台机器 push 的情况下，本地触发更确定。
+
+要从别的机器 push，先把 webhook 打开：
+
+```bash
+gh api -X PATCH repos/EthanCaol/Mind-City-Course/hooks/690595605 -F active=true
+```
+
+查看 webhook 状态：
 
 ```bash
 gh api repos/EthanCaol/Mind-City-Course/hooks \
@@ -232,7 +241,7 @@ gh api repos/EthanCaol/Mind-City-Course/hooks \
 
 ### 手动重新部署
 
-正常情况不需要手动操作 —— push 就会触发。需要强制重建时直接跑部署脚本：
+正常情况不需要手动操作 —— push 成功后脚本已经跑过一遍。需要强制重建时直接跑部署脚本：
 
 ```bash
 ~/Mind-City-Course                     # 确认在部署目录
@@ -277,7 +286,8 @@ sudo systemctl reload caddy
 安装包和电子书不走仓库，放在 `/var/www/mind-city/downloads/`，由现有 `root + file_server` 直接服务，地址 `https://mind-city.com/downloads/<文件名>`，**不需要单独的 Caddy handle 块**。
 
 - **课件不在这里，直接写 COS 直链**。`docs/material.md` 里各讲的 PDF 每个 1–2 MB，链接写 `https://mind-city-1379176255.cos.ap-shanghai.myqcloud.com/<文件名>`，对象在桶根保持公开读。上传完即可访问，不必等下一次 push 触发部署同步过来；一份两兆，流量费可以忽略。上传时**不要**带 `x-cos-acl: private` —— 桶本身是 `anyone: READ`，不带这个头的对象继承公开读（实测匿名 GET 返回 200）。以后新课件照此办理。代价是这些 PDF 点开是浏览器内预览，不再有 Caddy 那批的 `Content-Disposition: attachment` 下载行为。
-- **源头是 COS 桶 `mind-city-1379176255`**，部署脚本每次跑 `coscmd download -r -s --skipmd5` 增量同步过来。`-s` 按文件名和大小跳过没变的文件，所以只有新增或改动过的对象产生流量，其余一秒跑完。同步失败只记日志、不中断部署，`downloads/` 保持上一次的内容。
+- **源头是 COS 桶 `mind-city-1379176255`**，部署脚本按脚本里的 `DOWNLOADS` 清单逐个同步，不做整个桶的递归镜像。清单外的对象不会进站。新增下载文件时要在脚本里补一行，否则部署拿不到。`-s` 按文件名和大小跳过没变的文件，`--skipmd5` 不比对 md5，所以内容没变时不产生流量；并发 4 个下载，整个步骤约 5 秒。同步失败只记日志、不中断部署，`downloads/` 保持上一次的内容。
+- **桶根不只有下载项**：还放着课件 PDF（走 COS 直链）和其它私人文件。以前用 `download -r` 全量同步，把这些一起镜像到公开目录，安卓安装包还会被 COS 以 `DownloadForbidden` 拒发、每次部署刷几千行重试日志，所以改成了白名单。那几个 APK 已从桶和本地删除。
 - **部署脚本的 `rsync` 带了 `--exclude=/downloads/`**。这个目录不由 mkdocs 产出，去掉排除项后每次部署的 `--delete` 都会把它清空。
 - **文件不在仓库里，所以不需要 `.gitignore` 条目**。也别改成软链接指回家目录：`/home/ethan` 权限是 `750`，Caddy 以 `caddy` 用户运行，进不去。
 - **文档里写绝对地址** `https://mind-city.com/downloads/...`，不要写相对路径 `/downloads/...`：有链接用的是 `<...>` 自动链接形式，Markdown 只把带协议头的内容识别为链接。
@@ -290,13 +300,13 @@ systemd **用户级**服务（均设了 `linger`，断 SSH 不死、开机自启
 
 ```bash
 systemctl --user status  mind-city-docs      # 本地写作预览，127.0.0.1:8000
-systemctl --user status  mind-city-webhook   # 部署接收器，127.0.0.1:9000
+systemctl --user status  mind-city-webhook   # GitHub webhook 接收器，127.0.0.1:9000（webhook 已停用，平时不工作）
 systemctl --user status  mind-city-judge     # 在线评测判题后端，127.0.0.1:9100
 
 systemctl --user restart mind-city-webhook
 systemctl --user restart mind-city-judge
 
-journalctl --user -u mind-city-webhook -f    # 实时看部署日志
+journalctl --user -u mind-city-webhook -f    # 投递到达记录（部署日志直接打在运行脚本的终端）
 journalctl --user -u mind-city-judge -f      # 实时看判题日志
 ```
 
@@ -388,11 +398,11 @@ curl -sS https://mind-city.com/ | grep -c '<关键字>'           # 线上内容
 stat -c '%y' /var/www/mind-city/index.html                    # 静态文件更新时间
 ```
 
-**查看 GitHub 投递是否成功** —— 只看服务器日志会漏掉这类问题：
+**查看 GitHub 投递是否成功** —— webhook 重新打开后才有意义，只看服务器日志会漏掉这类问题：
 
 ```bash
-gh api repos/EthanCaol/Mind-City-Course/hooks/678947351/deliveries \
-  --jq '.[] | "\(.delivered_at)  \(.event)  \(.status)  HTTP \(.status_code)"'
+gh api repos/EthanCaol/Mind-City-Course/hooks/690595605/deliveries \
+  --jq '.[] | "\(.delivered_at)  \(.status)  HTTP \(.status_code)  \(.duration)s"'
 ```
 
 **常见问题**
@@ -400,7 +410,7 @@ gh api repos/EthanCaol/Mind-City-Course/hooks/678947351/deliveries \
 | 症状 | 原因与处理 |
 |---|---|
 | 日志报 `mkdocs: command not found`（退出码 127） | systemd 的 `PATH` 不含 miniconda。部署脚本开头已显式 `PATH="$HOME/miniconda3/bin:$PATH"`，**改动脚本时不要删掉这行**。交互式 shell 里因为 conda base 激活着，不会复现 |
-| GitHub 投递显示 `FAILED` / `context deadline exceeded` | **GitHub webhook 超时只有 10 秒**。接收器必须验签后立刻返回（现为 202），部署丢到后台线程跑。**不要把它改回同步执行** —— 失败的投递不会自动重试，push 会静默丢失 |
+| GitHub 投递显示 `FAILED` / `context deadline exceeded` | **GitHub webhook 超时只有 10 秒**，失败的投递不会自动重试。默认已停用 webhook、改由 push 后本地触发，就是为了避开这一点。若重新打开，接收器仍必须验签后立刻返回 202、部署丢到后台线程跑，**不要改回同步执行** |
 | 构建失败但站点还在 | 预期行为。脚本先构建到 staging，成功才同步，构建失败时线上保持旧版 |
 | 日志报 `Cannot fast-forward to multiple branches`（退出码 128） | 部署的 `git pull` 和**别人在同一个仓库里跑的 `git fetch`/`git pull` 撞了**，两个进程同时写 `.git/FETCH_HEAD`，同一条 `main` 被写了两遍，`merge --ff-only` 见到多个 head 就拒绝。本地 `git pull` 看起来一切正常，重跑一次部署脚本即可。**不要在可能触发部署的时间窗口里手动对这个仓库跑 fetch/pull** |
 | 中文标题锚点变成 `_1`/`_2` | `mkdocs.yml` 的 `toc.slugify` 配置被改动了。待修：`toc` 下加 `slugify: !!python/name:pymdownx.slugs.uslugify` |
@@ -535,7 +545,7 @@ curl -s https://mind-city.com/judge/api/health
 
 ### 接口改动要两边一起换
 
-`judge.js` 是静态文件，push 后十几秒自动部署；`mind-city-judge` 要 `systemctl --user restart` 才加载新代码，两边的接口结构必须同时换（新前端按新字段读、旧服务返回旧字段，错开的那段时间页面直接报错）。顺序是**先 push、确认线上文件已出现新代码，再重启服务**：推在前，构建失败时站点和接口都还是旧的，状态一致；重启在前，构建一旦失败就停在「新接口 + 旧前端」的不匹配组合上，而且不会自动恢复。
+`judge.js` 是静态文件，push 后由部署脚本构建上线（约 20 秒）；`mind-city-judge` 要 `systemctl --user restart` 才加载新代码，两边的接口结构必须同时换（新前端按新字段读、旧服务返回旧字段，错开的那段时间页面直接报错）。顺序是**先 push、确认线上文件已出现新代码，再重启服务**：推在前，构建失败时站点和接口都还是旧的，状态一致；重启在前，构建一旦失败就停在「新接口 + 旧前端」的不匹配组合上，而且不会自动恢复。
 
 ## 外部接口备忘
 
