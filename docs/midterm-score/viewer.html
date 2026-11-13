@@ -42,7 +42,8 @@
 <p id="hint">滚轮缩放，左键拖动，右键恢复默认大小和位置</p>
 
 <script>
-/* 单独窗口看答卷照片。参数从查询页带过来：sid、token、i。
+/* 单独窗口看答卷照片。参数从查询页带过来：sid、token、i、v（v 是照片文件的
+ * 修改时间，只用来区分缓存里的新旧副本）。
  *
  * 缩放和拖动都靠 transform（translate + scale），原点放在左上角，
  * 这样以指针为中心缩放只要解一次线性方程。
@@ -57,6 +58,7 @@
   var sid = params.get("sid") || "";
   var token = params.get("token") || "";
   var i = params.get("i");
+  var v = params.get("v") || "0";
 
   var scale = 1;
   var x = 0;
@@ -84,7 +86,8 @@
 
   img.src = "/judge/api/midterm/photo?sid=" + encodeURIComponent(sid) +
     "&token=" + encodeURIComponent(token) +
-    "&i=" + encodeURIComponent(i || "");
+    "&i=" + encodeURIComponent(i || "") +
+    "&v=" + encodeURIComponent(v);
 
   // 滚轮缩放。以指针为中心：让指针下面那个点在缩放前后保持不动
   addEventListener("wheel", function (e) {

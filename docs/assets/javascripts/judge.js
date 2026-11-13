@@ -1132,12 +1132,16 @@
       photos.className = "midterm__question";
       photos.appendChild(heading(2, "答卷照片（点击打开大图，支持拖动缩放）"));
 
+      var versions = data.photo_versions || [];
+
       for (var i = 0; i < data.photo_count; i++) {
+        // 版本号取文件修改时间：换图后地址随之变化，绕过浏览器的长期缓存
+        var ver = "&v=" + (versions[i] || 0);
         var img = document.createElement("img");
         img.className = "midterm__photo";
         img.loading = "lazy";
         img.alt = "答卷照片";
-        img.src = API + "/midterm/photo?sid=" + sid + "&token=" + token + "&i=" + i;
+        img.src = API + "/midterm/photo?sid=" + sid + "&token=" + token + "&i=" + i + ver;
 
         // 点开单独窗口看原图：缩放、拖动、右键复位都在那一页里
         var link = document.createElement("a");
@@ -1145,7 +1149,7 @@
         link.target = "_blank";
         link.rel = "noopener";
         link.href = "/midterm-score/viewer.html?sid=" + sid +
-          "&token=" + token + "&i=" + i;
+          "&token=" + token + "&i=" + i + ver;
         link.appendChild(img);
         photos.appendChild(link);
       }

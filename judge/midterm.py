@@ -105,10 +105,14 @@ def load(student_id: str) -> dict | None:
     # 第一题在前、第二题在后。目前只有单个数码，按字符位置排就够。
     questions.sort(key=lambda q: NUMERALS.find(q["no"][0]))
 
+    photos = _photos(folder)
     return {
         "student_id": student_id,
         "name": folder.name.split("-", 1)[1],
-        "photo_count": len(_photos(folder)),
+        "photo_count": len(photos),
+        # 每张照片的修改时间。前端把它拼进地址当版本号 —— 照片缓存一年，
+        # 换了图或插了新图之后序号会挪位，不带版本号就会一直显示旧缓存。
+        "photo_versions": [int(p.stat().st_mtime) for p in photos],
         "questions": questions,
     }
 
