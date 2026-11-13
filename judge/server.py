@@ -316,7 +316,7 @@ class App:
             return 502, {"error": "验证码邮件没发出去，等一会儿再试。"}
 
         return 200, {
-            "email": f"{student_id[:3]}***@{config.STUDENT_MAIL_DOMAIN}",
+            "email": f"{student_id}@{config.STUDENT_MAIL_DOMAIN}",
             "expires_in": config.CODE_TTL_S,
         }
 

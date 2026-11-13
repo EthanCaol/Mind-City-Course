@@ -1239,7 +1239,20 @@
       request("POST", API + "/verify/send", { student_id: sid })
         .then(function (data) {
           codeInput.focus();
-          say("验证码已发到 " + data.email + "，" + Math.round(data.expires_in / 60) + " 分钟内有效。");
+          // 提示里带收信入口，省得再去翻说明
+          msg.textContent = "";
+          msg.hidden = false;
+          msg.className = "midterm__msg";
+          msg.appendChild(document.createTextNode(
+            "验证码已发到 " + data.email + "，" + Math.round(data.expires_in / 60) + " 分钟内有效"));
+          msg.appendChild(document.createElement("br"));
+          msg.appendChild(document.createTextNode("复旦学邮网址: "));
+          var link = document.createElement("a");
+          link.href = "https://mail.m.fudan.edu.cn";
+          link.target = "_blank";
+          link.rel = "noopener";
+          setText(link, "https://mail.m.fudan.edu.cn");
+          msg.appendChild(link);
           cooldown(MIDTERM_RESEND_S);
         })
         .catch(function (err) {
