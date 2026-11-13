@@ -19,7 +19,7 @@
     #include <stdio.h>
     int main(void)
     {
-        printf("Concrete contains gravel and cement.\n");
+        printf("Hello, World!\n");
 
         return 0;
     }
@@ -28,7 +28,7 @@
     输出：
 
     ```text
-    Concrete contains gravel and cement.
+    Hello, World!
     ```
 
 !!! note "说明"
@@ -138,7 +138,6 @@
 
     ```text
     inform.c  inform.o  a.out                 # UNIX
-    concrete.c  concrete.obj  concrete.exe    # Windows
     ```
 
 !!! note "说明"
@@ -154,48 +153,6 @@
     - 把目标文件当作可执行文件运行
     - 只编译不链接，得不到可执行文件
 
-## 调用编译器
-
-!!! abstract "命令形式"
-
-    ```bash
-    cc 文件名.c
-    ```
-
-!!! example "示例"
-
-    ```bash
-    cc inform.c
-    ./a.out
-    ```
-
-    输出：
-
-    ```text
-    A .c is used to end a C program filename.
-    ```
-
-!!! note "说明"
-
-    - `cc` 是编译命令，多数系统把它设为 `gcc` 或 `clang` 的别名
-    - `cc -v` 显示编译器名称与版本
-    - `gcc -std=c99 文件名.c` 按 C99 标准编译，换成 `c11` 即 C11
-    - UNIX 下默认生成 `a.out`，再次编译会覆盖，需保留时先改名
-    - UNIX 编译单个源文件后通常删掉 `.o`，只留可执行文件
-
-## 控制台窗口暂停
-
-!!! example "示例"
-
-    ```c
-    getchar();
-    ```
-
-!!! note "说明"
-
-    - Windows IDE 中程序结束，控制台窗口立即关闭
-    - 在 `return 0;` 前加一行 `getchar();`，程序等一次回车再退出
-    - 若之前有输入，第一个 `getchar()` 读走遗留的回车，要写两行
 
 ## 复习题
 
