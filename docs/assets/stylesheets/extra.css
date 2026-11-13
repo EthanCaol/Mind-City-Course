@@ -1171,8 +1171,12 @@
   margin-bottom: 0.5rem;
 }
 
+/* 定宽：两个标签一个两字、一个三字，不定宽的话下面那个输入框会往右缩 */
 .md-typeset .midterm__label {
+  flex: none;
+  width: 3.2em;
   font-size: 0.8rem;
+  white-space: nowrap;
   color: var(--md-default-fg-color--light);
 }
 
@@ -1197,29 +1201,26 @@
   letter-spacing: 0.2em;
 }
 
-/* 按钮用描边样式而不是实心块：它和输入框同一行，实心大色块会把整行压歪 */
 .md-typeset .midterm__row button {
   flex: none;
-  min-width: 7.5rem;
-  padding: 0.45rem 0.8rem;
-  border: 0.05rem solid var(--md-primary-fg-color);
+  padding: 0.45rem 1.4rem;
+  border: none;
   border-radius: 0.2rem;
-  background-color: transparent;
-  color: var(--md-primary-fg-color);
-  font-size: 0.75rem;
+  background-color: var(--md-primary-fg-color);
+  color: var(--md-primary-bg-color);
+  font-size: 0.8rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: background-color 125ms, color 125ms;
 }
 
 .md-typeset .midterm__row button:hover:not(:disabled) {
-  background-color: var(--md-primary-fg-color);
-  color: var(--md-primary-bg-color);
+  background-color: var(--md-accent-fg-color);
 }
 
 .md-typeset .midterm__row button:disabled {
-  border-color: var(--md-default-fg-color--lighter);
-  color: var(--md-default-fg-color--light);
   cursor: not-allowed;
+  background-color: var(--md-default-fg-color--lighter);
+  color: var(--md-default-bg-color);
 }
 
 .md-typeset .midterm__msg {
