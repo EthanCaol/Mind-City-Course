@@ -33,9 +33,6 @@ nav:
   - 站点首页: index.md
   - 课程资料: material.md
   - 站点计划: plan.md
-  - 期中考试专栏:
-      - 编程题评分查询: midterm-score/programming.md
-      - 期中考试参考答案: midterm-score/answer.md
   - 编程作业:
       - 作业完成情况: homework-code/completion.md
       - 作业1：整数加法: homework-code/01-add.md
