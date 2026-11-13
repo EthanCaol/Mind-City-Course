@@ -52,6 +52,24 @@ nav:
       - 作业15：冒泡排序: homework-code/15-bubble-sort.md
       - 作业16：选择排序: homework-code/16-selection-sort.md
       - 作业17：插入排序: homework-code/17-insertion-sort.md
+  - C-Primer-Plus笔记:
+      - 第1章 初识C语言: c-primer-plus-notes/01-getting-ready.md
+      - 第2章 C语言概述: c-primer-plus-notes/02-introducing-c.md
+      - 第3章 数据和C: c-primer-plus-notes/03-data-and-c.md
+      - 第4章 字符串和格式化输入/输出: c-primer-plus-notes/04-strings-and-formatted-io.md
+      - 第5章 运算符、表达式和语句: c-primer-plus-notes/05-operators-expressions-and-statements.md
+      - 第6章 C控制语句：循环: c-primer-plus-notes/06-control-statements-looping.md
+      - 第7章 C控制语句：分支和跳转: c-primer-plus-notes/07-control-statements-branching-and-jumps.md
+      - 第8章 字符输入/输出和输入验证: c-primer-plus-notes/08-character-io-and-input-validation.md
+      - 第9章 函数: c-primer-plus-notes/09-functions.md
+      - 第10章 数组和指针: c-primer-plus-notes/10-arrays-and-pointers.md
+      - 第11章 字符串和字符串函数: c-primer-plus-notes/11-strings-and-string-functions.md
+      - 第12章 存储类别、链接和内存管理: c-primer-plus-notes/12-storage-classes-linkage-and-memory-management.md
+      - 第13章 文件输入/输出: c-primer-plus-notes/13-file-input-output.md
+      - 第14章 结构和其他数据形式: c-primer-plus-notes/14-structures-and-other-data-forms.md
+      - 第15章 位操作: c-primer-plus-notes/15-bit-fiddling.md
+      - 第16章 C预处理器和C库: c-primer-plus-notes/16-c-preprocessor-and-c-library.md
+      - 第17章 高级数据表示: c-primer-plus-notes/17-advanced-data-representation.md
   - 实验课文档:
       - 文档阅读进度: setup/reading.md
       - 实用工具推荐: setup/useful.md
@@ -69,6 +87,17 @@ nav:
       - (8) 助教的笔记仓库(参考): setup/markdown-repo.md
       - (9) Python 环境配置: setup/python-env.md
       - (10) Python 语法入门: setup/python-syntax.md
+  - 备考题库:
+      - 题库索引: past-exam-question/index.md
+      - 备考-第1章 程序设计基础: past-exam-question/01-basics.md
+      - 备考-第2章 基本数据类型及其运算: past-exam-question/02-data-and-expressions.md
+      - 备考-第3章 结构化程序设计: past-exam-question/03-control-flow.md
+      - 备考-第4章 数组: past-exam-question/04-arrays.md
+      - 备考-第5章 函数: past-exam-question/05-functions.md
+      - 备考-第6章 指针和引用: past-exam-question/06-pointers.md
+      - 备考-第7章 结构和链表: past-exam-question/07-structs-linked-list.md
+      - 备考-第8章 数据文件处理技术: past-exam-question/08-file-io.md
+      - 备考-第9章 算法设计技术基础: past-exam-question/09-algorithms.md
   - 教材习题:
       - 习题自测进度: homework-book/reading.md
       - 第二章：基本数据类型: homework-book/chapter-2.md
@@ -79,17 +108,6 @@ nav:
       - 第七章：结构和链表: homework-book/chapter-7.md
       - 第八章：数据文件处理技术: homework-book/chapter-8.md
       - 第九章：算法设计技术基础: homework-book/chapter-9.md
-  - 备考题库:
-      - 题库索引: question/index.md
-      - 备考-第1章 程序设计基础: question/01-basics.md
-      - 备考-第2章 基本数据类型及其运算: question/02-data-and-expressions.md
-      - 备考-第3章 结构化程序设计: question/03-control-flow.md
-      - 备考-第4章 数组: question/04-arrays.md
-      - 备考-第5章 函数: question/05-functions.md
-      - 备考-第6章 指针和引用: question/06-pointers.md
-      - 备考-第7章 结构和链表: question/07-structs-linked-list.md
-      - 备考-第8章 数据文件处理技术: question/08-file-io.md
-      - 备考-第9章 算法设计技术基础: question/09-algorithms.md
   - 期中复习专栏:
       - 复习课件下载: midterm-review/index.md
       - 期中复习内容: midterm-review/content.md
