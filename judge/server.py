@@ -519,10 +519,12 @@ def create_handler(app: App):
             if isinstance(payload, str):
                 self._send(status, payload.encode("utf-8"), "text/csv; charset=utf-8")
             elif isinstance(payload, bytes):
-                # 答卷照片一份就几 MB 且不会变，让浏览器自己存着，别每次重下。
+                # 答卷照片一份就几 MB 且交卷后不再变，一年内不必重下。
                 # 地址里带着学号和凭据，每个人、每个凭据各缓存各的。
+                # 换掉某张照片后，已经缓存的学生最长一年内看到的还是旧图 ——
+                # 真要换，让地址里的 token 变化（重新签发凭据）或等缓存过期。
                 self._send(status, payload, "image/jpeg",
-                           {"Cache-Control": "private, max-age=604800"})
+                           {"Cache-Control": "private, max-age=31536000"})
             else:
                 self._json(status, payload)
 
