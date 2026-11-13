@@ -149,8 +149,8 @@ systemctl --user start mind-city-backup.service
 |---|---|
 | `POST /api/verify/send` `{student_id}` | 发码。学号不在名单里 403；一分钟内重复索要 429；邮件发不出去 502 |
 | `POST /api/verify/check` `{student_id, code}` | 通过返回 `{token, student_id, name}`，失败 403，错满 5 次作废 |
-| `GET /api/midterm?sid=&token=` | 这个学号的两道题：代码原文、评议和评分的 HTML、照片张数。凭据不对 401，没有材料 404 |
-| `GET /api/midterm/photo?sid=&token=&q=&i=` | 第 q 道题的第 i 张照片，JPEG 原样返回。按索引取，前端没法用它读目录里的任意文件 |
+| `GET /api/midterm?sid=&token=` | 材料：整份卷子的照片张数，以及两道题的代码原文、评议和评分 HTML。凭据不对 401，没有材料 404 |
+| `GET /api/midterm/photo?sid=&token=&i=` | 第 i 张照片，JPEG 原样返回。按索引取，前端没法用它读目录里的任意文件 |
 
 材料在 `docs/midterm-score/期中考卷批改/`（Syncthing 同步，gitignore + `exclude_docs`
 挡在仓库和站点外），一个学生一个目录，文件名约定见 `midterm.py` 开头。页面是

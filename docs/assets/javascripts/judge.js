@@ -1116,7 +1116,7 @@
     }
 
     host.textContent = "";
-    if (!data.questions.length) {
+    if (!data.questions.length && !data.photo_count) {
       var empty = document.createElement("p");
       empty.className = "midterm__empty";
       setText(empty, "助教还没有整理好你的答卷，过几天再来看。");
@@ -1124,25 +1124,38 @@
       return;
     }
 
-    var photoBase = API + "/midterm/photo?sid=" + encodeURIComponent(data.student_id) +
-      "&token=" + encodeURIComponent(midtermToken());
+    // 照片是整份卷子拍的，两道题共用，所以单独一段放在最前面
+    if (data.photo_count > 0) {
+      var sid = encodeURIComponent(data.student_id);
+      var token = encodeURIComponent(midtermToken());
+      var photos = document.createElement("section");
+      photos.className = "midterm__question";
+      photos.appendChild(heading(2, "答卷照片"));
 
-    data.questions.forEach(function (q, qi) {
+      for (var i = 0; i < data.photo_count; i++) {
+        var img = document.createElement("img");
+        img.className = "midterm__photo";
+        img.loading = "lazy";
+        img.alt = "答卷照片";
+        img.src = API + "/midterm/photo?sid=" + sid + "&token=" + token + "&i=" + i;
+
+        // 点开单独窗口看原图：缩放、拖动、右键复位都在那一页里
+        var link = document.createElement("a");
+        link.className = "midterm__photo-link";
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.href = "/midterm-score/viewer.html?sid=" + sid +
+          "&token=" + token + "&i=" + i;
+        link.appendChild(img);
+        photos.appendChild(link);
+      }
+      host.appendChild(photos);
+    }
+
+    data.questions.forEach(function (q) {
       var section = document.createElement("section");
       section.className = "midterm__question";
       section.appendChild(heading(2, "编程题-第" + q.no + "题"));
-
-      if (q.photo_count > 0) {
-        section.appendChild(heading(3, "照片"));
-        for (var i = 0; i < q.photo_count; i++) {
-          var img = document.createElement("img");
-          img.className = "midterm__photo";
-          img.loading = "lazy";
-          img.alt = "答卷照片";
-          img.src = photoBase + "&q=" + qi + "&i=" + i;
-          section.appendChild(img);
-        }
-      }
 
       section.appendChild(heading(3, "代码"));
       var pre = document.createElement("pre");

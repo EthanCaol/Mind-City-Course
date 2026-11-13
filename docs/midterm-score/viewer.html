@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>答卷照片</title>
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    background: #1b1b1f;
+  }
+
+  #photo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: 0 0;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  #photo.dragging {
+    cursor: grabbing;
+  }
+
+  #hint {
+    position: fixed;
+    left: 0.8rem;
+    bottom: 0.8rem;
+    margin: 0;
+    color: #9aa0a6;
+    font: 0.8rem/1.5 system-ui, -apple-system, "Microsoft YaHei", sans-serif;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<img id="photo" alt="答卷照片" draggable="false">
+<p id="hint">滚轮缩放，左键拖动，右键恢复默认大小和位置</p>
+
+<script>
+/* 单独窗口看答卷照片。参数从查询页带过来：sid、token、i。
+ *
+ * 缩放和拖动都靠 transform（translate + scale），原点放在左上角，
+ * 这样以指针为中心缩放只要解一次线性方程。
+ */
+(function () {
+  "use strict";
+
+  var img = document.getElementById("photo");
+  var hint = document.getElementById("hint");
+
+  var params = new URLSearchParams(location.search);
+  var sid = params.get("sid") || "";
+  var token = params.get("token") || "";
+  var i = params.get("i");
+
+  var scale = 1;
+  var x = 0;
+  var y = 0;
+
+  function apply() {
+    img.style.transform =
+      "translate(" + x + "px, " + y + "px) scale(" + scale + ")";
+  }
+
+  /** 恢复到默认状态：缩放到刚好放进窗口，居中。 */
+  function fit() {
+    if (!img.naturalWidth) return;
+    scale = Math.min(innerWidth / img.naturalWidth, innerHeight / img.naturalHeight);
+    x = (innerWidth - img.naturalWidth * scale) / 2;
+    y = (innerHeight - img.naturalHeight * scale) / 2;
+    apply();
+  }
+
+  img.addEventListener("load", fit);
+
+  img.addEventListener("error", function () {
+    hint.textContent = "照片打不开。回到查询页重新验证学号，或者刷新这一页。";
+  });
+
+  img.src = "/judge/api/midterm/photo?sid=" + encodeURIComponent(sid) +
+    "&token=" + encodeURIComponent(token) +
+    "&i=" + encodeURIComponent(i || "");
+
+  // 滚轮缩放。以指针为中心：让指针下面那个点在缩放前后保持不动
+  addEventListener("wheel", function (e) {
+    e.preventDefault();
+    var k = Math.exp(-e.deltaY * 0.0015);
+    x = e.clientX - (e.clientX - x) * k;
+    y = e.clientY - (e.clientY - y) * k;
+    scale *= k;
+    apply();
+  }, { passive: false });
+
+  // 左键拖动
+  img.addEventListener("pointerdown", function (e) {
+    if (e.button !== 0) return;
+    e.preventDefault();
+
+    var ox = e.clientX - x;
+    var oy = e.clientY - y;
+    img.classList.add("dragging");
+    img.setPointerCapture(e.pointerId);
+
+    function move(ev) {
+      x = ev.clientX - ox;
+      y = ev.clientY - oy;
+      apply();
+    }
+
+    function end() {
+      img.classList.remove("dragging");
+      img.removeEventListener("pointermove", move);
+      img.removeEventListener("pointerup", end);
+      img.removeEventListener("pointercancel", end);
+    }
+
+    img.addEventListener("pointermove", move);
+    img.addEventListener("pointerup", end);
+    img.addEventListener("pointercancel", end);
+  });
+
+  // 右键恢复默认大小和位置
+  addEventListener("contextmenu", function (e) {
+    e.preventDefault();
+    fit();
+  });
+
+  // 浏览器自带的图片拖拽会盖掉 pointermove
+  addEventListener("dragstart", function (e) {
+    e.preventDefault();
+  });
+
+  addEventListener("resize", fit);
+})();
+</script>
+</body>
+</html>

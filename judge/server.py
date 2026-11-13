@@ -358,12 +358,12 @@ class App:
             return 404, {"error": "没有找到这个学号的期中答卷，找助教确认一下。"}
         return 200, data
 
-    def midterm_photo(self, student_id: str, token: str, q: int | None, i: int | None):
+    def midterm_photo(self, student_id: str, token: str, i: int | None):
         """答卷照片。鉴权和上面一样，照片本身是 JPEG 原样返回，不套 JSON。"""
         if check_token(token, self.verify_secret) != student_id:
             return 401, {"error": "先验证学号再看成绩。"}
 
-        data = None if q is None or i is None else midterm.photo(student_id, q, i)
+        data = None if i is None else midterm.photo(student_id, i)
         if data is None:
             return 404, {"error": "没有这张照片"}
         return 200, data
@@ -560,7 +560,6 @@ def create_handler(app: App):
                 return app.midterm_photo(
                     query.get("sid", ""),
                     query.get("token", ""),
-                    _int_or_none(query.get("q", "")),
                     _int_or_none(query.get("i", "")),
                 )
 

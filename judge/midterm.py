@@ -12,6 +12,9 @@
 
 题号从 `.c` 文件反推，不写死两题。评议和评分是写给人看的表格，直接渲染成 HTML
 交给前端；代码给原文，前端自己做高亮。
+
+照片不按题分：一张卷子的正反面通常同时拍进了两道题，所以整份材料只有一组照片，
+放在所有题目前面显示。
 """
 
 from __future__ import annotations
@@ -47,20 +50,13 @@ def _render(path: Path) -> str:
     return markdown.markdown(text, extensions=["tables"])
 
 
-def _photos(folder: Path, prefix: str, label: str, first: bool) -> list[Path]:
-    """某道题对应哪些照片。
+def _photos(folder: Path) -> list[Path]:
+    """这个学生的全部答卷照片，按文件名排序。
 
-    文件名带题号的只属于那道题；没带题号的（正反面整张拍的）归到第一题，
-    第二题不重复显示 —— 一张卷子拍一页的大多数情况都是这样。
+    名字有两种：`学号-姓名.jpg`（整页拍一张）和 `学号-姓名-第一题.jpg` /
+    `-背面.jpg`（分页拍），都算同一份材料。
     """
-    specific = sorted(folder.glob(f"{prefix}第{label}题*.jpg"))
-    if specific:
-        return specific
-    if not first:
-        return []
-    # 整张卷子的照片没有题号，名字就是 `学号-姓名.jpg` 或 `-背面.jpg`，注意
-    # 姓名后面没有连字符可依赖，所以这里按"不点名哪道题"来筛。
-    return sorted(p for p in folder.glob(f"{folder.name}*.jpg") if "第" not in p.name)
+    return sorted(folder.glob(f"{folder.name}*.jpg"))
 
 
 def load(student_id: str) -> dict | None:
@@ -77,14 +73,12 @@ def load(student_id: str) -> dict | None:
             continue
         label = match.group(1)
         base = code_path.name[: -len(".c")]
-        photos = _photos(folder, prefix, label, first=(label == NUMERALS[0]))
         questions.append(
             {
                 "no": label,
                 "code": code_path.read_text(encoding="utf-8"),
                 "review": _render(folder / f"{base}-代码评议.md"),
                 "score": _render(folder / f"{base}-代码评分.md"),
-                "photo_count": len(photos),
             }
         )
 
@@ -94,12 +88,13 @@ def load(student_id: str) -> dict | None:
     return {
         "student_id": student_id,
         "name": folder.name.split("-", 1)[1],
+        "photo_count": len(_photos(folder)),
         "questions": questions,
     }
 
 
-def photo(student_id: str, q_index: int, i: int) -> bytes | None:
-    """第 q_index 道题的第 i 张照片。索引越界返回 None。
+def photo(student_id: str, i: int) -> bytes | None:
+    """第 i 张照片。索引越界返回 None。
 
     按索引取而不是按文件名取，前端就没法借这个接口读目录里的任意文件。
     """
@@ -107,12 +102,7 @@ def photo(student_id: str, q_index: int, i: int) -> bytes | None:
     if folder is None:
         return None
 
-    prefix = folder.name + "-"
-    data = load(student_id)
-    if data is None or not 0 <= q_index < len(data["questions"]):
-        return None
-    label = data["questions"][q_index]["no"]
-    photos = _photos(folder, prefix, label, first=(label == NUMERALS[0]))
+    photos = _photos(folder)
     if not 0 <= i < len(photos):
         return None
     return photos[i].read_bytes()

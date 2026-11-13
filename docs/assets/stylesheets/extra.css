@@ -1235,6 +1235,11 @@
 
 /* 答卷照片是 2–4 MB 的原图，按栏宽缩放。不接 glightbox：那个在页面加载时
    绑定，动态插进来的图片它看不到。 */
+.md-typeset .midterm__photo-link {
+  display: block;
+  cursor: zoom-in;
+}
+
 .md-typeset .midterm__photo {
   display: block;
   width: 100%;
