@@ -40,14 +40,18 @@ def _folder(student_id: str) -> Path | None:
 
 
 def _render(path: Path) -> str:
-    """评议/评分文件转 HTML。首行的 H1 去掉 —— 页面上已经有一级标题了。"""
+    """评议/评分文件转 HTML。首行的 H1 去掉 —— 页面上已经有一级标题了。
+
+    `nl2br` 不能省：这些文件一行写一条说明，靠换行分隔，Markdown 默认会把
+    相邻的几行并成一段，页面上就挤成一条长句。
+    """
     if not path.is_file():
         return ""
     text = path.read_text(encoding="utf-8")
     lines = text.split("\n")
     if lines and lines[0].startswith("# "):
         text = "\n".join(lines[1:])
-    return markdown.markdown(text, extensions=["tables"])
+    return markdown.markdown(text, extensions=["tables", "nl2br"])
 
 
 def _photos(folder: Path) -> list[Path]:

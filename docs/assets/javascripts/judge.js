@@ -1130,7 +1130,7 @@
       var token = encodeURIComponent(midtermToken());
       var photos = document.createElement("section");
       photos.className = "midterm__question";
-      photos.appendChild(heading(2, "答卷照片"));
+      photos.appendChild(heading(2, "答卷照片（点击打开大图，支持拖动缩放）"));
 
       for (var i = 0; i < data.photo_count; i++) {
         var img = document.createElement("img");
