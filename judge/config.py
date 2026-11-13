@@ -218,10 +218,12 @@ MAIL_FROM_NAME = "Mind-City 课程"
 # 它的 MX 指向腾讯企业邮（mxbiz.qq.com），所以用 QQ 邮箱发信是同厂投递。
 STUDENT_MAIL_DOMAIN = "m.fudan.edu.cn"
 
-# 验证码有效期、同一个人两次索要的最小间隔、一个码最多试几次。
-CODE_TTL_S = 10 * 60
-CODE_RESEND_INTERVAL_S = 60
+# 验证码不是随机数，由学号和密钥算出来，同一个学号永远是同一个码 ——
+# 这样学生忘了上次那个也不影响，重发一封就是原来的码。
+CODE_RESEND_INTERVAL_S = 10
+# 错这么多次就锁一段时间，否则六位数字可以穷举。
 CODE_MAX_ATTEMPTS = 5
+CODE_LOCK_S = 10 * 60
 
 # 期中考试的批改材料。由 Syncthing 同步进 docs 下，gitignore + exclude_docs 挡在
 # 仓库和站点之外，只有这个服务按学号取来给查分页用。

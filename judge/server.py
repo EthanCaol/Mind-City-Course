@@ -22,7 +22,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
 from . import config, db, mailer, midterm, verdict as V
-from .identity import STUDENT_ID_RE, check_token, issue_token
+from .identity import STUDENT_ID_RE, check_token, code_for, issue_token
 from .isolate_runner import judge_ready
 from .problem import ProblemError, list_problems, load_problem
 from .roster import Roster, pull_from_cos
@@ -49,8 +49,9 @@ class App:
 
         self.admin_token = load_secret(config.ADMIN_TOKEN_PATH)
         self.verify_secret = load_secret(config.VERIFY_SECRET_PATH)
-        # 待用的验证码：学号 → (码, 过期时刻, 已试次数)。进程内存，重启即失效。
-        self.codes: dict[str, tuple[str, float, int]] = {}
+        # 验证码是算出来的固定值，不用存；这两张表只管发信冷却和试错锁定。
+        self.code_sent_at: dict[str, float] = {}
+        self.code_failures: dict[str, tuple[int, float]] = {}
         self.worker = JudgeWorker(self.db_path, self.roster)
         # 启动时从 COS 拉一次花名册就跑完退出 —— 名单不再变，不需要常驻线程。
         self._roster_pull = threading.Thread(
@@ -298,49 +299,45 @@ class App:
 
         now = time.time()
         with self.lock:
-            entry = self.codes.get(student_id)
-            if entry and now < entry[1] - config.CODE_TTL_S + config.CODE_RESEND_INTERVAL_S:
+            last = self.code_sent_at.get(student_id)
+            if last and now - last < config.CODE_RESEND_INTERVAL_S:
                 return 429, {
                     "error": f"验证码刚发过，{config.CODE_RESEND_INTERVAL_S} 秒后再试。"
                 }
 
-            code = f"{secrets.randbelow(1_000_000):06d}"
-            self.codes[student_id] = (code, now + config.CODE_TTL_S, 0)
-
         try:
-            mailer.send_code(student_id, code)
+            mailer.send_code(student_id, code_for(student_id, self.verify_secret))
         except mailer.MailError as exc:
             log.warning("验证码邮件发送失败：%s", exc)
-            with self.lock:
-                self.codes.pop(student_id, None)
             return 502, {"error": "验证码邮件没发出去，等一会儿再试。"}
 
-        return 200, {
-            "email": f"{student_id}@{config.STUDENT_MAIL_DOMAIN}",
-            "expires_in": config.CODE_TTL_S,
-        }
+        with self.lock:
+            self.code_sent_at[student_id] = now
+        return 200, {"email": f"{student_id}@{config.STUDENT_MAIL_DOMAIN}"}
 
     def verify_code(self, student_id: str, code: str) -> tuple[int, dict]:
         """核对验证码。通过后发一个长期有效的凭据，前端存进 localStorage。"""
         if not isinstance(student_id, str) or not STUDENT_ID_RE.fullmatch(student_id):
             return 400, {"error": "同学记得填 11位学号。"}
 
-        with self.lock:
-            entry = self.codes.get(student_id)
-            if entry is None or time.time() > entry[1]:
-                self.codes.pop(student_id, None)
-                return 403, {"error": "验证码不对或已过期，重新获取一个。"}
+        if self.roster.lookup(student_id) is None:
+            return 403, {"error": f"同学记得核对一下，名单里没有 {student_id}。"}
 
-            stored, expires_at, attempts = entry
-            if not hmac.compare_digest(str(code or ""), stored):
-                attempts += 1
-                if attempts >= config.CODE_MAX_ATTEMPTS:
-                    self.codes.pop(student_id, None)
-                    return 429, {"error": "验证码错得有点多，重新获取一个。"}
-                self.codes[student_id] = (stored, expires_at, attempts)
+        expected = code_for(student_id, self.verify_secret)
+        now = time.time()
+        with self.lock:
+            attempts, since = self.code_failures.get(student_id, (0, now))
+            locked = attempts >= config.CODE_MAX_ATTEMPTS and now - since < config.CODE_LOCK_S
+            if locked:
+                return 429, {"error": "验证码错得有点多，过十分钟再试。"}
+
+            if not hmac.compare_digest(str(code or ""), expected):
+                if now - since >= config.CODE_LOCK_S:
+                    attempts, since = 0, now  # 上一轮锁定已过期，重新计数
+                self.code_failures[student_id] = (attempts + 1, since)
                 return 403, {"error": "验证码不对。"}
 
-            self.codes.pop(student_id, None)
+            self.code_failures.pop(student_id, None)
             name = self.roster.lookup(student_id)
 
         return 200, {

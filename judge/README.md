@@ -162,13 +162,14 @@ systemctl --user start mind-city-backup.service
   `{"host","port","user","password"}`），不进仓库。选 QQ 是因为学邮的 MX 指向
   腾讯企业邮（`mxbiz.qq.com`），同厂投递最不容易进垃圾箱。个人 QQ 邮箱有每日发信量
   上限，超了接口返回 502，学生隔天再试即可。
-- **验证码只存在进程内存**，10 分钟过期，服务重启即全部作废。换机器不用迁移。
+- **验证码是固定的六位数字**，由学号和 `verify-secret` 算出来，同一个学号每次都一样，
+  服务重启、重发邮件都不变，也不存在过期问题。服务端只记发信冷却（60 秒）和试错
+  锁定（错 5 次锁 10 分钟），参数在 `config.py` 的 `CODE_RESEND_INTERVAL_S` /
+  `CODE_MAX_ATTEMPTS` / `CODE_LOCK_S`。
 - **凭据是无状态签名**，格式 `学号.HMAC-SHA256(学号)` 取前 32 位，密钥在
   `~/.config/mind-city/verify-secret`（首次启动自动生成）。服务端用
   `identity.check_token(token, secret)` 验，返回学号或 `None`。它不会过期 —— 学生换
   浏览器才需要重新验证。凭据可以被转给同学，这是弱校验，和判题、阅读登记同一档次。
-- 冷却时间和有效期在 `config.py` 的 `CODE_TTL_S` / `CODE_RESEND_INTERVAL_S` /
-  `CODE_MAX_ATTEMPTS`。
 
 ## 侧边栏标记已完成的条目
 

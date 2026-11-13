@@ -1083,7 +1083,7 @@
   // 照片走单独的接口（/api/midterm/photo），2–4 MB 的原图不塞进 JSON。
 
   var MIDTERM_TOKEN_KEY = "mind-city.midterm-token";
-  var MIDTERM_RESEND_S = 60; // 和 judge/config.py 的 CODE_RESEND_INTERVAL_S 一致
+  var MIDTERM_RESEND_S = 10; // 和 judge/config.py 的 CODE_RESEND_INTERVAL_S 一致
 
   function midtermToken() {
     try {
@@ -1243,8 +1243,7 @@
           msg.textContent = "";
           msg.hidden = false;
           msg.className = "midterm__msg";
-          msg.appendChild(document.createTextNode(
-            "验证码已发到 " + data.email + "，" + Math.round(data.expires_in / 60) + " 分钟内有效"));
+          msg.appendChild(document.createTextNode("验证码已发到 " + data.email));
           msg.appendChild(document.createElement("br"));
           msg.appendChild(document.createTextNode("复旦学邮网址: "));
           var link = document.createElement("a");

@@ -41,17 +41,15 @@ def send_code(student_id: str, code: str) -> None:
     """把验证码发到学生的复旦学邮。失败抛 MailError。"""
     cfg = _settings()
     address = f"{student_id}@{config.STUDENT_MAIL_DOMAIN}"
-    minutes = config.CODE_TTL_S // 60
 
     msg = EmailMessage()
     msg["Subject"] = f"成绩查询验证码：{code}"
     msg["From"] = f"{config.MAIL_FROM_NAME} <{cfg['user']}>"
     msg["To"] = address
     msg.set_content(
-        "同学你好：\n\n"
-        "有人正在查询你的成绩，验证码如下：\n\n"
-        f"    {code}\n\n"
-        f"{minutes} 分钟内有效。不是你本人操作的，忽略这封邮件即可。\n\n"
+        "同学你好，你的验证码如下：\n\n"
+        f"{code}\n\n"
+        "如果不是你本人操作的，忽略这封邮件即可。\n\n"
         "复旦大学《程序设计》课程\n"
     )
 

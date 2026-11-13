@@ -20,7 +20,7 @@ icon: material/account-lock
     </div>
     <div class="midterm__row">
       <label class="midterm__label" for="midterm-code">验证码</label>
-      <input id="midterm-code" class="midterm__input midterm__input--code" type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="6位验证码">
+      <input id="midterm-code" class="midterm__input" type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="6位验证码">
       <button id="midterm-login" type="button">认证登录</button>
     </div>
     <p class="midterm__msg" id="midterm-message" hidden></p>

@@ -14,6 +14,12 @@ import re
 STUDENT_ID_RE = re.compile(r"[0-9]{11}")
 
 
+def code_for(student_id: str, secret: str) -> str:
+    """学号对应的固定六位验证码。和签名共用密钥，同一个学号每次都一样。"""
+    digest = hmac.new(secret.encode(), student_id.encode(), hashlib.sha256).hexdigest()
+    return f"{int(digest[:8], 16) % 1_000_000:06d}"
+
+
 def issue_token(student_id: str, secret: str) -> str:
     """学号 + 签名。格式 `学号.签名前32位`。"""
     sig = hmac.new(secret.encode(), student_id.encode(), hashlib.sha256).hexdigest()

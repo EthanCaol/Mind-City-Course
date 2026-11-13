@@ -1197,10 +1197,6 @@
   outline: none;
 }
 
-.md-typeset .midterm__input--code {
-  letter-spacing: 0.2em;
-}
-
 .md-typeset .midterm__row button {
   flex: none;
   padding: 0.45rem 1.4rem;
