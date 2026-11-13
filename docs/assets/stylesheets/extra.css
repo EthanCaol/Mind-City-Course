@@ -1252,3 +1252,53 @@
 .md-typeset .midterm__doc table {
   width: 100%;
 }
+
+/* 代码块左边的行号列。行号和代码是两列 flex，字体、行高、上下内边距必须
+   完全一致，否则数字和代码会逐行错开。横向滚动时行号粘在左边（sticky），
+   所以它自己也要有背景，否则代码会从下面透过去。 */
+.md-typeset .midterm__code-wrap {
+  display: flex;
+  align-items: flex-start;
+  overflow-x: auto;
+  margin: 0.5rem 0 1rem;
+  border-radius: 0.2rem;
+  background-color: var(--md-code-bg-color);
+}
+
+.md-typeset .midterm__gutter,
+.md-typeset .midterm__code {
+  margin: 0;
+  padding-top: 0.8rem;
+  padding-bottom: 0.8rem;
+  font-family: var(--md-code-font-family);
+  font-size: 0.7rem;
+  line-height: 1.5;
+  white-space: pre;
+  background: none;
+}
+
+.md-typeset .midterm__gutter {
+  flex: none;
+  position: sticky;
+  left: 0;
+  padding-left: 0.8rem;
+  padding-right: 0.6rem;
+  color: var(--md-default-fg-color--light);
+  text-align: right;
+  user-select: none;
+  background-color: var(--md-code-bg-color);
+}
+
+.md-typeset .midterm__code {
+  flex: none;
+  padding-left: 0.4rem;
+  padding-right: 0.8rem;
+}
+
+.md-typeset .midterm__code code {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: inherit;
+  line-height: inherit;
+}

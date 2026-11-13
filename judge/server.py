@@ -519,7 +519,10 @@ def create_handler(app: App):
             if isinstance(payload, str):
                 self._send(status, payload.encode("utf-8"), "text/csv; charset=utf-8")
             elif isinstance(payload, bytes):
-                self._send(status, payload, "image/jpeg")
+                # 答卷照片一份就几 MB 且不会变，让浏览器自己存着，别每次重下。
+                # 地址里带着学号和凭据，每个人、每个凭据各缓存各的。
+                self._send(status, payload, "image/jpeg",
+                           {"Cache-Control": "private, max-age=604800"})
             else:
                 self._json(status, payload)
 
@@ -641,10 +644,13 @@ def create_handler(app: App):
             self._send(status, json.dumps(payload, ensure_ascii=False).encode("utf-8"),
                        "application/json; charset=utf-8")
 
-        def _send(self, status: int, body: bytes, content_type: str) -> None:
+        def _send(self, status: int, body: bytes, content_type: str,
+                  headers: dict | None = None) -> None:
             self.send_response(status)
             self.send_header("Content-Type", content_type)
             self.send_header("Content-Length", str(len(body)))
+            for name, value in (headers or {}).items():
+                self.send_header(name, value)
             self.end_headers()
             self.wfile.write(body)
 

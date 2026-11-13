@@ -1164,7 +1164,21 @@
       var code = document.createElement("code");
       code.appendChild(highlight(q.code));
       pre.appendChild(code);
-      section.appendChild(pre);
+
+      // 行号单独一列，选中和复制时不会跟代码一起被框进去
+      var gutter = document.createElement("div");
+      gutter.className = "midterm__gutter";
+      gutter.setAttribute("aria-hidden", "true");
+      var count = q.code.replace(/\n$/, "").split("\n").length;
+      var nums = [];
+      for (var n = 1; n <= count; n++) nums.push(n);
+      gutter.textContent = nums.join("\n");
+
+      var wrap = document.createElement("div");
+      wrap.className = "midterm__code-wrap";
+      wrap.appendChild(gutter);
+      wrap.appendChild(pre);
+      section.appendChild(wrap);
 
       if (q.review) {
         section.appendChild(document.createElement("hr"));
