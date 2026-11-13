@@ -3,6 +3,11 @@ site_description: 复旦大学《程序设计》课程实验文档
 site_url: https://mind-city.com/
 docs_dir: docs
 
+# 期中考卷批改的原始材料由 Syncthing 同步到 docs 下, 含学生姓名学号,
+# 不参与站点构建, 否则会随 site/ 一起发布到公网
+exclude_docs: |
+  期中考卷批改/
+
 theme:
   name: material
   language: zh
@@ -28,13 +33,9 @@ nav:
   - 站点首页: index.md
   - 课程资料: material.md
   - 站点计划: plan.md
-  - 期中复习专栏:
-      - 复习课件下载: midterm-review/index.md
-      - 期中复习内容: midterm-review/content.md
-      - 期中复习习题-1: midterm-review/exercises-1.md
-      - 期中复习习题-2: midterm-review/exercises-2.md
-      - 期中复习习题-3: midterm-review/exercises-3.md
-      - 期中复习习题-4: midterm-review/exercises-4.md
+  - 期中考试专栏:
+      - 编程题评分查询: midterm-score/programming.md
+      - 期中考试参考答案: midterm-score/answer.md
   - 编程作业:
       - 作业完成情况: homework-code/completion.md
       - 作业1：整数加法: homework-code/01-add.md
@@ -92,6 +93,13 @@ nav:
       - 备考-第7章 结构和链表: question/07-structs-linked-list.md
       - 备考-第8章 数据文件处理技术: question/08-file-io.md
       - 备考-第9章 算法设计技术基础: question/09-algorithms.md
+  - 期中复习专栏:
+      - 复习课件下载: midterm-review/index.md
+      - 期中复习内容: midterm-review/content.md
+      - 期中复习习题-1: midterm-review/exercises-1.md
+      - 期中复习习题-2: midterm-review/exercises-2.md
+      - 期中复习习题-3: midterm-review/exercises-3.md
+      - 期中复习习题-4: midterm-review/exercises-4.md
   - 数学分析-陈纪修-上册:
       - 教材 PDF: math-analysis/material.md
       - (1) 集合与映射: math-analysis/01-sets.md

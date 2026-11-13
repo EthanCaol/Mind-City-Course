@@ -34,7 +34,9 @@
     return fetch(url, opts).then(function (resp) {
       return resp.json().then(function (data) {
         if (!resp.ok) {
-          throw new Error(data.error || "请求失败（HTTP " + resp.status + "）");
+          var err = new Error(data.error || "请求失败（HTTP " + resp.status + "）");
+          err.status = resp.status; // 调用方要据此区分「凭据失效」和别的错误
+          throw err;
         }
         return data;
       });
@@ -1072,6 +1074,219 @@
       .catch(function () {});
   }
 
+  // ------------------------------------------------------------ 期中成绩查询
+  //
+  // 「编程题评分查询」页（#midterm）。流程：学号 → 复旦学邮收到的验证码 →
+  // 服务端签发的长期凭据。凭据存在 localStorage，同一台浏览器以后直接取材料，
+  // 不再发信。
+  //
+  // 照片走单独的接口（/api/midterm/photo），2–4 MB 的原图不塞进 JSON。
+
+  var MIDTERM_TOKEN_KEY = "mind-city.midterm-token";
+  var MIDTERM_RESEND_S = 60; // 和 judge/config.py 的 CODE_RESEND_INTERVAL_S 一致
+
+  function midtermToken() {
+    try {
+      return localStorage.getItem(MIDTERM_TOKEN_KEY) || "";
+    } catch (e) {
+      return "";
+    }
+  }
+
+  function rememberMidtermToken(token) {
+    try {
+      if (token) localStorage.setItem(MIDTERM_TOKEN_KEY, token);
+      else localStorage.removeItem(MIDTERM_TOKEN_KEY);
+    } catch (e) {
+      /* 记不住就算了，这次照样能看 */
+    }
+  }
+
+  function midtermUrl(sid) {
+    return API + "/midterm?sid=" + encodeURIComponent(sid) +
+      "&token=" + encodeURIComponent(midtermToken());
+  }
+
+  /** 把一份材料画进容器。评议和评分是助教写的 Markdown，服务端已经转成 HTML。 */
+  function renderMidterm(host, data) {
+    function heading(level, text) {
+      var h = document.createElement("h" + level);
+      h.textContent = text;
+      return h;
+    }
+
+    host.textContent = "";
+    if (!data.questions.length) {
+      var empty = document.createElement("p");
+      empty.className = "midterm__empty";
+      setText(empty, "助教还没有整理好你的答卷，过几天再来看。");
+      host.appendChild(empty);
+      return;
+    }
+
+    var photoBase = API + "/midterm/photo?sid=" + encodeURIComponent(data.student_id) +
+      "&token=" + encodeURIComponent(midtermToken());
+
+    data.questions.forEach(function (q, qi) {
+      var section = document.createElement("section");
+      section.className = "midterm__question";
+      section.appendChild(heading(2, "编程题-第" + q.no + "题"));
+
+      if (q.photo_count > 0) {
+        section.appendChild(heading(3, "照片"));
+        for (var i = 0; i < q.photo_count; i++) {
+          var img = document.createElement("img");
+          img.className = "midterm__photo";
+          img.loading = "lazy";
+          img.alt = "答卷照片";
+          img.src = photoBase + "&q=" + qi + "&i=" + i;
+          section.appendChild(img);
+        }
+      }
+
+      section.appendChild(heading(3, "代码"));
+      var pre = document.createElement("pre");
+      pre.className = "midterm__code";
+      var code = document.createElement("code");
+      code.appendChild(highlight(q.code));
+      pre.appendChild(code);
+      section.appendChild(pre);
+
+      if (q.review) {
+        section.appendChild(heading(3, "评议"));
+        var review = document.createElement("div");
+        review.className = "midterm__doc";
+        review.innerHTML = q.review;
+        section.appendChild(review);
+      }
+
+      if (q.score) {
+        section.appendChild(heading(3, "评分"));
+        var score = document.createElement("div");
+        score.className = "midterm__doc";
+        score.innerHTML = q.score;
+        section.appendChild(score);
+      }
+
+      host.appendChild(section);
+    });
+  }
+
+  function initMidterm() {
+    var root = $("midterm");
+    if (!root) return;
+
+    var auth = $("midterm-auth");
+    var result = $("midterm-result");
+    var msg = $("midterm-message");
+    var sidInput = $("midterm-id");
+    var codeInput = $("midterm-code");
+    var sendBtn = $("midterm-send");
+    var loginBtn = $("midterm-login");
+
+    function say(text, bad) {
+      msg.textContent = text || "";
+      msg.hidden = !text;
+      msg.className = bad ? "midterm__msg midterm__msg--bad" : "midterm__msg";
+    }
+
+    function showScores(data) {
+      auth.hidden = true;
+      result.hidden = false;
+      rememberSid(data.student_id);
+      renderMidterm(result, data);
+      say("");
+    }
+
+    function load() {
+      var sid = sidInput.value.trim();
+      request("GET", midtermUrl(sid))
+        .then(showScores)
+        .catch(function (err) {
+          if (err.status === 401) {
+            // 凭据失效（密钥换过或本地被清），退回验证界面重来一次
+            rememberMidtermToken("");
+            say("验证已失效，重新获取一个验证码。", true);
+            return;
+          }
+          say(err.message, true);
+        });
+    }
+
+    function cooldown(seconds) {
+      sendBtn.disabled = true;
+      var left = seconds;
+      setText(sendBtn, "重新获取（" + left + " 秒）");
+      var timer = setInterval(function () {
+        left -= 1;
+        if (left <= 0) {
+          clearInterval(timer);
+          sendBtn.disabled = false;
+          setText(sendBtn, "获取邮箱验证码");
+          return;
+        }
+        setText(sendBtn, "重新获取（" + left + " 秒）");
+      }, 1000);
+    }
+
+    sendBtn.addEventListener("click", function () {
+      var sid = sidInput.value.trim();
+      if (!/^[0-9]{11}$/.test(sid)) {
+        say("学号是 11 位数字。", true);
+        return;
+      }
+      sendBtn.disabled = true;
+      request("POST", API + "/verify/send", { student_id: sid })
+        .then(function (data) {
+          codeInput.focus();
+          say("验证码已发到 " + data.email + "，" + Math.round(data.expires_in / 60) + " 分钟内有效。");
+          cooldown(MIDTERM_RESEND_S);
+        })
+        .catch(function (err) {
+          sendBtn.disabled = false;
+          say(err.message, true);
+        });
+    });
+
+    function login() {
+      var sid = sidInput.value.trim();
+      var code = codeInput.value.trim();
+      if (!/^[0-9]{6}$/.test(code)) {
+        say("验证码是 6 位数字。", true);
+        return;
+      }
+      loginBtn.disabled = true;
+      request("POST", API + "/verify/check", { student_id: sid, code: code })
+        .then(function (data) {
+          rememberMidtermToken(data.token);
+          load();
+        })
+        .catch(function (err) {
+          say(err.message, true);
+        })
+        .finally(function () {
+          loginBtn.disabled = false;
+        });
+    }
+
+    loginBtn.addEventListener("click", login);
+    codeInput.addEventListener("keydown", function (e) {
+      if (e.key !== "Enter") return;
+      e.preventDefault();
+      if (!loginBtn.disabled) login();
+    });
+
+    // 上次填过的学号先回填。手上还有凭据就直接取材料，不必再走一遍验证。
+    var sid = rememberedSid();
+    if (sid) sidInput.value = sid;
+
+    var token = midtermToken();
+    if (token) {
+      sidInput.value = token.split(".")[0] || sid;
+      load();
+    }
+  }
+
   function init() {
     loadGrid($("grades"), API + "/grades"); // 「作业完成情况」页
 
@@ -1088,6 +1303,8 @@
     syncDone(); // 侧边栏：把已完成的作业标出来（每个页面都跑）
 
     initSid(); // 顶栏的学号控件（每个页面都跑）
+
+    initMidterm(); // 「编程题评分查询」页
 
     if (!$("judge")) return; // 剩下的是作业页才需要的东西
 

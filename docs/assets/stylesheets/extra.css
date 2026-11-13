@@ -1146,3 +1146,103 @@
 .md-typeset .katex {
   font-size: 1.1em;
 }
+
+/* ---------------------------------------------------------------------------
+   期中成绩查询（docs/midterm-score/programming.md）
+
+   表单样式跟作业页的工具条一致：同样的输入框、同样的按钮三种状态。
+   每道题是一段 section，照片、代码、评议、评分依次往下排。
+   --------------------------------------------------------------------------- */
+
+.md-typeset .midterm__auth {
+  margin: 1rem 0;
+  padding: 0.8rem;
+  border: 0.05rem solid var(--md-default-fg-color--lighter);
+  border-radius: 0.2rem;
+  background-color: var(--md-code-bg-color);
+}
+
+.md-typeset .midterm__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.md-typeset .midterm__label {
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .midterm__input {
+  flex: 1 1 8rem;
+  min-width: 6rem;
+  padding: 0.45rem 0.6rem;
+  border: 0.05rem solid var(--md-default-fg-color--lighter);
+  border-radius: 0.2rem;
+  background-color: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  font-family: var(--md-code-font-family);
+  font-size: 0.8rem;
+}
+
+.md-typeset .midterm__input:focus {
+  border-color: var(--md-accent-fg-color);
+  outline: none;
+}
+
+.md-typeset .midterm__input--code {
+  letter-spacing: 0.2em;
+}
+
+.md-typeset .midterm__row button {
+  flex: none;
+  padding: 0.45rem 1.4rem;
+  border: none;
+  border-radius: 0.2rem;
+  background-color: var(--md-primary-fg-color);
+  color: var(--md-primary-bg-color);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.md-typeset .midterm__row button:hover:not(:disabled) {
+  background-color: var(--md-accent-fg-color);
+}
+
+.md-typeset .midterm__row button:disabled {
+  cursor: not-allowed;
+  background-color: var(--md-default-fg-color--lighter);
+  color: var(--md-default-bg-color);
+}
+
+.md-typeset .midterm__msg {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+}
+
+.md-typeset .midterm__msg--bad,
+.md-typeset .midterm__empty {
+  color: var(--md-typeset-color-error, #ff5252);
+}
+
+.md-typeset .midterm__question {
+  margin-top: 2rem;
+}
+
+/* 答卷照片是 2–4 MB 的原图，按栏宽缩放。不接 glightbox：那个在页面加载时
+   绑定，动态插进来的图片它看不到。 */
+.md-typeset .midterm__photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0.4rem 0;
+  border: 0.05rem solid var(--md-default-fg-color--lighter);
+  border-radius: 0.2rem;
+}
+
+.md-typeset .midterm__doc table {
+  width: 100%;
+}

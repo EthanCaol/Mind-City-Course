@@ -206,3 +206,27 @@ RATE_LIMIT_MAX_IN_WINDOW = 5
 
 # 花名册不再变了，只在服务启动时从 COS 拉一次（见 roster.pull_from_cos）。
 # 想手动刷就重启服务。
+
+# ---------------------------------------------------------------- 成绩查询验证
+
+# QQ 邮箱 SMTP 的账号和授权码放这个文件，不进仓库（外层仓库是公开的）：
+# {"host": "smtp.qq.com", "port": 465, "user": "xxx@qq.com", "password": "授权码"}
+MAIL_CONFIG_PATH = Path.home() / ".config" / "mind-city" / "mail.json"
+MAIL_FROM_NAME = "Mind-City 课程"
+
+# 学生自己收得到验证码的这个域。复旦学生邮箱是 学号@m.fudan.edu.cn，
+# 它的 MX 指向腾讯企业邮（mxbiz.qq.com），所以用 QQ 邮箱发信是同厂投递。
+STUDENT_MAIL_DOMAIN = "m.fudan.edu.cn"
+
+# 验证码有效期、同一个人两次索要的最小间隔、一个码最多试几次。
+CODE_TTL_S = 10 * 60
+CODE_RESEND_INTERVAL_S = 60
+CODE_MAX_ATTEMPTS = 5
+
+# 期中考试的批改材料。由 Syncthing 同步进 docs 下，gitignore + exclude_docs 挡在
+# 仓库和站点之外，只有这个服务按学号取来给查分页用。
+MIDTERM_DIR = BASE_DIR.parent / "docs" / "midterm-score" / "期中考卷批改"
+
+# 验证通过后发给浏览器的凭据，用这个密钥签名。服务启动时没有就自动生成，
+# 所以不会被写进代码，也不会随仓库发布。
+VERIFY_SECRET_PATH = Path.home() / ".config" / "mind-city" / "verify-secret"

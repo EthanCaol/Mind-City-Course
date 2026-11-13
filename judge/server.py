@@ -17,11 +17,12 @@ import secrets
 import sqlite3
 import sys
 import threading
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
-from . import config, db, verdict as V
-from .identity import STUDENT_ID_RE
+from . import config, db, mailer, midterm, verdict as V
+from .identity import STUDENT_ID_RE, check_token, issue_token
 from .isolate_runner import judge_ready
 from .problem import ProblemError, list_problems, load_problem
 from .roster import Roster, pull_from_cos
@@ -46,7 +47,10 @@ class App:
         if not self.roster.reload_or_keep():
             raise SystemExit(f"花名册加载失败：{config.ROSTER_PATH}")
 
-        self.admin_token = load_admin_token()
+        self.admin_token = load_secret(config.ADMIN_TOKEN_PATH)
+        self.verify_secret = load_secret(config.VERIFY_SECRET_PATH)
+        # 待用的验证码：学号 → (码, 过期时刻, 已试次数)。进程内存，重启即失效。
+        self.codes: dict[str, tuple[str, float, int]] = {}
         self.worker = JudgeWorker(self.db_path, self.roster)
         # 启动时从 COS 拉一次花名册就跑完退出 —— 名单不再变，不需要常驻线程。
         self._roster_pull = threading.Thread(
@@ -278,6 +282,95 @@ class App:
             "roster_size": len(self.roster),
         }
 
+    # ------------------------------------------------------------ 成绩查询验证
+
+    def send_code(self, student_id: str) -> tuple[int, dict]:
+        """给学生的复旦学邮发一个验证码。
+
+        学号必须先在花名册里，否则任何人都能借这个接口往任意学号的信箱发信。
+        同一个人一分钟内只发一封；邮件发不出去时把码撤掉，免得占用冷却时间。
+        """
+        if not isinstance(student_id, str) or not STUDENT_ID_RE.fullmatch(student_id):
+            return 400, {"error": "同学记得填 11位学号。"}
+
+        if self.roster.lookup(student_id) is None:
+            return 403, {"error": f"同学记得核对一下，名单里没有 {student_id}。"}
+
+        now = time.time()
+        with self.lock:
+            entry = self.codes.get(student_id)
+            if entry and now < entry[1] - config.CODE_TTL_S + config.CODE_RESEND_INTERVAL_S:
+                return 429, {
+                    "error": f"验证码刚发过，{config.CODE_RESEND_INTERVAL_S} 秒后再试。"
+                }
+
+            code = f"{secrets.randbelow(1_000_000):06d}"
+            self.codes[student_id] = (code, now + config.CODE_TTL_S, 0)
+
+        try:
+            mailer.send_code(student_id, code)
+        except mailer.MailError as exc:
+            log.warning("验证码邮件发送失败：%s", exc)
+            with self.lock:
+                self.codes.pop(student_id, None)
+            return 502, {"error": "验证码邮件没发出去，等一会儿再试。"}
+
+        return 200, {
+            "email": f"{student_id[:3]}***@{config.STUDENT_MAIL_DOMAIN}",
+            "expires_in": config.CODE_TTL_S,
+        }
+
+    def verify_code(self, student_id: str, code: str) -> tuple[int, dict]:
+        """核对验证码。通过后发一个长期有效的凭据，前端存进 localStorage。"""
+        if not isinstance(student_id, str) or not STUDENT_ID_RE.fullmatch(student_id):
+            return 400, {"error": "同学记得填 11位学号。"}
+
+        with self.lock:
+            entry = self.codes.get(student_id)
+            if entry is None or time.time() > entry[1]:
+                self.codes.pop(student_id, None)
+                return 403, {"error": "验证码不对或已过期，重新获取一个。"}
+
+            stored, expires_at, attempts = entry
+            if not hmac.compare_digest(str(code or ""), stored):
+                attempts += 1
+                if attempts >= config.CODE_MAX_ATTEMPTS:
+                    self.codes.pop(student_id, None)
+                    return 429, {"error": "验证码错得有点多，重新获取一个。"}
+                self.codes[student_id] = (stored, expires_at, attempts)
+                return 403, {"error": "验证码不对。"}
+
+            self.codes.pop(student_id, None)
+            name = self.roster.lookup(student_id)
+
+        return 200, {
+            "token": issue_token(student_id, self.verify_secret),
+            "student_id": student_id,
+            "name": name,
+        }
+
+    # ------------------------------------------------------------ 期中成绩
+
+    def midterm_scores(self, student_id: str, token: str) -> tuple[int, dict]:
+        """期中两道编程题的材料。凭据要和学号对得上，否则只回 401。"""
+        if check_token(token, self.verify_secret) != student_id:
+            return 401, {"error": "先验证学号再看成绩。"}
+
+        data = midterm.load(student_id)
+        if data is None:
+            return 404, {"error": "没有找到这个学号的期中答卷，找助教确认一下。"}
+        return 200, data
+
+    def midterm_photo(self, student_id: str, token: str, q: int | None, i: int | None):
+        """答卷照片。鉴权和上面一样，照片本身是 JPEG 原样返回，不套 JSON。"""
+        if check_token(token, self.verify_secret) != student_id:
+            return 401, {"error": "先验证学号再看成绩。"}
+
+        data = None if q is None or i is None else midterm.photo(student_id, q, i)
+        if data is None:
+            return 404, {"error": "没有这张照片"}
+        return 200, data
+
     # ------------------------------------------------------------ 管理端
 
     def admin_submissions(self, q: dict) -> tuple[int, dict]:
@@ -375,8 +468,8 @@ def _submission_payload(conn, row: sqlite3.Row, problem) -> dict:
 # ---------------------------------------------------------------- 鉴权
 
 
-def load_admin_token() -> str:
-    path = config.ADMIN_TOKEN_PATH
+def load_secret(path) -> str:
+    """读一个密钥文件，没有就生成。权限 600 —— 它决定谁能看管理端和成绩。"""
     if path.is_file():
         return path.read_text(encoding="utf-8").strip()
 
@@ -384,7 +477,7 @@ def load_admin_token() -> str:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(token + "\n", encoding="utf-8")
     path.chmod(0o600)
-    log.info("已生成管理端查询码：%s", path)
+    log.info("已生成密钥：%s", path)
     return token
 
 
@@ -428,6 +521,8 @@ def create_handler(app: App):
 
             if isinstance(payload, str):
                 self._send(status, payload.encode("utf-8"), "text/csv; charset=utf-8")
+            elif isinstance(payload, bytes):
+                self._send(status, payload, "image/jpeg")
             else:
                 self._json(status, payload)
 
@@ -460,6 +555,24 @@ def create_handler(app: App):
 
             if route in ("/api/read", "/api/read/"):
                 return app.read_status(query.get("page", ""), query.get("sid", ""))
+
+            if route in ("/api/midterm", "/api/midterm/"):
+                return app.midterm_scores(query.get("sid", ""), query.get("token", ""))
+
+            if route in ("/api/midterm/photo", "/api/midterm/photo/"):
+                return app.midterm_photo(
+                    query.get("sid", ""),
+                    query.get("token", ""),
+                    _int_or_none(query.get("q", "")),
+                    _int_or_none(query.get("i", "")),
+                )
+
+            if route == "/api/verify/send" and method == "POST":
+                return app.send_code(self._read_json().get("student_id", ""))
+
+            if route == "/api/verify/check" and method == "POST":
+                body = self._read_json()
+                return app.verify_code(body.get("student_id", ""), body.get("code", ""))
 
             if route == "/api/submit" and method == "POST":
                 body = self._read_json()

@@ -23,3 +23,6 @@ judge/data/
 
 # 教材扫描件 81MB、受版权保护，不进 public 仓库
 docs/homework-book/*.pdf
+
+# 期中考试的答卷照片与转录代码, 含学生姓名学号, 由 Syncthing 从本机同步进来
+docs/midterm-score/期中考卷批改/

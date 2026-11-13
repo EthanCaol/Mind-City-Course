@@ -34,8 +34,9 @@ unit，user 级 unit 引用不到，所以没法靠 `After=` 保证顺序——�
 | 路径 | 说明 |
 |---|---|
 | `config.py` | 全部可调常量与路径。isolate 参数只在这里定义，不要分散到其它文件 |
-| `identity.py` | 学号的正则，判题和阅读登记共用 |
+| `identity.py` | 学号的正则，判题和阅读登记共用；成绩查询凭据的签名与校验 |
 | `roster.py` | 花名册读取与匹配 |
+| `mailer.py` | 发验证码邮件（QQ 邮箱 SMTP） |
 | `compare.py` | 输出归一化与比对 |
 | `problem.py` | 题目与测试点加载 |
 | `db.py` | SQLite 读写（两张表） |
@@ -137,6 +138,37 @@ systemctl --user start mind-city-backup.service
 要在那里补一条 —— 否则该页登记会返回「没有这一页」，总览页也不会出现那一列。
 
 `reads` 只存在 SQLite 里，跟着数据库一起每周备份到 COS —— 不计分，丢了也不影响成绩。
+
+## 成绩查询验证
+
+查分页要求学生先证明自己确实是这个学号的人：系统把 6 位验证码发到他的复旦学邮
+（`学号@m.fudan.edu.cn`），他输回来，换到一个签名凭据存在浏览器里，之后同一台浏览器
+不再要验证码。
+
+| 接口 | 说明 |
+|---|---|
+| `POST /api/verify/send` `{student_id}` | 发码。学号不在名单里 403；一分钟内重复索要 429；邮件发不出去 502 |
+| `POST /api/verify/check` `{student_id, code}` | 通过返回 `{token, student_id, name}`，失败 403，错满 5 次作废 |
+| `GET /api/midterm?sid=&token=` | 这个学号的两道题：代码原文、评议和评分的 HTML、照片张数。凭据不对 401，没有材料 404 |
+| `GET /api/midterm/photo?sid=&token=&q=&i=` | 第 q 道题的第 i 张照片，JPEG 原样返回。按索引取，前端没法用它读目录里的任意文件 |
+
+材料在 `docs/midterm-score/期中考卷批改/`（Syncthing 同步，gitignore + `exclude_docs`
+挡在仓库和站点外），一个学生一个目录，文件名约定见 `midterm.py` 开头。页面是
+`docs/midterm-score/programming.md`，交互写在 `judge.js` 的「期中成绩查询」一节。
+
+- **学邮格式是 `学号@m.fudan.edu.cn`**，收信入口 `https://mail.m.fudan.edu.cn`，
+  这条写进查分页给学生的说明里。
+- **发信走 QQ 邮箱**。账号和授权码在 `~/.config/mind-city/mail.json`（600 权限，
+  `{"host","port","user","password"}`），不进仓库。选 QQ 是因为学邮的 MX 指向
+  腾讯企业邮（`mxbiz.qq.com`），同厂投递最不容易进垃圾箱。个人 QQ 邮箱有每日发信量
+  上限，超了接口返回 502，学生隔天再试即可。
+- **验证码只存在进程内存**，10 分钟过期，服务重启即全部作废。换机器不用迁移。
+- **凭据是无状态签名**，格式 `学号.HMAC-SHA256(学号)` 取前 32 位，密钥在
+  `~/.config/mind-city/verify-secret`（首次启动自动生成）。服务端用
+  `identity.check_token(token, secret)` 验，返回学号或 `None`。它不会过期 —— 学生换
+  浏览器才需要重新验证。凭据可以被转给同学，这是弱校验，和判题、阅读登记同一档次。
+- 冷却时间和有效期在 `config.py` 的 `CODE_TTL_S` / `CODE_RESEND_INTERVAL_S` /
+  `CODE_MAX_ATTEMPTS`。
 
 ## 侧边栏标记已完成的条目
 
