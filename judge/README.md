@@ -149,7 +149,7 @@ systemctl --user start mind-city-backup.service
 |---|---|
 | `POST /api/verify/send` `{student_id}` | 发码。学号不在名单里 403；一分钟内重复索要 429；邮件发不出去 502 |
 | `POST /api/verify/check` `{student_id, code}` | 通过返回 `{token, student_id, name}`，失败 403，错满 5 次作废 |
-| `GET /api/midterm?sid=&token=` | 材料：整份卷子的照片张数，以及两道题的代码原文、评议和评分 HTML。凭据不对 401，没有材料 404 |
+| `GET /api/midterm?sid=&token=` | 材料：整份卷子的照片张数，以及两道题的代码原文、评议和评分 HTML、合计得分（`total.full` / `total.got`，标题上用）。凭据不对 401，没有材料 404 |
 | `GET /api/midterm/photo?sid=&token=&i=` | 第 i 张照片，JPEG 原样返回。按索引取，前端没法用它读目录里的任意文件 |
 
 材料在 `docs/midterm-score/期中考卷批改/`（Syncthing 同步，gitignore + `exclude_docs`

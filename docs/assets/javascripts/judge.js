@@ -1155,9 +1155,10 @@
     data.questions.forEach(function (q) {
       var section = document.createElement("section");
       section.className = "midterm__question";
-      section.appendChild(heading(2, "编程题-第" + q.no + "题"));
+      var title = "编程题-第" + q.no + "题";
+      if (q.total) title += "（" + q.total.got + "/" + q.total.full + "分）";
+      section.appendChild(heading(2, title));
 
-      section.appendChild(heading(3, "代码"));
       var pre = document.createElement("pre");
       pre.className = "midterm__code";
       var code = document.createElement("code");
@@ -1166,7 +1167,8 @@
       section.appendChild(pre);
 
       if (q.review) {
-        section.appendChild(heading(3, "评议"));
+        section.appendChild(document.createElement("hr"));
+        section.appendChild(heading(3, "代码评议"));
         var review = document.createElement("div");
         review.className = "midterm__doc";
         review.innerHTML = q.review;
@@ -1174,7 +1176,8 @@
       }
 
       if (q.score) {
-        section.appendChild(heading(3, "评分"));
+        section.appendChild(document.createElement("hr"));
+        section.appendChild(heading(3, "代码评分"));
         var score = document.createElement("div");
         score.className = "midterm__doc";
         score.innerHTML = q.score;

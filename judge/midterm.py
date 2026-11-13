@@ -33,6 +33,9 @@ NUMERALS = "一二三四五六七八九十"
 
 QUESTION_RE = re.compile(r"-第([一二三四五六七八九十]+)题\.c$")
 
+# 评分表最后一行：| 合计 | 满分 | 扣分 | 得分 | |
+TOTAL_RE = re.compile(r"\|\s*合计\s*\|\s*([0-9.]+)\s*\|[^|]*\|\s*([0-9.]+)\s*\|")
+
 
 def _folder(student_id: str) -> Path | None:
     matches = sorted(config.MIDTERM_DIR.glob(f"{student_id}-*"))
@@ -52,6 +55,16 @@ def _render(path: Path) -> str:
     if lines and lines[0].startswith("# "):
         text = "\n".join(lines[1:])
     return markdown.markdown(text, extensions=["tables", "nl2br"])
+
+
+def _total(path: Path) -> dict | None:
+    """评分表合计行的「满分 / 得分」。表里没有这一行就返回 None。"""
+    if not path.is_file():
+        return None
+    match = TOTAL_RE.search(path.read_text(encoding="utf-8"))
+    if match is None:
+        return None
+    return {"full": float(match.group(1)), "got": float(match.group(2))}
 
 
 def _photos(folder: Path) -> list[Path]:
@@ -77,12 +90,15 @@ def load(student_id: str) -> dict | None:
             continue
         label = match.group(1)
         base = code_path.name[: -len(".c")]
+        score_path = folder / f"{base}-代码评分.md"
         questions.append(
             {
                 "no": label,
                 "code": code_path.read_text(encoding="utf-8"),
                 "review": _render(folder / f"{base}-代码评议.md"),
-                "score": _render(folder / f"{base}-代码评分.md"),
+                "score": _render(score_path),
+                # 标题上要写「11/14分」，从评分表的合计行取
+                "total": _total(score_path),
             }
         )
 
