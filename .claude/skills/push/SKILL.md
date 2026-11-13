@@ -16,15 +16,21 @@ user-invocable: true
    - 时间不要自己拼接格式串, 直接用 `$(date '+%y/%-m/%-d %-H:%M')`
    - 概述压到一句话, 一句话写不下时空一行再补正文
    - 不用多行 `-m` 拼 patch note
-4. 执行: 一条命令走完 add/commit/push, 命令保持简短
+4. 提交: 一条命令走完 add/commit, 命令保持简短
    - 不先单独执行 status/diff/date 再回来确认
-5. 部署: `git push` 成功后再发一次 Bash 工具调用, 设 `run_in_background: true`, 跑
+5. 部署: 先发一次 Bash 工具调用, 设 `run_in_background: true`, 跑
    ```bash
    ~/.local/bin/mind-city-deploy.sh
    ```
    - 用工具自带的后台执行, 不要 `nohup ... &`: 那样命令立即返回, 脚本的退出码和输出都拿不到
-   - 提交和部署分成两次调用。写成 `... && nohup ... &` 会把整条链一起放进后台, 连 push 是否成功都看不到
    - 后台任务结束时会有完成通知, 直接看输出末尾是 `==> 部署完成` 还是 mkdocs 报错, 不必再读日志文件
-   - 本机就是部署目录, push 后本地 HEAD 已是最新, 脚本里的 `git pull --ff-only` 是空操作
+   - 本机就是部署目录, 脚本构建的是当前工作区, 所以本地 commit 一落地就能开跑, 不用等 push
+   - 脚本里的 `git pull --ff-only` 在本地领先远程时是空操作; 远程有新提交时会先快进再构建
+   - 先部署后 push 的代价: push 失败时站点已经是新版、GitHub 还是旧的, 下次 push 会把这个 commit 一起带上去
+6. 推送: 部署已经在跑之后再前台执行
+   ```bash
+   git push origin main
+   ```
+   - 独立一次调用, 看退出码。写成 `... && nohup ... &` 会把整条链放进后台, 连 push 是否成功都看不到
    - GitHub 的 webhook 已设为 inactive: 它偶发 10 秒超时且失败后不重试, 投递丢了站点会一直停在旧版, 改为本地触发
-   - 脚本约 20 秒; 同一时刻只允许一个部署, 脚本自带 flock, 后到的直接跳过
+   - 同一时刻只允许一个部署, 脚本自带 flock, 后到的直接跳过
