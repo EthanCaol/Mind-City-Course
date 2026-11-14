@@ -2,9 +2,9 @@
 
 ## 洛谷
 
-### 题单「【入门1】顺序结构」
+### 「【入门1】顺序结构」
 
-网址: <https://www.luogu.com.cn/training/100#problems>
+网址：<https://www.luogu.com.cn/training/100#problems>
 
 | 题号  | 题目名称                |
 | ----- | ----------------------- |
