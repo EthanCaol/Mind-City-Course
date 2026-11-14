@@ -33,18 +33,18 @@ nav:
   - 站点首页: index.md
   - 课程资料: material.md
   - 站点计划: plan.md
-  - 编程题库:
-      - 题库索引: coding/index.md
-      - (1) 顺序结构: coding/01-sequence.md
-      - (2) 分支结构: coding/02-branch.md
-      - (3) 循环结构: coding/03-loop.md
-      - (4) 数组: coding/04-array.md
-      - (5) 字符串: coding/05-string.md
-      - (6) 函数: coding/06-function.md
-      - (7) 递推与递归: coding/07-recursion.md
-      - (8) 指针: coding/08-pointer.md
-      - (9) 结构体: coding/09-struct.md
-      - (10) 排序: coding/10-sorting.md
+  - 洛谷-力扣题单:
+      - 完成情况: coding/index.md
+      - (1) 题单-顺序结构: coding/01-sequence.md
+      - (2) 题单-分支结构: coding/02-branch.md
+      - (3) 题单-循环结构: coding/03-loop.md
+      - (4) 题单-数组: coding/04-array.md
+      - (5) 题单-字符串: coding/05-string.md
+      - (6) 题单-函数: coding/06-function.md
+      - (7) 题单-递推与递归: coding/07-recursion.md
+      - (8) 题单-指针: coding/08-pointer.md
+      - (9) 题单-结构体: coding/09-struct.md
+      - (10) 题单-排序: coding/10-sorting.md
   - 实验课文档:
       - 文档阅读进度: setup/reading.md
       - 实用工具推荐: setup/useful.md
