@@ -67,8 +67,23 @@ BOOK_PAGES: tuple[tuple[str, str], ...] = (
     ("chapter-9", "第九章：算法设计技术基础"),
 )
 
+# 编程题库各章的「题单完成登记」。题目在洛谷和力扣上做，服务端拿不到判题结果，
+# 所以和上面的两组一样是学生自己登记，共用 reads 表。slug 跟页面上的 `data-page` 一致。
+CODING_PAGES: tuple[tuple[str, str], ...] = (
+    ("01-sequence", "(1) 顺序结构"),
+    ("02-branch", "(2) 分支结构"),
+    ("03-loop", "(3) 循环结构"),
+    ("04-array", "(4) 数组"),
+    ("05-string", "(5) 字符串"),
+    ("06-function", "(6) 函数"),
+    ("07-recursion", "(7) 递推与递归"),
+    ("08-pointer", "(8) 指针"),
+    ("09-struct", "(9) 结构体"),
+    ("10-sorting", "(10) 排序"),
+)
+
 # 登记接口认的全部页面 —— 不管哪一组，页面存在就能登记。
-ALL_READ_PAGES = READ_PAGES + BOOK_PAGES
+ALL_READ_PAGES = READ_PAGES + BOOK_PAGES + CODING_PAGES
 
 # ---------------------------------------------------------------- isolate
 

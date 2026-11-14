@@ -678,8 +678,8 @@
   var DONE_KEY = "mind-city.done";
   var DONE_TTL_MS = 10 * 60 * 1000;
 
-  /** 侧边栏里会被标记的三组：作业页的路径开头编号与题目 slug（judge/problems/作业5）
-      对应，文档和习题页的路径末段就是登记用的 page slug，以后加页面不用改这里。 */
+  /** 侧边栏里会被标记的四组：作业页的路径开头编号与题目 slug（judge/problems/作业5）
+      对应，文档、习题和题库页的路径末段就是登记用的 page slug，以后加页面不用改这里。 */
   var NAV_GROUPS = [
     {
       flag: "done",
@@ -701,6 +701,14 @@
       flag: "read",
       label: "已做完",
       re: /^\/homework-book\/([a-z0-9-]+)\//,
+      slug: function (m) {
+        return m[1];
+      }
+    },
+    {
+      flag: "read",
+      label: "已做完",
+      re: /^\/coding\/([a-z0-9-]+)\//,
       slug: function (m) {
         return m[1];
       }

@@ -243,10 +243,13 @@ class App:
     def reads(self, group: str = "") -> tuple[int, dict]:
         """阅读进度：行是学生，列是页面。和作业完成情况同构，也是公开接口。
 
-        分两组：实验课文档（setup，默认）和教材习题（book）。两张总览页各取一组，
-        否则一张表里会同时出现文档和习题的列。
+        分三组：实验课文档（setup，默认）、教材习题（book）和编程题库（coding）。
+        每张总览页各取一组，否则一张表里会混进别的页面的列。
         """
-        pages = config.BOOK_PAGES if group == "book" else config.READ_PAGES
+        pages = {
+            "book": config.BOOK_PAGES,
+            "coding": config.CODING_PAGES,
+        }.get(group, config.READ_PAGES)
         with self.lock:
             read = {page: db.read_ids(self.conn, page) for page, _ in pages}
 
