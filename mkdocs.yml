@@ -34,7 +34,7 @@ nav:
   - 课程资料: material.md
   - 站点计划: plan.md
   - 洛谷-力扣题单:
-      - 完成情况: coding/index.md
+      - 题单完成情况: coding/index.md
       - (1) 题单-顺序结构: coding/01-sequence.md
       - (2) 题单-分支结构: coding/02-branch.md
       - (3) 题单-循环结构: coding/03-loop.md
