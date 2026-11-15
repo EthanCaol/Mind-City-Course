@@ -1186,7 +1186,7 @@
       var table = document.createElement("table");
       scoresWrap.appendChild(table);
       var head = table.createTHead().insertRow();
-      ["部分", "得分", "满分"].forEach(function (text) {
+      ["", "学生得分", "满分"].forEach(function (text) {
         var th = document.createElement("th");
         th.textContent = text;
         head.appendChild(th);
@@ -1218,7 +1218,7 @@
     if (correction.length) {
       var correctionSection = document.createElement("section");
       correctionSection.className = "midterm__question";
-      correctionSection.appendChild(heading(2, "改错题与完全程序题答卷照片"));
+      correctionSection.appendChild(heading(2, "改错题与完全程序题-答卷照片"));
       var hint = document.createElement("p");
       setText(hint, "点击打开大图，支持拖动缩放。");
       correctionSection.appendChild(hint);
@@ -1233,7 +1233,7 @@
     if (programming.length) {
       var photoSection = document.createElement("section");
       photoSection.className = "midterm__question";
-      photoSection.appendChild(heading(2, "编程题答卷照片"));
+      photoSection.appendChild(heading(2, "编程题-答卷照片"));
       var hint2 = document.createElement("p");
       setText(hint2, "点击打开大图，支持拖动缩放。");
       photoSection.appendChild(hint2);

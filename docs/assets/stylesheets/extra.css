@@ -1262,7 +1262,7 @@
 
 .md-typeset .midterm__scores th:not(:first-child),
 .md-typeset .midterm__scores td:not(:first-child) {
-  text-align: right;
+  text-align: center;
 }
 
 .md-typeset .midterm__scores .midterm__scores-total td {
