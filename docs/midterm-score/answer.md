@@ -284,8 +284,8 @@ C 语言中用于结构化程序设计的 3 种基本结构是 ______
 #include <stdio.h>
 
 int main() {
-    int i, s = 0;
-    for (i = 1; i < 10; i += 2)
+    int s = 0;
+    for (int i = 1; i < 10; i += 2)
         s += i + 1;
     printf("%d\n", s);
     return 0;
@@ -313,12 +313,11 @@ int main() {
 
 以下程序运行所产生的输出是 ______
 
-```c
-#include <stdio.h>
+```c#include <stdio.h>
 
 int main() {
-    int i, a = 0, b = 0, c = 0;
-    for (i = 0; i < 10; i++) {
+    int a = 0, b = 0, c = 0;
+    for (int i = 0; i < 10; i++) {
         switch (i % 4) {
         case 0: a++;
         case 1: b++;
@@ -329,6 +328,7 @@ int main() {
     printf("%d,%d,%d\n", a, b, c);
     return 0;
 }
+
 ```
 
 ???+ note "答案"
@@ -560,8 +560,8 @@ int main() {
 
 int main() {
     int a[10] = {3, 7, 2, 7, 9, 7, 1, 7, 5, 7};
-    int n = 10, key = 7, i, count = 0, pos = ______(1)______;
-    for (i = 0; i < n; i++) {
+    int n = 10, key = 7, count = 0, pos = ______(1)______;
+    for (int i = 0; i < n; i++) {
         if (a[i] == key) {
             ______(2)______;
             if (______(3)______) {
@@ -616,11 +616,11 @@ int main() {
 
 int main() {
     int a[] = {4, 45, 65, 43, 32, 3, 72, 27};
-    int n, i, j, minIndex, t;
+    int n, minIndex, t;
     n = ______(5)______;
-    for (i = 0; i < n - 1; i++) {
+    for (int i = 0; i < n - 1; i++) {
         ______(6)______;
-        for (j = i + 1; j < n; j++)
+        for (int j = i + 1; j < n; j++)
             if (a[j] < ______(7)______)
                 minIndex = j;
         if (minIndex != i) {
@@ -688,20 +688,28 @@ int main() {
 #include <stdio.h>
 
 int main() {
-    int n, m, i, j;
+    int n, m;
+    // 题面范围 0 < n, m < 20
     int a[20][20];
 
+    // 读入行数和列数
     scanf("%d %d", &n, &m);
-    for (i = 0; i < n; i++)
-        for (j = 0; j < m; j++)
+
+    // 读入 n 行 m 列的矩阵
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < m; j++)
             scanf("%d", &a[i][j]);
 
-    for (i = n - 1; i >= 0; i--) {
-        for (j = 0; j < m; j++) {
+    // 从最后一行开始输出, 实现上下翻转
+    for (int i = n - 1; i >= 0; i--) {
+        for (int j = 0; j < m; j++) {
+            // 空格置于元素之前, 行尾不留空格
             if (j > 0)
                 printf(" ");
+
             printf("%d", a[i][j]);
         }
+        // 每行输出后换行
         printf("\n");
     }
 }
@@ -756,32 +764,39 @@ I  C anguag.
 #include <string.h>
 
 int main() {
+    // 题面保证长度小于 120
     char str1[120], str2[120];
-    char c1, c2;
-    int i, j, is_remove;
 
     fgets(str1, 120, stdin);
     fgets(str2, 120, stdin);
+
+    // 去掉 fgets 读入的换行符
     str1[strcspn(str1, "\n")] = '\0';
     str2[strcspn(str2, "\n")] = '\0';
 
-    for (i = 0; str1[i] != '\0'; i++) {
-        is_remove = 0;
+    for (int i = 0; str1[i] != '\0'; i++) {
+        // 默认保留该字符
+        int is_remove = 0;
 
-        for (j = 0; str2[j] != '\0'; j++) {
-            c1 = str1[i];
-            c2 = str2[j];
+        for (int j = 0; str2[j] != '\0'; j++) {
+            char c1 = str1[i];
+            char c2 = str2[j];
 
+            // 统一转换为小写再比较
             if (c1 >= 'A' && c1 <= 'Z')
                 c1 = c1 - 'A' + 'a';
             if (c2 >= 'A' && c2 <= 'Z')
                 c2 = c2 - 'A' + 'a';
             if (c1 == c2) {
+
+                // 在 str2 中出现过, 就标记为删除
+                // 然后结束内层的搜索循环
                 is_remove = 1;
                 break;
             }
         }
 
+        // 如果不在 str2 中, 输直接出该字符
         if (!is_remove)
             putchar(str1[i]);
     }
@@ -797,24 +812,33 @@ int main() {
 #include <ctype.h>
 
 int main() {
+    // 题面保证长度小于 120
     char str1[120], str2[120];
-    int i, j, is_remove;
 
     fgets(str1, 120, stdin);
     fgets(str2, 120, stdin);
+
+    // 去掉 fgets 读入的换行符
     str1[strcspn(str1, "\n")] = '\0';
     str2[strcspn(str2, "\n")] = '\0';
 
-    for (i = 0; str1[i] != '\0'; i++) {
-        is_remove = 0;
+    for (int i = 0; str1[i] != '\0'; i++) {
+        // 默认保留该字符
+        int is_remove = 0;
 
-        for (j = 0; str2[j] != '\0'; j++) {
+        for (int j = 0; str2[j] != '\0'; j++) {
+
+            // 用 tolower 统一转换为小写再比较
             if (tolower(str1[i]) == tolower(str2[j])) {
+
+                // 在 str2 中出现过, 就标记为删除
+                // 然后结束内层的搜索循环
                 is_remove = 1;
                 break;
             }
         }
 
+        // 如果不在 str2 中, 输直接出该字符
         if (!is_remove)
             putchar(str1[i]);
     }
