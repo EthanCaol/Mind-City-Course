@@ -704,7 +704,6 @@ int main() {
         }
         printf("\n");
     }
-    return 0;
 }
 ```
 
@@ -768,9 +767,11 @@ int main() {
 
     for (i = 0; str1[i] != '\0'; i++) {
         is_remove = 0;
+
         for (j = 0; str2[j] != '\0'; j++) {
             c1 = str1[i];
             c2 = str2[j];
+
             if (c1 >= 'A' && c1 <= 'Z')
                 c1 = c1 - 'A' + 'a';
             if (c2 >= 'A' && c2 <= 'Z')
@@ -780,12 +781,11 @@ int main() {
                 break;
             }
         }
+
         if (!is_remove)
             putchar(str1[i]);
     }
     putchar('\n');
-
-    return 0;
 }
 ```
 
@@ -807,18 +807,19 @@ int main() {
 
     for (i = 0; str1[i] != '\0'; i++) {
         is_remove = 0;
+
         for (j = 0; str2[j] != '\0'; j++) {
             if (tolower(str1[i]) == tolower(str2[j])) {
                 is_remove = 1;
                 break;
             }
         }
+
         if (!is_remove)
             putchar(str1[i]);
     }
-    putchar('\n');
 
-    return 0;
+    putchar('\n');
 }
 ```
 
