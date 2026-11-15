@@ -1148,7 +1148,7 @@
 }
 
 /* ---------------------------------------------------------------------------
-   期中成绩查询（docs/midterm-score/programming.md）
+   期中成绩查询（docs/midterm-score/check.md）
 
    表单样式跟作业页的工具条一致：同样的输入框、同样的按钮三种状态。
    每道题是一段 section，照片、代码、评议、评分依次往下排。
@@ -1251,6 +1251,22 @@
 
 .md-typeset .midterm__doc table {
   width: 100%;
+}
+
+/* 得分表。表格本身不带 class，沿用 Material 的默认样式；这里只限制宽度，
+   并把数字列右对齐。 */
+.md-typeset .midterm__scores table {
+  width: auto;
+  min-width: 18rem;
+}
+
+.md-typeset .midterm__scores th:not(:first-child),
+.md-typeset .midterm__scores td:not(:first-child) {
+  text-align: right;
+}
+
+.md-typeset .midterm__scores .midterm__scores-total td {
+  font-weight: 700;
 }
 
 /* 代码块左边的行号列。行号和代码是两列 flex，字体、行高、上下内边距必须

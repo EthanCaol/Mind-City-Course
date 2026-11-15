@@ -1084,7 +1084,7 @@
 
   // ------------------------------------------------------------ 期中成绩查询
   //
-  // 「编程题评分查询」页（#midterm）。流程：学号 → 复旦学邮收到的验证码 →
+  // 「期中考试评分查询」页（#midterm）。流程：学号 → 复旦学邮收到的验证码 →
   // 服务端签发的长期凭据。凭据存在 localStorage，同一台浏览器以后直接取材料，
   // 不再发信。
   //
@@ -1124,7 +1124,25 @@
     }
 
     host.textContent = "";
-    if (!data.questions.length && !data.photo_count) {
+
+    var sid = encodeURIComponent(data.student_id);
+    var token = encodeURIComponent(midtermToken());
+
+    var scores = data.scores || { sections: [], total: null };
+    // 发布过程中可能还是旧服务：没有 photos 字段时按原来的整卷照片处理
+    var photos = data.photos;
+    if (!photos) {
+      photos = [];
+      for (var v = 0; v < (data.photo_count || 0); v++) {
+        photos.push({
+          i: v,
+          kind: "programming",
+          version: (data.photo_versions || [])[v] || 0,
+        });
+      }
+    }
+
+    if (!data.questions.length && !photos.length && !scores.sections.length) {
       var empty = document.createElement("p");
       empty.className = "midterm__empty";
       setText(empty, "助教还没有整理好你的答卷，过几天再来看。");
@@ -1132,36 +1150,95 @@
       return;
     }
 
-    // 照片是整份卷子拍的，两道题共用，所以单独一段放在最前面
-    if (data.photo_count > 0) {
-      var sid = encodeURIComponent(data.student_id);
-      var token = encodeURIComponent(midtermToken());
-      var photos = document.createElement("section");
-      photos.className = "midterm__question";
-      photos.appendChild(heading(2, "答卷照片（点击打开大图，支持拖动缩放）"));
-
-      var versions = data.photo_versions || [];
-
-      for (var i = 0; i < data.photo_count; i++) {
+    /** 一组照片。每张点开单独窗口，缩放、拖动、右键复位都在那一页里。 */
+    function photoGrid(list) {
+      var grid = document.createElement("div");
+      list.forEach(function (p) {
         // 版本号取文件修改时间：换图后地址随之变化，绕过浏览器的长期缓存
-        var ver = "&v=" + (versions[i] || 0);
+        var ver = "&v=" + (p.version || 0);
         var img = document.createElement("img");
         img.className = "midterm__photo";
         img.loading = "lazy";
         img.alt = "答卷照片";
-        img.src = API + "/midterm/photo?sid=" + sid + "&token=" + token + "&i=" + i + ver;
+        img.src = API + "/midterm/photo?sid=" + sid + "&token=" + token + "&i=" + p.i + ver;
 
-        // 点开单独窗口看原图：缩放、拖动、右键复位都在那一页里
         var link = document.createElement("a");
         link.className = "midterm__photo-link";
         link.target = "_blank";
         link.rel = "noopener";
         link.href = "/midterm-score/viewer.html?sid=" + sid +
-          "&token=" + token + "&i=" + i + ver;
+          "&token=" + token + "&i=" + p.i + ver;
         link.appendChild(img);
-        photos.appendChild(link);
+        grid.appendChild(link);
+      });
+      return grid;
+    }
+
+    // 各部分得分表
+    if (scores.sections.length) {
+      var tableSection = document.createElement("section");
+      tableSection.className = "midterm__question";
+      tableSection.appendChild(heading(2, "得分"));
+
+      // table 不加 class，沿用 Material 对无 class 表格的默认样式
+      var scoresWrap = document.createElement("div");
+      scoresWrap.className = "midterm__scores";
+      var table = document.createElement("table");
+      scoresWrap.appendChild(table);
+      var head = table.createTHead().insertRow();
+      ["部分", "得分", "满分"].forEach(function (text) {
+        var th = document.createElement("th");
+        th.textContent = text;
+        head.appendChild(th);
+      });
+
+      var body = table.createTBody();
+      scores.sections.forEach(function (s) {
+        var row = body.insertRow();
+        row.insertCell().textContent = "[" + s.no + "]" + s.title;
+        row.insertCell().textContent = s.got === null ? "—" : s.got;
+        row.insertCell().textContent = s.full;
+      });
+      if (scores.total !== null) {
+        var totalRow = body.insertRow();
+        totalRow.className = "midterm__scores-total";
+        totalRow.insertCell().textContent = "总分";
+        totalRow.insertCell().textContent = scores.total;
+        totalRow.insertCell().textContent = 100;
       }
-      host.appendChild(photos);
+
+      tableSection.appendChild(scoresWrap);
+      host.appendChild(tableSection);
+    }
+
+    // 改错题照片那一页同时写着完全程序题的答案，两组分数在上面的表里
+    var correction = photos.filter(function (p) {
+      return p.kind === "correction";
+    });
+    if (correction.length) {
+      var correctionSection = document.createElement("section");
+      correctionSection.className = "midterm__question";
+      correctionSection.appendChild(heading(2, "改错题与完全程序题答卷照片"));
+      var hint = document.createElement("p");
+      setText(hint, "点击打开大图，支持拖动缩放。");
+      correctionSection.appendChild(hint);
+      correctionSection.appendChild(photoGrid(correction));
+      host.appendChild(correctionSection);
+    }
+
+    // 编程题照片两道题共用，放在题目列表前面
+    var programming = photos.filter(function (p) {
+      return p.kind === "programming";
+    });
+    if (programming.length) {
+      var photoSection = document.createElement("section");
+      photoSection.className = "midterm__question";
+      photoSection.appendChild(heading(2, "编程题答卷照片"));
+      var hint2 = document.createElement("p");
+      setText(hint2, "点击打开大图，支持拖动缩放。");
+      photoSection.appendChild(hint2);
+      photoSection.appendChild(photoGrid(programming));
+      host.appendChild(photoSection);
     }
 
     data.questions.forEach(function (q) {
@@ -1358,7 +1435,7 @@
 
     initSid(); // 顶栏的学号控件（每个页面都跑）
 
-    initMidterm(); // 「编程题评分查询」页
+    initMidterm(); // 「期中考试评分查询」页
 
     if (!$("judge")) return; // 剩下的是作业页才需要的东西
 
