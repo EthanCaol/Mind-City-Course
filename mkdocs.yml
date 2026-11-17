@@ -34,7 +34,7 @@ nav:
   - 课程资料: material.md
   - 站点计划: plan.md
   - 期中考试专栏:
-      # - 成绩查询（学邮）: midterm-score/check.md
+      - 成绩查询（学邮）: midterm-score/check.md
       - 试卷参考答案: midterm-score/answer.md
   - 洛谷-力扣题单:
       - 题单完成情况: coding/index.md
