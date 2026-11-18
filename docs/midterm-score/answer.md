@@ -633,7 +633,7 @@ int main() {
 
 ???+ note "答案"
 
-    - (5) sizeof(a) / sizeof(a[0])
+    - (5) sizeof(a) / sizeof(a[0]) (直接写 `8` 也可以)
     - (6) minIndex = i
     - (7) a[minIndex]
 
