@@ -313,7 +313,8 @@ int main() {
 
 以下程序运行所产生的输出是 ______
 
-```c#include <stdio.h>
+```c
+#include <stdio.h>
 
 int main() {
     int a = 0, b = 0, c = 0;
